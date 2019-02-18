@@ -99,5 +99,5 @@ deploy:
   #repo: git@gitee.com:tuzongxun/tzxBlog.git
   repo:
     github: git@github.com:tuzongxun/tuzongxun.github.io.git
-    gitee: git@gitee.com:tuzongxun/tzxBlog.git
+#    gitee: git@gitee.com:tuzongxun/tzxBlog.git
   branch: hexo
