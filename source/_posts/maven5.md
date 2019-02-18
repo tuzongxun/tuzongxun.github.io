@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记5——maven仓库和镜像
 date: 2017-11-13 15:19:42
-tags: [maven,读书笔记]
+tags: maven
 toc: true
-categories: [读书笔记,maven]
+categories: maven
 ---
 ### 什么是maven仓库
 要理解什么是maven仓库，需要先理解什么是maven构件。

@@ -1,8 +1,12 @@
 ---
-title: 我的网址收藏
+title: 我的网址收藏（友情链接）
 date: 2017-10-11 10:14:43
 toc: true
 ---
+***
+<h1><font color="red">需要交换友链的请留言</font></h1>
+说明：需要交换友链的，请先把本站加入友链列表中，然后留言提供需要交换的链接。
+***
 # 个人it网站/博客
 [江南白衣](http://calvin1978.blogcn.com/)
 [左潇龙](http://www.zuoxiaolong.com/)
@@ -67,3 +71,5 @@ toc: true
 [个税计算器](http://www.gerensuodeshui.cn/)
 [深圳住房公积金](http://www.szzfgjj.com/)
 [征信中心](https://ipcrs.pbccrc.org.cn/)
+[武汉公积金,IE打开](https://whgjj.hkbchina.com/portal/pc/main.html)
+[武汉社保，IE打开](https://221.232.64.242:7022/grws/jsp/framework/main.jsp)

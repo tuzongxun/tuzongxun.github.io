@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记4——maven坐标和依赖
 date: 2017-11-13 15:09:42
-tags: [maven,读书笔记]
+tags: maven
 toc: true
-categories: [读书笔记,maven]
+categories: maven
 ---
 ### maven坐标
 #### maven坐标是什么

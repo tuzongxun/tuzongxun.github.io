@@ -3,7 +3,7 @@ title: cookie、session和java过滤器理解和使用
 date: 2016-11-07 15:09:42
 tags: [java,cookie,session,过滤器]
 toc: true
-categories: [java,java]
+categories: java
 ---
 **基础知识理解：**
 

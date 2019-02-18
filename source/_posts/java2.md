@@ -3,7 +3,7 @@ title: 记java动态加载配置文件不成功的问题
 date: 2018-3-2 15:09:42
 tags: [java]
 toc: true
-categories: [java,java]
+categories: java
 ---
 ## 一、问题背景：
 在我们之前的项目中，很多数据是配置在application.properteis文件中的，这样很多时候修改了数据后，只需要重启应用，而不需要重新打包编译。

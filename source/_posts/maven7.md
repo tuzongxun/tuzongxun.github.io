@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记7——maven项目版本管理和灵活构建
 date: 2017-11-15 09:09:42
-tags: [maven,读书笔记]
+tags: maven
 toc: true
-categories: [读书笔记,maven]
+categories: maven
 ---
 ### 说明
 《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。

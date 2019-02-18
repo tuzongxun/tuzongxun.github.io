@@ -3,7 +3,7 @@ title: 不使用spring的情况下用java原生代码操作mongodb数据库的�
 date: 2016-11-07 15:09:42
 tags: [数据库技术,mongodb]
 toc: true
-categories: [数据库技术,mongodb]
+categories: mongodb
 ---
 由于更改了mongodb3.0数据库的密码，导致这几天storm组对数据进行处理的时候，一直在报mongodb数据库连接不上的异常。
 <!--more-->

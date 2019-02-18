@@ -1,9 +1,9 @@
 ---
 title: dubbo学习——基础环境搭建过程及要点记录
 date: 2018-03-12 15:09:42
-tags: [dubbo,zookeeper]
+tags: [dubbo,zookeeper,java]
 toc: true
-categories: [java,dubbo]
+categories: java
 ---
 网上关于dubbo的资料其实已经不少了，尤其是还有一个比较全面的官方文档教程。
 但是正所谓知易行难，很多事不动动手，就总不知道里边的一些细节。

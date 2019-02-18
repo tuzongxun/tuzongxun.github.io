@@ -1,7 +1,7 @@
 ---
 title: 【java设计模式初探0】_单例模式
 date: 2017-09-24 18:43:58
-categories: [设计模式] #分类
+categories: 设计模式 #分类
 toc: true  #在此处设定是否开启目录，需要主题支持。
 tags: 设计模式
 ---

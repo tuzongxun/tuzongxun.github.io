@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记3——maven使用入门
 date: 2017-11-07 15:09:42
-tags: [maven,读书笔记]
+tags: maven
 toc: true
-categories: [读书笔记,maven]
+categories: maven
 ---
 ### 说明
 由于我目前所做的项目皆是java web项目，因此整个系统学习的过程也就以java web为基础。

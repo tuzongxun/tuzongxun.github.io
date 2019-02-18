@@ -28,8 +28,8 @@ type: "books"
 | ![headfirst设计模式](/images/books/headfirst.png)          |《head first设计模式 》(暂无电子版链接)           |[简介和目录](#headFirst设计模式)|-|
 | ![设计模式](/images/books/shejimoshi.png)      |《设计模式 》(暂无电子版链接)           |[简介和目录](#设计模式)|[设计模式读书笔记分类](https://tuzongxun.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)|
 | ![编码](/images/books/bianma.png)      |《编码 CODE 》(暂无电子版链接)           |[简介和目录](#编码)|-|
-| ![redis开发与运维](/images/books/redis.png)          |《redis开发与运维 付磊、张益军著》(暂无电子版链接)                    |[简介和目录](#redis开发与运维)|-|
-| ![mysql](/images/books/mysql.png)      |《mysql从入门到精通 》(暂无电子版链接)           |[简介和目录](#mysql从入门到精通)|-|
+| <img src="/images/books/redis.png" width="50%" height="50%" />          |《redis开发与运维 付磊、张益军著》(暂无电子版链接)                    |[简介和目录](#redis开发与运维)|-|
+| <img src="/images/books/mysql.png" width="50%" height="50%" />     |《mysql从入门到精通 》(暂无电子版链接)           |[简介和目录](#mysql从入门到精通)|-|
 
 ***
 # 他人推荐书单

@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 涂宗勋的github博客
-subtitle: 认真生活，快乐工作，保持理想！qq交流群114308990
+title: 涂有薄技
+subtitle: 认真生活，快乐工作，保持理想！qq交流群：114308990
 description: 
-author: 涂宗勋
-language: zh-Hans
+author: 涂有薄技
+language: zh-CN
 timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-#url: https://tuzongxun.github.io
-url: https://gitee.com/tuzongxun123/tzxBlog
+url: https://blog.tzxcode.cn
+#url: http://blog.tzxcode.cn/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -70,14 +70,34 @@ time_format: HH:mm:ss
 per_page: 9
 pagination_dir: page
 
+# hexo-neat
+neat_enable: true
+neat_html:
+  enable: true
+  exclude:  
+neat_css:
+  enable: true
+  exclude:
+    - '*.min.css'
+neat_js:
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude:
+    - '*.min.js'
+
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: cafe
+theme: hexo-theme-snippet #pure
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://tuzongxun123@163.com:tuding66499@gitee.com/tuzongxun123/tzxBlog.git
-  branch: master
+  #repo: git@gitee.com:tuzongxun/tzxBlog.git
+  repo:
+    github: git@github.com:tuzongxun/tuzongxun.github.io.git
+    gitee: git@gitee.com:tuzongxun/tzxBlog.git
+  branch: hexo
