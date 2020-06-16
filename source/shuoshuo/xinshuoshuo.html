@@ -1,0 +1,246 @@
+<style type="text/css">
+    #shuoshuo_content {
+        background-color: #fff;
+        padding: 10px;
+        min-height: 500px;
+    }
+    /* shuo */
+ 
+    body.theme-dark .cbp_tmtimeline::before {
+        background: RGBA(255, 255, 255, 0.06);
+    }
+ 
+    ul.cbp_tmtimeline {
+        padding: 0;
+    }
+ 
+    div class.cdp_tmlabel > li .cbp_tmlabel {
+        margin-bottom: 0;
+    }
+ 
+    .cbp_tmtimeline {
+        margin: 30px 0 0 0;
+        padding: 0;
+        list-style: none;
+        position: relative;
+    }
+    /* The line */
+ 
+    .cbp_tmtimeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: RGBA(0, 0, 0, 0.02);
+        left: 80px;
+        margin-left: 10px;
+    }
+    /* The date/time */
+ 
+    .cbp_tmtimeline > li .cbp_tmtime {
+        display: block;
+        /* width: 29%; */
+        /* padding-right: 110px; */
+        max-width: 70px;
+        position: absolute;
+    }
+ 
+    .cbp_tmtimeline > li .cbp_tmtime span {
+        display: block;
+        text-align: right;
+    }
+ 
+    .cbp_tmtimeline > li .cbp_tmtime span:first-child {
+        font-size: 0.9em;
+        color: #bdd0db;
+    }
+ 
+    .cbp_tmtimeline > li .cbp_tmtime span:last-child {
+        font-size: 1.2em;
+        color: #9BCD9B;
+    }
+ 
+    .cbp_tmtimeline > li:nth-child(odd) .cbp_tmtime span:last-child {
+        color: RGBA(255, 125, 73, 0.75);
+    }
+ 
+    div.cbp_tmlabel > p {
+        margin-bottom: 0;
+    }
+    /* Right content */
+ 
+    .cbp_tmtimeline > li .cbp_tmlabel {
+        margin: 0 0 45px 65px;
+        background: #9BCD9B;
+        color: #fff;
+        padding: .8em 1.2em .4em 1.2em;
+        /* font-size: 1.2em; */
+        font-weight: 300;
+        line-height: 1.4;
+        position: relative;
+        border-radius: 5px;
+        transition: all 0.3s ease 0s;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        display: block;
+    }
+ 
+    .cbp_tmlabel:hover {
+        /* transform:scale(1.05); */
+        transform: translateY(-3px);
+        z-index: 1;
+        -webkit-box-shadow: 0 15px 32px rgba(0, 0, 0, 0.15) !important
+    }
+ 
+    .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel {
+        background: RGBA(255, 125, 73, 0.75);
+    }
+    /* The triangle */
+ 
+    .cbp_tmtimeline > li .cbp_tmlabel:after {
+        right: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-right-color: #9BCD9B;
+        border-width: 10px;
+        top: 4px;
+    }
+ 
+    .cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
+        border-right-color: RGBA(255, 125, 73, 0.75);
+    }
+ 
+    p.shuoshuo_time {
+        margin-top: 10px;
+        border-top: 1px dashed #fff;
+        padding-top: 5px;
+    }
+    /* Media */
+ 
+    @media screen and (max-width: 65.375em) {
+        .cbp_tmtimeline > li .cbp_tmtime span:last-child {
+            font-size: 1.2em;
+        }
+    }
+ 
+    .shuoshuo_author_img img {
+        border: 1px solid #ddd;
+        padding: 2px;
+        float: left;
+        border-radius: 64px;
+        transition: all 1.0s;
+    }
+ 
+    .avatar {
+        -webkit-border-radius: 100% !important;
+        -moz-border-radius: 100% !important;
+        box-shadow: inset 0 -1px 0 #3333sf;
+        -webkit-box-shadow: inset 0 -1px 0 #3333sf;
+        -webkit-transition: 0.4s;
+        -webkit-transition: -webkit-transform 0.4s ease-out;
+        transition: transform 0.4s ease-out;
+        -moz-transition: -moz-transform 0.4s ease-out;
+    }
+ 
+    .zhuan {
+        transform: rotateZ(720deg);
+        -webkit-transform: rotateZ(720deg);
+        -moz-transform: rotateZ(720deg);
+    }
+    /* end */
+</style>
+</head>
+ 
+<body>
+<div id="primary" class="content-area" style="">
+    <main id="main" class="site-main" role="main">
+        <div id="shuoshuo_content">
+            <ul class="cbp_tmtimeline">
+			    <li> <span class="shuoshuo_author_img"><img src="/images/touxiang.png" class="avatar avatar-48" width="48" height="48"></span>
+                    <a class="cbp_tmlabel" href="">
+                        <p></p>
+                        <p>一般来说，同样一个人，在A被很重视，在B感觉一般，那么背后的现实是，B比A的实力要更加强，人员的水平更高。
+这就是一个简单的鸡头凤尾的问题。</p>
+                        <p></p>
+                        <p class="shuoshuo_time"><i class="fa fa-clock-o"></i>
+                            2019年2月11日
+                        </p>
+                    </a>
+                </li>
+			    <li> <span class="shuoshuo_author_img"><img src="/images/touxiang.png" class="avatar avatar-48" width="48" height="48"></span>
+                    <a class="cbp_tmlabel" href="">
+                        <p></p>
+                        <p>最近在微信读书看了好几本理财书，理财归根结底都是围绕开源节流四个字。
+而围绕开源节流展开，会发现如书中所说一样，理财其实就是理生活。
+如何开源，如何节流，就不得不考虑到生活的方方面面。</p>
+                        <p></p>
+                        <p class="shuoshuo_time"><i class="fa fa-clock-o"></i>
+                            2019年1月15日
+                        </p>
+                    </a>
+                </li>
+			    <li> <span class="shuoshuo_author_img"><img src="/images/touxiang.png" class="avatar avatar-48" width="48" height="48"></span>
+                    <a class="cbp_tmlabel" href="">
+                        <p></p>
+                        <p>周末和一个朋友谈了谈写博客的事，当时说到我一直在折腾博客，现在又弄了个个人博客，他表示没有必要，他就只在开源中国写。
+后来仔细想了想，我一开始似乎也是那种想法，只不过后来被邀请的多了，对虚名的追求多了，便不知不觉的总在想着曝光率，于是便整了一大堆的、各种博客网站的博客。
+说白了，这就是一种务虚不务实的做法，其实是弊大于利的。</p>
+                        <p></p>
+                        <p class="shuoshuo_time"><i class="fa fa-clock-o"></i>
+                            2018年1月29日
+                        </p>
+                    </a>
+                </li>
+				<li> <span class="shuoshuo_author_img"><img src="/images/touxiang.png" class="avatar avatar-48" width="48" height="48"></span>
+                    <a class="cbp_tmlabel" href="">
+                        <p></p>
+                        <p>
+从在CSDN写下第一篇博客开始，陆续又在博客园、开源中国、51CTO、云栖社区等博客网站发表过博客，写着写着，有时候竟然会花费大量的时间去看访问量，于是不得不静下心来好好的思考一下写博客的初衷，我的初衷是什么？<br/>
+1.为了备忘，因为记性不好，写下来以后就容易参考；<br/>
+2.为了总结知识体系，其实也是备忘，方便自己知道学过什么，方便回过头复习；<br/>
+3.为了形成一份非正式的简历，为以后面试加分，但是并不知道作用究竟有多大；<br/>
+综上可知，一开始并不是为了访问量，如今这微乎其微的访问量其实并没有太大用处！</p>
+                        <p></p>
+                        <p class="shuoshuo_time"><i class="fa fa-clock-o"></i>
+                            2018年1月25日
+                        </p>
+                    </a>
+                </li>
+                <li> <span class="shuoshuo_author_img"><img src="/images/touxiang.png" class="avatar avatar-48" width="48" height="48"></span>
+                    <a class="cbp_tmlabel" href="">
+                        <p></p>
+                        <p>
+从有道云笔记走到CSDN，从CSDN走到个人博客，再从个人博客走到云栖社区，又从云栖社区走到github博客，发现和其他的博客对比，github博客至少有这样几个不可取代的地方？<br/>
+1.无广告<br/>
+2.免费<br/>
+3.可以不联网本地运行<br/>
+而和github比，gitee由于国内的属性，又显得更方便更快。</p>
+                        <p></p>
+                        <p class="shuoshuo_time"><i class="fa fa-clock-o"></i>
+                            2018年1月25日
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+</div>
+<script type="text/javascript">
+    (function () {
+        var oldClass = "";
+        var Obj = "";
+        $(".cbp_tmtimeline li").hover(function () {
+            Obj = $(this).children(".shuoshuo_author_img");
+            Obj = Obj.children("img");
+            oldClass = Obj.attr("class");
+            var newClass = oldClass + " zhuan";
+            Obj.attr("class", newClass);
+        }, function () {
+            Obj.attr("class", oldClass);
+        })
+    })
+</script>

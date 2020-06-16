@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务四：服务容错保护Hystrix断路器
 date: 2017-5-26 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

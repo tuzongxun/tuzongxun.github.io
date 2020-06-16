@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务二：Eureka服务治理之服务注册中心
 date: 2017-5-23 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

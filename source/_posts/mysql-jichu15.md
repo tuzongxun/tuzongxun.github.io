@@ -1,9 +1,9 @@
 ---
 title: mysql常用操作语法（十五）~~触发器
 date: 2018-04-25 23:42:11
-tags: [数据库技术,mysql]
+tags: [数据库,mysql]
 toc: true
-categories: mysql
+categories: 数据库
 ---
 # 理解
 mysql触发器的概念，从某种程度来说，比较像java中的aop。也就是根据一定的规则，拦截某一类情况，然后在适当的时机（before/after）执行一些其他的逻辑。 

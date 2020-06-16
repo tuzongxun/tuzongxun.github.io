@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记1——maven是什么？为什么要用maven？
 date: 2017-10-13 15:09:42
-tags: maven
+tags: [maven,开发工具]
 toc: true
-categories: maven
+categories: 开发工具
 ---
 # 前言
 工欲善其事，必先利其器。对于java web开发者而言，或者说对于目前大部分java web开发者而言，eclipse、maven、svn、tomcat可能就是目前最常用也是必会的武器了，所以为了更高效的开发和解决问题，经过一番思考后我决定系统性的学学这几样武器。

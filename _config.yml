@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 涂有薄技
-subtitle: 认真生活，快乐工作，保持理想！qq交流群：114308990
+title: 涂宗勋的博客
+subtitle: 5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun
 description: 
-author: 涂有薄技
+author: 涂宗勋
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -67,7 +67,7 @@ time_format: HH:mm:ss
 
 # Pagination
 ## Set per_page to 0 to disable pagination
-per_page: 9
+per_page: 0
 pagination_dir: page
 
 # hexo-neat
@@ -90,7 +90,14 @@ neat_js:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: hexo-theme-snippet #pure
+#theme: pure
+theme: cafe
+#theme: obsidian
+#theme: hexo-theme-snippet
+#theme: 3-hexo
+#theme: ace
+#theme: theme-ad
+#theme: BlueLake
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -99,5 +106,5 @@ deploy:
   #repo: git@gitee.com:tuzongxun/tzxBlog.git
   repo:
     github: git@github.com:tuzongxun/tuzongxun.github.io.git
-#    gitee: git@gitee.com:tuzongxun/tzxBlog.git
+    #gitee: git@gitee.com:tuzongxun/tzxBlog.git
   branch: hexo

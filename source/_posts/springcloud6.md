@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务六：声明式服务调用Feign
 date: 2018-9-9 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

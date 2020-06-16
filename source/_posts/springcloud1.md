@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务一：spring boot基础项目搭建及问题处理
 date: 2017-5-22 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

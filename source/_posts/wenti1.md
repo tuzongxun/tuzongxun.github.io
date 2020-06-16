@@ -1,8 +1,8 @@
 ---
 title: 关于技术提升的一点思考
 date: 2017-10-13 08:55:07
-tags: 思考总结
-categories: 思考总结
+tags: [思考总结,修心•修性•修行]
+categories: 修心•修性•修行
 toc: true
 ---
 # 面临的问题

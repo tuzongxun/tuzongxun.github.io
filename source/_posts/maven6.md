@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记6——maven聚合和继承
 date: 2017-11-14 15:09:42
-tags: maven
+tags: [maven,开发工具]
 toc: true
-categories: maven
+categories: 开发工具
 ---
 ### maven聚合
 #### 为什么要用maven聚合

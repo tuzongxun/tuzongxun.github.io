@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务五：客户端负载均衡ribbon
 date: 2018-9-3 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

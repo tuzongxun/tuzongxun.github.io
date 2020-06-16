@@ -1,9 +1,9 @@
 ---
 title: 业余小项目——tzxblog博客系统
 date: 2017-11-29 09:09:42
-tags: 业余小项目
+tags: 业余项目
 toc: true
-categories: 业余小项目
+categories: 业余项目
 ---
 ## 使用spring boot作为后台创建的博客小项目
 ### 项目说明

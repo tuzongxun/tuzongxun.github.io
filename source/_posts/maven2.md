@@ -1,9 +1,9 @@
 ---
 title: 《maven实战》学习笔记2——maven安装（windows和eclipse插件）
 date: 2017-11-03 15:09:42
-tags: maven
+tags: [maven,开发工具]
 toc: true
-categories: maven
+categories: 开发工具
 ---
 # 前言
 由于我的工作中开发环境就是windows，IDE是eclipse，因此安装也只涉及和记录这两部分，在看书和动手的过程也就直接跳过其他部分。

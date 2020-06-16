@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务三：Eureka服务治理之注册服务提供者及服务的发现和消费
 date: 2017-5-24 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

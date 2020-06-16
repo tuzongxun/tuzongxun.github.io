@@ -1,7 +1,7 @@
 ---
 title: 记java动态加载配置文件不成功的问题
 date: 2018-3-2 15:09:42
-tags: [java]
+tags: java
 toc: true
 categories: java
 ---

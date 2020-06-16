@@ -2,6 +2,18 @@
     link: https://blog.csdn.net/tuzongxun
     avatar: http://example.com/avatar.png
     desc: "我的CSDN博客"
+阮一峰:
+    link: http://www.ruanyifeng.com/home.html
+    avatar: http://example.com/avatar.png
+    desc: "阮一峰博客"
+江南一点雨:
+    link: http://www.javaboy.org/
+    avatar: http://example.com/avatar.png
+    desc: "江南一点雨"
+纯洁的微笑:
+    link: http://www.ityouknow.com/
+    avatar: http://example.com/avatar.png
+    desc: "纯洁的微笑"
 左潇龙:
     link: http://www.zuoxiaolong.com/
     avatar: http://example.com/avatar.png

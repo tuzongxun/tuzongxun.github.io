@@ -1,7 +1,7 @@
 ---
 title: springcloud微服务七：网关zuul
 date: 2018-9-15 15:09:42
-tags: springcloud
+tags: [springcloud,java]
 toc: true
 categories: springcloud
 ---

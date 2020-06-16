@@ -1,8 +1,8 @@
 ---
 title: activiti基础操作
 date: 2017-01-30 15:19:45
-tags: activiti
-categories: activiti #分类
+tags: [activiti,java]
+categories: java #分类
 toc: true  #在此处设定是否开启目录，需要主题支持。
 ---
 ## 获取流程引擎

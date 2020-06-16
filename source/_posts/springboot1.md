@@ -1,8 +1,8 @@
 ---
 title:  一篇文章学会spring boot（包括jms和hessian的集成）
 date: 2017-07-30 15:57:44
-tags: springboot
-categories: springboot #分类
+tags: [springboot,java]
+categories: java #分类
 toc: true  #在此处设定是否开启目录，需要主题支持。
 ---
 之前在学习spring cloud微服务的时候，由于spring cloud的基础是spring boot，因此曾简单地了解过spring boot，但也只是简单的了解过而已。 

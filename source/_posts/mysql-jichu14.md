@@ -1,9 +1,9 @@
 ---
 title: mysql常用操作语法（十三）~~存储过程
 date: 2018-04-16 23:42:11
-tags: [数据库技术,mysql]
+tags: [数据库,mysql]
 toc: true
-categories: mysql
+categories: 数据库
 ---
 ## 为什么要使用存储过程
 在系统实际开发应用中，有可能只需要单条sql语句就能实现想要的功能，但是有时候，要完整实现某个业务，却需要同时执行多条sql才能达到目的。

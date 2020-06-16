@@ -1,8 +1,8 @@
 ---
 title: 使用sonar进行java代码质量管理
 date: 2017-10-19 08:49:06
-tags: sonar
-categories: sonar
+tags: [sonar,开发工具]
+categories: 开发工具
 toc: true
 ---
 # 前言

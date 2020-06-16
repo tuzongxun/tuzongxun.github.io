@@ -1,8 +1,8 @@
 ---
 title: 论细节决定成败
 date: 2017-11-14 08:55:07
-tags: 思考总结
-categories: 思考总结
+tags: [思考总结,修心•修性•修行]
+categories: 修心•修性•修行
 toc: true
 ---
 ### 说明

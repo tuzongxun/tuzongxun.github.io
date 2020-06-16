@@ -1,9 +1,9 @@
 ---
 title:  Mongodb3.0.5副本集搭建及spring和java连接副本集配置
 date: 2016-11-07 15:09:44
-tags: [数据库技术,mongodb]
+tags: [数据库,mongodb,java]
 toc: true
-categories: mongodb
+categories: 数据库
 ---
 这是去年写的一篇文档，最近突然发现并没有发不出来，因此现在补上，希望能对某些朋友有所帮助。因为当时记录时没有截图，因此这里看起来可能就比较单调。
 <!--more-->
