@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记8——外观模式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义外观模式引用书中的定义如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记8——外观模式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/01/05/pattern8-facade/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="定义外观模式引用书中的定义如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-01-05T01:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:28:31.733Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern8-facade" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/05/pattern8-facade/" class="article-date">
+  <time datetime="2018-01-05T01:43:58.000Z" itemprop="datePublished">2018-01-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记8——外观模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>外观模式引用书中的定义如下：</p>
+<a id="more"></a>
+<blockquote>
+<p>为子系统中的一组接口提供一个统一的入口。外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。<br>外观模式又称为门面模式，它是一种对象结构型模式。外观模式是迪米特法则的一种具体实<br>现，通过引入一个新的外观角色可以降低原有系统的复杂度，同时降低客户类与子系统的耦<br>合度。</p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>对于这个模式的理解，我觉得着重点在于几个词上，分别是<code>一组接口</code>、<code>统一入口</code>、<code>降低复杂度</code>。<br>结合我们目前的系统进行说明,首先说什么是一组接口。<br>在我们的系统中，由于业务需要，有三种日志，分别是系统日志、告警日志、监控日志，我用非正式的代码简单表示如下：<br>系统日志类接口定义：</p>
+<pre>
+/**
+ *日志统一管理类，外观类
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class LogHandle {
+    private SysLogService sysLogService = new SysLogService();
+    private AlarmLogService alarmLogService = new AlarmLogService();
+    private MonitorLogService monitorLogService = new MonitorLogService();
+    public void error(String msg, Object... args) {
+        sysLogService.error(msg, args);
+        alarmLogService.error(msg, args);
+        monitorLogService.error(msg, args);
+    }
+}
+</pre>
+<p>告警日志类接口定义：</p>
+<pre>
+/**
+ *告警日志接口
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class AlarmLogService {
+    private Logger sysLog = LoggerFactory.getLogger(this.getClass());
+    public void error(String msg, Object... args) {
+        String sys = "alarm";
+        msg = "#" + msg + "#" + sys + "#";
+        sysLog.error(msg, args);
+    }
+}
+</pre>
+<p>监控日志类接口：</p>
+<pre>
+/**
+ *监控日志接口
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class MonitorLogService {
+    private Logger sysLog = LoggerFactory.getLogger(this.getClass());
+    public void error(String msg, Object... args) {
+        String sys = "monitor";
+        msg = "|" + msg + "|" + sys + "|";
+        sysLog.error(msg, args);
+    }
+}
+</pre>
+<p>上边三个日志接口为了表示功能的不同，简单地对日志内容进行了不同的拼接，实际项目中自然不会这样。<br>这三个日志接口，都是属于日志的操作，只是打印出的日志内容被不同的系统采集再使用，而且他们基本上也都同时被使用到，所以可以说他们就是属于外观模式定义中的那<code>一组接口</code>。<br>在没有使用外观模式的情况下，我们在业务代码中需要打印日志的时候可能就会是下边所示这样：</p>
+<pre>
+/**
+ *博客操作类
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class BlogService {
+    private SysLogService sysLogService = new SysLogService();
+    private AlarmLogService alarmLogService = new AlarmLogService();
+    private MonitorLogService monitorLogService = new MonitorLogService();
+    public void addBlog() {
+        try{
+        System.out.println("");
+        }catch (Exception e) {
+            sysLogService.error("系统异常{}", new Object[] { e.getMessage() });
+            alarmLogService.error("系统异常{}", new Object[] { e.getMessage() });
+            monitorLogService.error("系统异常{}", new Object[] { e.getMessage() });
+        }
+    }
+}
+</pre>
+<pre>
+/**
+ *用户操作类
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class UserService {
+    private SysLogService sysLogService = new SysLogService();
+    private AlarmLogService alarmLogService = new AlarmLogService();
+    private MonitorLogService monitorLogService = new MonitorLogService();
+    public void addUser() {
+        try {
+            System.out.println("");
+        } catch (Exception e) {
+            sysLogService.error("系统异常{}", new Object[] { e.getMessage() });
+            alarmLogService.error("系统异常{}", new Object[] { e.getMessage() });
+            monitorLogService.error("系统异常{}", new Object[] { e.getMessage() });
+        }
+    }
+}
+</pre>
+<p>很显然，两个service中有大量重复的代码。这里只有两个类打印日志，就需要一共调用6次日志打印方法，每多出一个类需要打印这样的日志，就会以3的倍数增加代码。<br>而且这里的示例几乎是最简单的，在实际业务开发的时候可能就远不止三行。<br>同时，像上边这种做法，假如后续日志系统增多，需要增加到四种甚至五种或者更多，那个每个打印日志的类都需要进行相应的修改，很显然，这是极不利于维护和拓展的。<br>因此，按照常规的思路，可能就会有两种做法：<br>一种是把这种打印日志的代码进行提取，封装为一个方法进行调用。但是这种做法会存在一定的问题，首先，这个方法本身和业务是无关的，放在业务类中不合适。其次，除非所有需要打印日志的类都有一个共同的父类，把这个方法放在父类中，否则就需要定义多次该方法。<br>于是乎，就有了第二种做法，那就是把这段代码提取到另外一个类中，那么这个类就是所谓的外观类了：</p>
+<pre>
+/**
+ *日志统一管理类，外观类
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class LogHandle {
+    private SysLogService sysLogService = new SysLogService();
+    private AlarmLogService alarmLogService = new AlarmLogService();
+    private MonitorLogService monitorLogService = new MonitorLogService();
+    public void error(String msg, Object... args) {
+        sysLogService.error(msg, args);
+        alarmLogService.error(msg, args);
+        monitorLogService.error(msg, args);
+    }
+}
+</pre>
+<p>有了这样一个类之后，我们的业务代码调用的时候就只需要一次就可以搞定，而这个管理日志操作的类就是<code>统一接口</code>。</p>
+<pre>
+/**
+ *用户操作类
+ *@author tzx
+ *@date 2018年1月4日
+ */
+public class UserService {
+    private LogHandle logHandle = new LogHandle();
+    public void addUser() {
+        try {
+            System.out.println("");
+        } catch (Exception e) {
+            logHandle.error("系统异常{}", new Object[] { e.getMessage() });
+        }
+    }
+}
+</pre>
+<p>与此同时，如果后续日志系统变化，不论是增加新的日志类型，还是删减旧的日志类型，都只需要改动logHandle类就可以了，而且每个调用日志的地方代码也都减少了很多，这就大大<code>降低了系统的复杂度</code>。</p>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><p>那么根据上边的理解和示例，外观模式有如下一些要点：</p>
+<ol>
+<li>需要有一组接口，他们几乎都是成套被使用；</li>
+<li>一个外观类或接口，实际操作上边的一组接口，而提供一个公开的接口方法供外部调用；</li>
+<li>客户端只需要一次调用外观类的接口，而不需要分别调用最开始那一组接口的每一个。</li>
+</ol>
+<p>在没有学这个模式的时候，我觉得单例模式是最简单的设计模式，而现在来看，这个似乎才是最简单的设计模式。</p>
+<p>demo源码可在github下载：<a href="https://github.com/tuzongxun/mypattern" target="_blank" rel="noopener">https://github.com/tuzongxun/mypattern</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/01/05/pattern8-facade/" data-id="ckbk4ukb9002e0svhen7x5405" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/03/02/java2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          记java动态加载配置文件不成功的问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/05/pattern7-observer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记7——观察者模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解"><span class="toc-number">2.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要点"><span class="toc-number">3.</span> <span class="toc-text">要点</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

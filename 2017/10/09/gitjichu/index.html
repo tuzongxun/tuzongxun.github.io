@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>git的几个基本操作 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="要把本地的数据提交到github远程仓库，需要几个必要的步骤，以下是根据自己的操作简单记录。 前提条件是本地安装好了git，并且做好了相应配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git的几个基本操作">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/10/09/gitjichu/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="要把本地的数据提交到github远程仓库，需要几个必要的步骤，以下是根据自己的操作简单记录。 前提条件是本地安装好了git，并且做好了相应配置">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/git/gitremote.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/git/merge.png">
+<meta property="article:published_time" content="2017-10-09T07:23:50.000Z">
+<meta property="article:modified_time" content="2019-08-13T08:02:19.393Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="开发工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/git/gitremote.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-gitjichu" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/09/gitjichu/" class="article-date">
+  <time datetime="2017-10-09T07:23:50.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      git的几个基本操作
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p><strong>要把本地的数据提交到github远程仓库，需要几个必要的步骤，以下是根据自己的操作简单记录。</strong></p>
+<p><strong>前提条件是本地安装好了git，并且做好了相应配置</strong></p>
+<a id="more"></a>
+<h1 id="初始化及基础操作"><a href="#初始化及基础操作" class="headerlink" title="初始化及基础操作"></a>初始化及基础操作</h1><p>一、首先需要在本地建立一个目录（或者本地的项目），例如docBlog，后边文件都存在这里；<br>二、后续步骤：</p>
+<h2 id="命令行方式"><a href="#命令行方式" class="headerlink" title="命令行方式"></a>命令行方式</h2><ol>
+<li><p>cmd命令行进入到docBlog目录，例如：<code>cd E:\docBlog</code>，执行<code>git init</code>命令，意思是当前目录初始化一个本地git仓库，然后会看到生成了一个.git目录；</p>
+</li>
+<li><p>把需要上传到github远程仓库的数据存在docBlog下,或者说在当前目录下新建子目录和相应文件，例如readme.md；</p>
+</li>
+<li><p>在docBlog下执行<code>git status</code>,查看文件状态，会看到那些文件进行了改动；这个改动是相对于本地仓库而言；</p>
+</li>
+<li><p>执行<code>git add 相应的文件或目录</code>；例如<code>git add readme.md</code>；这个大概的意思是把指定的文件或目录加到提交暂存区，不是真正的提交；</p>
+</li>
+<li><p>执行<code>git commit -m &quot;注释内容&quot;</code>，正式提交add的所有内容到本地git仓库；</p>
+</li>
+<li><p>执行<code>git remote add origin 远程github仓库的url</code>，例如：<code>git remote add origin https://github.com/tuzongxun/docBlog.git</code>我的理解是和远程仓库建立一个初步连接，感觉像是办某些长期业务的第一次申请一样，例如办一张手机卡；</p>
+</li>
+<li><p>执行<code>git push -u origin master</code>；这个命令会把本地仓库的内容正是提交到远程仓库中，-u的意思我理解成新办的手机号第一次交话费的激活动作，因为这个也是只需要一次；</p>
+</li>
+<li><p>后续每次有了新的改动，都可以依次像下边这样执行：<br><code>git status</code> 查看状态；<br><code>git add</code> 提交到暂存区（如果是删了文件，就要用delete，可以git help查看）；<br><code>git commit -m</code>  正式提交;<br><code>git push origin master</code> 提交到远程库（-u只需第一次时使用）；</p>
+</li>
+</ol>
+<h2 id="tortoisegit图形界面方式"><a href="#tortoisegit图形界面方式" class="headerlink" title="tortoisegit图形界面方式"></a>tortoisegit图形界面方式</h2><ol>
+<li><p>进入需要git管理的目录下，例如/docBlog,然后右键选择<code>git create repository here</code>，等同于<code>git init</code>，会在当前目录生成.git目录；</p>
+</li>
+<li><p>继续在当前目录右键后选择<code>git commit</code>,默认是mater分支，填写注释、选择需要提交的文件后提交，然后文件会被提交到本地git仓库；</p>
+</li>
+<li><p>创建远程git仓库，复制仓库地址，例如<code>https://github.com/tuzongxun/docBlog.git</code>；</p>
+</li>
+<li><p>在需要git操作的目录或者文件上右键然后选择Tortoisegit，再选择<code>settings</code>，粘贴上边复制的远程仓库地址，如下图：<br><img src="/images/git/gitremote.png" alt="gitremote"></p>
+</li>
+<li><p>右键Tortoisegit，选择<code>git pull</code>，先同步一下远程库；</p>
+</li>
+<li><p>右键Tortoisegit，选择<code>git push</code>，提交到远程仓库；</p>
+</li>
+</ol>
+<p>注：以上步骤按顺序操作，即最基本的初始化操作；</p>
+<ol start="7">
+<li>通常的常规操作步骤只需要<code>git pull</code>、<code>git commit</code>、<code>git push</code>即可，不过更建议的方式是<code>git pull</code>、<code>git commit</code>、<code>git pull</code>、<code>git push</code>，这样可以一定程度上防止系统自动的merge；</li>
+</ol>
+<p><strong>更多git操作可参考<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="noopener">廖雪峰的官方网站</a></strong></p>
+<hr>
+<h1 id="分支和合并"><a href="#分支和合并" class="headerlink" title="分支和合并"></a>分支和合并</h1><h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><ol>
+<li><p>创建一个分支，例如创建dev分支，<code>git branch dev</code>；</p>
+</li>
+<li><p>切换分支，例如切换到dev分支，<code>git checkout dev</code>;</p>
+</li>
+<li><p>上述两步合并，即创建并切换，<code>git checkout -b dev</code>；</p>
+</li>
+<li><p>创建分支并切换之后可以直接先push推送到远端，推送时不会显示创建分支前的改动（用命令行push可能会把idea或eclipse特有的文件也推送上去）；</p>
+</li>
+<li><p>合并分支，例如要把dev内容合并到master，先切换到master分支，然后执行<code>git merge dev</code>；</p>
+</li>
+<li><p>删除分支，例如删除dev分支，<code>git branch -d dev</code>；</p>
+</li>
+<li><p>查看已有分支，以及当前所在分支，<code>git branch</code>；</p>
+</li>
+</ol>
+<h2 id="Tortoisegit图形界面合并分支步骤"><a href="#Tortoisegit图形界面合并分支步骤" class="headerlink" title="Tortoisegit图形界面合并分支步骤"></a>Tortoisegit图形界面合并分支步骤</h2><p>以下步骤针对有权限控制，不能直接push到目标分支的场景。</p>
+<ol>
+<li><p>选择<code>git pull</code>更新当前分支远程代码（例如需要把dev分支合并到master分支，这里就选择dev（源分支）），若有冲突，解决冲突；</p>
+</li>
+<li><p>选择<code>git commit</code>提交本地没问题的代码到本地git仓库；</p>
+</li>
+<li><p>选择<code>git push</code>推送本地分支代码到远程仓库；</p>
+</li>
+<li><p>选择<code>git pull</code>或者<code>git sync</code>更新(同步)需要合并的目标分支的远程代码（例如需要把dev分支合并到master分支，这里就在dev分支选择<code>git pull</code>或<code>git sync</code>，然后在出现的界面的remote branch里选择master（目标分支））,若果有冲突，解决冲突；</p>
+</li>
+<li><p>选择<code>git commit</code>提交本地合并后的源分支最新代码到本地git仓库；这一步只有在解决过冲突的情况下需要，如果pull之后本地没有冲突，实际可以直接飘到下一步。</p>
+</li>
+<li><p>选择<code>git push</code>推送本地合并后的源分支最新代码到远程git仓库；</p>
+</li>
+<li><p>进入github或者gitlab或gitee远程网页界面，进入需要合并的仓库，选择<code>branchs</code>；</p>
+</li>
+<li><p>找到刚刚提交的源分支，选择<code>merge request</code>,进入合并请求界面：</p>
+</li>
+<li><p>在合并请求界面中填写标题和描述，指定处理人（即该项目具有master权限的人，如果自己有master权限，也可以是自己），选择需要合并的源分支和目标分支，如下图：<br><img src="/images/git/merge.png" alt="gitmerge"></p>
+</li>
+<li><p>等待上边指定的具有master权限的处理人进行合并确认。</p>
+</li>
+</ol>
+<h1 id="标签tag"><a href="#标签tag" class="headerlink" title="标签tag"></a>标签tag</h1><p><strong>分支和标签最大的区别：tag的位置是固定的，在给指定提交打好标签以后，它就固定于此位置。branch的位置会不断变动的，随着分支的向前推移或者向后回滚，都在不断变化</strong></p>
+<ol>
+<li><p>查看当前已有分支，<code>git tag</code>;</p>
+</li>
+<li><p>在当前位置创建分支，例如创建v1.0标签，<code>git tag -a v1.0</code>;也可以创建的时候添加注释，<code>git tag -a v1.0 -m &quot;1.0版本&quot;</code>，还可以使用客户端创建tag，操作比较简单，自己一看客户端界面就知道了；</p>
+</li>
+<li><p>在历史提交的某个版本上穿件标签，先要查出历史版本，<code>git log --pretty=oneline</code>,或者直接<code>git log --oneline</code>;<br>然后可以看到一串提交id，例如<code>abb56d0</code>,然后创建标签，<code>git tag -a v1.0 abb56d0</code>；</p>
+</li>
+<li><p>标签版本提交，<code>git push origin v1.0</code>；</p>
+</li>
+<li><p>查看某个标签版本，<code>git show v1.0</code>；</p>
+</li>
+<li><p>删除本地标签，<code>git tag -d v1.0</code>；</p>
+</li>
+<li><p>删除远程标签，<code>git push origin --delete v1.0</code>；</p>
+</li>
+<li><p>切换标签，<code>git checkout v1.0</code>,tag相当于快照，不能直接开发，如果要在次tag版本继续开发，需要checkout之后再创建新的branch；</p>
+</li>
+</ol>
+<h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><ol>
+<li>获取当前分支、tag远程最新代码，<code>git pull</code>。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/10/09/gitjichu/" data-id="ckbk4uka5000b0svh86jy031l" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">开发工具</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/10/13/wenti1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          关于技术提升的一点思考
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/24/pattern1_danli/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">【java设计模式初探0】_单例模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初始化及基础操作"><span class="toc-number">1.</span> <span class="toc-text">初始化及基础操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#命令行方式"><span class="toc-number">1.1.</span> <span class="toc-text">命令行方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tortoisegit图形界面方式"><span class="toc-number">1.2.</span> <span class="toc-text">tortoisegit图形界面方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分支和合并"><span class="toc-number">2.</span> <span class="toc-text">分支和合并</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础操作"><span class="toc-number">2.1.</span> <span class="toc-text">基础操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tortoisegit图形界面合并分支步骤"><span class="toc-number">2.2.</span> <span class="toc-text">Tortoisegit图形界面合并分支步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#标签tag"><span class="toc-number">3.</span> <span class="toc-text">标签tag</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-number">4.</span> <span class="toc-text">更新</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

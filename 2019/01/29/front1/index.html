@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>vue+element-ui搭建纯前台项目记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="架构说明本次项目用于个人学习，作用于个人聚合支付demo，记录步骤，为以后作参考。前台项目搭建的架构基础是前后台分离，即：从代码层面来说，前台和后台互不相干，不同的服务，不同的端口，前后台之前使用http协议进行交互。前台基本技术架构为node.js+vue.js+element-ui+vue-router。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue+element-ui搭建纯前台项目记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2019/01/29/front1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="架构说明本次项目用于个人学习，作用于个人聚合支付demo，记录步骤，为以后作参考。前台项目搭建的架构基础是前后台分离，即：从代码层面来说，前台和后台互不相干，不同的服务，不同的端口，前后台之前使用http协议进行交互。前台基本技术架构为node.js+vue.js+element-ui+vue-router。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-29T01:09:42.000Z">
+<meta property="article:modified_time" content="2019-01-30T06:10:08.352Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-front1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/29/front1/" class="article-date">
+  <time datetime="2019-01-29T01:09:42.000Z" itemprop="datePublished">2019-01-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vue+element-ui搭建纯前台项目记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="架构说明"><a href="#架构说明" class="headerlink" title="架构说明"></a>架构说明</h2><p>本次项目用于个人学习，作用于个人聚合支付demo，记录步骤，为以后作参考。<br>前台项目搭建的架构基础是前后台分离，即：从代码层面来说，前台和后台互不相干，不同的服务，不同的端口，前后台之前使用http协议进行交互。<br>前台基本技术架构为node.js+vue.js+element-ui+vue-router。</p>
+<a id="more"></a>
+
+<h2 id="步骤说明"><a href="#步骤说明" class="headerlink" title="步骤说明"></a>步骤说明</h2><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>本项目基于node.js搭建，需要使用npm命令，由于我之前已经安装过，因此跳过。</p>
+<h3 id="创建vue项目"><a href="#创建vue项目" class="headerlink" title="创建vue项目"></a>创建vue项目</h3><p>vue初始项目搭建过程主要参考如下博客：<br><a href="https://www.cnblogs.com/dreling/p/6892684.html" target="_blank" rel="noopener">前端架构之路：使用Vue.js开始第一个项目</a><br>稍有不同的是，上边博文中使用的是阿里版node，所以是cnpm命令，而我用的是原版，所以用的是npm。<br>简单整理一下最终步骤，大致如下：</p>
+<h3 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a>安装webpack</h3><p>网上说webpack是一个模板打包器，实际使用时我觉得似乎说是一个构建工具更合理，使用如下命令安装：<code>npm install -g webpack</code></p>
+<h3 id="安装vue-cli"><a href="#安装vue-cli" class="headerlink" title="安装vue-cli"></a>安装vue-cli</h3><p>使用<code>npm install vue-cli -g</code>命令安装脚手架，目前理解为就是一个创建vue项目的工具。</p>
+<h3 id="创建vue项目-1"><a href="#创建vue项目-1" class="headerlink" title="创建vue项目"></a>创建vue项目</h3><p>使用vue-cli的vue命令创建项目模板，这里实际上踩了个坑。上边博文中创建命令是<code>vue init webpack-simple first-vue</code>，我是照着敲的，一开始没有问题，但是到后边使用vue-router路由的时候各种问题出现。原因就是webpack-simple搭建的是极简版项目，如果要使用router这些功能，从依赖到目录都要自己一个个的创建。对于刚接触vue的人来说，这个过程必然频频出错，所以后来得知最佳步骤应该是这样<code>vue init webpack first-vue</code></p>
+<h3 id="引入element-ui。"><a href="#引入element-ui。" class="headerlink" title="引入element-ui。"></a>引入element-ui。</h3><p>使用element-ui，先要在项目中安装element-ui的依赖，在项目根目录下执行如下命令<code>npm install element-ui -S</code>。<br>然后需要在项目main.js中加入这样几行：</p>
+<pre>
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+</pre>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><h3 id="webpack和webpack-simple的区别"><a href="#webpack和webpack-simple的区别" class="headerlink" title="webpack和webpack-simple的区别"></a>webpack和webpack-simple的区别</h3><p>这个在上边说过，使用webpack会在项目中创建好路由相关的结构，而webpack-simple不会。</p>
+<h3 id="依赖加载"><a href="#依赖加载" class="headerlink" title="依赖加载"></a>依赖加载</h3><p>不管是初始项目后，还是后边加入element-ui之后，都是需要使用类似npm install这样的命令安装加载依赖的，就如java maven项目中import一个类或者包，必须要maven加载了相应的jar包才行。</p>
+<h3 id="vue-router用法"><a href="#vue-router用法" class="headerlink" title="vue-router用法"></a>vue-router用法</h3><p>常规的vue文件大概是类似下边的格式：</p>
+<pre>
+&lt;template>
+  &lt;div id="myvue">&lt;/div>
+&lt;/template>
+&lt;script>
+&lt;/script>
+&lt;style>
+&lt;style>
+</pre>
+
+<p>这个模板如果要交给router路由管理，就需要在路由中配置，如router目录下的index.js中配置，例如：<br><code>import myvue from &#39;@/components/myvue&#39;</code><br>其中，import后边的myvue是上边的id的值，components后边的myvue是components目录下的myvue.vue文件名。<br>然后配置路由组件,在routes中加入类似下边这样的代码：</p>
+<pre>
+{
+  path: '/myvue',
+  name: 'myvue',
+  component: myvue
+}
+</pre>
+
+<p>有了上边的操作还不够，还需要在使用上述模板的地方使用<code>&lt;router-view&gt;&lt;/router-view&gt;</code>标签，这样router才能正确的路由跳转。</p>
+<hr>
+<h2 id="代码参考"><a href="#代码参考" class="headerlink" title="代码参考"></a>代码参考</h2><p><a href="https://github.com/tuzongxun/tzx-payment" target="_blank" rel="noopener">涂宗勋的个人聚合支付demo</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2019/01/29/front1/" data-id="ckbk4uka000060svhdht6gx5f" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/" rel="tag">vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2019/02/11/zongjie3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          回望18，展望19
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/18/tzxpay/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">tzxPay个人聚合支付项目demo</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#架构说明"><span class="toc-number">1.</span> <span class="toc-text">架构说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤说明"><span class="toc-number">2.</span> <span class="toc-text">步骤说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装node-js"><span class="toc-number">2.1.</span> <span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建vue项目"><span class="toc-number">2.2.</span> <span class="toc-text">创建vue项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装webpack"><span class="toc-number">2.3.</span> <span class="toc-text">安装webpack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装vue-cli"><span class="toc-number">2.4.</span> <span class="toc-text">安装vue-cli</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建vue项目-1"><span class="toc-number">2.5.</span> <span class="toc-text">创建vue项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#引入element-ui。"><span class="toc-number">2.6.</span> <span class="toc-text">引入element-ui。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">3.</span> <span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#webpack和webpack-simple的区别"><span class="toc-number">3.1.</span> <span class="toc-text">webpack和webpack-simple的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖加载"><span class="toc-number">3.2.</span> <span class="toc-text">依赖加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vue-router用法"><span class="toc-number">3.3.</span> <span class="toc-text">vue-router用法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码参考"><span class="toc-number">4.</span> <span class="toc-text">代码参考</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

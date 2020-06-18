@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记3——工厂模式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义工厂模式实际上有广义和狭义的分别，广义的工厂模式指的是简单工厂模式、工厂方法模式、抽象工厂模式三个，而狭义的工厂模式就是这里的工厂方法模式，一般情况下如果有人直接说工厂模式，多半指的就是工厂方法模式。工厂方法模式引用书中的定义如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记3——工厂模式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/21/pattern3-factory/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="定义工厂模式实际上有广义和狭义的分别，广义的工厂模式指的是简单工厂模式、工厂方法模式、抽象工厂模式三个，而狭义的工厂模式就是这里的工厂方法模式，一般情况下如果有人直接说工厂模式，多半指的就是工厂方法模式。工厂方法模式引用书中的定义如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-21T05:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:27:55.247Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern3-factory" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/21/pattern3-factory/" class="article-date">
+  <time datetime="2017-11-21T05:43:58.000Z" itemprop="datePublished">2017-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记3——工厂模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>工厂模式实际上有广义和狭义的分别，广义的工厂模式指的是简单工厂模式、工厂方法模式、抽象工厂模式三个，而狭义的工厂模式就是这里的工厂方法模式，一般情况下如果有人直接说工厂模式，多半指的就是工厂方法模式。工厂方法模式引用书中的定义如下：</p>
+<a id="more"></a>
+<blockquote>
+<p>工厂方法模式(Factory Method Pattern)：定义一个用于创建对象的接口，让子类决定将哪一个<br>类实例化。工厂方法模式让一个类的实例化延迟到其子类。工厂方法模式又简称为工厂模式<br>(Factory Pattern)，又可称作虚拟构造器模式(Virtual Constructor Pattern)或多态工厂模式<br>(Polymorphic Factory Pattern)。工厂方法模式是一种类创建型模式</p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>对于工厂方法模式的定义，我觉得首先需要注意的是几个概念上的东西，也就是这个模式的几个别称，如虚拟构造器模式、多态工厂模式，根据以往面试的经验，如果考察知识面，某些公司是极有可能用这些别称来代替大家熟知的工厂模式的。<br>那么要理解工厂方法模式，结合之前的简单工厂模式应该就很容易了。<br>在之前的简单工厂模式中，有一个抽象产品类、若干个具体产品类、一个工厂类和一个静态工厂方法、还有一个消费者类。<br>之前说到工厂类的工厂方法是提供给外部获取产品的方法，而实际上这个方法内部也负责了产品的创建，所以也有一些地方说这个工厂方法是创建产品对象的方法。<br>而我认为这些都不重要，重要的是我的目的只是想要<code>产品的创建和消费者分离</code>，实现松耦合。所以不论对那个工厂方法的描述和理解是什么，只要知道这个方法的作用是不再需要消费者自己创建产品对象就够了。<br>但是，简单工厂模式中的这个工厂却有这一定的缺陷存在，并不适用于所有的场合。<br>之前的例子中以一个生产儿童牙膏和普通牙膏的工厂作为例子，现在我的实现依然要停留在这个制造牙膏的工厂中。<br>如果这个工厂的经营一直一成不变，永远都只生产这两种牙膏，那么之前的简单工厂完全没有问题，足以胜任，但是这只是一个假设，现实中的工厂总是要发展壮大的。<br>随着时间的推移和利润的增长，工厂又引进了各种产品，例如特效美白牙膏、超级环保牙膏，不止是牙膏，还有儿童牙刷、成年人牙刷、普通刷牙杯、创意刷牙杯等等，那么之前的工厂方法将变成这样：</p>
+<pre>
+    /**
+     *外部获取产品的工厂方法
+     */
+    public static MyProduct getProduct(int type) {
+        MyProduct product = null;
+        if (0 == type) {
+            // 普通牙膏
+            product = new MyProduct1();
+        } else if (1 == type) {
+            // 儿童牙膏
+            product = new MyProduct2();
+        } else if (2 == type) {
+            // 特效美白牙膏
+        } else if (3 == type) {
+            // 超级环保牙膏
+        } else if (4 == type) {
+            // 儿童牙刷
+        } else if (5 == type) {
+            // 成年人牙刷
+        } else if (6 == type) {
+            // 普通刷牙杯
+        } else if (7 == type) {
+            // 创意刷牙杯
+        }
+        return product;
+    }
+</pre>
+<p>上边的代码基本没有太具体的处理，已经有点让人眼花，如果再加上更具体的处理，可能每个if里边都会占满一个屏幕，那么这样的代码查找问题以及后期维护将会是一场噩梦。<br>如果把这个类回归实际生产工厂，每一个产品是一条生产线，那么如此多的if和else就会是如此多的生产线。<br>这么多的生产线放在一个工厂车间中，且不说空间的限制能否容得下，单说管理方面，就会是一种剪不断理还乱。<br>如果上边的工厂遇到这样的问题，势必会增加分厂，增加车间。然后会有一个管理所有分厂的总厂，不负责实际的生产。<br>而考虑到之前的产品发展时间长，需求量太大，因此只是单个的产品可能就需要一个单独的工厂来生产，因此分厂的设计便是一个分厂只负责一个产品。<br>代码的逻辑本身就来源于现实中，那么上边的工厂就需要改变，需要增加工厂类和工厂方法，犹如分厂。<br>还需要有一个抽象的工厂类和抽象工厂方法作为总厂，便是所谓的抽象父类。<br>那么优化后的工厂方法就需要改成如下，首先需要有一个抽象的工厂父类，可以使抽象类，可以使普通类，也可以是接口，但是通常可能就声明为接口或抽象类，我这里就声明为一个接口：</p>
+<pre>
+package patterntest.factorypattern;
+import patterntest.product.MyProduct;
+public interface MyFactory {
+    /**
+     *外部获取产品的工厂方法,父类工厂接口
+     */
+    public MyProduct getProduct(int type);
+}
+</pre>
+<p>这里定义了一个提供给外部获取产品的统一接口，基本和简单工厂方法里的定义一样，不同的是这个方法不再是静态方法，也没有了方法实体。<br>至于为什么没有方法实体，这个很好理解，是因为这个接口中这个方法并不需要具体的生产产品，具体的生产工作需要分厂来做，所以他就应该是抽象的没有实体的方法。<br>而为什么简单工厂模式里的工厂方法是static静态的，这里却去掉了static呢？那是因为虽然static的方法也可以被继承，但是却“不能被覆盖”。<br>对于非static的方法，如果子类重写了这个方法，当我们用父类调用这个方法的时候，会调用实际子类的这个方法。<br>但是如果是static的方法，子类也“重写”了这个方法，那么再使用父类调用这个方法的时候，调用的还是父类的这个方法，也就是并不能实现多态性。<br>为什么上边的重写要打引号？是因为这个“重写”，不是我们平常理解的那个重写，看起来是和父类一模一样的方法，但是不能使用<code>@Override</code>注解，相当于就是互相独立没有关系的方法。<br>有了接口和抽象方法，我然后就需要有实际工厂类和方法，但是为了演示，首先还需要提供抽象产品类和实际产品类，这里只演示三个：</p>
+<pre>
+package patterntest.product;
+/**
+ *产品类父类
+ * @author tzx
+ */
+public abstract class MyProduct {
+    /**
+     *产品名称
+     */
+    protected String productName;
+    /**
+     *产品规格
+     */
+    protected String productSize;
+
+    /**
+     *添加必要成分
+     */
+    public void addIngredient() {
+    }
+    public String getProductName() {
+        return productName;
+    }
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public String getProductSize() {
+        return productSize;
+    }
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
+    }
+    @Override
+    public String toString() {
+        return "MyProduct [productName=" + productName + ", productSize=" + productSize + "]";
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *普通牙膏
+ *@author tzx
+ */
+public class MyProduct1 extends MyProduct {
+    public MyProduct1() {
+        addIngredient();
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+
+/**
+ *儿童牙膏
+ *@author tzx
+ */
+public class MyProduct2 extends MyProduct {
+    public MyProduct2() {
+        addIngredient();
+        delead();
+    }
+    /**
+     *去铅
+     */
+    public void delead() {
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *特效美白牙膏
+ *@author tzx
+ */
+public class MyProduct3 extends MyProduct {
+    public MyProduct3() {
+        addIngredient();
+        addWhitening();
+    }
+    /**
+     *增加特效美白成分
+     */
+    public void addWhitening() {
+    }
+}
+</pre>
+<p>有了具体的三个产品，根据上边的理念，每个工厂生产一种产品，也就是每个产品要对应一个实际工厂，所以我们需要有三个对应的工厂,这些工厂均实现工厂接口的抽象方法：</p>
+<pre>
+package patterntest.factorypattern;
+import patterntest.product.MyProduct;
+import patterntest.product.MyProduct1;
+/**
+ *生产普通牙膏的分厂 
+ *@author tzx
+ */
+public class MyFactory1 implements MyFactory {
+    @Override
+    public MyProduct getProduct() {
+        return new MyProduct1();
+    }
+}
+</pre>
+<pre>
+package patterntest.factorypattern;
+import patterntest.product.MyProduct;
+import patterntest.product.MyProduct2;
+/**
+ *生产儿童牙膏的分厂
+ *@author tzx
+ */
+public class MyFactory2 implements MyFactory {
+    @Override
+    public MyProduct getProduct() {
+        return new MyProduct2();
+    }
+}
+</pre>
+<pre>
+package patterntest.factorypattern;
+import patterntest.product.MyProduct;
+import patterntest.product.MyProduct3;
+/*
+ *生产特效美白牙膏的分厂
+ */
+public class MyFactory3 implements MyFactory {
+    @Override
+    public MyProduct getProduct() {
+        return new MyProduct3();
+    }
+}
+</pre>
+<p>这样一来，工厂就可以正常开始运行了，接下来是消费者找工厂购买商品，只需要根据实际需要创建时间的工厂，然后调用生产方法，就可以得到想要的产品：</p>
+<pre>
+package patterntest.consumer;
+import patterntest.factorypattern.MyFactory;
+import patterntest.factorypattern.MyFactory1;
+import patterntest.factorypattern.MyFactory2;
+import patterntest.factorypattern.MyFactory3;
+/**
+ *消费者
+ *@author tzx
+ */
+public class Consumer {
+    public static void main(String[] args) {
+        MyFactory factory = null;
+        // 我需要普通牙膏
+        factory = new MyFactory1();
+        factory.getProduct();
+        System.out.println(factory.getProduct().getClass());
+        // 我需要儿童牙膏
+        factory = new MyFactory2();
+        factory.getProduct();
+        System.out.println(factory.getProduct().getClass());
+        // 我需要特效美白牙膏
+        factory = new MyFactory3();
+        factory.getProduct();
+        System.out.println(factory.getProduct().getClass());
+    }
+}
+</pre>
+
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><p>那么，根据上边的实例可以归纳出工厂方法的要点基本如下：</p>
+<ol>
+<li>需要有一个抽象产品类</li>
+<li>需要有若干个具体的产品类</li>
+<li>需要有一个抽象工厂和抽象工厂方法</li>
+<li>需要每个具体产品对应一个具体的工厂和工厂方法</li>
+<li>抽象工厂中的抽象工厂方法需要是非static的</li>
+<li>消费者需要自己根据实际需要创建实际的工厂</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>工厂方法模式相对于简单工厂模式，就是减轻了工厂类和工厂方法的工作，把简单工厂模式中的一个工厂类根据具体产品拆分成不同的工厂，并提供一个父类接口。<br>这样做不仅实现了产品和消费者的分离，也实现了具体工厂的轻负荷，使用面向对象的多态性在运行期选择具体的工厂。<br>但是这种模式中，缺点也是显而易见的，每一个产品都需要有一个产品工厂，就相当于每增加一个产品，都至少要增加两个类，大大增加了类的个数。<br>另外，根据简单工厂模式那里的理解，自己new一个工厂，相当于为了一个牙膏创建一个工厂，这似乎也是不合理的。<br>但是需要明白的是，现在的场景不一样了，每个工厂创造的是一批牙膏而不是一支，所以这里new一个工厂，其实可以理解成我需要一批牙膏，于是我找了个工厂代理生产了一批。</p>
+<p>注：书中实际上还提到了对工厂方法模式的优化，那就是在使用的时候使用xml配置文件和反射来得到具体的工厂类，而不是直接new，是否要这样优化可以根据每个人的实际需要选择。</p>
+<p>demo源码可在github下载：<a href="https://github.com/tuzongxun/mypattern" target="_blank" rel="noopener">https://github.com/tuzongxun/mypattern</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/21/pattern3-factory/" data-id="ckbk4ukb300220svh44t72hvl" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/22/pattern4-absfactory/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记4——抽象工厂模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/20/pattern2-simfactory/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记2——简单工厂模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解"><span class="toc-number">2.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要点"><span class="toc-number">3.</span> <span class="toc-text">要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>cookie、session和java过滤器理解和使用 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基础知识理解： cookie、session和过滤器通常都是用在web应用中，cookie和session用来保存一定的数据，过滤器Filter则是在浏览器发出请求之后，而后台执行特定的请求之前发生一定的作用。之所以把这三个放一起，是因为有很多时候都会是把他们结合在一起使用，例如有些登陆程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cookie、session和java过滤器理解和使用">
+<meta property="og:url" content="https://blog.tzxcode.cn/2016/11/07/java1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="基础知识理解： cookie、session和过滤器通常都是用在web应用中，cookie和session用来保存一定的数据，过滤器Filter则是在浏览器发出请求之后，而后台执行特定的请求之前发生一定的作用。之所以把这三个放一起，是因为有很多时候都会是把他们结合在一起使用，例如有些登陆程序。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-07T07:09:42.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:31:50.798Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="cookie">
+<meta property="article:tag" content="session">
+<meta property="article:tag" content="过滤器">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-java1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/07/java1/" class="article-date">
+  <time datetime="2016-11-07T07:09:42.000Z" itemprop="datePublished">2016-11-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      cookie、session和java过滤器理解和使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p><strong>基础知识理解：</strong></p>
+<p>cookie、session和过滤器通常都是用在web应用中，cookie和session用来保存一定的数据，过滤器Filter则是在浏览器发出请求之后，而后台执行特定的请求之前发生一定的作用。之所以把这三个放一起，是因为有很多时候都会是把他们结合在一起使用，例如有些登陆程序。</p>
+<a id="more"></a>
+<p>cookie是浏览器的机制，session是服务器的机制，但是实际上cookie也是由服务器生成的，之后返回给浏览器的，并不是浏览器本身生成。当浏览器发送某个请求时，如果拥有有效的cookie则会把这个cookie带在一起。</p>
+<p>之所有会有cookie的使用，是因为http协议原本是无状态协议，也就是说通过http协议本身，服务器不能判断浏览器是否之前访问过。</p>
+<p>Filter和servlet的写法相似，编写相关代码的时候需要实现Filter接口并重写相关的方法，通常更改较多的是doFilter方法。Filter代码写好以后如果需要发生效用，需要像配置servlet一样在web.xml中 进行一定的配置。</p>
+<p>以下是一个简单的结合cookie、session、Servlet和Filter的登陆示例代码：</p>
+<p>定义一个用户实体类，充当数据库数据，这里使用单例模式，保证只存在一个实例对象：</p>
+<pre>
+package models;  
+/** 
+ *用户信息实体类  
+ *@author tuzongxun123 
+ */  
+public class UserModel {  
+    private String userName;  
+    private String password;  
+    // 单例模式，保证只有一个用户对象实例  
+    public static UserModel getInstance() {  
+        UserModel user = new UserModel("zhangsan", "123456");  
+        return user;  
+    }  
+    private UserModel(String userName, String pasword) {  
+        this.userName = userName;  
+        this.password = pasword;  
+    }  
+    public String getUserName() {  
+        return userName;  
+    }  
+    public String getPassword() {  
+        return password;  
+    }  
+}  
+</pre>
+
+
+<p>用户登陆输入信息index.jsp界面，在form表单的action中使用jsp的特性获得项目路径：</p>
+<pre>
+&lt;%@ page language="java" import="java.util.*" contentType="text/html; charset=utf-8"  
+    pageEncoding="utf-8"%>  
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">  
+&lt;html>  
+&lt;head>  
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+&lt;title>cookieAndFilterTest</title>  
+&lt;/head>  
+&lt;body>  
+     &lt;form action="<%=request.getContextPath() %>/loginServlet" method="post">  
+        userName：&lt;input type="text" name="userName" />&lt;/br>  
+        password：&lt;input type="password" name="password" />&lt;/br>  
+        &lt;input type="submit" value="login"/>  
+     &lt;/form>  
+&lt;/body>  
+&lt;/html>  
+</pre>
+
+
+<p>对应的后台servlet：</p>
+<pre>
+package servletTest;  
+import java.io.IOException;  
+import javax.servlet.ServletException;  
+import javax.servlet.http.Cookie;  
+import javax.servlet.http.HttpServlet;  
+import javax.servlet.http.HttpServletRequest;  
+import javax.servlet.http.HttpServletResponse;  
+import javax.servlet.http.HttpSession;  
+import models.UserModel;  
+public class LoginServlet extends HttpServlet {  
+    @Override  
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)  
+            throws ServletException, IOException {  
+        this.doPost(req, resp);  
+    }  
+    @Override  
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)  
+            throws ServletException, IOException {  
+        String userName = req.getParameter("userName");  
+        String password = req.getParameter("password");  
+        // 模拟数据库数据  
+        UserModel user = UserModel.getInstance();  
+        String dbUserName = user.getUserName();  
+        String dbPassword = user.getPassword();  
+        if (dbUserName.equals(userName) && dbPassword.equals(password)) {  
+            // 用户名和密码都匹配，证明登陆成功，设置session和cookie  
+            HttpSession session = req.getSession();  
+            session.setAttribute("userName", userName);  
+            session.setAttribute("password", password);  
+            Cookie cookie = new Cookie("userName", userName);  
+            Cookie cookie2 = new Cookie("password", password);  
+            // 设置cookie的存储时长  
+            cookie.setMaxAge(60);  
+            cookie2.setMaxAge(60);  
+            // 把cookie发送给浏览器  
+            resp.addCookie(cookie);  
+            resp.addCookie(cookie2);  
+            // 转发请求到用户列表  
+            req.getRequestDispatcher("/userList").forward(req, resp);  
+        } else {  
+            // 转发请求到登陆页面  
+            req.getRequestDispatcher("index.jsp").forward(req, resp);  
+        }  
+    }  
+}  
+</pre>
+
+
+<p>上边登陆后跳转的请求：</p>
+<pre>
+package servletTest;   
+import java.io.IOException;  
+import javax.servlet.ServletException;  
+import javax.servlet.http.HttpServlet;  
+import javax.servlet.http.HttpServletRequest;  
+import javax.servlet.http.HttpServletResponse;  
+import models.UserModel;  
+public class UserListServlet extends HttpServlet {  
+    @Override  
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)  
+            throws ServletException, IOException {  
+        this.doPost(req, resp);  
+    }  
+    @Override  
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)  
+            throws ServletException, IOException {  
+        UserModel user = UserModel.getInstance();  
+        //在浏览器中打印出用户列表书数据  
+        resp.getWriter().write(  
+                "userName:" + user.getUserName() + "," + "password:"  
+                        + user.getPassword());  
+    }  
+}  
+</pre>
+
+
+<p>项目web.xml配置：</p>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?>  
+&lt;web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
+    id="WebApp_ID" version="2.5">      
+  &lt;!-- 访问时的项目名称 -->  
+  &lt;display-name>cookieAndFilterTest&lt;/display-name>  
+  &lt;!-- servlet配置 -->  
+  &lt;servlet>  
+     &lt;servlet-name>login&lt;/servlet-name>  
+     &lt;servlet-class>servletTest.LoginServlet&lt;/servlet-class>  
+  &lt;/servlet>  
+  &lt;servlet-mapping>  
+     &lt;servlet-name>login&lt;/servlet-name>  
+     &lt;url-pattern>/loginServlet&lt;/url-pattern>  
+  &lt;/servlet-mapping>  
+  &lt;servlet>  
+     &lt;servlet-name>userList&lt;/servlet-name>  
+     &lt;servlet-class>servletTest.UserListServlet&lt;/servlet-class>  
+  &lt;/servlet>  
+  &lt;servlet-mapping>  
+     &lt;servlet-name>userList&lt;/servlet-name>  
+     &lt;url-pattern>/userList&lt;/url-pattern>  
+  &lt;/servlet-mapping>  
+  &lt;!-- 过滤器设置，浏览其发送请求后首先会走这里 -->  
+  &lt;filter>  
+     &lt;filter-name>loginFilter&lt;/filter-name>  
+     &lt;filter-class>filterTest.FilterTest&lt;/filter-class>  
+  &lt;/filter>  
+  &lt;filter-mapping>  
+     &lt;filter-name>loginFilter&lt;/filter-name>  
+     &lt;url-pattern>/*&lt;/url-pattern>  
+  &lt;/filter-mapping>  
+  &lt;!-- 输入项目名访问的默认页面 -->  
+  &lt;welcome-file-list>  
+    &lt;welcome-file>index.jsp&lt;/welcome-file>  
+  &lt;/welcome-file-list>  
+&lt;/web-app>  
+</pre>
+
+<p>java过滤器代码：</p>
+<pre>
+package filterTest;   
+import java.io.IOException;  
+import javax.servlet.Filter;  
+import javax.servlet.FilterChain;  
+import javax.servlet.FilterConfig;  
+import javax.servlet.ServletException;  
+import javax.servlet.ServletRequest;  
+import javax.servlet.ServletResponse;  
+import javax.servlet.http.Cookie;  
+import javax.servlet.http.HttpServletRequest;  
+import javax.servlet.http.HttpServletResponse;  
+import models.UserModel;  
+public class FilterTest implements Filter {  
+    @Override  
+    public void destroy() {  
+    }  
+    @Override  
+    public void doFilter(ServletRequest request, ServletResponse response,  
+            FilterChain chain) throws IOException, ServletException {  
+        // 登陆请求、初始请求直接放行  
+        HttpServletRequest req = (HttpServletRequest) request;  
+        HttpServletResponse resp = (HttpServletResponse) response;  
+        String uri = req.getRequestURI();  
+        if ("/cookieAndFilterTest/loginServlet".equals(uri)  
+                || "/cookieAndFilterTest/".equals(uri)) {  
+            // 放行  
+            chain.doFilter(request, response);  
+            return;  
+        }  
+        // 不是登陆请求的话，判断是否有cookie  
+        Cookie[] cookies = req.getCookies();  
+        if (cookies != null && cookies.length > 0) {  
+            String userName = null;  
+            String password = null;  
+            // 判断cookie中的用户名和密码是否和数据库中的一致，如果一致则放行，否则转发请求到登陆页面  
+            for (Cookie cookie : cookies) {  
+                if ("userName".equals(cookie.getName())) {  
+                    userName = cookie.getValue();  
+                }  
+                if ("password".equals(cookie.getName())) {  
+                    password = cookie.getValue();  
+                }  
+            }  
+            UserModel user = UserModel.getInstance();  
+            if (user.getUserName().equals(userName)  
+                    && user.getPassword().equals(password)) {  
+                chain.doFilter(request, response);  
+                return;  
+            } else {  
+                // 重定向到登陆界面  
+                req.getRequestDispatcher("/index.jsp").forward(req, resp);  
+                return;  
+            }  
+        } else {  
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);  
+            return;  
+        }  
+    }  
+    @Override  
+    public void init(FilterConfig arg0) throws ServletException {  
+    }  
+}
+</pre>  
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2016/11/07/java1/" data-id="ckbk4uka7000c0svh1dvae4b3" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cookie/" rel="tag">cookie</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/session/" rel="tag">session</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%87%E6%BB%A4%E5%99%A8/" rel="tag">过滤器</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2016/11/07/mongo2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Mongodb3.0.5副本集搭建及spring和java连接副本集配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/11/07/mongodb1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">不使用spring的情况下用java原生代码操作mongodb数据库的两种方式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title recent-posts">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/18/zongjie2/">记一次开发过程中的思维转换</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/14/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/13/tzxblog7/">前后台打通之vue和vant前端要点及设计问题记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/05/tzxblog6/">前后台打通之springboot后台要点记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/01/tzxblog5/">vue前端项目搭建和要点记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

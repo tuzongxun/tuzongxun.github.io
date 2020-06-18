@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>springcloud微服务七：网关zuul | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="理解网关概念根据我个人的理解，对于一个系统来说，不管是微服务架构还是非微服务架构，如果单从功能实现来说，网关其实不是必要的。但是，如果一个系统的业务涉及到了和外部网络的交互，多数情况下都会加入网关功能，最根源的目的就是提升系统的网络安全性。因此网关可以理解为是在大的系统架构层面，一个网络策略方面的东西，最基本的需求就是实现请求的路由转发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springcloud微服务七：网关zuul">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/09/15/springcloud7/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="理解网关概念根据我个人的理解，对于一个系统来说，不管是微服务架构还是非微服务架构，如果单从功能实现来说，网关其实不是必要的。但是，如果一个系统的业务涉及到了和外部网络的交互，多数情况下都会加入网关功能，最根源的目的就是提升系统的网络安全性。因此网关可以理解为是在大的系统架构层面，一个网络策略方面的东西，最基本的需求就是实现请求的路由转发。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s71.png">
+<meta property="article:published_time" content="2018-09-15T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-10-17T03:29:37.029Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springcloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/springcloud/s71.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springcloud7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/15/springcloud7/" class="article-date">
+  <time datetime="2018-09-15T07:09:42.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springcloud微服务七：网关zuul
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="理解网关概念"><a href="#理解网关概念" class="headerlink" title="理解网关概念"></a>理解网关概念</h1><p>根据我个人的理解，对于一个系统来说，不管是微服务架构还是非微服务架构，如果单从功能实现来说，网关其实不是必要的。<br>但是，如果一个系统的业务涉及到了和外部网络的交互，多数情况下都会加入网关功能，最根源的目的就是提升系统的网络安全性。<br>因此网关可以理解为是在大的系统架构层面，一个网络策略方面的东西，最基本的需求就是实现请求的路由转发。</p>
+<a id="more"></a>
+<p>但是有的时候，可能网关是一种功能上的实现，而没有叫做网关，就例如在我们目前的一个支付系统中，大的架构大致如下：<br><img src="/images/springcloud/s71.png" alt="cloud1"><br>我们把支付核心功能放在了内网中，dmz域的子系统可以访问，而外部网络的其他系统不能直接访问，这里dmz域的前置系统实际上就做了一部分网关的功能，但是没有被称作网关。<br>之所以没有被称作网关，可能是因为我们这两个前置不仅做了部分请求转发功能，还实现了一部分业务相关的逻辑。<br>而比较纯粹的网关，一般来说应该是不直接涉及业务层面的，就如这里要说的spring cloud整合的zuul，他就主要包含两个功能：路由转发和请求过滤。<br>这里的路由转发又分为传统路由转发和面向服务的路由转发，我认为zuul的优势实际上就是后一种，面向服务的路由转发。<br>因为传统路由转发，转发的目标都是要配置具体的ip或主机名的，在子系统特别多的情况下，就会导致配置异常繁琐。<br>面向服务的路由转发，就结合ribbon负载均衡，面向服务名进行转发，由于多个部署节点服务名相同，这就大大降低了配置复杂度。<br>所以，这里我就不再记录传统路由转发的方式，只记录面向服务的路由转发。</p>
+<h1 id="zuul面向服务路由转发的基础使用"><a href="#zuul面向服务路由转发的基础使用" class="headerlink" title="zuul面向服务路由转发的基础使用"></a>zuul面向服务路由转发的基础使用</h1><p>一个带zuul网关面向服务转发的springcloud系统，至少需要包含这样三个模块：<br>eureka注册中心<br>eureka服务提供者<br>zuul网关<br>那么这里，结合之前的项目，我就还需要创建一个zuul网关服务，之后就可以进行测试。<br>zuul首先也需要引入相关的依赖，包含zuul本身的依赖，和eureka的依赖，eureka的依赖是为了实现面向服务转发的关键：</p>
+<pre>
+&lt;dependency>
+        &lt;groupId>org.springframework.cloud&lt;/groupId>
+        &lt;artifactId>spring-cloud-starter-zuul&lt;/artifactId>
+&lt;/dependency>
+&lt;dependency>
+        &lt;groupId>org.springframework.cloud&lt;/groupId>
+        &lt;artifactId>spring-cloud-starter-eureka&lt;/artifactId>
+&lt;/dependency>
+</pre>
+
+<p>有了依赖之后，就是application.properties文件的配置：</p>
+<pre>
+server.port=5000
+spring.application.name=zuul-service
+zuul.servlet-path=/
+zuul.routes.zuul-service.path=/zuul/*
+zuul.routes.zuul-service.serviceId=client
+eureka.instance.prefer-ip-address=true
+eureka.client.serviceUrl.defaultZone=http://127.0.0.1:10010/eureka/
+</pre>
+
+<p>这里的重点在于后边五项，配置最后一项是因为网关服务本身也是一个服务，要被外部访问。倒数第二项之前说过，为了能够直接使用ip访问。<br>最关键的是中间三项：zuul.routes.zuul-service.path指定需要被过滤的请求uri，这里的意思就是凡是访问zuul这个项目的请求时/zuul开头的，都进行转发。转发到哪里呢？转发到zuul.routes.zuul-service.serviceId指定的服务，如果zuul.routes.zuul-service.serviceId指定的服务实际上有多个实例，那么就会由ribbon负责负载均衡选择。<br>最最重要的一项，是zuul.servlet-path，之所以说最最重要，是因为我参考的很多文章里都没有提这一项，而结果就是后边访问的时候直接抛出500错误：</p>
+<pre>
+No route found for uri
+</pre>
+
+<p>有了上边的配置后，还需要在启动类上加上开启网关的注解，当然了，还需要springcloud项目的标准注解：</p>
+<pre>
+@EnableZuulProxy
+@SpringCloudApplication
+</pre>
+
+<p>至此，一个基本的网关服务就建好了，陆续启动注册中心、client服务和zuul网关项目，然后浏览器直接访问localhost:5000/zuul/hello，会发现返回“String”的字符串。<br>我们上边的zuul项目除了启动类的默认代码外，没有任何其他代码，之所以返回了数据，就是因为zuul系统对该请求进行了转发，内部又请求了client服务这个系统。</p>
+<h1 id="zuul请求过滤"><a href="#zuul请求过滤" class="headerlink" title="zuul请求过滤"></a>zuul请求过滤</h1><p>网关路由转发其实也是权限控制的一个环节，是在网络层面的控制，而权限控制通常都还会涉及到用户登录验证之类的功能。<br>在zuul里边就提供了请求过滤功能，可以使我们在这里脱离业务进行权限控制，从而使整个系统看起来耦合度更低。<br>zuul请求过滤其实理解起来比较简单，需要继承ZuulFilter类，这个类是个抽象类，实现了IZuulFilter接口。我们在继承这个类的时候，必须实现ZuulFilter和IZuulFilter里的四个抽象方法。<br>下边是代码示例：</p>
+<pre>
+/**
+ * zuul网关过滤器
+ * @author tuzongxun
+ * @create 2018年9月15日
+ */
+ @Component
+public class FirstZuulFilter extends ZuulFilter {
+    @Override
+    public Object run() {
+        // 具体权限控制的业务逻辑
+        return null;
+    }
+    @Override
+    public boolean shouldFilter() {
+        return true;
+    }
+    @Override
+    public int filterOrder() {
+        return 0;
+    }
+    @Override
+    public String filterType() {
+        return "pre";
+    }
+}
+</pre>
+
+<p>其中，run是主要逻辑代码的方法，比如进行一定的权限校验等，就是在这个方法里做。<br>shoouldFilter方法相当于一个开关，返回true的时候代表这个过滤器生效，返回false代表此过滤器不生效。我这里直接返回true，实际上可以做一定的逻辑处理。<br>filterOrder方法代表这个过滤器的执行顺序，当我们写了多个过滤器的时候，就可以给定不同的数值返回，数值越小的越先执行。还需要知道的是，在zuul内部有若干个内置的过滤器，有很多执行顺序值设为负数的，还有设置为1000的。<br>filterType方法指定过滤器的类型，可以理解为spring aop中before、after、around这种。filterType的值有四个：pre代表请求被路由之前执行，routing代表在路由请求时调用，post代表在routing和error之后被调用，error请求出错是被调用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/09/15/springcloud7/" data-id="ckbk4ukbk00380svhaicc0acj" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2019/01/18/tzxpay/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          tzxPay个人聚合支付项目demo
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/09/springcloud6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">springcloud微服务六：声明式服务调用Feign</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#理解网关概念"><span class="toc-number">1.</span> <span class="toc-text">理解网关概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zuul面向服务路由转发的基础使用"><span class="toc-number">2.</span> <span class="toc-text">zuul面向服务路由转发的基础使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zuul请求过滤"><span class="toc-number">3.</span> <span class="toc-text">zuul请求过滤</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

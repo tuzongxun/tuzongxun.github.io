@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>tzxblog博客系统-接口文档 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="V1.0接口安全说明所有接口需要实现签名，前台向后台发起请求前需要在header中添加签名参数和签名，以减少后台服务器的被攻击可能性。签名参数至少包含url、时间戳，有token的接口也需要对token签名，以参数名首字母排序后使用&amp;符号拼接后，进行rsa256算法签名。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tzxblog博客系统-接口文档">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/02/02/tzxblog4/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="V1.0接口安全说明所有接口需要实现签名，前台向后台发起请求前需要在header中添加签名参数和签名，以减少后台服务器的被攻击可能性。签名参数至少包含url、时间戳，有token的接口也需要对token签名，以参数名首字母排序后使用&amp;符号拼接后，进行rsa256算法签名。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-02T06:09:42.000Z">
+<meta property="article:modified_time" content="2020-02-02T08:34:16.372Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="业余项目">
+<meta property="article:tag" content="tzxblog">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-tzxblog4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/02/tzxblog4/" class="article-date">
+  <time datetime="2020-02-02T06:09:42.000Z" itemprop="datePublished">2020-02-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tzxblog博客系统-接口文档
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="V1-0"><a href="#V1-0" class="headerlink" title="V1.0"></a>V1.0</h1><h1 id="接口安全说明"><a href="#接口安全说明" class="headerlink" title="接口安全说明"></a>接口安全说明</h1><p>所有接口需要实现签名，前台向后台发起请求前需要在header中添加签名参数和签名，以减少后台服务器的被攻击可能性。<br>签名参数至少包含url、时间戳，有token的接口也需要对token签名，以参数名首字母排序后使用&amp;符号拼接后，进行rsa256算法签名。</p>
+<a id="more"></a>
+
+<hr>
+<h1 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h1><table>
+<thead>
+<tr>
+<th align="left">环境名称</th>
+<th align="left">协议</th>
+<th align="left">IP/域名</th>
+<th align="left">端口</th>
+<th align="left">私钥</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">开发环境</td>
+<td align="left">HTTP</td>
+<td align="left">127.0.0.1</td>
+<td align="left">8080</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">测试环境</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">联调环境</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">预生产环境</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">生产环境</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+</tbody></table>
+<h1 id="统一响应对象"><a href="#统一响应对象" class="headerlink" title="统一响应对象"></a>统一响应对象</h1><table>
+<thead>
+<tr>
+<th align="left">参数名称</th>
+<th align="left">数据类型</th>
+<th align="left">是否必须</th>
+<th align="left">参数描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">code</td>
+<td align="left">String</td>
+<td align="left">Y</td>
+<td align="left">响应码</td>
+</tr>
+<tr>
+<td align="left">msg</td>
+<td align="left">String</td>
+<td align="left">Y</td>
+<td align="left">响应描述</td>
+</tr>
+<tr>
+<td align="left">requestId</td>
+<td align="left">String</td>
+<td align="left">Y</td>
+<td align="left">请求id</td>
+</tr>
+<tr>
+<td align="left">data</td>
+<td align="left">Object</td>
+<td align="left">N</td>
+<td align="left">响应结果</td>
+</tr>
+</tbody></table>
+<h1 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h1><h2 id="文章分类或归档列表查询"><a href="#文章分类或归档列表查询" class="headerlink" title="文章分类或归档列表查询"></a>文章分类或归档列表查询</h2><hr>
+<p>| 接口名称      | 文章分类或归档列表查询                 ||||<br>|———–|—————————–|<br>| URL       | tzxblog/blog/category-list ||||<br>| 协议        | HTTP                        ||||<br>| 请求类型      | GET                         ||||<br>| 请求参数      | 参数名称                        | 数据类型   | 是否必须                    | 参数描述      |<br>| Header参数  | timestamp                   | String | Y                       | 时间戳       |<br>|| sign      | String                      | Y      | 签名                      |<br>| URL参数     | queryType                   | String | Y                       | index:首页； user:用户； recom:推荐；hot:热门； file:归档   |<br>|| userId    | String                      | N      | 用户id                    |<br>| 响应参数      | 参数名称                        | 数据类型   | 是否必须                    | 参数描述      |<br>|| code      | String                      | Y      | 响应码                     |<br>|| msg       | String                      | Y      | 响应描述                    |<br>|| requestId | String                      | Y      | 请求id                    |<br>|| data      | List<CategoryInfo>          | N      | 分类对象列表，参见附录CategoryInfo |</p>
+<h2 id="文章列表分页查询"><a href="#文章列表分页查询" class="headerlink" title="文章列表分页查询"></a>文章列表分页查询</h2><hr>
+<p>| 接口名称      | 文章列表分页查询                ||||<br>|———–|————————-|<br>| URL       | tzxblog/blog/blog-list ||||<br>| 协议        | HTTP                    ||||<br>| 请求类型      | GET                     ||||<br>| 请求参数      | 参数名称                    | 数据类型                         | 是否必须    | 参数描述      |<br>| Header参数  | timestamp               | String                       | Y       | 时间戳       |<br>|| sign      | String                  | Y                            | 签名      |<br>| URL参数     | queryType               | String                       | Y       | index:首页；user:用户；recom:推荐；hot:热门；file:归档   |<br>|| pageIndex | Long                    | N                            | 页码，默认1  |<br>|| pagSize   | Long                    | N                            | 页数，默认10 |<br>|| userId    | String                  | N                            | 用户id    |<br>| 响应参数      | 参数名称                    | 数据类型                         | 是否必须    | 参数描述      |<br>|| code      | String                  | Y                            | 响应码     |<br>|| msg       | String                  | Y                            | 响应描述    |<br>|| requestId | String                  | Y                            | 请求id    |<br>|| data      | PageInfo<BlogInfo>      | N                       | 分页博客对象，参见附录PageInfo<BlogInfo> |</p>
+<h2 id="文章详情查询"><a href="#文章详情查询" class="headerlink" title="文章详情查询"></a>文章详情查询</h2><hr>
+<p>| 接口名称      | 文章详情查询                ||||<br>|———–|———————–|<br>| URL       | tzxblog/blog/bloginfo ||||<br>| 协议        | HTTP                  ||||<br>| 请求类型      | GET                   ||||<br>| 请求参数      | 参数名称                  | 数据类型   | 是否必须 | 参数描述 |<br>| Header参数  | timestamp             | String | Y    | 时间戳  |<br>|| sign      | String                | Y      | 签名   |<br>| URL参数     | blogId                | String | Y    | 博客id |<br>| 响应参数      | 参数名称                  | 数据类型   | 是否必须 | 参数描述 |<br>|| code      | String                | Y      | 响应码  |<br>|| msg       | String                | Y      | 响应描述 |<br>|| requestId | String                | Y      | 请求id |<br>|| data      | BlogInfo              | N      | 博客对象 |</p>
+<h2 id="文章发布"><a href="#文章发布" class="headerlink" title="文章发布"></a>文章发布</h2><hr>
+<p>| 接口名称             | 文章发布                   ||||<br>|——————|————————|<br>| URL              | tzxblog/blog/add-blog ||||<br>| 协议               | HTTP                   ||||<br>| 请求类型             | POST                   ||||<br>| 请求参数             | 参数名称                   | 数据类型   | 是否必须   | 参数描述             |<br>| Header参数         | Content-Type          | String | Y      | application/json |<br>|| timestamp        | String                 | Y      | 时间戳    |<br>|| sign             | String                 | Y      | 签名     |<br>|| token            | String                 | Y      | token  |<br>| Body参数           | blogTitle              | String | Y      | 博客标题             |<br>|| blogContent      | String                 | Y      | 博客内容   |<br>|| blogCategroy     | String                 | Y      | 网站博客分类 |<br>|| blogUserCategroy | String                 | Y      | 个人分类   |<br>|| blogType         | String                 | Y      | 博客类型： original：原创；reprint：转载；translate：翻译；    |<br>|| blogPower        | String                 | Y      | 博客权限：private:私密；public：公开        |<br>| 响应参数             | 参数名称                   | 数据类型   | 是否必须   | 参数描述             |<br>|| code             | String                 | y      | 响应码    |<br>|| msg              | String                 | y      | 响应描述   |<br>|| requestId        | String                 | y      | 请求id   |<br>|| data             | String                 | N      | 博客id   |</p>
+<h2 id="文章删除"><a href="#文章删除" class="headerlink" title="文章删除"></a>文章删除</h2><hr>
+<p>| 接口名称      | 文章删除                      ||||<br>|———–|—————————|<br>| URL       | tzxblog/blog/remove-blog ||||<br>| 协议        | HTTP                      ||||<br>| 请求类型      | DELETE                    ||||<br>| 请求参数      | 参数名称                      | 数据类型   | 是否必须  | 参数描述 |<br>| Header参数  | timestamp                 | String | Y     | 时间戳  |<br>|| sign      | String                    | Y      | 签名    |<br>|| token     | String                    | Y      | token |<br>| URL参数     | blogId                    | String | Y     | 博客id |<br>| 响应参数      | 参数名称                      | 数据类型   | 是否必须  | 参数描述 |<br>|| code      | String                    | Y      | 响应码   |<br>|| msg       | String                    | Y      | 响应描述  |<br>|| requestId | String                    | Y      | 请求id  |<br>|| data      | String                    | N      | 博客id  |</p>
+<h2 id="文章修改"><a href="#文章修改" class="headerlink" title="文章修改"></a>文章修改</h2><hr>
+<p>| 接口名称             | 文章修改                      ||||<br>|——————|—————————|<br>| URL              | tzxblog/blog/update-blog ||||<br>| 协议               | HTTP                      ||||<br>| 请求类型             | POST                      ||||<br>| 请求参数             | 参数名称                      | 数据类型   | 是否必须   | 参数描述             |<br>| Header参数         | Content-Type             | String | Y      | application/json |<br>|| timestamp        | String                    | Y      | 时间戳    |<br>|| sign             | String                    | Y      | 签名     |<br>|| token            | String                    | Y      | token  |<br>| Body参数           | blogTitle                 | String | Y      | 博客标题             |<br>|| blogContent      | String                    | Y      | 博客内容   |<br>|| blogCategroy     | String                    | Y      | 网站博客分类 |<br>|| blogUserCategroy | String                    | Y      | 个人分类   |<br>|| blogType         | String                    | Y      | 博客类型：original：原创； reprint：转载；translate：翻译；    |<br>|| blogPower        | String                    | Y      | 博客权限： private:私密；public：公开        |<br>| 响应参数             | 参数名称                      | 数据类型   | 是否必须   | 参数描述             |<br>|| code             | String                    | y      | 响应码    |<br>|| msg              | String                    | y      | 响应描述   |<br>|| requestId        | String                    | y      | 请求id   |<br>|| data             | String                    | N      | 博客id   |</p>
+<h2 id="评论列表分页查询"><a href="#评论列表分页查询" class="headerlink" title="评论列表分页查询"></a>评论列表分页查询</h2><hr>
+<p>| 接口名称      | 评论列表分页查询                      ||||<br>|———–|——————————-|<br>| URL       | tzxblog/comment/comment-list ||||<br>| 协议        | HTTP                          ||||<br>| 请求类型      | GET                           ||||<br>| 请求参数      | 参数名称                          | 数据类型                            | 是否必须    | 参数描述   |<br>| Header参数  | timestamp                     | String                          | Y       | 时间戳    |<br>|| sign      | String                        | Y                               | 签名      |<br>| URL参数     | pageIndex                     | Long                            | N       | 页码，默认1 |<br>|| pagSize   | Long                          | N                               | 页数，默认10 |<br>|| userId    | String                        | N                               | 用户id    |<br>|| blogId    | String                        | N                               | 博客id    |<br>| 响应参数      | 参数名称                          | 数据类型                            | 是否必须    | 参数描述   |<br>|| code      | String                        | Y                               | 响应码     |<br>|| msg       | String                        | Y                               | 响应描述    |<br>|| requestId | String                        | Y                               | 请求id    |<br>|| data      | PageInfo<CommentInfo>          | N                             | 评论分页对象，参见附录PageInfo<CommentInfo> |</p>
+<h2 id="文章评论"><a href="#文章评论" class="headerlink" title="文章评论"></a>文章评论</h2><hr>
+<p>| 接口名称           | 文章评论                         ||||<br>|—————-|——————————|<br>| URL            | tzxblog/comment/add-comment ||||<br>| 协议             | HTTP                         ||||<br>| 请求类型           | POST                         ||||<br>| 请求参数           | 参数名称                         | 数据类型   | 是否必须  | 参数描述             |<br>| Header参数       | Content-Type                | String | Y     | application/json |<br>|| timestamp      | String                       | Y      | 时间戳   |<br>|| sign           | String                       | Y      | 签名    |<br>|| token          | String                       | Y      | token |<br>| Body参数         | blogId                       | String | Y     | 博客id             |<br>|| commentContent | String                       | Y      | 评论内容  |<br>| 响应参数           | 参数名称                         | 数据类型   | 是否必须  | 参数描述             |<br>|| code           | String                       | Y      | 响应码   |<br>|| msg            | String                       | Y      | 响应描述  |<br>|| requestId      | String                       | Y      | 请求id  |<br>|| data           | String                       | N      | 博客id  |</p>
+<h2 id="文件列表分页查询"><a href="#文件列表分页查询" class="headerlink" title="文件列表分页查询"></a>文件列表分页查询</h2><hr>
+<p>| 接口名称      | 文件列表分页查询                ||||<br>|———–|————————-|<br>| URL       | tzxblog/file/file-list ||||<br>| 协议        | HTTP                    ||||<br>| 请求类型      | GET                     ||||<br>| 请求参数      | 参数名称                    | 数据类型                         | 是否必须    | 参数描述   |<br>| Header参数  | timestamp               | String                       | Y       | 时间戳    |<br>|| sign      | String                  | Y                            | 签名      |<br>| URL参数     | pageIndex               | Long                         | N       | 页码，默认1 |<br>|| pagSize   | Long                    | N                            | 页数，默认10 |<br>| 响应参数      | 参数名称                    | 数据类型                         | 是否必须    | 参数描述   |<br>|| code      | String                  | Y                            | 响应码     |<br>|| msg       | String                  | Y                            | 响应描述    |<br>|| requestId | String                  | Y                            | 请求id    |<br>|| data      | PageInfo&lt;FileInfo       | N                       | 评论分页对象，参见附录PageInfo&lt;FileInfo |</p>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><hr>
+<p>| 接口名称      | 文件上传                      ||||<br>|———–|—————————|<br>| URL       | tzxblog/file/upload-file ||||<br>| 协议        | HTTP                      ||||<br>| 请求类型      | POST                      ||||<br>| 请求参数      | 参数名称                      | 数据类型   | 是否必须  | 参数描述                 |<br>| Header参数  | Content-Type             | String | Y     | multipart/form-data |<br>|| timestamp | String                    | Y      | 时间戳   |<br>|| sign      | String                    | Y      | 签名    |<br>|| token     | String                    | Y      | token |<br>| Form参数    | fileName                  | String | Y     | 文件名称                 |<br>|| file      | MultipartFile             | Y      | 文件    |<br>| 响应参数      | 参数名称                      | 数据类型   | 是否必须  | 参数描述                 |<br>|| code      | String                    | Y      | 响应码   |<br>|| msg       | String                    | Y      | 响应描述  |<br>|| requestId | String                    | Y      | 请求id  |<br>|| data      | String                    | N      | 文件id  |</p>
+<h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><hr>
+<p>| 接口名称      | 文件下载                        ||||<br>|———–|—————————–|<br>| URL       | tzxblog/file/download-file ||||<br>| 协议        | HTTP                        ||||<br>| 请求类型      | POST                        ||||<br>| 请求参数      | 参数名称                        | 数据类型   | 是否必须  | 参数描述                 |<br>| Header参数  | Content-Type               | String | Y     | multipart/form-data |<br>|| timestamp | String                      | Y      | 时间戳   |<br>|| sign      | String                      | Y      | 签名    |<br>|| token     | String                      | Y      | token |<br>| URL参数     | fileId                      | String | Y     | 文件id                 |<br>| 响应参数      | 参数名称                        | 数据类型   | 是否必须  | 参数描述                 |<br>|-|-|-|-|-|</p>
+<h2 id="用户基本信息查询"><a href="#用户基本信息查询" class="headerlink" title="用户基本信息查询"></a>用户基本信息查询</h2><hr>
+<p>| 接口名称      | 用户基本信息查询              ||||<br>|———–|———————–|<br>| URL       | tzxblog/user/userinfo ||||<br>| 协议        | HTTP                  ||||<br>| 请求类型      | GET                   ||||<br>| 请求参数      | 参数名称                  | 数据类型   | 是否必须 | 参数描述 |<br>| Header参数  | timestamp             | String | Y    | 时间戳  |<br>|| sign      | String                | Y      | 签名   |<br>| URL参数     | userId                | String | Y    | 用户id |<br>| 响应参数      | 参数名称                  | 数据类型   | 是否必须 | 参数描述 |<br>|| code      | String                | Y      | 响应码  |<br>|| msg       | String                | Y      | 响应描述 |<br>|| requestId | String                | Y      | 请求id |<br>|| data      | UserInfo              | N      | 用户信息 |</p>
+<h2 id="用户注册"><a href="#用户注册" class="headerlink" title="用户注册"></a>用户注册</h2><hr>
+<p>| 接口名称       | 用户注册                  ||||<br>|————|———————–|<br>| URL        | tzxblog/user/register ||||<br>| 协议         | HTTP                  ||||<br>| 请求类型       | POST                  ||||<br>| 请求参数       | 参数名称                  | 数据类型   | 是否必须 | 参数描述             |<br>| Header参数   | Content-Type         | String | Y    | application/json |<br>|| timestamp  | String                | Y      | 时间戳  |<br>|| sign       | String                | Y      | 签名   |<br>| Body参数     | userAccount           | String | Y    | 账号               |<br>|| password   | String                | Y      | 密码   |<br>|| rePassword | String                | Y      | 密码确认 |<br>|| userPhone  | String                | Y      | 手机号  |<br>|| userEmail  | String                | Y      | 邮箱   |<br>|| userName   | String                | N      | 姓名   |<br>|| userNick   | String                | N      | 昵称   |<br>|| userAge    | Integer               | N      | 年龄   |<br>|| userDesc   | String                | N      | 简介   |<br>|| userAddr   | String                | N      | 地址   |<br>| 响应参数       | 参数名称                  | 数据类型   | 是否必须 | 参数描述             |<br>|| code       | String                | Y      | 响应码  |<br>|| msg        | String                | Y      | 响应描述 |<br>|| requestId  | String                | Y      | 请求id |<br>|| data       | String                | N      | 用户id |</p>
+<h2 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h2><hr>
+<p>| 接口名称      | 用户登录               ||||<br>|———–|——————–|<br>| URL       | tzxblog/user/login ||||<br>| 协议        | HTTP               ||||<br>| 请求类型      | POST               ||||<br>| 请求参数      | 参数名称               | 数据类型   | 是否必须 | 参数描述             |<br>| Header参数  | Content-Type      | String | Y    | application/json |<br>|| timestamp | String             | Y      | 时间戳  |<br>|| sign      | String             | Y      | 签名   |<br>| Body参数    | userAccount        | String | Y    | 账号               |<br>|| password  | String             | Y      | 密码   |<br>| 响应参数      | 参数名称               | 数据类型   | 是否必须 | 参数描述             |<br>|| code      | String             | Y      | 响应码  |<br>|| msg       | String             | Y      | 响应描述 |<br>|| requestId | String             | Y      | 请求id |<br>|| data      | LoginInfo          | N      | 登录信息 |</p>
+<hr>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="附录一"><a href="#附录一" class="headerlink" title="附录一"></a>附录一</h2><h3 id="CategoryInfo"><a href="#CategoryInfo" class="headerlink" title="CategoryInfo"></a>CategoryInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>String</td>
+<td>Y</td>
+<td>分类id</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Y</td>
+<td>分类名称</td>
+</tr>
+</tbody></table>
+<h3 id="PageInfo"><a href="#PageInfo" class="headerlink" title="PageInfo"></a>PageInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pageIndex</td>
+<td>Long</td>
+<td>Y</td>
+<td>页码</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>Long</td>
+<td>Y</td>
+<td>每页数量</td>
+</tr>
+<tr>
+<td>totalCount</td>
+<td>Long</td>
+<td>Y</td>
+<td>总数</td>
+</tr>
+<tr>
+<td>pageCount</td>
+<td>Long</td>
+<td>Y</td>
+<td>页数</td>
+</tr>
+<tr>
+<td>pageContent</td>
+<td>Object</td>
+<td>N</td>
+<td>分页内容</td>
+</tr>
+</tbody></table>
+<h3 id="BlogInfo"><a href="#BlogInfo" class="headerlink" title="BlogInfo"></a>BlogInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>String</td>
+<td>Y</td>
+<td>博客id</td>
+</tr>
+<tr>
+<td>blogTitle</td>
+<td>String</td>
+<td>Y</td>
+<td>博客标题</td>
+</tr>
+<tr>
+<td>blogAbstract</td>
+<td>String</td>
+<td>Y</td>
+<td>博客摘要</td>
+</tr>
+<tr>
+<td>readCount</td>
+<td>Long</td>
+<td>Y</td>
+<td>阅读数</td>
+</tr>
+<tr>
+<td>commentCount</td>
+<td>Long</td>
+<td>Y</td>
+<td>评论数</td>
+</tr>
+<tr>
+<td>updateTime</td>
+<td>String</td>
+<td>Y</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>createTime</td>
+<td>String</td>
+<td>Y</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>blogContent</td>
+<td>String</td>
+<td>Y</td>
+<td>博客内容</td>
+</tr>
+<tr>
+<td>blogCategroy</td>
+<td>String</td>
+<td>Y</td>
+<td>网站博客分类</td>
+</tr>
+<tr>
+<td>blogUserCategroy</td>
+<td>String</td>
+<td>Y</td>
+<td>个人分类</td>
+</tr>
+<tr>
+<td>blogType</td>
+<td>String</td>
+<td>Y</td>
+<td>博客类型： original：原创；reprint：转载；translate：翻译；</td>
+</tr>
+<tr>
+<td>blogPower</td>
+<td>String</td>
+<td>Y</td>
+<td>博客权限：private:私密； public：公开</td>
+</tr>
+<tr>
+<td>userId</td>
+<td>String</td>
+<td>Y</td>
+<td>用户id</td>
+</tr>
+<tr>
+<td>userNick</td>
+<td>String</td>
+<td>Y</td>
+<td>用户昵称</td>
+</tr>
+</tbody></table>
+<h3 id="CommentInfo"><a href="#CommentInfo" class="headerlink" title="CommentInfo"></a>CommentInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>String</td>
+<td>Y</td>
+<td>评论id</td>
+</tr>
+<tr>
+<td>updateTime</td>
+<td>String</td>
+<td>Y</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>createTime</td>
+<td>String</td>
+<td>Y</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>commentContent</td>
+<td>String</td>
+<td>Y</td>
+<td>评论内容</td>
+</tr>
+</tbody></table>
+<h3 id="FileInfo"><a href="#FileInfo" class="headerlink" title="FileInfo"></a>FileInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>String</td>
+<td>Y</td>
+<td>文件id</td>
+</tr>
+<tr>
+<td>updateTime</td>
+<td>String</td>
+<td>Y</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>createTime</td>
+<td>String</td>
+<td>Y</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>fileUrl</td>
+<td>String</td>
+<td>Y</td>
+<td>文件路径</td>
+</tr>
+<tr>
+<td>fileName</td>
+<td>String</td>
+<td>Y</td>
+<td>文件名称</td>
+</tr>
+<tr>
+<td>fileDesc</td>
+<td>String</td>
+<td>Y</td>
+<td>文件描述</td>
+</tr>
+<tr>
+<td>downCount</td>
+<td>Long</td>
+<td>Y</td>
+<td>下载次数</td>
+</tr>
+</tbody></table>
+<h3 id="UserInfo"><a href="#UserInfo" class="headerlink" title="UserInfo"></a>UserInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>String</td>
+<td>Y</td>
+<td>文件id</td>
+</tr>
+<tr>
+<td>updateTime</td>
+<td>String</td>
+<td>Y</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>createTime</td>
+<td>String</td>
+<td>Y</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>userAccount</td>
+<td>String</td>
+<td>Y</td>
+<td>账号</td>
+</tr>
+<tr>
+<td>userName</td>
+<td>String</td>
+<td>N</td>
+<td>姓名</td>
+</tr>
+<tr>
+<td>userNick</td>
+<td>String</td>
+<td>Y</td>
+<td>昵称</td>
+</tr>
+<tr>
+<td>userAge</td>
+<td>Integer</td>
+<td>N</td>
+<td>年龄</td>
+</tr>
+<tr>
+<td>userDesc</td>
+<td>String</td>
+<td>N</td>
+<td>简介</td>
+</tr>
+<tr>
+<td>userAddr</td>
+<td>String</td>
+<td>N</td>
+<td>地址</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>String</td>
+<td>Y</td>
+<td>手机号</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>String</td>
+<td>Y</td>
+<td>邮箱</td>
+</tr>
+<tr>
+<td>userImg</td>
+<td>String</td>
+<td>Y</td>
+<td>头像url</td>
+</tr>
+</tbody></table>
+<h3 id="LoginInfo"><a href="#LoginInfo" class="headerlink" title="LoginInfo"></a>LoginInfo</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user</td>
+<td>UserInfo</td>
+<td>Y</td>
+<td>用户对象</td>
+</tr>
+<tr>
+<td>token</td>
+<td>UserToken</td>
+<td>Y</td>
+<td>用户token对象</td>
+</tr>
+</tbody></table>
+<h3 id="UserToken"><a href="#UserToken" class="headerlink" title="UserToken"></a>UserToken</h3><table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>属性描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>access_token</td>
+<td>String</td>
+<td>Y</td>
+<td>AT</td>
+</tr>
+<tr>
+<td>expires_in</td>
+<td>Long</td>
+<td>Y</td>
+<td>AT有效期</td>
+</tr>
+<tr>
+<td>refresh_token</td>
+<td>String</td>
+<td>Y</td>
+<td>RT</td>
+</tr>
+<tr>
+<td>refresh_expires_in</td>
+<td>Long</td>
+<td>Y</td>
+<td>RT有效期</td>
+</tr>
+<tr>
+<td>scope</td>
+<td>String</td>
+<td>N</td>
+<td>用户权限，备用</td>
+</tr>
+</tbody></table>
+<h1 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h1><p>项目代码和文档均以github托管，地址如下：<br><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/02/02/tzxblog4/" data-id="ckbk4ukbx00410svhhj9c5087" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/03/01/tzxblog5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          vue前端项目搭建和要点记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/02/01/tzxblog3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">tzxblog博客系统-概要设计</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#V1-0"><span class="toc-number">1.</span> <span class="toc-text">V1.0</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#接口安全说明"><span class="toc-number">2.</span> <span class="toc-text">接口安全说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境说明"><span class="toc-number">3.</span> <span class="toc-text">环境说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#统一响应对象"><span class="toc-number">4.</span> <span class="toc-text">统一响应对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#接口定义"><span class="toc-number">5.</span> <span class="toc-text">接口定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#文章分类或归档列表查询"><span class="toc-number">5.1.</span> <span class="toc-text">文章分类或归档列表查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文章列表分页查询"><span class="toc-number">5.2.</span> <span class="toc-text">文章列表分页查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文章详情查询"><span class="toc-number">5.3.</span> <span class="toc-text">文章详情查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文章发布"><span class="toc-number">5.4.</span> <span class="toc-text">文章发布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文章删除"><span class="toc-number">5.5.</span> <span class="toc-text">文章删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文章修改"><span class="toc-number">5.6.</span> <span class="toc-text">文章修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评论列表分页查询"><span class="toc-number">5.7.</span> <span class="toc-text">评论列表分页查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文章评论"><span class="toc-number">5.8.</span> <span class="toc-text">文章评论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件列表分页查询"><span class="toc-number">5.9.</span> <span class="toc-text">文件列表分页查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件上传"><span class="toc-number">5.10.</span> <span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件下载"><span class="toc-number">5.11.</span> <span class="toc-text">文件下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户基本信息查询"><span class="toc-number">5.12.</span> <span class="toc-text">用户基本信息查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户注册"><span class="toc-number">5.13.</span> <span class="toc-text">用户注册</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户登录"><span class="toc-number">5.14.</span> <span class="toc-text">用户登录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#附录"><span class="toc-number">6.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#附录一"><span class="toc-number">6.1.</span> <span class="toc-text">附录一</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CategoryInfo"><span class="toc-number">6.1.1.</span> <span class="toc-text">CategoryInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PageInfo"><span class="toc-number">6.1.2.</span> <span class="toc-text">PageInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BlogInfo"><span class="toc-number">6.1.3.</span> <span class="toc-text">BlogInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CommentInfo"><span class="toc-number">6.1.4.</span> <span class="toc-text">CommentInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FileInfo"><span class="toc-number">6.1.5.</span> <span class="toc-text">FileInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UserInfo"><span class="toc-number">6.1.6.</span> <span class="toc-text">UserInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LoginInfo"><span class="toc-number">6.1.7.</span> <span class="toc-text">LoginInfo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UserToken"><span class="toc-number">6.1.8.</span> <span class="toc-text">UserToken</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目地址"><span class="toc-number">7.</span> <span class="toc-text">项目地址</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

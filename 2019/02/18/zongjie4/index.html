@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>读《淘宝技术这十年》有感 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言不知不觉间，在微信读书看书已经有好几十个小时了，也许是因为都是零碎时间看一看，所以一直也都仅限于看，只有输入而没有输出。互联网时代知识太多，只限于看的层面可能要不了多久又会全部忘记，希望能从这里开始有一定的产出，让看书这件事更有意义一点，而不是变成一个消磨时间的手段。刚好，最近读完的《淘宝技术这十年》在读的过程中做了一些摘抄，对有一些内容也是深有感触。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读《淘宝技术这十年》有感">
+<meta property="og:url" content="https://blog.tzxcode.cn/2019/02/18/zongjie4/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言不知不觉间，在微信读书看书已经有好几十个小时了，也许是因为都是零碎时间看一看，所以一直也都仅限于看，只有输入而没有输出。互联网时代知识太多，只限于看的层面可能要不了多久又会全部忘记，希望能从这里开始有一定的产出，让看书这件事更有意义一点，而不是变成一个消磨时间的手段。刚好，最近读完的《淘宝技术这十年》在读的过程中做了一些摘抄，对有一些内容也是深有感触。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-02-18T13:43:58.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:49:10.743Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="修心•修性•修行">
+<meta property="article:tag" content="读后感">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-zongjie4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/18/zongjie4/" class="article-date">
+  <time datetime="2019-02-18T13:43:58.000Z" itemprop="datePublished">2019-02-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/">读后感</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      读《淘宝技术这十年》有感
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>不知不觉间，在<code>微信读书</code>看书已经有好几十个小时了，也许是因为都是零碎时间看一看，所以一直也都仅限于看，只有输入而没有输出。<br>互联网时代知识太多，只限于看的层面可能要不了多久又会全部忘记，希望能从这里开始有一定的产出，让看书这件事更有意义一点，而不是变成一个消磨时间的手段。<br>刚好，最近读完的《淘宝技术这十年》在读的过程中做了一些摘抄，对有一些内容也是深有感触。</p>
+<a id="more"></a>
+<h1 id="论成功学的好坏"><a href="#论成功学的好坏" class="headerlink" title="论成功学的好坏"></a>论成功学的好坏</h1><p>从前往后看，首先比较有感触的是书中的一段辟谣，描述如下：</p>
+<blockquote>
+<p>1998年，马化腾等一伙人凑了50万元创办了腾讯，没买房；<br>1998年，史玉柱借了50万元搞脑白金，没买房；<br>1999年，丁磊用50万元创办了163.com，没买房；<br>1999年，陈天桥炒股赚了50万元，创办盛大，没买房；<br>1999年，马云等18人凑了50万元注册了阿里巴巴，没买房。<br>如果当年他们用这50万元买了房，现在估计还在还着银行的贷款吧。<br>事实上，阿里巴巴和淘宝网都是在马云自己的房子里创办的，阿里巴巴是1999年初发布上线的。</p>
+</blockquote>
+<p>上边的那个谣言，我记得几年前在我的朋友圈中反复出现，首先应该是一些房地产销售发出来，后来随着房价的连续高涨，许多从事成功学的人以及推崇成功学的人、乃至讲理财的人也都开始转发。<br>卖房的当然是为了突出买房能带来的巨大收益，从而激起别人买房的欲望，而成功学讲的则是一种选择和投资策略。<br>而我当时看到这一段的时候，却没有关注房子的事，也没有关注选择的问题，而是在想成功学本身。<br>认识我较早的朋友可能还记得，曾经有那么几年我就是一个成功学的狂热者，当时QQ空间遍布着”拿破仑.希尔”、”安东尼.罗宾”、”陈安之”、”刘一秒”等人的各种言论，每天都是打了鸡血一样。<br>后来慢慢的我就不怎么发了。<br>前两年，在《老梁观世界》这一档节目中，老梁点名道姓的说”刘一秒”是骗子，这件事的起因是一个学习刘一秒成功学课程的学员，去参加《非你莫属》这个节目，然后各种雷人的言行，让人感觉像走火入魔一般。<br>《老梁观世界》这个节目很多人看，老梁这个人也是某种程度上的权威，但是对于节目上说的刘一秒骗子，我倒并不完全认同。<br>不得不承认的是，很多人为了营销，会对自己的各种经历进行包装，这里边就难免会有水分存在。<br>但是即便现在我不再学习、不再转发各种成功学的言论和视频，我却依然觉得许多成功学里边讲的确实很有道理。<br>就比如曾经看过关于《天道师道孝道》运用到企业中的思想，说到企业的天是顾客而不是老板，企业的师是最懂、最在行的人而不是上司，企业的祖就是元老，要懂得尊重创业元老。<br>如这种言论、这种思想，从我个人角度来看，我觉得就是对的。如果这种是骗子，那么只能说这个社会或许已经不太正常。<br>对于成功学，我觉得可能就像人民币一样，用的好就是好的，用的不好就是不好的，而好不好并不在于它本身。<br>如上边那个上《非你莫属》的哥们儿，那就是过度了，不能因为他一个人就否定了成功学的价值。<br>我只知道时至今日，当初学的很多成功学观点依然深深的影响的我，比如感恩、诚信，比如律己和坚持，也比如乐观和自省！</p>
+<h1 id="欺骗还是策略"><a href="#欺骗还是策略" class="headerlink" title="欺骗还是策略"></a>欺骗还是策略</h1><p>中国的文字一向博大精深，同样的一件事情用不同的描述，可能就是决然不同的感觉。<br>在《淘宝技术这十年》中讲述淘宝发展的过程时有这样一段描述：</p>
+<blockquote>
+<p>为了不引起eBay的注意，淘宝网在2003年里一直声称自己是一个“个人网站”.</p>
+</blockquote>
+<p>这句话的背景，就是当初淘宝刚开始的时候，和ebay是竞争关系，为了不被ebay封杀，就采用了这样一个策略。<br>这让我想起了同为bat之一的腾讯，记得网上有说QQ刚起步的时候为了引流，马化腾也曾伪装成女性和人聊天。<br>这两件事虽然一个是对竞争对手，一个是对客户，但是本质上其实都是欺骗。<br>只不过，如今再看这两件事，都叫做策略。<br>到底是欺骗还是策略，其实只看站在一个什么样的立场，从某种程度来说，欺骗就是一种策略。<br>欺骗不一定都是坏的，而策略也未必都是好的，这两种说法只是体现了多元化而已。</p>
+<h1 id="成事在天"><a href="#成事在天" class="headerlink" title="成事在天"></a>成事在天</h1><p>这本书中有一章讲了作者在淘宝的经历，其中讲的两个付出大量心血又连续失败的项目，让我有种两眼发热、身临其境的感觉。<br>虽然我个人过往的经历不如作者那般丰富多彩，做的项目也没有那么高的技术含量和知名度，但是类似这种投入了满腔热情，最终又因为各种原因不了了之的情况，也同样是多次发生。<br>但是就如作者说的一样，谋事在人，成事在天，却不能因为成事的不确定性就失去了自己本身的那份热情。<br>以下是摘抄书中的那两段：</p>
+<blockquote>
+<p>我们热火朝天地干了三个月，快要完成的时候，老马突然出现在我身后，看我操作了一遍新版“我的淘宝”之后，问我这是不是客户端软件，我说是网页。<br>他抓狂了，说这跟客户端软件一样，链接下面的下画线都没有，上下架用文件夹表示，他都不知道怎么操作，卖家肯定也不会玩。<br>老马果然是神一样的人物，他说的应验了，淘宝历史上第一个群体性事件爆发了，试用完新版本的“我的淘宝”之后，很多卖家愤怒了，说不会玩儿。<br>一灯就和承志一起商量怎么把页面改得像网页一点，改了半个月，愤怒依然没有平息。<br>我很无奈地看着这两个人在那里坚持，然后跟老板们商量怎么办。<br>后来我们到论坛上让大家投票要不要使用新版“我的淘宝”，<br>投票结果是一半以上的人反对。于是这十来个人做了3个月的系统被杀掉了。<br>我当时只感觉对不起这帮兄弟们，也对不起自己领的这三个月的薪水，走路都抬不起头来</p>
+</blockquote>
+<blockquote>
+<p>到2006年“五一”的时候，另一个划时代的项目启动了，就是“招财进宝”<br>这个系统进行得很顺利，但发布的时候，更大的群体性事件出现了，买家们质疑：你们不是承诺3年不收费吗？收广告费不是收费吗？<br>然后我们的竞争对手趁机在各种媒体上展开公关战，甚至在系统中开发出了“一键搬家”，搬过去还保留淘宝信用这样的“大规模杀伤性”功能。<br>然后，这个项目又失败了。<br>项目下线的那一天，乔峰先哭了，财神说男子汉大丈夫要拿得起，放得下，晚上去虚竹家请大家吃顿饭，算是项目结束了。<br>饭桌上，他才喝了两杯，就醉了，我看大家都吃不下去，也不敢多吃。<br>结束的时候，我和小宝送他回家，小宝力气大，背着他，我在旁边撑着伞，路灯下雾蒙蒙的，小雨一直下。<br>接连两个项目都挂了，我反倒不怎么悲伤了，心态反倒轻松了许多，明白了一个道理：很多东西，不是你努力就能成功的，也许应了那句话“谋事在人，成事在天”。</p>
+</blockquote>
+<h1 id="从苦B到牛B"><a href="#从苦B到牛B" class="headerlink" title="从苦B到牛B"></a>从苦B到牛B</h1><p>接下来的内容，可能也算是一碗鸡汤了，就当做本文的结尾，用来致敬那些走在前边的人，也用来勉励自己。<br>虽然如今的我还是只能用前一个词来形容，但是希望在一步步成长的过程中，能有一天换成后边一个！</p>
+<blockquote>
+<p>在那段不稳定的时间里，七公曾经在机房住了5天5夜，差点被辐射成蜘蛛侠<br>替换完数据库后，时间到了2004年春天，俗话说“春宵一刻值千金”，但这些人的春宵却不太好过，他们在把数据的连接放在SQL Relay之后就噩梦不断，这个代理服务经常会死锁，如同之前的MySQL死锁一样。<br>虽然多隆做了很多修改，但当时那个版本内部处理的逻辑不对，问题很多，最快的解决办法就是“重启”它的服务。这在白天还好，只要连接上机房的服务器，把进程杀掉，然后开启就可以了。<br>但是最痛苦的是它在晚上也要死掉，于是工程师们不得不24小时开着手机，一旦收到“SQL Relay进程挂起”的短信，就从春梦中醒来，打开电脑，连上机房的网络，重启服务，后来干脆每天睡觉之前先重启一下。<br>做这事最多的据说是三丰，他现在是淘宝网的总裁。现在我们知道，任何牛B的人物，都有一段苦B的经历。</p>
+</blockquote>
+<blockquote>
+<p>当时多数银行的网站已经支持在线支付了，但多隆告诉我，他们的网关五花八门，用什么技术的都有，我们必须一家一家地去接。<br>而且银行的网关不保证用户付钱后就一定能扣款成功，不保证扣款成功后就一定通知淘宝，也不保证通知淘宝后就一定能通知到，以及不保证通知到了就不重复通知。<br>这害苦了苗人凤，他必须每天手工核对账单，少一分钱都睡不着觉，因为对不齐账就一定是有人的钱找不到地方了，这可是天大的问题。<br>另外，他为了测试这些功能，去杭州所有的银行都办理了一张银行卡。一大堆银行卡摆在桌子上，不知道的人还以为他一定很有钱（高富帅啊），其实里面都只是十元八元的。<br>现在我们再一次知道，任何牛B的人物，都必须有一段苦B的经历。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2019/02/18/zongjie4/" data-id="ckbk4ukeh008y0svhcgmqgpdq" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/" rel="tag">修心•修性•修行</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E5%90%8E%E6%84%9F/" rel="tag">读后感</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2019/08/08/keycloak1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          springboot2集成oauth2和keycloak以及admin rest api记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/12/tzxpay1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">支付宝支付开发要点记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#论成功学的好坏"><span class="toc-number">2.</span> <span class="toc-text">论成功学的好坏</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#欺骗还是策略"><span class="toc-number">3.</span> <span class="toc-text">欺骗还是策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#成事在天"><span class="toc-number">4.</span> <span class="toc-text">成事在天</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从苦B到牛B"><span class="toc-number">5.</span> <span class="toc-text">从苦B到牛B</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

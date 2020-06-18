@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>业余小项目——tzxblog博客系统 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用spring boot作为后台创建的博客小项目项目说明这是一个模拟的博客系统，旨在练习spring boot等知识点的应用，以java后端为主，某些地方可能会显得是为了应用而应用。前端技术在于简单练习和熟悉，参考价值可能不是太大。同时，本项目希望努力做成一个方便本地使用的文件管理系统，包含单不限于博客文章、pdf书籍阅读、资料管理等功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="业余小项目——tzxblog博客系统">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/29/tzxblog1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="使用spring boot作为后台创建的博客小项目项目说明这是一个模拟的博客系统，旨在练习spring boot等知识点的应用，以java后端为主，某些地方可能会显得是为了应用而应用。前端技术在于简单练习和熟悉，参考价值可能不是太大。同时，本项目希望努力做成一个方便本地使用的文件管理系统，包含单不限于博客文章、pdf书籍阅读、资料管理等功能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/index.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/login.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/regist.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/index2.png">
+<meta property="article:published_time" content="2017-11-29T01:09:42.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:30:46.015Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="业余项目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/index.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-tzxblog1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/29/tzxblog1/" class="article-date">
+  <time datetime="2017-11-29T01:09:42.000Z" itemprop="datePublished">2017-11-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      业余小项目——tzxblog博客系统
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="使用spring-boot作为后台创建的博客小项目"><a href="#使用spring-boot作为后台创建的博客小项目" class="headerlink" title="使用spring boot作为后台创建的博客小项目"></a>使用spring boot作为后台创建的博客小项目</h2><h3 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h3><p>这是一个模拟的博客系统，旨在练习spring boot等知识点的应用，以java后端为主，某些地方可能会显得是为了应用而应用。<br/><br>前端技术在于简单练习和熟悉，参考价值可能不是太大。<br/><br>同时，本项目希望努力做成一个方便本地使用的文件管理系统，包含单不限于博客文章、pdf书籍阅读、资料管理等功能</br></p>
+<a id="more"></a>
+<h3 id="github源代码地址"><a href="#github源代码地址" class="headerlink" title="github源代码地址"></a>github源代码地址</h3><p><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a></p>
+<h3 id="基础环境和相关技术说明"><a href="#基础环境和相关技术说明" class="headerlink" title="基础环境和相关技术说明"></a>基础环境和相关技术说明</h3><blockquote>
+<p>java 版本1.8  后台编程语言<br/><br>spring boot 版本1.5.4  java后台主框架<br/><br>maven 版本3.2.5  项目构建和依赖管理<br/><br>使用spring boot结合thymeleaf模板    部分页面渲染<br/><br>mysql5.6  数据持久化存储<br/><br>jpa  持久层框架操作mysql<br/><br>slf4j/logback  使用springboot默认日志框架记录操作日志<br/><br>bootstrap4 页面美化<br/><br>jquery3.2.1 动态操作html页面<br/><br>markdown 部分页面渲染<br/><br>html 部分页面渲染<br/><br>css 页面样式控制<br/><br>git 提交到github<br/></p>
+</blockquote>
+<h3 id="基础效果截图如下："><a href="#基础效果截图如下：" class="headerlink" title="基础效果截图如下："></a>基础效果截图如下：</h3><p><img src="/images/index.png" alt="页面布局截图"></p>
+<h3 id="历程和进度（还在开发中）"><a href="#历程和进度（还在开发中）" class="headerlink" title="历程和进度（还在开发中）"></a>历程和进度（还在开发中）</h3><p><strong>2017-9-26:</strong> 基础页面布局，初次提交到github</br></p>
+<hr/>
+
+<p><strong>2017-9-28:</strong> 后台基础代码编写和数据库设计，并提交数据库结构sql到github</br></p>
+<hr/>
+
+<p><strong>2017-9-29:</strong> 前端页面增加对markdown语法的支持</br></p>
+<hr/>
+
+<p><strong>2017-11-27:</strong> 增加login页面，使用ajax请求，同时基础页面布局增加bootstrap支持</br></p>
+<hr/>
+
+<p><strong>2017-11-28:</strong> 优化登录功能，实现后台逻辑验证及验证后的前台提示</br><br><img src="/images/login.png" alt="login"><br><strong>2017-11-28:</strong> 增加注册功能，实现后台逻辑验证及前台可视化页面</br><br><img src="/images/regist.png" alt="regist"><br><strong>2017-11-28:</strong> 提取登录功能的js到独立文件中</br><br><strong>2017-11-28:</strong> java后台增加filter过滤器，对请求进行过滤</br><br><strong>2017-11-28:</strong> 根据登录与否动态决定”登录、注册、注销、用户”等信息的显示和隐藏</br><br><strong>2017-11-28:</strong> 增加简单的错误页面，使404、500等异常更加友好</br></p>
+<hr/>
+
+<p><strong>2017-11-29:</strong> 增加logback的配置，把日志记录到特定文件中，同时定义日志记录级别</br><br><strong>2017-11-29:</strong> 增加controller层的日志记录功能</br><br><strong>2017-11-29:</strong> 项目根路径增加gitattributes文件，使github改变默认显示的编程语言</br><br><strong>2017-11-29:</strong> 首页优化，由一篇示例博客改为博客列表</br><br><strong>2017-11-29:</strong> 首页优化，网站统计信息从静态模拟数据改为从数据库动态获取</br><br><img src="/images/index2.png" alt="regist"></p>
+<hr/>
+
+<p><strong>2017-12-4:</strong> 实现首页博客列表到打开具体博客的跳转</br></p>
+<hr/>
+
+<p><strong>2018-1-29:</strong> 实现评论时自动发送邮件功能（评论需登录）</br></p>
+<h3 id="预计功能说明"><a href="#预计功能说明" class="headerlink" title="预计功能说明"></a>预计功能说明</h3><ol>
+<li>实现类似博客的文章访问功能，如文章标题、内容（已）</li>
+<li>实现文章统计功能，如字数、时间、分类</li>
+<li>实现pdf书籍阅读功能</li>
+<li>实现资料上传和下载、资料列表功能</li>
+<li>实现基础的登录注册功能及权限控制（已）</li>
+<li>根据不同用户权限展现不同页面内容</li>
+<li>实现推送功能</li>
+<li>实现评论邮件提醒功能（已）</li>
+<li>日志记录(已)</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/29/tzxblog1/" data-id="ckbk4ukbq003i0svhgjdu81fd" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/12/01/zongjie1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          技术问题小总结1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/23/pattern5-singleton/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记5——单例模式【高并发拓展】</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用spring-boot作为后台创建的博客小项目"><span class="toc-number">1.</span> <span class="toc-text">使用spring boot作为后台创建的博客小项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目说明"><span class="toc-number">1.1.</span> <span class="toc-text">项目说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#github源代码地址"><span class="toc-number">1.2.</span> <span class="toc-text">github源代码地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基础环境和相关技术说明"><span class="toc-number">1.3.</span> <span class="toc-text">基础环境和相关技术说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基础效果截图如下："><span class="toc-number">1.4.</span> <span class="toc-text">基础效果截图如下：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#历程和进度（还在开发中）"><span class="toc-number">1.5.</span> <span class="toc-text">历程和进度（还在开发中）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预计功能说明"><span class="toc-number">1.6.</span> <span class="toc-text">预计功能说明</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

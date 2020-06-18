@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记6——原型模式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义在开发的过程中，可能会遇到需要为同一个类创建多个对象，而这多个对象的大部分属性值都一样的情况。这时候如果每一个对象都一一设值，就会显得有很多代码重复，原型模式就可以用来解决这种场景，用来精简代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记6——原型模式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/12/04/pattern6-prototype/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="定义在开发的过程中，可能会遇到需要为同一个类创建多个对象，而这多个对象的大部分属性值都一样的情况。这时候如果每一个对象都一一设值，就会显得有很多代码重复，原型模式就可以用来解决这种场景，用来精简代码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-12-04T07:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:28:18.473Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern6-prototype" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/04/pattern6-prototype/" class="article-date">
+  <time datetime="2017-12-04T07:43:58.000Z" itemprop="datePublished">2017-12-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记6——原型模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>在开发的过程中，可能会遇到需要为同一个类创建多个对象，而这多个对象的大部分属性值都一样的情况。这时候如果每一个对象都一一设值，就会显得有很多代码重复，原型模式就可以用来解决这种场景，用来精简代码。</p>
+<a id="more"></a>
+<p>原型模式引用书中的定义如下：</p>
+<blockquote>
+<p>原型模式(Prototype Pattern)：使用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。原型模式是一种对象创建型模式</p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>原型模式可以简单的理解成就是克隆、复制，把某个对象拷贝一份出来。<br>在我既往开发的过程中，要把一个对象的属性给予另一个对象，通常有两种做法,为了更好的说明，下边先定义一个实体类：</p>
+<pre>
+package patterntest.prototypepattern;
+/**
+ *班主任实体类
+ *@author tzx
+ *@date 2017年12月4日
+ */
+public class HeadmasterModel {
+    /**
+     *老师姓名
+     */
+    private String name;
+    /**
+     *老师年龄
+     */
+    private int age;
+    /**
+     *管理班级的名称
+     */
+    private String className;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public String getClassName() {
+        return className;
+    }
+    public void setClassName(String className) {
+        this.className = className;
+    }
+    @Override
+    public String toString() {
+        return "HeadmasterModel [name=" + name + ", age=" + age + ", className=" + className + "]";
+    }
+}
+</pre>
+
+<h3 id="做法一"><a href="#做法一" class="headerlink" title="做法一"></a>做法一</h3><p>把一个对象的引用直接给予另一个对象，代码如下：</p>
+<pre>
+HeadmasterModel headmaster = new HeadmasterModel();
+headmaster.setAge(32);
+headmaster.setClassName("六一班");
+headmaster.setName("张威");
+HeadmasterModel headmaster2=headmaster;
+</pre>
+
+<p>在这里首先有一个headmaster对象，然后直接把headmaster对象赋值给了headmaster2。<br>对java稍微了解的同学应该知道，这种赋值其实给的是对象的引用，如果我改变了headmaster2的属性值，那么headmaster也会跟着改变，也就是说这两个对象其实就是同一个对象。<br>那么这种情况的问题就很明显了，如果我只想改变headmaster2的值而并不想改变headmaster的值，似乎是无法做到的。</p>
+<h3 id="做法二"><a href="#做法二" class="headerlink" title="做法二"></a>做法二</h3><p>那么为了解决上边的问题，既想headmaster2使用headmaster的部分属性值，又想改变headmaster2的其他部分值时不影响headmaster，就可以这样做：</p>
+<pre>
+HeadmasterModel headmaster = new HeadmasterModel();
+headmaster.setAge(32);
+headmaster.setClassName("六一班");
+headmaster.setName("张威");
+student.setHeadmaster(headmaster);
+HeadmasterModel headmaster2 = new HeadmasterModel();
+headmaster2.setAge(headmaster.getAge());
+headmaster2.setName(headmaster.getName());
+headmaster2.setClassName("六二班");
+</pre>
+<p>上边的代码其实就是创建了两个对象，然后get第一个对象的值，接着set给第二个对象。<br>这种情况下，实现了两个对象部分属性的一致，同时如果更改headmaster2的值，也不会影响到headmaster，就解决了第一种做法的问题。<br>但是，这种做法的问题也是很明显的，如果这个对象的各种属性需要多次被复用，那就需要每一次复用的地方都使用类似<code>headmaster2.setAge(headmaster.getAge())</code>这样的代码，被复用的属性越多，重复代码也就越多，因为这种写法是在消费端。</p>
+<h3 id="原型模式基础"><a href="#原型模式基础" class="headerlink" title="原型模式基础"></a>原型模式基础</h3><p>基于上边两种做法所出现的问题，原型模式就呼之欲出了，为了减少重复，我们需要把复用属性的代码从消费端移到服务端，这里的服务端其实就是具体的实现类。<br>具体做法也就是在实体类里增加一个方法供外部调用，这个方法会复用当前对象的属性赋值给另一个同类对象，然后返回回去，而这个方法通常就叫做clone，就像这样：</p>
+<pre>
+public HeadmasterModel clone() {
+    HeadmasterModel headmasterModel = new HeadmasterModel();
+    headmasterModel.setAge(this.age);
+    headmasterModel.setClassName(this.className);
+    headmasterModel.setName(this.name);
+    return headmasterModel;
+}
+</pre>
+<p>这一个方法看起来和上边第二种做法的处理逻辑一样，但是这里因为是写在实体类中，因此在具体消费端使用的时候只需要用原对象调用clone方法即可得到一个和原对象一样属性的新对象。<br>因为clone方法中new了一个新对象，所以和原对象也是不同的。</p>
+<h3 id="原型模式晋级"><a href="#原型模式晋级" class="headerlink" title="原型模式晋级"></a>原型模式晋级</h3><p>上边的实现方式比较简单，但是实际上还有更简单的。<br>在上边的例子中我们也还是自己写代码一一从原对象中拿出属性值，然后赋值给新的对象，但是实际上在java的Object类中就实现了clone方法，凡是继承了Object类的子类，都可以使用该clone方法创建新的对象。<br><strong>不过这里需要注意的是：需要使用Object的clone方法的对象必须实现Cloneable接口，否则会抛出异常</strong></p>
+<p>因此优化后的clone方法就可以改成下边这样：</p>
+<pre>
+public HeadmasterModel clone() {
+    HeadmasterModel headmasterMode = null;
+    try {
+        headmasterMode = (HeadmasterModel) super.clone();
+    } catch (CloneNotSupportedException e) {
+        // e.printStackTrace();
+    }
+    return headmasterMode;
+}
+</pre>
+
+<p>同时需要在类上边加上对Cloneable接口的实现：</p>
+<pre>
+public class HeadmasterModel implements Cloneable
+</pre>
+
+<h3 id="原型模式深入"><a href="#原型模式深入" class="headerlink" title="原型模式深入"></a>原型模式深入</h3><p>通过上边的一系列分析，使用原型模式克隆出一个和原对象属性值一样的新对象就基本实现了，但是其实还存在一个问题，对于非基础类型的属性，我们上边的克隆方法实际上克隆的只是引用。<br>例如我们这里又有一个学生类，班主任是学生类的其中一个属性,该学生类也拥有clone方法：</p>
+<pre>
+package patterntest.prototypepattern;
+/**
+ *学生实体类
+ *@author tzx
+ *@date 2017年12月4日
+ */
+public class StudentModel {
+    /**
+     *学生姓名
+     */
+    private String name;
+    /**
+     *学生年龄
+     */
+    private int age;
+    /**
+     *所属班级名称
+     */
+    private String className;
+    /**
+     *性别
+     */
+    private String sex;
+    /**
+     *班主任
+     */
+    private HeadmasterModel headmaster;
+    public StudentModel clone() {
+        StudentModel studentModel = null;
+        try {
+            studentModel = (StudentModel) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return studentModel;
+    }
+    ...get、set以及toString方法省略
+}
+</pre>
+<p>然后生成一个学生对象，以此为基础克隆一个新对象：</p>
+<pre>
+public static void main(String[] args) {
+    StudentModel student = new StudentModel();
+    student.setName("张三");
+    student.setAge(12);
+    student.setClassName("六一班");
+    student.setSex("男");
+    HeadmasterModel headmaster = new HeadmasterModel();
+    headmaster.setAge(32);
+    headmaster.setClassName("六一班");
+    headmaster.setName("张威");
+    student.setHeadmaster(headmaster);
+    System.out.println(student.getHeadmaster().hashCode());
+    System.out.println(student.clone().getHeadmaster().hashCode());
+}
+</pre>
+<p>通过运行上边的代码可以看到克隆之前的student对象的headmaster属性的hashcode和克隆后的student对象的headmaster属性的hashcode是一模一样的，也就是说这两个headmaster对象使用了同一个引用，实际对象还是同一个。<br>那么这时候如果我们就改动了克隆后的student对象的headmaster的属性，很显然克隆前的那个对象的headmaster的属性也会跟着变化，这明显也是不合理的。<br><strong>那么就里就又涉及到原型模式的两个概念：浅克隆和深克隆。</strong></p>
+<p>浅克隆，就是上边示例的这种，虽然克隆的对象是新的，但是对象里边的非基础类型的属性还是旧的。<br>而深克隆，就是不仅克隆出的对象时新的，连这个新对象的属性也都是新的对象。<br>由于super.clone()方法调用Object的clone方法实现的是浅克隆，所以深克隆就不能使用这个方法了，深克隆需要实现Serializable接口对对象进行序列化，通过io流生成全新的对象，具体代码如下：</p>
+<pre>
+public class StudentModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+    /**
+     *学生姓名
+     */
+    private String name;
+    /**
+     *学生年龄
+     */
+    private int age;
+    /**
+     *所属班级名称
+     */
+    private String className;
+    /**
+     *性别
+     */
+    private String sex;
+    /**
+     *班主任
+     */
+    private HeadmasterModel headmaster;
+    public StudentModel clone() {
+        StudentModel studentModel = null;
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream objectOutputStream=new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(this);
+            ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+            ObjectInputStream objectInputStream=new ObjectInputStream(byteArrayInputStream);
+            studentModel=(StudentModel)objectInputStream.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return studentModel;
+    }
+    ...get、set以及toString方法省略
+}
+</pre>
+<p>这个时候如果再运行上边的测试main方法，会发现会抛出异常，原因是深克隆不仅被克隆的对象需要实现Serializable接口，被克隆的对象里边需要被深克隆的属性对象在定义时也需要实现Serializable接口：</p>
+<pre>
+public class HeadmasterModel implements Cloneable, Serializable 
+</pre>
+
+<p>然后再运行测试方法，就会发现这时候不仅被克隆的对象和原对象不一样了，克隆后的对象的非基本类型的属性也不再是原属性对象。这时候如果修改克隆之后的对象的改属性，就不会再影响克隆之前的对象。</p>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><p>根据上边的分析可知原型模式的要点大概有这样几个：</p>
+<ol>
+<li>需要有一个对象作为原型</li>
+<li>可以自己实现克隆方法，实现对原型的复用，但如果是浅克隆则使用Object的clone方法更简洁</li>
+<li>深克隆必须自己实现</li>
+<li>使用Object的clone方法必须实现Cloneable接口</li>
+<li>实现深克隆时，必须保证被克隆对象及属性对象都实现序列化接口Serializable</li>
+<li>为了更好的拓展及更简洁的代码，可以考虑在父级抽象类中实现克隆方法</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上边的分析和示例可以发现，原型模式的主要优点就是：在其他同类对象需要大量重用某个对象的属性时，可以使代码更简洁，大大减少代码的重复度。<br>而这种模式的缺点也是很明显的，首先是被克隆的对象需要有克隆方法，需要根据情况实现Cloneable和 Serializable接口；其次就是实现深克隆的对象的每个非基本类型的属性对象，在定义时也都必须实现Serializable接口，这从某种程度上说也增加了代码量。</p>
+<p>demo源码可在github下载：<a href="https://github.com/tuzongxun/mypattern" target="_blank" rel="noopener">https://github.com/tuzongxun/mypattern</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/12/04/pattern6-prototype/" data-id="ckbk4ukb500260svh9vqicyby" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/12/05/pattern7-observer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记7——观察者模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/01/zongjie1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">技术问题小总结1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解"><span class="toc-number">2.</span> <span class="toc-text">理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#做法一"><span class="toc-number">2.1.</span> <span class="toc-text">做法一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#做法二"><span class="toc-number">2.2.</span> <span class="toc-text">做法二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型模式基础"><span class="toc-number">2.3.</span> <span class="toc-text">原型模式基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型模式晋级"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式晋级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型模式深入"><span class="toc-number">2.5.</span> <span class="toc-text">原型模式深入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要点"><span class="toc-number">3.</span> <span class="toc-text">要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

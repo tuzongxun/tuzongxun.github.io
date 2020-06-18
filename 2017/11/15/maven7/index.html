@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《maven实战》学习笔记7——maven项目版本管理和灵活构建 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="说明《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《maven实战》学习笔记7——maven项目版本管理和灵活构建">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/15/maven7/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="说明《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-15T01:09:42.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:29:15.252Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="开发工具">
+<meta property="article:tag" content="maven">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-maven7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/15/maven7/" class="article-date">
+  <time datetime="2017-11-15T01:09:42.000Z" itemprop="datePublished">2017-11-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《maven实战》学习笔记7——maven项目版本管理和灵活构建
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。</p>
+<a id="more"></a>
+<h3 id="maven版本管理"><a href="#maven版本管理" class="headerlink" title="maven版本管理"></a>maven版本管理</h3><p>对于maven版本管理，最重要的是需要区分出快照版本SNAPSHOT和发布版本release，据目前的了解，快照版本格式是固定的，而发布版本有几种，例如带release单词的和不带release单词的。<br>快照版本由于每次发布都带时间戳，所以适用于开发阶段团队协作，但同时也是不稳定的。<br>发布版本就需要是比较稳定的版本，定了就不能变，如果要变就要发布新的发布版本。<br>不过，要更好的了解maven版本管理，必须先比较熟悉版本控制，结合实际情况，就是需要先比较熟悉svn版本控制。<br>由于目前我虽然天天在用svn，却还没有系统的学一下，所以对svn也还不是太熟，再加上目前实际工作对maven版本管理似乎也没有什么需求，因此maven版本管理这一块就先只做了解。</p>
+<h3 id="灵活构建"><a href="#灵活构建" class="headerlink" title="灵活构建"></a>灵活构建</h3><p>根据我的理解，maven灵活构建指的是经过一定的配置后，可以使maven在不同的场景很容易的改变一些构建细节，例如某些属性实际值的使用。<br>maven提供了属性properties、profiles、资源过滤三个特性来实现。</p>
+<h4 id="属性properties"><a href="#属性properties" class="headerlink" title="属性properties"></a>属性properties</h4><p>这个说白了就相当于配置的一个变量，里边的标签名就是变量名，只不过有一些标签是maven默认的，或者说约定了的，同时也能自定义并使用，例如我在某个项目的pom.xml中这样配置：</p>
+<pre>
+&lt;properties>
+    &lt;project.build.sourceEncoding>UTF-8&lt;/project.build.sourceEncoding>
+    &lt;project.reporting.outputEncoding>UTF-8&lt;/project.reporting.outputEncoding>
+    &lt;java.version>1.8&lt;/java.version>
+    &lt;spring.version>4.0.9&lt;/spring.version>
+    &lt;auth.name>tzx&lt;/auth.name>
+&lt;/properties>
+</pre>
+<p>在上边的例子中，前三个是maven默认的一些属性名，而spring.version、auth.name是我自己加的，有了这些配置，在这个pom.xml文件中就能用<code>${auth.name}</code>、<code>${spring.version}</code>这样的方式获取到里边配置的值，这样大大增加可维护性以及减少重复配置。<br>就比如这里的spring.version，如果这个项目导入了很多个spring的jar包，那么每个依赖配置都要配置version，如果有了spring.version，那么在依赖配置的version那里就可以使用<code>${spring.version}</code>，以后如果要升级spring版本，就可以只改动properties中的spring.version的值就可以了。<br>需要注意的是，我的这个配置是在项目的pom.xml中，但是实际上不只是能配置在这里，还能配置在maven的settings.xml中，例如我之前学习代码管理工具sonar的时候就在setting.xml中配置过mysql数据库相关的属性：</p>
+<pre>
+&lt;properties>
+       &lt;sonar.jdbc.url>
+        jdbc:mysql://localhost:3306/sonar
+       &lt;/sonar.jdbc.url>
+       &lt;sonar.jdbc.driver>com.mysql.jdbc.Driver&lt;/sonar.jdbc.driver>
+       &lt;sonar.jdbc.username>sonar&lt;/sonar.jdbc.username>
+       &lt;sonar.jdbc.password>sonar&lt;/sonar.jdbc.password>
+       &lt;sonar.host.url>http://localhost:9000&lt;/sonar.host.url>
+&lt;/properties>
+</pre>
+<p>除开上边两个之外，maven还能用maven内置属性、环境变量、系统变量等等，可以用<code>mvn help:system</code>命令来查看有哪些环境变量和系统变量，至于具体的内置属性有哪些，可以需要时网上查询一下。</p>
+<h4 id="maven的profiles"><a href="#maven的profiles" class="headerlink" title="maven的profiles"></a>maven的profiles</h4><p>在说这个之前，先来看一个在前几篇记录中，讲maven仓库时有在settings.xml中出现过的一个配置：</p>
+<pre>
+&lt;profiles>
+   &lt;profile>
+     &lt;id>nexus&lt;/id>
+     &lt;repositories>
+      &lt;repository>
+         &lt;id>repo1&lt;/id>
+         &lt;url>http://192.168.0.224:8081/nexus/content/groups/public&lt;/url>
+         &lt;releases>
+                &lt;enabled>true&lt;/enabled>
+                &lt;updatePolicy>daily&lt;/updatePolicy>
+                &lt;checksumPolicy>ignore&lt;/checksumPolicy>
+         &lt;/releases>
+      &lt;/repository>
+      &lt;repository>
+         &lt;id>repo2&lt;/id>
+         &lt;url>http://192.168.0.224:8081/nexus/content/groups/public-snapshots&lt;/url>         
+         &lt;snapshots>
+                &lt;enabled>true&lt;/enabled>
+         &lt;/snapshots>
+      &lt;/repository>
+     &lt;/repositories>
+     &lt;pluginRepositories>
+      &lt;pluginRepository>
+         &lt;id>repo3&lt;/id>
+         &lt;url>http://192.168.0.65:8082/nexus/content/groups/public&lt;/url>
+         &lt;releases>
+                &lt;enabled>true&lt;/enabled>
+         &lt;/releases>
+      &lt;/pluginRepository>
+      &lt;pluginRepository>
+         &lt;id>repo4&lt;/id>
+         &lt;url>http://192.168.0.65:8082/nexus/content/groups/public-snapshots&lt;/url>
+         &lt;snapshots>
+                &lt;enabled>true&lt;/enabled>
+         &lt;/snapshots>
+      &lt;/pluginRepository>
+     &lt;/pluginRepositories>
+   &lt;/profile>
+&lt;/profiles>
+</pre>
+<p>很显然，这就是一个这里要说的profiles的配置，这种配置的基本形式是，在一个<code>profiles</code>中可以配置多个<code>profile</code>，<code>profile</code>里就是具体的配置信息，据我理解，几乎所有能在profile之外配置的信息都可以放到这里边配置。<br>在这个配置中，最重要的是<code>id</code>属性，这是每个<code>profile</code>的唯一标示。<br>之后可以使用很多种方法来激活这个配置，例如可以在settings.xml文件的<code>profiles</code>标签之外增加这样的配置：</p>
+<pre>
+&lt;activeProfiles>
+    &lt;activeProfile>nexus&lt;/activeProfile>
+&lt;/activeProfiles>
+</pre>
+<p>然后，上边所配置的profile就被激活，可以被使用了。<br>除了上边这种激活方式，还可以通过‘命令行激活’、‘环境变量激活’、‘文件是否存在激活’等各种激活方式，不过目前我还完全没有用过这些方式，就暂时认为不常用，稍作了解就好。<br>那么除开上述的所有激活方式外，还有一种就是在profile内部配置激活：</p>
+<pre>
+&lt;activation>
+      &lt;activeByDefault>true&lt;/activeByDefault>
+&lt;/activation>
+</pre>
+<p>这种配置的意思，从字面意思其实就可以理解，那就是默认激活。不过需要注意的是，假如有用上述任何一种方式激活过某个profile，那么所有这种默认激活的方式都会失效。</p>
+<h4 id="web资源过滤"><a href="#web资源过滤" class="headerlink" title="web资源过滤"></a>web资源过滤</h4><p>这个目前感觉也似乎不怎么常用，因此暂时只需要知道有这么回事就好。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/15/maven7/" data-id="ckbk4ukaj00130svhd6o9hhcm" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">开发工具</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/15/yuanze-shuoming/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记0——说明
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/14/maven6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《maven实战》学习笔记6——maven聚合和继承</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven版本管理"><span class="toc-number">2.</span> <span class="toc-text">maven版本管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#灵活构建"><span class="toc-number">3.</span> <span class="toc-text">灵活构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#属性properties"><span class="toc-number">3.1.</span> <span class="toc-text">属性properties</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maven的profiles"><span class="toc-number">3.2.</span> <span class="toc-text">maven的profiles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#web资源过滤"><span class="toc-number">3.3.</span> <span class="toc-text">web资源过滤</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

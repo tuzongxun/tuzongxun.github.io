@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>tzxblog博客系统-需求及立项说明 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="v1.0项目背景这是一个模拟的博客系统，利用业余时间开发，旨在巩固整个软件开发周期内的各项流程，以开发技术练习为主，文档和工具练习为辅。力求重要的流程都有文档可以追溯、关键的技术点都有笔记进行记录。由于之前实现的功能选择的部分技术并非主流，因此本次算是对原项目的优化和重构。再由于之前并没有完整的流程，因此本次实际也可以看成是一个全新的项目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tzxblog博客系统-需求及立项说明">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/01/30/tzxblog2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="v1.0项目背景这是一个模拟的博客系统，利用业余时间开发，旨在巩固整个软件开发周期内的各项流程，以开发技术练习为主，文档和工具练习为辅。力求重要的流程都有文档可以追溯、关键的技术点都有笔记进行记录。由于之前实现的功能选择的部分技术并非主流，因此本次算是对原项目的优化和重构。再由于之前并没有完整的流程，因此本次实际也可以看成是一个全新的项目。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-30T06:09:42.000Z">
+<meta property="article:modified_time" content="2020-01-31T05:41:11.355Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="业余项目">
+<meta property="article:tag" content="tzxblog">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-tzxblog2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/30/tzxblog2/" class="article-date">
+  <time datetime="2020-01-30T06:09:42.000Z" itemprop="datePublished">2020-01-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tzxblog博客系统-需求及立项说明
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="v1-0"><a href="#v1-0" class="headerlink" title="v1.0"></a>v1.0</h2><h3 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h3><p>这是一个模拟的博客系统，利用业余时间开发，旨在巩固整个软件开发周期内的各项流程，以开发技术练习为主，文档和工具练习为辅。力求重要的流程都有文档可以追溯、关键的技术点都有笔记进行记录。</br><br>由于之前实现的功能选择的部分技术并非主流，因此本次算是对原项目的优化和重构。再由于之前并没有完整的流程，因此本次实际也可以看成是一个全新的项目。</p>
+<a id="more"></a>
+
+<hr>
+<h3 id="项目流程说明"><a href="#项目流程说明" class="headerlink" title="项目流程说明"></a>项目流程说明</h3><p>项目预计可练习的流程有：</p>
+<h4 id="需求和立项说明"><a href="#需求和立项说明" class="headerlink" title="需求和立项说明"></a>需求和立项说明</h4><p>这里的需求旨在对项目整体背景和功能进行说明，作为项目开发的基本指导，不交付标准的需求文档，需求和立项相关内容暂时合二为一，输出简单的指导文档。</p>
+<h4 id="概要设计"><a href="#概要设计" class="headerlink" title="概要设计"></a>概要设计</h4><p>整体概要设计应当对前后端各项技术、架构、基本功能流程及异常有所说明，输出概要设计文档。</p>
+<h4 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h4><p>数据库设计应当包含基本的数据字典说明，也应该包含基本的数据初始化sql，输出对应的文档。</p>
+<h4 id="接口设计"><a href="#接口设计" class="headerlink" title="接口设计"></a>接口设计</h4><p>接口设计主要用于前后台对接，需要标明请求方式、URL、入参、出参、错误码等，输出接口API文档</p>
+<h4 id="框架搭建"><a href="#框架搭建" class="headerlink" title="框架搭建"></a>框架搭建</h4><p>框架搭建包含前端项目搭建和后端项目搭建，此过程应当对关键点有所记录和整理以及存档，使要点可回顾，代码可复用。</p>
+<h4 id="项目开发"><a href="#项目开发" class="headerlink" title="项目开发"></a>项目开发</h4><p>项目开发过程中应当注意和概要设计的一致性，以版本迭代方式，需兼顾功能和性能以及代码的可读性、可拓展性、规范性。</p>
+<h4 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h4><p>功能测试应当对照需求功能说明输出测试用例和测试工具及脚本使用说明。</p>
+<h4 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h4><p>性能测试应当输出性能测试脚本和工具使用说明。</p>
+<h4 id="部署文档"><a href="#部署文档" class="headerlink" title="部署文档"></a>部署文档</h4><p>项目部署需要输出部署文档，对部署方式是否自动化，各中间件的安装、配置及初始化进行说明。</p>
+<h4 id="用户手册"><a href="#用户手册" class="headerlink" title="用户手册"></a>用户手册</h4><p>用户手册用于指导最终软件的功能使用，原则应该是简单易懂。</p>
+<h4 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h4><p>各输出文档均以迭代方式进行，需在每次变更时明确修改版本号并进行版本说明。</p>
+<hr>
+<h3 id="功能需求说明"><a href="#功能需求说明" class="headerlink" title="功能需求说明"></a>功能需求说明</h3><h4 id="首页"><a href="#首页" class="headerlink" title="首页"></a>首页</h4><p>首页以四栏式布局，分为头部导航、下方左侧分类信息、下方中间内容列表区域和下方右侧推荐等信息区域。<br>头部导航包括回到首页、博客、下载、登录按钮，点击可跳转到具体的功能页面。<br>点击分类信息的具体选项，需要展示出具体分类下的内容列表，以时间倒序排列。<br>点击内容列表区域需要跳转到具体的文章页面。<br>推荐区域需求待定。</p>
+<h4 id="个人首页"><a href="#个人首页" class="headerlink" title="个人首页"></a>个人首页</h4><p>首页以常用三栏式布局，分为头部导航、下方左侧基本信息和下方右侧内容列表区域。<br>头部导航包括回到首页、博客、下载、登录、写博客按钮，点击可跳转到具体的功能页面。<br>基本信息应当包括个人信息、分类信息、存档等。<br>内容列表区域展示个人博客分类，点击具体列表项跳转到文章详情页面。</p>
+<h4 id="文章详情"><a href="#文章详情" class="headerlink" title="文章详情"></a>文章详情</h4><p>文章详情页需要实现基本的文档展示以及评论和编辑，要能支持markdown语法。</p>
+<h4 id="下载功能"><a href="#下载功能" class="headerlink" title="下载功能"></a>下载功能</h4><p>点击导航的下载需要跳转下载页面，展示可供下载的资源列表，并提供下载和上传以及文件在线预览功能。</p>
+<h4 id="评论功能"><a href="#评论功能" class="headerlink" title="评论功能"></a>评论功能</h4><p>文章详情支持评论，评论实现邮件推送功能，同时实现登陆后的消息通知。</p>
+<hr>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p>项目代码和文档均以github托管，地址如下：<br><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/01/30/tzxblog2/" data-id="ckbk4ukbs003q0svh6mbh2f2b" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/02/01/tzxblog3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          tzxblog博客系统-概要设计
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/28/vue1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">vue项目搭建问题记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#v1-0"><span class="toc-number">1.</span> <span class="toc-text">v1.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目背景"><span class="toc-number">1.1.</span> <span class="toc-text">项目背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目流程说明"><span class="toc-number">1.2.</span> <span class="toc-text">项目流程说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#需求和立项说明"><span class="toc-number">1.2.1.</span> <span class="toc-text">需求和立项说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#概要设计"><span class="toc-number">1.2.2.</span> <span class="toc-text">概要设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库设计"><span class="toc-number">1.2.3.</span> <span class="toc-text">数据库设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接口设计"><span class="toc-number">1.2.4.</span> <span class="toc-text">接口设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#框架搭建"><span class="toc-number">1.2.5.</span> <span class="toc-text">框架搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#项目开发"><span class="toc-number">1.2.6.</span> <span class="toc-text">项目开发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#功能测试"><span class="toc-number">1.2.7.</span> <span class="toc-text">功能测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能测试"><span class="toc-number">1.2.8.</span> <span class="toc-text">性能测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#部署文档"><span class="toc-number">1.2.9.</span> <span class="toc-text">部署文档</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用户手册"><span class="toc-number">1.2.10.</span> <span class="toc-text">用户手册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#版本说明"><span class="toc-number">1.2.11.</span> <span class="toc-text">版本说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能需求说明"><span class="toc-number">1.3.</span> <span class="toc-text">功能需求说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#首页"><span class="toc-number">1.3.1.</span> <span class="toc-text">首页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#个人首页"><span class="toc-number">1.3.2.</span> <span class="toc-text">个人首页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文章详情"><span class="toc-number">1.3.3.</span> <span class="toc-text">文章详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载功能"><span class="toc-number">1.3.4.</span> <span class="toc-text">下载功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#评论功能"><span class="toc-number">1.3.5.</span> <span class="toc-text">评论功能</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目地址"><span class="toc-number">2.</span> <span class="toc-text">项目地址</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

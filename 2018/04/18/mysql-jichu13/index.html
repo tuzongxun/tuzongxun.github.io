@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>mysql常用操作语法（十四）~~复杂的存储过程 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言我看到在很多教程中，都是把存储过程和自定义函数一起讲，主要是因为他们两个非常的相像，而且自定义函数从某种程度上讲，更像是存储过程中的特例。在这种情况下，我就暂时省略掉自定义函数的笔记，直接继续了解更复杂的存储过程。所谓的更复杂，实际上也就是定义变量，变量赋值，游标以及结构控制语句和循环等，有java语言基础的情况下，就很好理解了，只是其中有些细节需要稍微注意一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql常用操作语法（十四）~~复杂的存储过程">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/04/18/mysql-jichu13/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言我看到在很多教程中，都是把存储过程和自定义函数一起讲，主要是因为他们两个非常的相像，而且自定义函数从某种程度上讲，更像是存储过程中的特例。在这种情况下，我就暂时省略掉自定义函数的笔记，直接继续了解更复杂的存储过程。所谓的更复杂，实际上也就是定义变量，变量赋值，游标以及结构控制语句和循环等，有java语言基础的情况下，就很好理解了，只是其中有些细节需要稍微注意一下。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-18T07:32:46.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:31:04.243Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql-jichu13" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/18/mysql-jichu13/" class="article-date">
+  <time datetime="2018-04-18T07:32:46.000Z" itemprop="datePublished">2018-04-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql常用操作语法（十四）~~复杂的存储过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我看到在很多教程中，都是把存储过程和自定义函数一起讲，主要是因为他们两个非常的相像，而且自定义函数从某种程度上讲，更像是存储过程中的特例。<br>在这种情况下，我就暂时省略掉自定义函数的笔记，直接继续了解更复杂的存储过程。<br>所谓的更复杂，实际上也就是定义变量，变量赋值，游标以及结构控制语句和循环等，有java语言基础的情况下，就很好理解了，只是其中有些细节需要稍微注意一下。</p>
+<a id="more"></a>
+
+<h2 id="定义变量和赋值"><a href="#定义变量和赋值" class="headerlink" title="定义变量和赋值"></a>定义变量和赋值</h2><p>之前的例子中，在存储过程里只是简单地做一些基本sql操作，而实际应用中自然远不止这么简单，经常需要声明变量，并进行一定的操作。<br>声明变量的语法是：</p>
+<pre>
+DECLARE 变量名 变量类型  约束条件
+</pre>
+
+<p>例如：</p>
+<pre>
+DECLARE count INTEGER DEFAULT 100;
+</pre>
+
+<p>给变量赋值的常用语法是：</p>
+<pre>
+SET 变量名 = 值;
+</pre>
+
+<p>例如：</p>
+<pre>
+SET count = 10;
+</pre>
+
+<p>上边赋值的语法比较常用，但是还有其他的语法也可以赋值，例如：</p>
+<pre>
+SELECT COUNT(*) INTO COUNT FROM USER;
+</pre>
+
+<p>上边这种根据sql语句的结果进行赋值需要注意的是，当前sql返回值必须是单一的而不能是多个。</p>
+<h2 id="结构控制"><a href="#结构控制" class="headerlink" title="结构控制"></a>结构控制</h2><p>结构控制我目前了解的有两种，使用if和case，结合上边变量的知识以及之前存储过程一起举例进行说明：</p>
+<pre>
+DELIMITER $
+CREATE PROCEDURE proce_test0()
+BEGIN
+DECLARE COUNT INTEGER DEFAULT 0;
+DECLARE result VARCHAR(10) DEFAULT '';
+SELECT COUNT(*) INTO COUNT FROM USER;
+IF COUNT < 2 THEN
+SET result='不合格';
+ELSEIF COUNT = 2 THEN
+SET result ='及格';
+ELSE
+SET result = '优秀';
+END IF;
+SELECT result;
+END
+$
+DELIMITER ;
+</pre>
+
+<p>对上边sql的解释如下：<br>使用$分隔符确定sql语句的起始位置；<br>创建一个名称是proce_test0的无参存储过程；<br>在存储过程里声明一个COUNT变量，类型是INTEGER，默认值0；<br>再声明一个result变量，类型是varchar，长度是10，默认值是空字符串；<br>查询user表的数据条数，并把结果赋值给变量count；<br>根据count变量的值，进行if判断：<br>如果count小于2，给result赋值为“不合格”；<br>如果coutn等于2，给result赋值为“及格”；<br>否则，给result赋值为“优秀”；<br>结束if判断；<br>输出变量result的值；<br>结束存储过程；<br>分隔符定义结尾；</p>
+<p>那么，上边的逻辑完全可以用case代替if实现，改过之后的sql应该如下：</p>
+<pre>
+DROP PROCEDURE IF EXISTS proce_test0;
+DELIMITER $
+CREATE PROCEDURE proce_test0()
+BEGIN
+DECLARE COUNT INTEGER DEFAULT 0;
+DECLARE result VARCHAR(10) DEFAULT '';
+SELECT COUNT(*) INTO COUNT FROM USER;
+CASE COUNT 
+WHEN COUNT < 2 THEN
+SET result='不合格';
+WHEN 2 THEN
+SET result ='及格';
+ELSE
+SET result = '优秀';
+END CASE;
+SELECT result;
+END
+$
+DELIMITER ;
+</pre>
+
+<h2 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h2><p>在上边的例子中，我们声明了变量，并且把sql语句的结果赋值给了变量，但是这里的问题就是只能把单结果的sql赋值给变量。如果要把一个结果集赋值给某个变量进行操作，就需要借助游标实现，例如：</p>
+<pre>
+DELIMITER $
+CREATE PROCEDURE proce_test0()
+BEGIN
+DECLARE user_id INTEGER;
+DECLARE cursor_userId CURSOR FOR SELECT id FROM USER;
+OPEN cursor_userId;
+FETCH cursor_userId INTO user_id;
+SELECT user_id;
+CLOSE cursor_userId;
+END
+$
+DELIMITER ;
+</pre>
+
+<p>对上述示例的红色标记部分解释如下：<br>声明一个user_id变量，类型是INTEGER；<br>创建一个游标，名称是cursor_userId，游标里的内容是user表中的id结果集；<br>打开游标；<br>从游标当前位置取出一条数据，赋值给变量user_id，并把游标向前移动一位；<br>输出变量user_id的值；<br>关闭游标。</p>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>上述示例中，只是从游标中取出了一条数据，如果要取出所有数据，比较好的方法就是使用循环遍历，有while、loop以及repeat,例如：</p>
+<pre>
+DELIMITER $
+CREATE PROCEDURE proce_test0()
+BEGIN
+DECLARE user_id INTEGER;
+DECLARE flag INTEGER DEFAULT 0;
+DECLARE idStr NVARCHAR(20) DEFAULT '';
+DECLARE cursor_userId CURSOR FOR SELECT id FROM USER;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = 1;
+OPEN cursor_userId;
+WHILE flag != 1 DO
+FETCH cursor_userId INTO user_id;
+IF user_id = 5 THEN
+IF idStr = '' THEN
+SET idStr = user_id;
+ELSE
+SET idStr = CONCAT(idStr,'|',user_id);
+END IF;
+END IF;
+END WHILE;
+CLOSE cursor_userId;
+SELECT idStr;
+END
+$
+DELIMITER ;
+</pre>
+
+<p>上述存储过程中，我想做的事是这样的：<br>把user表中所有id是5的数据用“|”连接成一个字符串。<br>对上述红色部分的解释是：<br>声明一个名称为user_id的变量，类型是INTEGER；<br>声明一个名称为flag的变量，类型是INTEGER，默认值是0。这个变量的作用是作为while循环的条件；<br>声明一个名称是idStr的变量，类型是varchar，长度20，默认值空字符串；<br>声明一个游标，上边解释过；<br>设置游标读取到末尾的时候，改变变量flag的值；<br>打开游标；<br>使用while循环，添加条件flag ！= 1；<br>从游标读取数据，并移动游标位置，上边解释过；<br>外层if判断user_id的值，等于5的时候进入内层if；<br>内层if判断idStr是否是空字符串，如果是，就把user_id的值赋值给idStr，也就是第一个id前边不要“|”，否则进行字符串拼接；<br>结束内层if；<br>结束外层if；<br>结束while循环；<br>关闭游标；<br>输出变量idStr的值。</p>
+<p>上边的存储过程把while循环替换成loop循环之后如下：</p>
+<pre>
+DELIMITER $
+CREATE PROCEDURE proce_test0()
+BEGIN
+DECLARE user_id INTEGER;
+DECLARE flag INTEGER DEFAULT 0;
+DECLARE idStr NVARCHAR(20) DEFAULT '';
+DECLARE cursor_userId CURSOR FOR SELECT id FROM USER;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = 1;
+OPEN cursor_userId;
+loop_test:LOOP
+IF flag =1 THEN
+LEAVE loop_test;
+END IF;
+FETCH cursor_userId INTO user_id;
+IF user_id = 5 THEN
+IF idStr = '' THEN
+SET idStr = user_id;
+ELSE
+SET idStr = CONCAT(idStr,'|',user_id);
+END IF;
+END IF;
+#FETCH cursor_userId INTO user_id;
+END LOOP;
+CLOSE cursor_userId;
+SELECT idStr;
+END
+$
+DELIMITER ;
+</pre>
+
+<p>重点在红色部分，其中loop_test是自定义的名字，可以理解成java中for循环前的标签。然后需要if判断一个临界条件来终止循环，终止的语法就是<code>leave 循环名</code>，相当于java的for循环里的break。最后的end loop结束循环。</p>
+<p>同样的，上边的写法也可以用repeat循环来代替：</p>
+<pre>
+DELIMITER $
+CREATE PROCEDURE proce_test0()
+BEGIN
+DECLARE idStr VARCHAR(20) DEFAULT '';
+DECLARE user_id INTEGER;
+DECLARE flag INTEGER DEFAULT 0;
+DECLARE cursor_id CURSOR FOR SELECT id FROM USER;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = 1;
+OPEN cursor_id;
+REPEAT
+FETCH cursor_id INTO user_id;
+IF user_id =5 THEN
+IF idStr = '' THEN
+SET idStr = user_id;
+ELSE
+SET idStr = CONCAT(idStr,"|",user_id);
+END IF;
+END IF;
+UNTIL flag =1 END REPEAT;
+CLOSE cursor_id;
+SELECT idStr;
+END
+$
+DELIMITER ;
+</pre>
+
+<p>repeat循环的终止，需要借助于until关键字，这种语法结构的写法其实很像是java中的do while循环，先给一个关键词，然后是循环体，最后写终止循环的条件。</p>
+<p>通过上边的示例，就可以基本了解变量声明和赋值，结构控制语句，游标，循环等语法的用法，从而组合起来生成相对复杂的存储过程了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/04/18/mysql-jichu13/" data-id="ckbk4ukbb002j0svh842z49r3" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/04/19/wenti/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          记一次数据库or和and优先级引发的连环生产故障
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/16/mysql-jichu14/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">mysql常用操作语法（十三）~~存储过程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定义变量和赋值"><span class="toc-number">2.</span> <span class="toc-text">定义变量和赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构控制"><span class="toc-number">3.</span> <span class="toc-text">结构控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#游标"><span class="toc-number">4.</span> <span class="toc-text">游标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#循环"><span class="toc-number">5.</span> <span class="toc-text">循环</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

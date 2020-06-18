@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>使用github和hexo写博客要点记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="有很多爱分享的技术人，都会在网上或多或少的写博客，一开始可能都是在那些有名气的网站上发表，例如CSDN、开源中国等，一方面是分享，一方面是作为自己的笔记。但是时间久了就会发现在这种网站上写博客会受到各种制约和限制，如果网站本身技术不是很好或者其他原因，还会经常出现无法访问的情况。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用github和hexo写博客要点记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/09/07/hello-world/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="有很多爱分享的技术人，都会在网上或多或少的写博客，一开始可能都是在那些有名气的网站上发表，例如CSDN、开源中国等，一方面是分享，一方面是作为自己的笔记。但是时间久了就会发现在这种网站上写博客会受到各种制约和限制，如果网站本身技术不是很好或者其他原因，还会经常出现无法访问的情况。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/mulu.png">
+<meta property="article:published_time" content="2017-09-07T00:55:29.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:31:43.239Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/mulu.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/07/hello-world/" class="article-date">
+  <time datetime="2017-09-07T00:55:29.000Z" itemprop="datePublished">2017-09-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hexo/">hexo</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用github和hexo写博客要点记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>有很多爱分享的技术人，都会在网上或多或少的写博客，一开始可能都是在那些有名气的网站上发表，例如CSDN、开源中国等，一方面是分享，一方面是作为自己的笔记。<br>但是时间久了就会发现在这种网站上写博客会受到各种制约和限制，如果网站本身技术不是很好或者其他原因，还会经常出现无法访问的情况。</p>
+<a id="more"></a>
+<p>于是很多人就想拥有属于自己的博客，这样只要技术够好，想要什么样就可以要什么样。<br>而搭建自己的博客通常又分为花钱的和不花钱的，花钱通常指的是自己租服务器、买域名，而我这里用的就是不花钱的，使用github和hexo搭建属于自己的博客。<br>主要搭建过程参考如下两篇文章：<br><a href="http://blog.csdn.net/gdutxiaoxu/article/details/53576018" target="_blank" rel="noopener">http://blog.csdn.net/gdutxiaoxu/article/details/53576018</a><br><a href="http://www.jianshu.com/p/e99ed60390a8" target="_blank" rel="noopener">http://www.jianshu.com/p/e99ed60390a8</a></p>
+<p>因为上边两篇文章讲的已经非常详细，所以我这里就不需要赘述了，以下的一些记录仅作上述两篇的小小补充，同时方便后边写博客时查阅。<br>如果有朋友也想有一个属于自己的风格的个人免费博客，可以参考。</p>
+<h2 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h2><h3 id="常用操作-1"><a href="#常用操作-1" class="headerlink" title="常用操作"></a>常用操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">"第一篇github博客"</span> <span class="comment">#新建文章</span></span><br><span class="line">hexo new page <span class="string">"pageName"</span> <span class="comment">#新建页面,比如</span></span><br><span class="line">hexo generate <span class="comment">#生成静态页面至public目录</span></span><br><span class="line">hexo server <span class="comment">#开启预览访问端口（默认端口4000，'ctrl + c'关闭server）</span></span><br><span class="line">hexo deploy <span class="comment">#将.deploy目录部署到GitHub</span></span><br><span class="line">hexo <span class="built_in">help</span>  <span class="comment"># 查看帮助</span></span><br><span class="line">hexo version  <span class="comment">#查看Hexo的版本</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="文章模板"><a href="#文章模板" class="headerlink" title="文章模板"></a>文章模板</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><pre><code>---
+title: 使用github和hexo写博客要点记录 #标题
+date: 2017-9-7 08:55:29 #时间
+categories: 博客搭建 #分类
+toc: true  #在此处设定是否开启目录，需要主题支持。
+---
+&lt;!--more--&gt; #使这一段之前的内容成为摘要</code></pre><h4 id="生成about页面"><a href="#生成about页面" class="headerlink" title="生成about页面"></a>生成about页面</h4><pre><code>hexo new page &quot;about&quot;</code></pre><p>上述命令会在source目录生成about目录，并在about中生成index.md文件，更改这个文件的type为”about”，如果没有type，自己加上。<br>书签books页面创建方法一样。<br>注意执行部署hexo d之前，先把浏览器访问的页面关掉，否则有时候提交不了。</p>
+<h3 id="markdown常用语法"><a href="#markdown常用语法" class="headerlink" title="markdown常用语法"></a>markdown常用语法</h3><h4 id="区块引用"><a href="#区块引用" class="headerlink" title="区块引用"></a>区块引用</h4><blockquote>
+<p>&gt;这是一个区块引用<br>这是一个区块引用<br>这是一个区块引用</p>
+</blockquote>
+<h4 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h4><p>星号、加号、减号开头</p>
+<blockquote>
+<p>* 列表一<br>+ 列表四<br>- 列表三</p>
+</blockquote>
+<ul>
+<li>列表一</li>
+</ul>
+<ul>
+<li>列表四</li>
+</ul>
+<ul>
+<li>列表三</li>
+</ul>
+<h4 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h4><p>数字开头，数字顺序无所谓</p>
+<blockquote>
+<ol>
+<li>列表一</li>
+<li>列表二</li>
+</ol>
+</blockquote>
+<ol>
+<li>列表一</li>
+<li>列表二</li>
+</ol>
+<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p>在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西</p>
+<blockquote>
+<p>***<br>---</p>
+</blockquote>
+<hr>
+<hr>
+<h4 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h4><blockquote>
+<p>[链接描述](实际url)<br>[涂宗勋的个人博客](<a href="http://tuzongxun.github.io" target="_blank" rel="noopener">http://tuzongxun.github.io</a>)</p>
+</blockquote>
+<p><a href="http://tuzongxun.github.io" target="_blank" rel="noopener">涂宗勋的个人博客</a></p>
+<p>还可以链接到本机，例如链接到关于我页面：/about/url</p>
+<h4 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h4><p>两个*对或者_包起来</p>
+<blockquote>
+<p>**强调**<br>__强调__</p>
+</blockquote>
+<p><strong>强调</strong><br><strong>强调</strong></p>
+<blockquote>
+<p>*强调*<br>_强调_</p>
+</blockquote>
+<p><em>强调</em><br><em>强调</em></p>
+<h4 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h4><blockquote>
+<p>![描述](url)</p>
+</blockquote>
+<h2 id="博客增加目录导航"><a href="#博客增加目录导航" class="headerlink" title="博客增加目录导航"></a>博客增加目录导航</h2><h2 id="一级目录"><a href="#一级目录" class="headerlink" title="一级目录"></a>一级目录</h2><p>目录定位，格式：”## 一级目录 “（注意“#”之后的空格）</p>
+<h3 id="二级目录"><a href="#二级目录" class="headerlink" title="二级目录"></a>二级目录</h3><p>目录定位，格式：”### 二级目录”</p>
+<h4 id="三级目录"><a href="#三级目录" class="headerlink" title="三级目录"></a>三级目录</h4><p>目录定位，格式：”#### 三级目录”</p>
+<p>其实就是对应的h1到Hn的html标签，这个功能我个人觉得非常好，可以做一些教程之类的，直接在后边会出来层级目录。<br><img src="/images/mulu.png" alt="目录结构"></p>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server  <span class="comment">#可以简写成hexo s</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="常用部署三部曲"><a href="#常用部署三部曲" class="headerlink" title="常用部署三部曲"></a>常用部署三部曲</h3><h4 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+<p>大概就是清缓存的意思</p>
+<h4 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>可以简写为 hexo g,即把hexo new生成的.md结尾的文件生成为html</p>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h4 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>部署上传到github服务器,可简写为hexo d</p>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/09/07/hello-world/" data-id="ckbk4ukak00160svh562z6pkx" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/09/24/pattern1_danli/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          【java设计模式初探0】_单例模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/30/springboot1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">一篇文章学会spring boot（包括jms和hessian的集成）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用操作"><span class="toc-number">1.</span> <span class="toc-text">常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常用操作-1"><span class="toc-number">1.1.</span> <span class="toc-text">常用操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文章模板"><span class="toc-number">1.2.</span> <span class="toc-text">文章模板</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#标题"><span class="toc-number">1.2.1.</span> <span class="toc-text">标题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成about页面"><span class="toc-number">1.2.2.</span> <span class="toc-text">生成about页面</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#markdown常用语法"><span class="toc-number">1.3.</span> <span class="toc-text">markdown常用语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#区块引用"><span class="toc-number">1.3.1.</span> <span class="toc-text">区块引用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无序列表"><span class="toc-number">1.3.2.</span> <span class="toc-text">无序列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#有序列表"><span class="toc-number">1.3.3.</span> <span class="toc-text">有序列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分割线"><span class="toc-number">1.3.4.</span> <span class="toc-text">分割线</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#链接"><span class="toc-number">1.3.5.</span> <span class="toc-text">链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#强调"><span class="toc-number">1.3.6.</span> <span class="toc-text">强调</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片"><span class="toc-number">1.3.7.</span> <span class="toc-text">图片</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#博客增加目录导航"><span class="toc-number">2.</span> <span class="toc-text">博客增加目录导航</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一级目录"><span class="toc-number">3.</span> <span class="toc-text">一级目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二级目录"><span class="toc-number">3.1.</span> <span class="toc-text">二级目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#三级目录"><span class="toc-number">3.1.1.</span> <span class="toc-text">三级目录</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署"><span class="toc-number">4.</span> <span class="toc-text">部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#本地部署"><span class="toc-number">4.1.</span> <span class="toc-text">本地部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用部署三部曲"><span class="toc-number">4.2.</span> <span class="toc-text">常用部署三部曲</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#clean"><span class="toc-number">4.2.1.</span> <span class="toc-text">clean</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#generate"><span class="toc-number">4.2.2.</span> <span class="toc-text">generate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#deploy"><span class="toc-number">4.2.3.</span> <span class="toc-text">deploy</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

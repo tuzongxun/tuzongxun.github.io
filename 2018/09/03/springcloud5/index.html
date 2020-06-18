@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>springcloud微服务五：客户端负载均衡ribbon | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基本概念理解ribbon用在客户端，或者说消费端，被称作客户端负载均衡。对于这个称呼，可以解析为三个部分，一个是客户端，一个是负载均衡，然后就是客户端负载均衡。根据个人理解，所有发起请求的一端、去拿东西的一端，都可以称之为客户端或消费端。而负载均衡，一般则是针对于至少两个以上的集群而言，重点在于均衡。从相对论的角度而言，一切都是相对的，那么也就不存在绝对的均衡，因此所谓的均衡就需要一定的标准，如何">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springcloud微服务五：客户端负载均衡ribbon">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/09/03/springcloud5/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="基本概念理解ribbon用在客户端，或者说消费端，被称作客户端负载均衡。对于这个称呼，可以解析为三个部分，一个是客户端，一个是负载均衡，然后就是客户端负载均衡。根据个人理解，所有发起请求的一端、去拿东西的一端，都可以称之为客户端或消费端。而负载均衡，一般则是针对于至少两个以上的集群而言，重点在于均衡。从相对论的角度而言，一切都是相对的，那么也就不存在绝对的均衡，因此所谓的均衡就需要一定的标准，如何">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-03T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-10-17T03:29:24.079Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springcloud">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springcloud5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/03/springcloud5/" class="article-date">
+  <time datetime="2018-09-03T07:09:42.000Z" itemprop="datePublished">2018-09-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springcloud微服务五：客户端负载均衡ribbon
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="基本概念理解"><a href="#基本概念理解" class="headerlink" title="基本概念理解"></a>基本概念理解</h1><p>ribbon用在客户端，或者说消费端，被称作客户端负载均衡。<br>对于这个称呼，可以解析为三个部分，一个是客户端，一个是负载均衡，然后就是客户端负载均衡。<br>根据个人理解，所有发起请求的一端、去拿东西的一端，都可以称之为客户端或消费端。<br>而负载均衡，一般则是针对于至少两个以上的集群而言，重点在于均衡。从相对论的角度而言，一切都是相对的，那么也就不存在绝对的均衡，因此所谓的均衡就需要一定的标准，如何达到这个标准，则需要一定的控制，即负载均衡策略，也可以称之为规则。<br>对于客户端负载均衡，则可以很好的理解为，这是相对于服务端负载均衡而言。相对于服务端负载均衡而言，客户端负载均衡的好处就在于各个客户端自己实现负载均衡运算，从而降低了服务端的压力。坏处在于客户端要自己实现负载，就需要清楚服务端集群的状态，增加了客户端的复杂度以及多个客户端下可能看起来的功能冗余。</p>
+<a id="more"></a>
+
+<h1 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h1><h2 id="pom-xml配置"><a href="#pom-xml配置" class="headerlink" title="pom.xml配置"></a>pom.xml配置</h2><p>ribbon的基本用法，实际上之前提过，首先还是一样需要创建一个springboot项目，然后配置maven的pom.xml文件</p>
+<pre>
+&lt;parent>
+    &lt;groupId>org.springframework.boot&lt;/groupId>
+    &lt;artifactId>spring-boot-starter-parent&lt;/artifactId>
+    &lt;version>1.5.10.RELEASE&lt;/version>
+    &lt;relativePath/> 
+&lt;/parent>
+......
+&lt;dependency>
+    &lt;groupId>org.springframework.cloud&lt;/groupId>
+    &lt;artifactId>spring-cloud-starter-eureka&lt;/artifactId>
+&lt;/dependency>
+&lt;dependency>
+    &lt;groupId>org.springframework.cloud&lt;/groupId>
+    &lt;artifactId>spring-cloud-starter-ribbon&lt;/artifactId>
+&lt;/dependency>
+......
+&lt;dependencyManagement>
+    &lt;dependencies>
+        &lt;dependency>
+            &lt;groupId>org.springframework.cloud&lt;/groupId>
+            &lt;artifactId>spring-cloud-dependencies&lt;/artifactId>
+            &lt;version>Edgware.SR2&lt;/version>
+            &lt;type>pom&lt;/type>
+            &lt;scope>import&lt;/scope>
+        &lt;/dependency>
+    &lt;/dependencies>
+&lt;/dependencyManagement>
+</pre>
+
+<p><strong>注：由于和之前四篇隔得时间较长，且目前工作实际项目使用的版本是springboot1.5.0和springcloud-Edgware.SR2，因此这之后的代码示例也均已这两个版本为主。</strong></p>
+<h2 id="properties文件配置"><a href="#properties文件配置" class="headerlink" title="properties文件配置"></a>properties文件配置</h2><pre>
+服务名
+spring.application.name=ribbon-client
+服务端口
+server.port=9098
+是否允许ip访问
+eureka.instance.prefer-ip-address=true
+指定注册中心的地址
+eureka.client.serviceUrl.defaultZone=http://localhost:10010/eureka/
+</pre>
+
+<h2 id="基本代码"><a href="#基本代码" class="headerlink" title="基本代码"></a>基本代码</h2><p>配置好pom.xml和properties文件后之后，在springcloud启动类类名上方加入springboot的启动注解以及springcloud客户端注解</p>
+<pre>
+@EnableDiscoveryClient
+@SpringBootApplication
+</pre>
+
+<p>之后，在启动类中加入 RestTemplate的初始化代码，并使用@Bean注解告知springboot管理，同时加入@LoadBalanced注解，代表使用ribbon负载均衡来管理RestTemplate，这一段代码大致如下：</p>
+<pre>
+@Bean
+@LoadBalanced
+RestTemplate restTemplate() {
+    return new RestTemplate();
+ }
+</pre>
+
+<p>有了上边的代码，我们在其他被spring管理的组件中就可以使用@Autowired这样的方式注入RestTemplate，一个被ribbon管理的RestTemplate，如下边所示：</p>
+<pre>
+@service
+public interface RibbonService {
+    @Autowired
+    RestTemplate restTemplate;
+    public String sayHello() {
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://client/hello", String.class);
+        return responseEntity.getBody();
+    }}
+</pre>
+
+<h1 id="内置负载均衡策略"><a href="#内置负载均衡策略" class="headerlink" title="内置负载均衡策略"></a>内置负载均衡策略</h1><p><strong>RoundRobinRule线性轮询策略</strong><br>上边的简单实现，只使用了@LoadBalanced注解来开启ribbon负载均衡，那么就会使用ribbon默认的负载均衡策略，即线性轮询。<br>就如我们用酷狗等音乐播放器放歌一样，有很多方式，例如单曲循环、列表循环、随机播放，这里的线性轮询其实就是列表循环，放歌循环的是歌曲列表，线性轮询循环的是服务器列表，针对一系列的请求，从前到后依次访问列表中的服务器，到了最后边，就再回到开头。<br>虽然在多个服务端的情况下，线性轮询已经可以一定程度的实现负载均衡，大概也是实际使用率最高的一种方式，但是也有它的局限性，因此ribbon还内置了其他一些负载均衡策略供我们选择。</p>
+<p>我们目前项目中就只使用了默认的负载均衡策略，不过也对其他策略有过一定的了解，下边几个是我个人认为可能也会用到的：<br><strong>RandomRule随机选择策略</strong><br>随机二字应该就不需要多做解释了；<br><strong>RetryRule线性轮询重试策略</strong><br>这个策略内部实际上还是用的线性轮询，与默认的线性轮询不一样的地方在于，这个策略在访问轮询到的服务有问题时，会在一定的时间内进行重试，这个时间可以通过maxRetryMillis参数进行配置。<br><strong>WeightedResponseTimeRule权重响应时间策略</strong><br>这个策略是对线性轮询的拓展，在线性轮询的情况下，不论服务器实例的性能如何，在一定的请求次数下都必然会被轮询到，这样一来，如果某个实例由于某些原因，响应时间远大于其他实例，就必然影响整体性能。<br>而WeightedResponseTimeRule则会对每个服务实例的响应时间进行一定的记录和计算，然后给每个实例一个权重值区间。<br>如果上边的权重值最大值小于0.001，那么之后的请求会采用线性轮询策略；如果大于0.001，那么对于每一个请求，会随机分配一个0到最大权重值之间的随机数，然后这个随机数在实力列表中哪个实例的权重区间内，就会选择哪个实例。<br>那么这里有一个细节，就是随机数算法中含头不含尾，也就是说在0到最大权重值之间的随机数，可以是0，却不会是最大权重值那个值。<br>另一个细节就是，根据这里的权重算法，平均响应时间越短的服务实例，它的权重区间就会越大，注意，是权重区间越大，而不是权重值。再明确点说，就是这个实力区间内能容纳的随机数个数更多。<br>因此，在生成随机数的时候，这个区间命中的概率就越大，这个实例被选择到的几率也更高，从而就使得平均响应时间短的实例更容易被选择到，就提升了系统效率。</p>
+<p>除了上边四种，还有诸如<strong>最好可用策略BestAvailableRule</strong>等策略，就不再记录。<br>同时，<strong>还可以自己定义负载均衡策略</strong>，但是应该很少会被用到，因为内置的这些已经能够满足非常多的应用场景了。</p>
+<p>那么，了解了不同的负载均衡策略之后，还需要知道的当然就是如何使用非默认的负载均衡策略了。<br>其实也比较简单，只需要在加一个让spring来管理的bean就好，如下边这样：</p>
+<pre>
+@Bean
+public IRule ribbonRule() {
+    // return new RandomRule();
+    // return new RetryRule();
+    return new WeightedResponseTimeRule();
+ }
+</pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/09/03/springcloud5/" data-id="ckbk4ukbh00300svh4zkb1e9c" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/09/09/springcloud6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          springcloud微服务六：声明式服务调用Feign
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/25/mysql-jichu15/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">mysql常用操作语法（十五）~~触发器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基本概念理解"><span class="toc-number">1.</span> <span class="toc-text">基本概念理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基本用法"><span class="toc-number">2.</span> <span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#pom-xml配置"><span class="toc-number">2.1.</span> <span class="toc-text">pom.xml配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#properties文件配置"><span class="toc-number">2.2.</span> <span class="toc-text">properties文件配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本代码"><span class="toc-number">2.3.</span> <span class="toc-text">基本代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#内置负载均衡策略"><span class="toc-number">3.</span> <span class="toc-text">内置负载均衡策略</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

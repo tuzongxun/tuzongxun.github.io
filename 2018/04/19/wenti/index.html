@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>记一次数据库or和and优先级引发的连环生产故障 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="故障描述：自上个月某个功能改动上线以后，最近生产上连环出现了多个生产故障，故障基本描述如下：error日志出现数据库连接异常，而实际交易量似乎并没有到达耗尽连接池的地步。数据中某个字段无值，不符合正常设计推理的流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次数据库or和and优先级引发的连环生产故障">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/04/19/wenti/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="故障描述：自上个月某个功能改动上线以后，最近生产上连环出现了多个生产故障，故障基本描述如下：error日志出现数据库连接异常，而实际交易量似乎并没有到达耗尽连接池的地步。数据中某个字段无值，不符合正常设计推理的流程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-19T03:43:58.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:50:40.205Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="问题整理">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-wenti" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/wenti/" class="article-date">
+  <time datetime="2018-04-19T03:43:58.000Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      记一次数据库or和and优先级引发的连环生产故障
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="故障描述："><a href="#故障描述：" class="headerlink" title="故障描述："></a>故障描述：</h1><p>自上个月某个功能改动上线以后，最近生产上连环出现了多个生产故障，故障基本描述如下：<br>error日志出现数据库连接异常，而实际交易量似乎并没有到达耗尽连接池的地步。<br>数据中某个字段无值，不符合正常设计推理的流程。</p>
+<a id="more"></a>
+<h2 id="故障描述"><a href="#故障描述" class="headerlink" title="故障描述"></a>故障描述</h2><p>数据出现诡异的结果，和关联的业务日志显示的完全不一样，业务日志显示成功，数据库记录却是成功。</p>
+<h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>在详细说明上述故障之前，需要简单描述一样具体的业务场景，大概是这样：</p>
+<p>我们系统需要和外部系统进行交互，交互的过程中会在日志和数据库中都记录交易的状态，使用mq消息队列交互。<br>数据库涉及到的关键字段是：status代表状态，time代表响应时间；<br>发送请求前，status设置为02，代表“收到请求，本系统处理中”；<br>发送请求并接到同步响应后，status设置为03，代表“请求成功，外部系统处理中”，同时记录响应时间time；<br>收到外部系统异步结果，结果是成功，status设置为00，代表“外部系统业务处理成功”；<br>收到外部系统异步结果，但结果是失败，status设置为01，代表“外部系统业务处理失败”；</p>
+<h2 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h2><p>第一个问题，数据库连接异常，相关人员分析了很久后也没能找出是什么原因，导致当前交易量的情况下就连接耗尽。<br>第二个问题，因为同步响应才会保存time字段，异步通知不会保存time字段。<br>正常流程是先有同步响应后修改数据库，而后才是异步通知修改数据库，会进行status的判断。<br>但是出现问题的时候发现是异步通知先改数据库，同步响应后改，就导致status判断不过。这个问题是程序本身的缺陷所在，算是找到了解决办法。但是是什么原因导致了异步在前，同步在后？这又是一个未解问题。<br>第三个问题，一样是相关人员定位了很久，无法想通究竟是什么原因导致日志都成功的情况下，数据库字段是失败。</p>
+<p>直到这三个问题聚合到一起，关联起来之后，才有数据库比较熟的同事发现了问题所在，这三个诡异的问题，实际上都是同一个问题导致，那就是sql语句中and和or使用不当，出了优先级的隐秘问题。<br>这个修改数据库的sql在mybits中大概是这样的：</p>
+<pre>
+update table1 
+&lt;set>
+&lt;if test="status!= null">
+status=#{status},
+&lt;/if>
+&lt;if test="time != null">
+time=#{time},
+&lt;/if>
+&lt;/set>
+where
+&lt;if test="name != null">
+name=#{name}
+&lt;/if>
+&lt;if test="age != null">
+and age=#{age}
+&lt;/if>
+and status="01" or status="02"
+</pre>
+
+<p>这个sql的问题就在于，and的优先级高于or，同时使用了and和or的情况下，这里or前后的条件本该是整体，却没有用括号括起来。<br>导致or前边所有and连接的条件成了整体，就直接导致当status=‘01’不成立的情况下，就只剩下了一个条件，status=“02”。<br>然后这个操作就会更新数据当前status为02的所有记录，由一条变成了n条。<br>于是乎，就大大增加了数据库的负荷，使得原本可能只需消耗很短时间的update操作变得异常耗时，紧接着就导致后续很多数据库操作陆续从连接池获取连接，并且得不到释放，直到连接耗尽，出现第一个连接异常的问题。<br>同样的，由于数据库连接的问题，导致同步响应的更新操作一直等待，mq消息就无法消费，产生堆积。又由于同步响应和异步通知的mq队列不同，就导致最终异步通知mq队列先消费，同步响应的mq队列后消费，然后再加上程序本身的缺陷，导致第二个生产故障。<br>也是因为这样，原本可能根据name条件只update符合条件的一条数据，结果变成了更新所有status是02的数据，就会导致其他失败的订单更新数据库时，把其他订单的status也更新成失败，就会出现其他订单日志和数据库记录不一致的第三个生产故障。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>实际上分析出问题根本原因后，解决起来就很简单了，最简单的，就是把or优先级低的整体用括号括起来，如下：</p>
+<pre>
+update table1 
+&lt;set>
+&lt;if test="status!= null">
+status=#{status},
+&lt;/if>
+&lt;if test="time != null">
+time=#{time},
+&lt;/if>
+&lt;/set>
+where
+&lt;if test="name != null">
+name=#{name}
+&lt;/if>
+&lt;if test="age != null">
+and age=#{age}
+&lt;/if>
+and (status="01" or status="02")
+</pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/04/19/wenti/" data-id="ckbk4uke300810svhguutdjsa" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/04/25/mysql-jichu15/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          mysql常用操作语法（十五）~~触发器
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/18/mysql-jichu13/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">mysql常用操作语法（十四）~~复杂的存储过程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#故障描述："><span class="toc-number">1.</span> <span class="toc-text">故障描述：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#故障描述"><span class="toc-number">1.1.</span> <span class="toc-text">故障描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#场景描述"><span class="toc-number">1.2.</span> <span class="toc-text">场景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因分析"><span class="toc-number">1.3.</span> <span class="toc-text">原因分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方案"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

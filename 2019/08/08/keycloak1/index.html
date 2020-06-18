@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>springboot2集成oauth2和keycloak以及admin rest api记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言以keycloak作为sso认证中心服务端，springboot2的客户端集成方式有很多种，例如仅集成keycloak的jar包方式、集成spring security的方式、以及security+oauth2的方式等。上述三种方式，从实现以及功能上来说均是一个比一个复杂。另外，springboot作为普通客户端的同时，也可以进行更多的集成，进而实现对keycloak服务端的操作，这就涉及到k">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot2集成oauth2和keycloak以及admin rest api记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2019/08/08/keycloak1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言以keycloak作为sso认证中心服务端，springboot2的客户端集成方式有很多种，例如仅集成keycloak的jar包方式、集成spring security的方式、以及security+oauth2的方式等。上述三种方式，从实现以及功能上来说均是一个比一个复杂。另外，springboot作为普通客户端的同时，也可以进行更多的集成，进而实现对keycloak服务端的操作，这就涉及到k">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-08T01:43:58.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:46:57.392Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="keycloak">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-keycloak1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/08/keycloak1/" class="article-date">
+  <time datetime="2019-08-08T01:43:58.000Z" itemprop="datePublished">2019-08-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springboot2集成oauth2和keycloak以及admin rest api记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>以keycloak作为sso认证中心服务端，springboot2的客户端集成方式有很多种，例如仅集成keycloak的jar包方式、集成spring security的方式、以及security+oauth2的方式等。<br>上述三种方式，从实现以及功能上来说均是一个比一个复杂。<br>另外，springboot作为普通客户端的同时，也可以进行更多的集成，进而实现对keycloak服务端的操作，这就涉及到keycloak中admin rest api的调用。<br>正常而言，rest api符合rest规范，应该是比较简单的。但是当rest api牵扯到各种权限和角色的时候，会发现很多其他的细节问题会导致这个rest接口无法调通，尤其是这些问题不是代码本身问题的时候，就会更加让人摸不着头脑。<br>以下是初步集成security+oauth2+admin rest api过程中部分踩坑记录，其中有很多细节还有待深入理解。</p>
+<a id="more"></a>
+
+<h1 id="security-oauth2客户端集成"><a href="#security-oauth2客户端集成" class="headerlink" title="security+oauth2客户端集成"></a>security+oauth2客户端集成</h1><h2 id="条件说明"><a href="#条件说明" class="headerlink" title="条件说明"></a>条件说明</h2><p>客户端集成的前提是，有了已经可用的keycloak服务端，并且已经在服务端控制台创建好了realm、<br>client、role、scope等，可以参考上一篇：<br><a href="https://tuzongxun.blog.csdn.net/article/details/96979245" target="_blank" rel="noopener">https://tuzongxun.blog.csdn.net/article/details/96979245</a></p>
+<h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><p>spingboot1.x和springboot2.x集成keycloak的方式是有一定差别的，鉴于为实际项目服务的宗旨，这一次的集成预研，基于springboot2.1.3版本，以下是客户端集成时的maven依赖配置：</p>
+<pre>
+&lt;dependency>
+&lt;groupId>org.springframework.boot&lt;/groupId>
+&lt;artifactId>spring-boot-starter-web&lt;/artifactId>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.springframework.boot&lt;/groupId>
+&lt;artifactId>spring-boot-starter-oauth2-client&lt;/artifactId>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.springframework.boot&lt;/groupId>
+&lt;artifactId>spring-boot-starter-oauth2-resource-server&lt;/artifactId>
+&lt;/dependency> 
+&lt;dependency>
+&lt;groupId>org.springframework.boot&lt;/groupId>
+&lt;artifactId>spring-boot-starter-security&lt;/artifactId>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.springframework.security.oauth&lt;/groupId>
+&lt;artifactId>spring-security-oauth2&lt;/artifactId>
+&lt;version>2.1.3.RELEASE&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.springframework.security&lt;/groupId>
+&lt;artifactId>spring-security-oauth2-jose&lt;/artifactId>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.springframework.cloud&lt;/groupId>
+&lt;artifactId>spring-cloud-starter-oauth2&lt;/artifactId>
+&lt;version>2.1.3.RELEASE&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.springframework.cloud&lt;/groupId>
+&lt;artifactId>spring-cloud-starter-security&lt;/artifactId>
+&lt;version>2.1.3.RELEASE&lt;/version>
+&lt;/dependency>
+</pre>
+
+<h2 id="项目配置说明"><a href="#项目配置说明" class="headerlink" title="项目配置说明"></a>项目配置说明</h2><p>oauth2授权验证时，需要token等令牌，sso单点登录需要一个统一的登录入，这些均是keycloak服务端提供，因此就必须在客户端集成时进行oauth2的配置，各种url指向对应的keycloak服务的url，如下：</p>
+<pre>
+server:
+  port: 8884 
+spring:
+  application:
+    name: oauthdemo
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:8080/auth/realms/tzx
+          jwk-set-uri: http://127.0.0.1:8080/auth/realms/tzx/protocol/openid-connect/certs
+      client:
+        provider:
+          master:
+            issuer-uri: http://127.0.0.1:8080/auth/realms/tzx
+            token-uri: http://127.0.0.1:8080/auth/realms/tzx/protocol/openid-connect/token
+            authorization-uri: http://127.0.0.1:8080/auth/realms/tzx/protocol/openid-connect/auth
+            user-info-uri: http://127.0.0.1:8080/auth/realms/tzx/protocol/openid-connect/userinfo
+            jwk-set-uri: http://127.0.0.1:8080/auth/realms/tzx/protocol/openid-connect/certs
+            user-info-authentication-method: header
+            user-name-attribute: preferred_username
+        registration:
+          master:
+            client-id: test-authz
+            client-secret: 2811de6b-e703-4644-8330-617ac5104ca6
+            client-name: test-authz
+            provider: master
+            authorization-grant-type: authorization_code
+            client-authentication-method: basic
+            scope:
+              - email
+              - profile
+              - openid
+              - openid_test
+</pre>
+
+<p>上边内容需要注意的是：</p>
+<ol>
+<li>大部分内容对可以照搬的，仅需改一下ip端口和realm</li>
+<li>各个url里边realms后边的tzx实际上就是在keycloak服务端创建的realm，这里的tzx就是我自己创建的一个realm。</li>
+<li>client-id、client-secret、client-name这些很多资源有讲，有示例的，就不多说。</li>
+<li>scope里边配置的是一个数组，这里配了四个，实际上前两个是keycloak我们创建客户端时就默认会有的，后两个是需要自己创建的。在本次集成中，实际也只有最后一个起了作用，会看到后边的代码中有用到。</li>
+</ol>
+<h2 id="WebSecurity配置类"><a href="#WebSecurity配置类" class="headerlink" title="WebSecurity配置类"></a>WebSecurity配置类</h2><p>集成了security，并且要启用的话，就需要根据实际重写security适配器，简易代码如下：</p>
+<pre>
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/test/*").hasRole("USER").antMatchers("/token")        .hasAuthority("SCOPE_openid_test").anyRequest().authenticated().and().oauth2Login().and()
+                .oauth2Client().and().oauth2ResourceServer().jwt();
+    }
+}
+</pre>
+<p>这里边需要注意的就是SCOPE_openid_test_api，这个实际上就是上边说的那个scope，不过呢直到这里，配置文件中的scope配置其实都还是没有起作用的，配置文件中的那个配置是在后边有用。这里生效的就是代码里所写的，需要保证这个scope在keycloak服务端有创建。</p>
+<h2 id="OAuth2Client的配置"><a href="#OAuth2Client的配置" class="headerlink" title="OAuth2Client的配置"></a>OAuth2Client的配置</h2><p>我们启用了oauth2验证之后，在各个接口就需要token等令牌信息，只有令牌校验通过，这个接口才应该被正常的访问。<br>那么访问接口如何携带令牌等授权信息，oauth2对restTemplat进行了封住，需要我们使用的时候进行一定的处理，以使它知道如何获取令牌如何携带令牌，初步实现代码如下：</p>
+<pre>
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.AccessTokenRequest;
+import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+import org.springframework.security.oauth2.common.AuthenticationScheme;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+@Configuration
+@EnableOAuth2Client
+public class OAuth2ClientConfiguration {
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
+    @Bean
+    protected OAuth2ProtectedResourceDetails resource() {
+        ClientCredentialsResourceDetails resource = new ClientCredentialsResourceDetails();
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("master");
+        resource.setAccessTokenUri(clientRegistration.getProviderDetails().getTokenUri());
+        resource.setClientId(clientRegistration.getClientId());
+        resource.setClientSecret(clientRegistration.getClientSecret());
+        resource.setClientAuthenticationScheme(AuthenticationScheme.header);
+        resource.setClientAuthenticationScheme(AuthenticationScheme.header);
+        List<String> scopes = new ArrayList<String>(clientRegistration.getScopes());
+        resource.setScope(scopes);
+
+        return resource;
+    }
+    @Bean
+    public OAuth2RestTemplate restTemplate() {
+        AccessTokenRequest accessTokenRequest = new DefaultAccessTokenRequest();
+        OAuth2ClientContext oAuth2ClientContext = new DefaultOAuth2ClientContext(accessTokenRequest);
+        return new OAuth2RestTemplate(resource(), oAuth2ClientContext);
+    }
+}
+</pre>
+
+<p>上边代码主要作用就是为了装配OAuth2RestTemplate这个bean，以用来在后边发送oauth2授权的请求，下边就是一个相应的controller。</p>
+<h2 id="测试示例"><a href="#测试示例" class="headerlink" title="测试示例"></a>测试示例</h2><pre>
+@Autowired
+private OAuth2RestTemplate restTemplate;
+@GettMapping( "/test/getToken")
+public String client() {
+        String result = restTemplate.postForObject("http://127.0.0.1:8884/token", null, String.class);
+        return result;
+}
+@PostMapping("/token")
+public String getToken(@AuthenticationPrincipal Jwt jwt) {
+        String tokenId = jwt.getId();
+        String value = jwt.getTokenValue();
+        return "tokenId:" + tokenId + ",token:" + value;
+}
+</pre>
+
+<p>这里为何要写两个接口呢？仔细看便会发现，第一个接口就是一个普通接口，除开收到之前security的权限限制外，就没有别的条件，因此这个接口是可以不用任何额外操作，可以直接在浏览器地址栏请求的。<br>在这个普通接口里做了二次请求，目标接口用了@AuthenticationPrincipal注解以及jwt令牌类，里边的逻辑就是获取tokenid和token内容。<br>可能有人已经明白了，之所以这里一个注解和一个特定类就能拿到token，就是因为上边的restTemplate使用的是我们配置过的OAuth2RestTemplate，他在发请求的时候就会去配置文件中查找资源，请求token，然后再发起实际的目标请求。进而在目标接口收到请求的时候就可以根据注解和特定的类拿到token等信息。<br>到这里，springboot2+secutiry+oauth2+jwt+keycloak的一个基本集成就算是完成了，浏览器访问<a href="http://localhost:8884/test/getToken就会返回token等信息。" target="_blank" rel="noopener">http://localhost:8884/test/getToken就会返回token等信息。</a></p>
+<h1 id="admin-rest-api调用"><a href="#admin-rest-api调用" class="headerlink" title="admin rest api调用"></a>admin rest api调用</h1><p>在上边的例子中，我们有配置client-id等信息，这些信息均来自与keycloak服务端。网上的各种示例说明，基本都是说的直接在keycloak服务端控制台创建，也就是跟我们用任何软件一样点点鼠标。<br>而实际上，keycloak提供了admin rest api，以使我们可以再java代码中调用，来创建各种原本在keycloak控制台创建的资源，下边就以创建一个简单的client作为示例进行说明。</p>
+<h2 id="依赖集成"><a href="#依赖集成" class="headerlink" title="依赖集成"></a>依赖集成</h2><p>java操作keycloak服务端，这个java代码所在的项目实际上本身就是一个客户端，因此上边的那些依赖、配置和代码其实也都是必要的，同时，除了上边的依赖外，还需要另外集成两个依赖：</p>
+<pre>
+&lt;dependency>
+&lt;groupId>org.keycloak&lt;/groupId>
+&lt;artifactId>keycloak-authz-client&lt;/artifactId>
+&lt;version>6.0.1&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>org.keycloak&lt;/groupId>
+&lt;artifactId>keycloak-admin-client&lt;/artifactId>
+&lt;version>6.0.1</version>
+&lt;/dependency>
+</pre>
+
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>需要再次声明的是，java操作keycloak服务端，这个java代码所在的项目实际上本身就是一个客户端，因此上边的那些依赖、配置和代码其实也都是必要的。<br>在上边的基础上，如果需要用java代码创建一个client，示例代码如下：</p>
+<pre>
+@RequestMapping("/test/createClient")
+    public void test() {
+        try {
+            ClientRepresentation client = new ClientRepresentation();
+            client.setClientId("client-test000123");
+            client.setId("client-test-id00123");
+            client.setPublicClient(false);
+            client.setSecret("1235879");
+            client.setEnabled(true);
+            client.setProtocol("openid-connect");
+            List<String> origins = new ArrayList<String>();
+            origins.add("*");
+            client.setWebOrigins(origins);
+            List<String> urls = new ArrayList<String>();
+            urls.add("*");
+            client.setRedirectUris(urls);
+            client.setClientAuthenticatorType("client-secret");
+            client.setServiceAccountsEnabled(true);
+            client.setDirectAccessGrantsEnabled(true);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            HttpEntity<?> httpEntity = new HttpEntity<>(client, headers);
+            String jsonStr;
+            restTemplate.postForObject("http://127.0.0.1:8080/auth/admin/realms/tzx/clients", httpEntity,String.class, client);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+</pre>
+
+<p>上边的代码主要是参考keycloak官网的admin rest api操作说明：<br><a href="https://www.keycloak.org/docs-api/6.0/rest-api/" target="_blank" rel="noopener">https://www.keycloak.org/docs-api/6.0/rest-api/</a><br>代码是没有问题的，但是如果有人从上往下抄一遍，会发现执行上边的创建客户端的请求会报错：</p>
+<pre>
+org.springframework.web.client.HttpClientErrorException$Forbidden: 403 Forbidden
+    at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:83)
+    at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:122)
+    at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:102)
+</pre>
+
+<p>为何会这样呢？这其实就是我说的坑，原因在与当前这个client的role里没有创建client的权限。<br>例如我这里配置文件里的client是faw-api-authz，那么要想成功用java代码创建别的client<br>，就需要faw-api-authz拥有创建client的权限，需要在keycloak控制台设置步骤依次如下：<br>进入tzx这个realm——》点击clients——》找到并点击faw-api-authz——》点击service Account roles——》找到client roles——》点击下拉框，找到realm management——》选择create client和manage clients——》点击add select。<br>注：settings那里的service accounts enable需要打开。<br>有了上边的设置之后，重启springboot服务，再次访问，会发现我们新的client就创建成功了，在keycloak的 控制台的clients也会看到多了一个，各种参数就是java代码里写的参数。<br>至此，springboot2集成security+oauth2+jwt+keycloak+keycloak admin rest api基本完成，各种细节性的配置和选择需要在此基础上进一步优化。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2019/08/08/keycloak1/" data-id="ckbk4ukaq001i0svhh7ho6kqm" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2019/10/15/jwt/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          jwt、oauth2和oidc等认证授权技术的理解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/18/zongjie4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">读《淘宝技术这十年》有感</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#security-oauth2客户端集成"><span class="toc-number">2.</span> <span class="toc-text">security+oauth2客户端集成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#条件说明"><span class="toc-number">2.1.</span> <span class="toc-text">条件说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境说明"><span class="toc-number">2.2.</span> <span class="toc-text">环境说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目配置说明"><span class="toc-number">2.3.</span> <span class="toc-text">项目配置说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebSecurity配置类"><span class="toc-number">2.4.</span> <span class="toc-text">WebSecurity配置类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OAuth2Client的配置"><span class="toc-number">2.5.</span> <span class="toc-text">OAuth2Client的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试示例"><span class="toc-number">2.6.</span> <span class="toc-text">测试示例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#admin-rest-api调用"><span class="toc-number">3.</span> <span class="toc-text">admin rest api调用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#依赖集成"><span class="toc-number">3.1.</span> <span class="toc-text">依赖集成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码示例"><span class="toc-number">3.2.</span> <span class="toc-text">代码示例</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

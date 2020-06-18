@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记4——抽象工厂模式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义在进行工厂方法模式学习的时候，发现工厂方法模式有一个明显的缺陷，即每增加一个具体的产品都需要至少增加两个类，一个产品类，一个对应的工厂类。这种情况在产品特别多的情况下，显然就更有问题，然后便有了抽象工厂模式，来解决这个问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记4——抽象工厂模式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/22/pattern4-absfactory/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="定义在进行工厂方法模式学习的时候，发现工厂方法模式有一个明显的缺陷，即每增加一个具体的产品都需要至少增加两个类，一个产品类，一个对应的工厂类。这种情况在产品特别多的情况下，显然就更有问题，然后便有了抽象工厂模式，来解决这个问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-22T07:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:28:02.207Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern4-absfactory" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/22/pattern4-absfactory/" class="article-date">
+  <time datetime="2017-11-22T07:43:58.000Z" itemprop="datePublished">2017-11-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记4——抽象工厂模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>在进行工厂方法模式学习的时候，发现工厂方法模式有一个明显的缺陷，即每增加一个具体的产品都需要至少增加两个类，一个产品类，一个对应的工厂类。<br>这种情况在产品特别多的情况下，显然就更有问题，然后便有了抽象工厂模式，来解决这个问题。</p>
+<a id="more"></a>
+<p>抽象工厂模式引用书中的定义如下：</p>
+<blockquote>
+<p>抽象工厂模式(Abstract Factory Pattern)：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，它是一种对象创建型模式</p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>抽象工厂模式相对于前两个工厂模式都要难以理解一些，根据书中所说，要理解抽象工厂模式，需要先引入<code>产品族</code>和<code>产品等级结构</code>两个概念。<br>实际上我觉得这两个概念似乎比抽象工厂模式的定义更难理解，就我个人而言，我认为<code>产品族</code>不如叫<code>产品组</code>，组的概念应该远比族要好理解。<br>不过呢，如果能够直接理解<code>产品族</code>，还是不要替换成我所谓的<code>产品组</code>比较好，因为<code>产品族</code>实际上是特殊的<code>产品组</code>。<br>产品组很容易理解，就是一组产品，但是这一组产品不一定要有什么共性，可以是随意放在一起的，我们可以说他们就是一组。<br>而产品族为什么是特殊的产品组，是因为它是具有共性的产品组，这个共性，需要根据实际情况进行分析。<br>所以，如果一开始无法直接理解产品族的概念，完全可以先理解一下产品组的概念，然后进行一个迂回的理解。<br>就如这样：<br><strong>海尔冰箱、康佳电视、美的空调，如果把他们都是电器的共性去掉的话，他们放在一起就是一个普通的产品组；</strong><br><strong>海尔冰箱、海尔电视、海尔空调，他们都是海尔制造的，这是共性，然后就是一个海尔牌的产品族；</strong></p>
+<p>理解了产品族的概念，接下来就是产品等级结构，根据我的个人理解，简单点说产品等级结构就可以理解为同一类不同型号、或不同品牌、或者细节特点不同的产品，例如冰箱是一类产品，然后有海尔冰箱、美的冰箱、奥马冰箱，这三个不同品牌的冰箱组成了一个产品等级结构。<br><strong>那么结合我之前在工厂方法模式中的例子，就可以理解成儿童牙膏、普通牙膏、特效美白牙膏，他们都是牙膏的子类，是一个产品等级结构；再入普通牙刷、儿童牙刷、创意牙刷，都是牙刷，也可以是一个产品等级结构。</strong></p>
+<p><strong>所以说，产品族就是不同类但有共性的一组产品，而产品等级结构是同类但有所区别的一组产品，他们都是特殊的产品组，这是我的理解。</strong><br>当然了，这种共性就看自己实际应用的时候怎么分析，就像我非要说冰箱、电视、空调也是一个产品等级结构似乎也不是不行，但这个产品的着重点就在于“电器”，也就是他们的父类。</p>
+<p>那么理解了产品族和产品等级结构的概念后，接下来就是理解抽象工厂方法的定义了。<br>定义中<code>一系列相关或相互依赖对象</code>实际就是我们所说的产品族，一组有共性但不同类的产品，就例如儿童牙膏、普通牙膏、儿童牙刷、普通牙刷这四样东西的定义如下：</p>
+<pre>
+package patterntest.product;
+/**
+ *牙膏类产品父类
+ *@author tzx
+ */
+public abstract class FatherProduct1 {
+    /**
+     *产品名称
+     */
+    protected String productName;
+    /**
+     *产品规格
+     */
+    protected String productSize;
+    /**
+     *添加必要成分
+     */
+    public void addIngredient() {
+    }
+    public String getProductName() {
+        return productName;
+    }
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public String getProductSize() {
+        return productSize;
+    }
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
+    }
+    @Override
+    public String toString() {
+        return "MyProduct [productName=" + productName + ", productSize=" + productSize + "]";
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *普通牙膏
+ *@author tzx
+ */
+public class MyProduct1 extends FatherProduct1 {
+    public MyProduct1() {
+        addIngredient();
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *儿童牙膏
+ *@author tzx
+ */
+public class MyProduct2 extends FatherProduct1 {
+    public MyProduct2() {
+        addIngredient();
+        delead();
+    }
+    /**
+     *去铅
+     */
+    public void delead() {
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *牙刷类产品父类
+ *@author tzx
+ */
+public abstract class FatherProduct2 {
+    /**
+     *产品名称
+     */
+    protected String productName;
+    /**
+     *产品规格
+     */
+    protected String productSize;
+    /**
+     *组装
+     */
+    public void assemble() {
+    }
+    public String getProductName() {
+        return productName;
+    }
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public String getProductSize() {
+        return productSize;
+    }
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
+    }
+    @Override
+    public String toString() {
+        return "MyProduct [productName=" + productName + ", productSize=" + productSize + "]";
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *普通牙刷
+ *@author tzx
+ */
+public class MyProduct3 extends FatherProduct2 {
+    public MyProduct3() {
+        assemble();
+    }
+}
+</pre>
+<pre>
+package patterntest.product;
+/**
+ *普通牙膏
+ *@author tzx
+ */
+public class MyProduct4 extends FatherProduct2 {
+    public MyProduct4() {
+        assemble();
+        delead();
+    }
+    /**
+     * 去铅
+     */
+    public void delead() {
+    }
+}
+</pre>
+<p>这里有两个抽象产品类，一个是牙膏类，一个是牙刷类，他们各有两个子类。<br>任意一种牙膏和牙刷的组合，不去考虑都是洗刷工具的情况下，如果他们是同一个工厂生产的，可以说他们就是一个产品族，那么这里便又有了一个对设计模式中产品族的新理解，那就是需要被同一个工厂生产的。而不论是两个牙膏子类的组合，还是两个牙刷子类的组合，就是一个产品等级结构。<br>例如我这里把儿童牙刷和儿童牙膏作为一个产品族，普通牙刷和普通牙膏作为一个产品族，我的抽象工厂就应该是这样的：</p>
+<pre>
+package patterntest.absfactorypattern;
+import patterntest.product.FatherProduct1;
+import patterntest.product.FatherProduct2;
+/**
+ *产品族的抽象工厂
+ *@author tzx
+ */
+public interface MyAbsFactory {
+    /**
+     *获取牙膏
+     *@return
+     */
+    public FatherProduct1 getProGroup1();
+    /**
+     *获取牙刷
+     *@return
+     */
+    public FatherProduct2 getProGroup2();
+}
+</pre>
+<p>然后针对两个不同的产品族：普通牙膏和牙刷、儿童牙膏和牙刷，对用的实际工厂是这样</p>
+<pre>
+package patterntest.absfactorypattern;
+import patterntest.product.FatherProduct1;
+import patterntest.product.FatherProduct2;
+import patterntest.product.MyProduct1;
+import patterntest.product.MyProduct3;
+public class MyFactory1 implements MyAbsFactory {
+    /**
+     *普通牙膏
+     */
+    @Override
+    public FatherProduct1 getProGroup1() {
+        return new MyProduct1();
+    }
+    /**
+     *普通牙刷
+     */
+    @Override
+    public FatherProduct2 getProGroup2() {
+        return new MyProduct3();
+    }
+}
+</pre>
+<pre>
+package patterntest.absfactorypattern;
+import patterntest.product.FatherProduct1;
+import patterntest.product.FatherProduct2;
+import patterntest.product.MyProduct2;
+import patterntest.product.MyProduct4;
+public class MyFactory2 implements MyAbsFactory {
+    /**
+     *儿童牙膏
+     */
+    @Override
+    public FatherProduct1 getProGroup1() {
+        return new MyProduct2();
+    }
+    /**
+     *儿童牙刷
+     */
+    @Override
+    public FatherProduct2 getProGroup2() {
+        return new MyProduct4();
+    }
+}
+</pre>
+
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><p>根据上边的实例，抽象工厂模式基本可以归纳为如下几个要点：</p>
+<ol>
+<li>需要两个以上的抽象产品类，不同类的产品才能组成一个产品族</li>
+<li>每个抽象产品类需要有若干具体的产品类</li>
+<li>需要有一个抽象工厂类（根据需要也可以是多个），里边要有和产品等级结构个数对应的抽象工厂方法</li>
+<li>需要有至少一个具体工厂类，根据具体有几个产品族来定工厂类的个数</li>
+<li>客户端调用基本和工厂方法模式一样</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从之前工厂方法模式的例子以及上边的例子中可以看到，在之前工厂方法模式中，每一个产品都对应一个具体的工厂类，一个工厂类只有一个工厂方法。<br><strong>而现在，我们是每一个产品族对应一个工厂类，然后每一个产品等级结构对应一个工厂方法。</strong><br>这样一来必然大大减少工厂类的创建，如果再有新的产品族加入进来，例如有新的创意牙膏、创意牙刷组成一个产品族，那么就可以创建一个新的工厂。在这里，我们虽然加了两种产品，但只需要一个工厂类，这样也不用修改原来的代码，符合开闭原则。<br>但是这种模式也有一个很明显的问题，我们增加新的产品族是容易了，但是增加新的产品等级结构却必须要修改源代码。<br>例如现在的产品等级结构有两个，一个是牙刷类产品，一个是牙膏类产品，如果我们要再增加一个牙杯类产品，就必须在抽象工厂类和每个子类工厂都增加一个获取牙杯类产品的工厂方法，这就破坏了开闭原则。<br>但是每种模式偏重的点不一样，都有自己适合的地方，所以抽象工厂模式的缺点也需要实际应用的时候进行选择。</p>
+<p>demo源码可在github下载：<a href="https://github.com/tuzongxun/mypattern" target="_blank" rel="noopener">https://github.com/tuzongxun/mypattern</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/22/pattern4-absfactory/" data-id="ckbk4ukba002g0svhb5ea3uyb" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/23/pattern5-singleton/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记5——单例模式【高并发拓展】
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/21/pattern3-factory/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记3——工厂模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解"><span class="toc-number">2.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要点"><span class="toc-number">3.</span> <span class="toc-text">要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

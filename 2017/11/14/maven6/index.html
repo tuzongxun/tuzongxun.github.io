@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《maven实战》学习笔记6——maven聚合和继承 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="maven聚合为什么要用maven聚合随着互联网的发展，一个项目的业务复杂度越来越高，整个项目的业务代码也会越来越庞大，因此便有了把一个项目拆分成若干个子项目的需求。根据之前的知识，clean、test、package、install等都是针对单独的项目，那么对于上边若干个子项目可能就需要执行若干次的clean、test、package、install等操作，而这些操作具有很高的重复性。介于这样的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《maven实战》学习笔记6——maven聚合和继承">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/14/maven6/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="maven聚合为什么要用maven聚合随着互联网的发展，一个项目的业务复杂度越来越高，整个项目的业务代码也会越来越庞大，因此便有了把一个项目拆分成若干个子项目的需求。根据之前的知识，clean、test、package、install等都是针对单独的项目，那么对于上边若干个子项目可能就需要执行若干次的clean、test、package、install等操作，而这些操作具有很高的重复性。介于这样的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-14T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:29:04.274Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="开发工具">
+<meta property="article:tag" content="maven">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-maven6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/14/maven6/" class="article-date">
+  <time datetime="2017-11-14T07:09:42.000Z" itemprop="datePublished">2017-11-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《maven实战》学习笔记6——maven聚合和继承
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h3 id="maven聚合"><a href="#maven聚合" class="headerlink" title="maven聚合"></a>maven聚合</h3><h4 id="为什么要用maven聚合"><a href="#为什么要用maven聚合" class="headerlink" title="为什么要用maven聚合"></a>为什么要用maven聚合</h4><p>随着互联网的发展，一个项目的业务复杂度越来越高，整个项目的业务代码也会越来越庞大，因此便有了把一个项目拆分成若干个子项目的需求。<br>根据之前的知识，clean、test、package、install等都是针对单独的项目，那么对于上边若干个子项目可能就需要执行若干次的clean、test、package、install等操作，而这些操作具有很高的重复性。<br>介于这样的前提，便需要使用到maven聚合，经过一定的配置后，可以让我们每一次clean或者test或者package等都同时对所有子模块生效，大大减少了重复工作。</p>
+<a id="more"></a>
+<h4 id="maven聚合怎么用"><a href="#maven聚合怎么用" class="headerlink" title="maven聚合怎么用"></a>maven聚合怎么用</h4><p>根据上边的前提可以知道，属于同一个项目的子项目，或者说子模块，规范性的配置应该是他们groupId都一样，version也一样，只有artifactId不同。<br>例如有这样两个子项目mytest-project1、mytest-project2，他们的pom.xml的必要配置分别如下：<br>myporject1的pom.xml：</p>
+<pre>
+  &lt;modelVersion>4.0.0&lt;/modelVersion>
+  &lt;groupId>my.maven.test&lt;/groupId>
+  &lt;artifactId>mytest-project1&lt;/artifactId>
+  &lt;packaging>war&lt;/packaging>
+  &lt;version>0.0.1-SNAPSHOT&lt;/version>
+  &lt;name>mytest-project1 Maven Webapp&lt;/name>
+</pre>
+
+<p>myporject2的pom.xml：</p>
+<pre>
+  &lt;modelVersion>4.0.0&lt;/modelVersion>
+  &lt;groupId>my.maven.test&lt;/groupId>
+  &lt;artifactId>mytest-project2&lt;/artifactId>
+  &lt;packaging>war&lt;/packaging>
+  &lt;version>0.0.1-SNAPSHOT&lt;/version>
+  &lt;name>mytest-project2 Maven Webapp&lt;/name>
+</pre>
+
+<p>那么就可以再创建一个只有pom.xml的项目作为聚合这两个子项目的父项目，这个父项目的pom.xml的必要配置如下：</p>
+<pre>
+  &lt;modelVersion>4.0.0&lt;/modelVersion>
+  &lt;groupId>my.maven.test&lt;/groupId>
+  &lt;artifactId>mytest-project0&lt;/artifactId>
+  &lt;packaging>pom&lt;/packaging>
+  &lt;version>0.0.1-SNAPSHOT&lt;/version>
+  &lt;name>mytest-project0 Maven Webapp&lt;/name>
+  &lt;modules>
+     &lt;module>mytest-project1&lt;/module>
+     &lt;module>mytest-project2&lt;/module>
+  &lt;/modules>
+</pre>
+<p>对比之下可以知道看到，这个父项目的配置中modelVersion、groupId、version都和子项目的一模一样。其他除开artifactId、name本身每个maven项目都应该不一样之外，还有packaging的值不一样，并且还多了一个<code>modules</code>属性,而<code>packaging</code>和<code>modules</code>这两个属性就是maven聚合最重要的属性了。<br>首先，用来作为聚合其他子项目的父级项目的packaging的值必须是<code>pom</code>，也只能是<code>pom</code>。<br>然后<code>modules</code>中配置了需要聚合的子项目的列表。<br>如上边例子中配置的子项目列表是什么意思呢？比如<code>&lt;module&gt;mytest-project1&lt;/module&gt;</code>,这个其实指像的是一个pom.xml文件，也就是<code>工作空间/mytest-project0/mytest-project1/pom.xml</code>，说的更简单点，就是需要把子项目mytest-project1放到mytest-project0里边。<br>那么如果mytest-project1和mytest-project0位于同级目录怎么办呢？这个聚合的<code>modules</code>里的配置就要该成这样：</p>
+<pre>
+&lt;module>../mytest-project1&lt;/module>
+</pre>
+<p>由此其实可以看到，这个module里边的配置实际上就是一个相对路径，是相对于当前这个pom.xml（聚合项目的pom.xml）的相对路径。<br>例如<code>&lt;module&gt;mytest-project1&lt;/module&gt;</code>，其实就是mytest-project0/pom.xml所在目录下的mytest-project1，而<code>&lt;module&gt;../mytest-project1&lt;/module&gt;</code>，其实就是mytest-project0/pom.xml所在目录的上一级目录中的mytest-project1，<code>../</code>代表上一级目录，这个应该能来学maven的人都知道。<br>经过上边这样配置之后，那么我们只需要对这个聚合父项目进行clean等操作，就会同时对配置的各子模块生效，例如执行clean，那么mytest-project1和mytest-project2下边的target就都会被清理掉，执行package，那么mytest-project1和mytest-project2就都会执行package操作，然后在各自的target目录下生成各自的输出文件，这些结果在执行操作的时候就可以再控制台看到信息输出，例如执行clean，就会如下：</p>
+<pre>
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] mytest-project1 Maven Webapp
+[INFO] mytest-project2 Maven Webapp
+[INFO] mytest-project0 Maven Webapp
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building mytest-project1 Maven Webapp 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ mytest-project1 ---
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building mytest-project2 Maven Webapp 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ mytest-project2 ---
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building mytest-project0 Maven Webapp 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ mytest-project0 ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] mytest-project1 Maven Webapp ....................... SUCCESS [  0.164 s]
+[INFO] mytest-project2 Maven Webapp ....................... SUCCESS [  0.004 s]
+[INFO] mytest-project0 Maven Webapp ....................... SUCCESS [  0.003 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.272 s
+[INFO] Finished at: 2017-11-14T15:07:59+08:00
+[INFO] Final Memory: 6M/123M
+[INFO] ------------------------------------------------------------------------
+</pre>
+
+<h3 id="maven继承"><a href="#maven继承" class="headerlink" title="maven继承"></a>maven继承</h3><p>maven继承的作用其实和java中继承的作用是类似的，基本上都是主要为了实现重用，java中类的继承，减少了重复的代码，而maven中的继承则减少了pom.xml的配置。<br>因此显而易见的是，这里所说的maven继承更确切的说，应该指的是pom.xml配置的继承。<br>说到继承，自然是需要有父类和子类，那么引申到这里，就需要有父的pom.xml和子pom.xml,例如我这里有一个父项目pom.xml的必要内容如下：</p>
+<pre>
+  &lt;modelVersion>4.0.0&lt;/modelVersion>
+  &lt;groupId>my.maven.test1&lt;/groupId>
+  &lt;artifactId>mytest-project00&lt;/artifactId>
+  &lt;packaging>pom&lt;/packaging>
+  &lt;version>0.0.1-SNAPSHOT&lt;/version>
+  &lt;name>mytest-project00 Maven Webapp&lt;/name>
+  &lt;url>http://maven.apache.org&lt;/url>
+  &lt;dependencies>
+     &lt;dependency>
+         &lt;groupId>org.springframework&lt;/groupId>
+         &lt;artifactId>spring-webmvc&lt;/artifactId>
+         &lt;version>4.3.9.RELEASE&lt;/version>
+     &lt;/dependency>
+  &lt;/dependencies>
+  &lt;build>
+    <finalName>mytest-project00&lt;/finalName>
+  &lt;/build>
+</pre>
+<p>这个配置只显示的引用了spring-webmvc的依赖，所以会导入spring-webmvc及它所依赖的所有jar包，这个项目看起来和一个普通的maven项目几乎没有区别，唯一不同的就是，他的<code>packaging</code>和聚合一样也是pom才行。<br>那么如果我们有一个子项目也需要使用spring-webmvc，就可以继承这个项目的pom.xml，而不需要再另行配置spring-webmvc的依赖，例如子项目的pom.xml如下：</p>
+<pre>
+  &lt;modelVersion>4.0.0&lt;/modelVersion>
+  &lt;groupId>my.maven.test1&lt;/groupId>
+  &lt;artifactId>mytest-project01&lt;/artifactId>
+  &lt;packaging>war&lt;/packaging>
+  &lt;version>0.0.1-SNAPSHOT&lt;</version>
+  &lt;name>mytest-project01 Maven Webapp&lt;/name>
+  &lt;parent>
+     &lt;groupId>my.maven.test1&lt;/groupId>
+     &lt;artifactId>mytest-project00&lt;/artifactId>
+     &lt;version>0.0.1-SNAPSHOT&lt;/version>
+     &lt;relativePath>../mytest-project00/pom.xml&lt;/relativePath>
+  &lt;/parent>
+  &lt;url>http://maven.apache.org</url>
+  &lt;dependencies>
+  &lt;/dependencies>
+  &lt;build>
+    &lt;finalName>mytest-project01&lt;/finalName>
+  &lt;/build>
+</pre>
+<p>很明显的可以看到，上边的配置中并没有显示的配置任何依赖，但是多了一个<code>parent</code>的配置，而这个配置就是继承父项目的关键配置。<br>在parent中，groupId、artifactId、version这几个坐标的配置相信不用多说，关键在于<code>relativePath</code>，这个属性指定了maven父项目的pom.xml的路径，当然了，这里也是配置的相对于当前pom.xml的相对路径。<br>有了这个配置之后，mytest-project01不需要显示的配置对spring-webmvc的依赖，就会导入相应的依赖，也就是继承了mytest-project00的pom.xml的配置。</p>
+<p>pom.xml中有很多的属性，这些属性并非都能继承，根据我目前的工作状况，我觉得需要知道有这么回事就好了，因此暂时便不做更深入的了解。<br>maven聚合和maven继承可以让我们的maven开发过程更加简洁，两个可以结合在一起使用，既然知道了怎么聚合，也知道了怎么继承，那么结合在一起使用应该就不用多说了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/14/maven6/" data-id="ckbk4ukai00100svh19rxbda1" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">开发工具</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/15/maven7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《maven实战》学习笔记7——maven项目版本管理和灵活构建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/14/wenti2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">论细节决定成败</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#maven聚合"><span class="toc-number">1.</span> <span class="toc-text">maven聚合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#为什么要用maven聚合"><span class="toc-number">1.1.</span> <span class="toc-text">为什么要用maven聚合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maven聚合怎么用"><span class="toc-number">1.2.</span> <span class="toc-text">maven聚合怎么用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven继承"><span class="toc-number">2.</span> <span class="toc-text">maven继承</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

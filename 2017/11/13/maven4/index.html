@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《maven实战》学习笔记4——maven坐标和依赖 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="maven坐标maven坐标是什么坐标一词最让人熟悉的就是读书时学的x、y轴的横竖坐标，平面中由x、y决定一个唯一的点，x、y就是坐标。三维中，x、y、z决定一个唯一的点，x、y、z就是坐标。而在maven中，就是groupId、artifactId、version、packaging等属性决定一个唯一的项目模块，这些属性就是maven项目的坐标。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《maven实战》学习笔记4——maven坐标和依赖">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/13/maven4/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="maven坐标maven坐标是什么坐标一词最让人熟悉的就是读书时学的x、y轴的横竖坐标，平面中由x、y决定一个唯一的点，x、y就是坐标。三维中，x、y、z决定一个唯一的点，x、y、z就是坐标。而在maven中，就是groupId、artifactId、version、packaging等属性决定一个唯一的项目模块，这些属性就是maven项目的坐标。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-13T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:28:42.203Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="开发工具">
+<meta property="article:tag" content="maven">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-maven4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/13/maven4/" class="article-date">
+  <time datetime="2017-11-13T07:09:42.000Z" itemprop="datePublished">2017-11-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《maven实战》学习笔记4——maven坐标和依赖
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h3 id="maven坐标"><a href="#maven坐标" class="headerlink" title="maven坐标"></a>maven坐标</h3><h4 id="maven坐标是什么"><a href="#maven坐标是什么" class="headerlink" title="maven坐标是什么"></a>maven坐标是什么</h4><p>坐标一词最让人熟悉的就是读书时学的x、y轴的横竖坐标，平面中由x、y决定一个唯一的点，x、y就是坐标。三维中，x、y、z决定一个唯一的点，x、y、z就是坐标。而在maven中，就是groupId、artifactId、version、packaging等属性决定一个唯一的项目模块，这些属性就是maven项目的坐标。</p>
+<a id="more"></a>
+<h4 id="maven坐标详解"><a href="#maven坐标详解" class="headerlink" title="maven坐标详解"></a>maven坐标详解</h4><p>对于groupId、artifactId、version、packaging，上一篇实际上我已经根据自己的理解说过，但是这本书学到这里后，却发现有些地方略有些偏差，因此还需要进行补充和修正。<br>对于groupId，我说是项目所属的组，一般可能是公司网址，当时我的理解其实就是公司的网址。<br>但是读到这一章，却发现groupId实际上应该是针对开源项目发布之后的项目网址，而并非是公司网址。只不过在我之前所接触的项目中，很多人写的全是公司网址而已。<br>究其原因，可能是因为写的人对maven规范并不是很了解，也或者是公司项目不多，所以也就无所谓怎么写。而根据书中所说，maven的规范是不应该都写公司网址的。<br>至于artifactId，我之前理解的就是项目名，书学到这里，个人觉得也还是项目名。不过这个项目名应该更具体的理解为项目里边的模块名，一个模块其实也就是一个单独的子项目。<br>至于version和packaging比较好理解，和之前的没区别，但了解了一个新的、在我看来不怎么常用的属性classifier，这个属性定义maven项目一些附属构件，由maven插件决定，不能像前几个属性一个样直接定义值。由于这个属性我目前不常用，因此只做了解。</p>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><h4 id="依赖配置"><a href="#依赖配置" class="headerlink" title="依赖配置"></a>依赖配置</h4><p>在学习maven一开始就了解到了maven是一个优秀的依赖管理工具，这也是在我看来maven最重要的特性，通常一个比较完整的maven依赖配置是这样的（下边的例子只是为了演示用法，一般不太可能真的从webmvc排除web）：</p>
+<pre>
+&lt;dependency>
+    &lt;groupId>org.springframework&lt;/groupId>
+    &lt;artifactId>spring-webmvc&lt;/artifactId>
+    &lt;version>4.0.9.RELEASE&lt;/version>
+    &lt;scope>test&lt;/scope>
+    &lt;type>jar&lt;/type>
+    &lt;optional>true&lt;/optional>
+    &lt;exclusions>
+       &lt;exclusion>
+          &lt;groupId>org.springframework&lt;/groupId>
+          &lt;artifactId>spring-web&lt;/artifactId>
+          &lt;version>4.0.9.RELEASE&lt;/version>
+       &lt;/exclusion>
+    &lt;/exclusions>
+&lt;/dependency>
+</pre>
+<p>以上配置中前三个属性就是上边说的最常用的maven坐标，scope是生效范围，例如示例中的test，指的是只有在测试阶段有效，也就是运行测试类的测试方法的时候有用。<br>scope默认值时compile，表示对编译、测试、运行阶段都有效。除开test和compile，还有runtime、system等，我目前基本不怎么用，也就暂时略过。<br>type指的是依赖类型，默认是jar，可以理解成jar包，type可以是jar、war和pom等。<br>optional代表的是可选，值为true代表选择，值为false为不选择，这个属性实际用的也不多。<br>exclusions、exclusion是排除依赖，例如这里需要带入spring-webmvc的jar包，spring-webmvc依赖于spring-web的jar包，也就是说使用maven显示导入spring-webmvc的jar包时，maven也会把spring-web的jar包也导入进来，如果我们不需要spring-web，就可以在这个地方配置spring-web的坐标排除掉，然后就不会再导入这个依赖包。</p>
+<h4 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h4><p>还是如上边所示的例子，我们要导入spring-webmvc的jar包，spring-webmvc依赖于spring-web，所以在我们的项目中也会把spring-web的jar包导入进来。<br>根据上边对依赖配置的解释，我们知道配置中有scope，即依赖范围，如果spring-webmvc中配置的对spring-web的scope是compile，那么在我们的项目中默认导入进来的spring-web的依赖范围就也是compile。<br>但是上边的结论的前提是我们我们项目中对spring-webmvc的依赖范围和spring-webmvc中对spring-web的依赖范围一致。<br>但这两个依赖范围不一致的时候，就需要理解第一直接依赖和第二直接依赖这样的概念。就比如上述例子中，我们的项目队spring-webmvc就是第一直接依赖，我们的项目对spring-web就是第二直接依赖。<br>因此这里需要特备注意的是，有时候如果有第二直接依赖的包，但没有生效，可以从这个角度去考虑一下。<br>还有一个问题就是，针对配置了可选依赖选项的jar，将不会被传递，如果需要，必须另外手动导入才行。</p>
+<h4 id="依赖调解"><a href="#依赖调解" class="headerlink" title="依赖调解"></a>依赖调解</h4><p>maven之所以能根据一定的配置就准确的导入我们需要的依赖，那是因为我们的配置，也就是所说的坐标保证了依赖的唯一性，而一旦出现不唯一的情况，那么就需要进行选择，这就涉及到依赖调解，或者就理解成依赖选择。<br>之所以会出现这种不唯一的情况，一般都是因为依赖传递。<br>例如我一个项目导入了A.jar和B.jar两个jar包，而A.jar和B.jar都依赖于C.jar，但是这两个C.jar的版本version又不一样，这时候我们的项目就需要选择究竟是使用哪一个C.jar，这就是所谓的依赖调解。<br>那么首先，根据最短路径原则选择。<br>联系上边的知识，可以理解成第几直接依赖的问题。比如刚才A、B、C的例子，由于两个C.jar都是第二直接依赖，所以他们路径就是一样长。假如这里是A.jar依赖于C-1.jar，而B.jar依赖于D.jar，而D.jar再依赖于C-2.jar，那么这时候C-1是第二直接依赖，c-2就是第三直接依赖，也就是c-1的路径比较短，那么这时候就会选择c-1而不是c-2。<br>当然了，上边是假设B.jar依赖于D.jar，那么如果就是一开始那样B.jar就是直接依赖C-2.jar呢，这时候两个的路径是一样的，那就涉及到第一声明优先原则，也就是说在pom.xml中A和B谁在前，谁就会被选择，需要注意的是这个原则是maven2.0.9之后才有的。</p>
+<h4 id="依赖优化"><a href="#依赖优化" class="headerlink" title="依赖优化"></a>依赖优化</h4><p>根据上边所有的知识，可是知道一个项目的第一、第二乃至第n个直接依赖可能会有若干个重复的依赖声明，但是根据一些原则，最终被实际用到的确实唯一的，这些被最终确认的依赖称为解析依赖，可以通过<code>mvn dependency:list</code>来进行查看，然后可以看到各依赖是第几依赖，是根据哪个依赖进来的，然后就可以进行一定的优化。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/13/maven4/" data-id="ckbk4ukag000u0svhebncbiw2" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">开发工具</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/13/maven5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《maven实战》学习笔记5——maven仓库和镜像
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/07/maven3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《maven实战》学习笔记3——maven使用入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#maven坐标"><span class="toc-number">1.</span> <span class="toc-text">maven坐标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#maven坐标是什么"><span class="toc-number">1.1.</span> <span class="toc-text">maven坐标是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maven坐标详解"><span class="toc-number">1.2.</span> <span class="toc-text">maven坐标详解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven依赖"><span class="toc-number">2.</span> <span class="toc-text">maven依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖配置"><span class="toc-number">2.1.</span> <span class="toc-text">依赖配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖传递"><span class="toc-number">2.2.</span> <span class="toc-text">依赖传递</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖调解"><span class="toc-number">2.3.</span> <span class="toc-text">依赖调解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖优化"><span class="toc-number">2.4.</span> <span class="toc-text">依赖优化</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

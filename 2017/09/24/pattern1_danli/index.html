@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>【java设计模式初探0】_单例模式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在java的几十种设计模式中，可能单例模式算是最容易理解的吧！因为不论是目前的我自己，还是偶尔面试的别人，能稍微讲清楚的，基本就是单例模式。什么叫单例模式？顾名思义，就是单一的实例，唯一的实 例。也就是说对于某个java类来说，他的实例对象最多只能创建一个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【java设计模式初探0】_单例模式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/09/24/pattern1_danli/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="在java的几十种设计模式中，可能单例模式算是最容易理解的吧！因为不论是目前的我自己，还是偶尔面试的别人，能稍微讲清楚的，基本就是单例模式。什么叫单例模式？顾名思义，就是单一的实例，唯一的实 例。也就是说对于某个java类来说，他的实例对象最多只能创建一个。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-09-24T10:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:27:39.079Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern1_danli" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/24/pattern1_danli/" class="article-date">
+  <time datetime="2017-09-24T10:43:58.000Z" itemprop="datePublished">2017-09-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【java设计模式初探0】_单例模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>在java的几十种设计模式中，可能单例模式算是最容易理解的吧！因为不论是目前的我自己，还是偶尔面试的别人，能稍微讲清楚的，基本就是单例模式。<br>什么叫单例模式？顾名思义，就是单一的实例，唯一的实 例。也就是说对于某个java类来说，他的实例对象最多只能创建一个。</p>
+<a id="more"></a>
+<p>那么，稍微有点java基础的同学都知道，我们自己创建对象最基本的方式就是使用new关键字，通过类定义的构造器来创建。就比如有这样一个类：</p>
+<pre> 
+    public class Earth{
+     public Earth(){
+     }
+    }
+</pre>
+<p>我们自己创建该类的对象，一般就是new Earth()，那么很显然的，这种情况下我们每new一次，这个类就会有一个新的对象实例。<br>如此一来，也就是说只要这个类有了可以供外部调用的构造器，那么就必然无法控制这个类的实例个数。<br>也就是说，如果我们希望这个类的实例只有一个，就必须把类的构造器访问权限设置成private，使得外部无法调用。就如下边这样：</p>
+<pre>   
+    public class Earth{
+     private Earth(){
+     }
+    }
+</pre>
+<p>那么问题又来了，既然类的构造器都是private，那么我们又该如何创建这个类的实例对象呢？<br>这时候就需要知道一个基础的知识点：实际上在java中创建对象，归根结底都只能使用构造器创建，不论是使用框架（框架内部）还是直接使用普通代码！<br>也就是说，即使这个类的构造器是private的，我们也还是只能使用类构造器来创建这个类的实例对象。<br>如此一来，便又涉及到一个java很基础的知识点，我们知道private修饰的方法只有当前类才能使用，那么很显然的，对于构造器是private的类，我们也就只能在这个类的内部创建类的实例对象了。</p>
+<pre>
+    public class Earth{
+     private Earth(){
+     }
+     Earth earth=new Earth();
+    }
+</pre>
+<p>那么问题又来了，看起来我们在当前类中创建了一个该类的实例对象，但是我们知道java中非static修饰的变量是属于对象的，而这里我们并不能在外部创建类的实例对象，那么就还是无法获取到我们自己创建的实例。<br>怎么办呢？此时外部能访问的只有这个类本身，那么如果要外部能获取到我们在类中创建的实例，就只能使这个实例是属于类的，也就是说需要让它变成static。</p>
+<pre>   
+    public class Earth{
+     private Earth(){  
+     }
+     static Earth earth=new Earth();
+    }
+</pre>
+<p>好了，这样一来，实际上一个基本的单例就算是实现了，我们已经保证了这个类只会有一个实例对象，直接使用Earth.earth来获取就好了。<br>但是呢，这并不是我们要说的单例模式的规范写法。因为在java规范中，类的属性一般是需要对外隐藏的，也就是说这个自己创建的实例对象也需要声明为private。</p>
+<pre>
+    public class Earth{
+     private Earth(){  
+     }
+     private static Earth earth=new Earth();
+    }
+</pre>
+<p>这样的话，我们外部似乎又没法获取到这个类的对象了，怎么办呢？那就只能提供一个对外公开的方法，让外部能根据这个方法来获取到类的对象实例。当然了，这个方法自然也是要属于类的，这样才能在没有对象多的情况下调用：</p>
+<h2 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h2><pre>
+    public class Earth{
+     private Earth(){ 
+     }
+     private static Earth earth=new Earth();
+     public static Earth getInstance(){
+      return earth;
+     }
+    }
+</pre>
+<p>好了，到了这里，我们一个比较规范的单例模式的类便算是真正的完成了，既可以保证这个类的实例是单一的，又遵循了基本的java规范。<br>总结一下就会发现其实就是三个简单而必须的步骤：<br>*<em>一、构造器私有化 *</em><br>*<em>二、自己创建自己的私有并且静态的实例对象 *</em><br>*<em>三、提供一个外部能访问的静态方法，返回自己的实例对象 *</em><br>上边这种模式，被称为单例模式中的饿汉式。<br>何为饿汉？饿，可以理解为迫不及待，也就是等不及要吃东西。放在我们代码中，就是说在一开始就创建了实例对象，编译完就立马初始化了这个实例对象。</p>
+<h2 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h2><p>那么除开饿汉式，还有一个很常用的就是懒汉式了（实际还有一个双重锁模式，这里暂时不谈），基本代码如下：</p>
+<pre>
+    public class Earth{
+     private Earth(){
+     }
+     private static Earth earth=null;
+     public static Earth getInstance(){
+      if(earth==null){
+        earth=new Earth();
+      }
+     return earth;
+    }
+</pre>
+<p>和上边饿汉式的区别在于，并没有在定义Earth变量的时候就给他初始化，而是给了一个初始值null。只不过这里虽然显示的写了null，实际上是可以不写的。<br>因为即使我们不显示的给，在这个类编译完之后也会给所有的变量初始化赋值，基本类型有各自独特的初始值，比如int类型的是0，而引用类型的默认初始值都是null。<br>与此同时，我们把具体对象的实例化放在了提供给外部调用的方法中，并且做了一定的判断，只有当这个对象是null的时候才会创建一个对象。<br>这里的判断是很必要的，如果不做判断，那么每调用一次就是一个新的对象，无法保证单一实例，跟直接构造器创建就没了区别。<br>那么有了代码，懒汉式也就比较好理解了。何谓懒汉？懒，就是做什么事都要一拖再拖，直到非做不可的时候才做。放在我们代码中，也就是在必须要获取实例对象的时候才会创建一个实例，在第一次调用getInstance方法的时候才会创建实例。</p>
+<p>单例模式很简单，在实际项目中也应用非常的广泛。例如某些数据量很小的，直接定义死的，但是有时候可能因为业务需求的变化需要手动改变的一些公用数据，我们就可以不放在数据库，而是直接放在配置文件中，然后在项目中加载一次，放到内存中。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/09/24/pattern1_danli/" data-id="ckbk4ukb100200svh2u24fglf" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/10/09/gitjichu/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          git的几个基本操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/07/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">使用github和hexo写博客要点记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#饿汉式"><span class="toc-number">1.</span> <span class="toc-text">饿汉式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#懒汉式"><span class="toc-number">2.</span> <span class="toc-text">懒汉式</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

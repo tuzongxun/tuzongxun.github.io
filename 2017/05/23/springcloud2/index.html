@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>springcloud微服务二：Eureka服务治理之服务注册中心 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="理解当初步的学习了spring boot，了解了spring boot的基本实现过程后，我就正式开始学习spring cloud，首先就从Eureka服务治理开始。 服务治理包含三个核心的角色：服务注册中心、服务提供者和服务消费者，他们相对独立，新的服务要向服务注册中心注册，新的消费者会向服务注册中心索引服务列表。 一番了解之后，让我想到了人才招聘。在我看来，现在普遍存在的招聘形式也是分为了三个部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springcloud微服务二：Eureka服务治理之服务注册中心">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/05/23/springcloud2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="理解当初步的学习了spring boot，了解了spring boot的基本实现过程后，我就正式开始学习spring cloud，首先就从Eureka服务治理开始。 服务治理包含三个核心的角色：服务注册中心、服务提供者和服务消费者，他们相对独立，新的服务要向服务注册中心注册，新的消费者会向服务注册中心索引服务列表。 一番了解之后，让我想到了人才招聘。在我看来，现在普遍存在的招聘形式也是分为了三个部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s21.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s22.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s23.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s24.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s25.png">
+<meta property="article:published_time" content="2017-05-23T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-10-17T03:29:05.133Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springcloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/springcloud/s21.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springcloud2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/23/springcloud2/" class="article-date">
+  <time datetime="2017-05-23T07:09:42.000Z" itemprop="datePublished">2017-05-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springcloud微服务二：Eureka服务治理之服务注册中心
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h1><p>当初步的学习了spring boot，了解了spring boot的基本实现过程后，我就正式开始学习spring cloud，首先就从Eureka服务治理开始。</p>
+<p><strong>服务治理包含三个核心的角色：服务注册中心、服务提供者和服务消费者</strong>，他们相对独立，新的服务要向服务注册中心注册，新的消费者会向服务注册中心索引服务列表。</p>
+<p>一番了解之后，让我想到了人才招聘。在我看来，现在普遍存在的招聘形式也是分为了三个部分：招聘网站或者人才市场、发布招聘需求的企业、需要找工作的人。当然了，也可以把企业和人换一下位置，那就是：招聘网站或者人才市场、找工作的人发布的简历、需要招聘的企业。</p>
+<a id="more"></a>
+
+<p>那么这里的招聘网站或者人才市场就如同Eureka服务治理中的服务注册中心，不管是企业的招聘需求还是人的简历，都可以看做一种需求的同时看成一种服务。当有了一个这种新的服务或者需求后会发布在网站上或者人才市场，实际上就相当于Eureka服务治理中，新的服务通知注册到服务注册中心。而我们企业查找相关简历，或者找工作的人查找相关的招聘需求，就是客户端向注册中心索引服务。</p>
+<p>在这个过程中，招聘网站、企业和找工作的人是各自独立的，由招聘网站把企业和人联系起来，前提就是企业和人知道网站的地址，这就如同在Eureka服务治理的服务提供者和服务消费者的application.properties文件中配置eureka.client.serviceUrl.defaultZone来指定服务注册中心。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>有了一点简单的理解之后，就是实际的项目构建，首先需要构建一个基础的spring boot项目作为服务注册中心，勾选web选项，这样会创建一个上一篇结构的项目。然后在pom.xml文件中加入Eureka的以来配置：</p>
+<pre>
+&lt;dependency>
+    &lt;groupId>org.springframework.cloud&lt;/groupId>
+    &lt;artifactId>spring-cloud-starter-eureka-server&lt;/artifactId>
+&lt;/dependency>
+</pre>
+
+<p>以及如下的dependencyManagement，指定spring cloud的版本：</p>
+<pre>
+&lt;dependencyManagement>
+        &lt;dependencies>
+            &lt;dependency>
+               &lt;groupId>org.springframework.cloud&lt;/groupId>
+               &lt;artifactId>spring-cloud-dependencies&lt;/artifactId>
+               &lt;version>Brixton.RELEASE&lt;/version>
+               &lt;type>pom&lt;/type>
+               &lt;scope>import&lt;/scope>
+            &lt;/dependency>
+        &lt;/dependencies>
+&lt;/dependencyManagement>
+</pre>
+
+<p>这里<strong>需要注意的是，spring cloud的版本号是以英国伦敦地铁站的名字命名的，按首字母A-Z的顺序排，不同的spring cloud版本相对应的spring boot的版本是有限制的，否则无法使用。</strong><br>具体的对应需要参考官网说明，目前比较新的spring boot版本是1.5.2，而对应的spring cloud的版本是Dalston，我这里例子中用的是1.3.8的spring boot，因此spring cloud版本是Brixton。</p>
+<p>配置好依赖之后，下一步就是在创建项目时自动生成的那个类中加入@EnableEurekaServer注解，来启动一个服务注册中心，如下：</p>
+<pre>
+@EnableEurekaServer
+@SpringBootApplication
+public class EurekaServer1Application {
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServer1Application.class, args);
+    }
+}
+</pre>
+
+<p>然后便是在基本的配置文件application.properties中进行一些必要的配置：</p>
+<pre>
+#应用名，服务名，如果不指定就是unkown
+spring.application.name=eureka-server
+#服务端口，实际上就是tomcat端口，浏览器访问或者其他地方调用时需要用的端口
+server.port=1000
+#实例的主机名
+eureka.instance.hostname=server1
+#设置是否向注册中心注册，默认是true
+eureka.client.register-with-eureka=false
+#是否需要去检索寻找服务，默认是true
+eureka.client.fetch-registry=false
+#指定注册中心
+eureka.client.serviceUrl.defaultZone=http://server1:1000/eureka/
+</pre>
+
+<p>就这样，一个简单的Eureka服务注册中心就完成了，除了引入依赖包的配置、properties的基本配置外，就是在代码中加了一个@EnableEurekaServer，非常的简单。<br>然后浏览其访问localhost:1000或者server1:1000（这里使用主机名需要配置ip和主机的映射）就可以看到如下界面：<br><img src="/images/springcloud/s21.png" alt="cloud1"></p>
+<p>如果有新的服务注册到服务注册中心，那么在上图中红框标注的地方就会有所显示，就比如如果我修改application.properties文件，去掉这一段配置：</p>
+<pre>
+#设置是否向注册中心注册，默认是true
+eureka.client.register-with-eureka=false
+#是否需要去检索寻找服务，默认是true
+eureka.client.fetch-registry=false
+</pre>
+
+<p>那么该服务注册中心就会把自己也当做一个服务注册到这个注册中心中，那么就会如下图所示：<br><img src="/images/springcloud/s22.png" alt="cloud2"><br>上边所实现的是单机版的服务注册中心，而微服务架构的九大特征之一就是高可用性，也就是需要注册中心从单机模式变为集群模式，使其中某个注册中心出现故障的情况下不影响整个业务系统的运行。<br>在spring cloud中，这个实现过程就十分的简单，简单到我们只需要在上述的过程中仅仅做一个很小的配置修改就可以了。<br>一是去掉eureka.client.register-with-eureka=false和eureka.client.fetch-registry=false的配置，使得注册中心可以自己把自己注册为服务，二是在指定注册中心的时候指定所有的注册中心，三是修改端口和主机实例名，修改后的配置如下：</p>
+<pre>
+spring.application.name=eureka-server
+server.port=1000
+eureka.instance.hostname=server1
+eureka.client.serviceUrl.defaultZone=http://server1:1000/eureka/,http://server2:2000/eureka/
+</pre>
+
+<p>同样的，我们需要在另一个注册中心中把配置文件改为类似下边的样子：</p>
+<pre>
+spring.application.name=eureka-server
+server.port=2000
+eureka.instance.hostname=server2
+eureka.client.serviceUrl.defaultZone=http://server1:1000/eureka/,http://server2:2000/eureka/
+</pre>
+
+<p>然后我们启动其中一个注册中心后再访问各自的页面，会看到如下所示：<br><img src="/images/springcloud/s23.png" alt="cloud3"></p>
+<p>这时候会看到我们的服务注册中心已经成为了集群模式，但是server2是unavailable的，并不可用，而当我们把另一个注册中心server2启动后，就会看到有些内容有了变化，server2也是可用的了，同样的，如果访问server2的页面，会看到这里列出server1的状态。<br><img src="/images/springcloud/s24.png" alt="cloud4"></p>
+<p>正常情况来说，两个注册中心是应该在不同的服务器中运行的，这样才能更好的实现高可用，所以就是两套代码。<br>但是在学习的过程中由于环境的限制，也为了方便，实际上就可以用一套代码，然后弄两个分别代表server1和server2的配置文件就可以了，文件命名需要遵循spring boot的约定规则，然后再application.properties文件中使用spring.profiles.active属性来指定运行的时候需要具体启用的篇配置就可以了，如图：<br><img src="/images/springcloud/s25.png" alt="cloud5"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/05/23/springcloud2/" data-id="ckbk4ukbi00320svhhg4v3n4k" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/05/24/springcloud3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          springcloud微服务三：Eureka服务治理之注册服务提供者及服务的发现和消费
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/22/springcloud1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">springcloud微服务一：spring boot基础项目搭建及问题处理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#理解"><span class="toc-number">1.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用"><span class="toc-number">2.</span> <span class="toc-text">使用</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

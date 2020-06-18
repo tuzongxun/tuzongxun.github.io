@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>jwt、oauth2和oidc等认证授权技术的理解 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言jwt、oauth2、oidc等，都是和认证授权相关的规范或者解决方案，因此要理解他们，就需要从业务场景的适用性一步步的分析和认识。 一、认证授权业务场景理解就个人目前的理解来看，一个好的软件系统的构成可能需要包含但不限于以下几个方面：  功能性能拓展安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jwt、oauth2和oidc等认证授权技术的理解">
+<meta property="og:url" content="https://blog.tzxcode.cn/2019/10/15/jwt/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言jwt、oauth2、oidc等，都是和认证授权相关的规范或者解决方案，因此要理解他们，就需要从业务场景的适用性一步步的分析和认识。 一、认证授权业务场景理解就个人目前的理解来看，一个好的软件系统的构成可能需要包含但不限于以下几个方面：  功能性能拓展安全">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-15T01:43:58.000Z">
+<meta property="article:modified_time" content="2019-10-15T10:03:30.135Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="jwt">
+<meta property="article:tag" content="oauth2">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-jwt" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/15/jwt/" class="article-date">
+  <time datetime="2019-10-15T01:43:58.000Z" itemprop="datePublished">2019-10-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      jwt、oauth2和oidc等认证授权技术的理解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>jwt、oauth2、oidc等，都是和认证授权相关的规范或者解决方案，因此要理解他们，就需要从业务场景的适用性一步步的分析和认识。</p>
+<h1 id="一、认证授权业务场景理解"><a href="#一、认证授权业务场景理解" class="headerlink" title="一、认证授权业务场景理解"></a>一、认证授权业务场景理解</h1><p>就个人目前的理解来看，一个好的软件系统的构成可能需要包含但不限于以下几个方面：</p>
+<blockquote>
+<p>功能<br>性能<br>拓展<br>安全</p>
+</blockquote>
+<a id="more"></a>
+<p>不论是从公司或者项目角度而言，还是从个人开发者的角度而言，有相当大一部分可能都只在功能部分停留。<br>何谓功能，我的理解就是实现业务需求里的要求，满足需求文档需要的效果，流程走通、可交付使用。因此这里说的功能，和仅仅是流程走通还是有一定区别的。</p>
+<p>在功能的基础上，有的客户可能在需求里就对一些性能有要求，或者有些公司的项目团队有一定追求，那么可能就更进一步，会在功能的基础上再注重性能。<br>那么这里的性能就会涉及到整个架构的设计、技术的选型以及代码的规范和调优。</p>
+<p>至于拓展性，实际上和上边一条就有些类似了，不论是动机还是处理方式都差不多。<br>只不过在分布式、微服务和容器盛行的今天，很多项目的第一选择就是这两个，那么在架构层面来说，其实一开始就具备了一定的拓展性。</p>
+<p>而说到安全，很多人第一时间想到的可能是用户名密码这些，这也是最常见到的安全里的内容。<br>但是实际上软件的安全远远不止用户名密码的管理和校验，还包含数据传输的安全、资源权限的安全等。<br><strong>而标题所说的认证授权，也正是安全范畴里的内容，更确切的说，应该是资源权限控制的范畴。</strong></p>
+<h1 id="二、token的理解"><a href="#二、token的理解" class="headerlink" title="二、token的理解"></a>二、token的理解</h1><p>token这个词，很多做开发的应该都知道，比较常见的就是在用户名密码登陆后，后台生成一个token，然后客户端保存token。<br>客户端只有获取了正确的token后，在发起业务请求时携带这个token，才能正常进行后续的业务处理。<br>那么这个token既然是为了保证安全、用来校验用户是否登录的，token本身的安全自然也是需要注意的，所以一般的token就有了签名加密的处理。<br>而至于token里的内容定义以及格式定义，理论上讲只需要客户端和服务端协商一致即可。<br>但是<strong>考虑到token的通用性和广泛性，因此慢慢的就有了一些token定义的规范，一个目前比较通用的token规范就是jwt。</strong></p>
+<h1 id="三、jwt的理解"><a href="#三、jwt的理解" class="headerlink" title="三、jwt的理解"></a>三、jwt的理解</h1><p>jwt是json web token的简称，标准的jwt格式token包含了三段，分别是token头、token主题和token签名，三部分以点符号分割。<br>jwt作为一种规范，也可以说一种解决方案，本身就可以拿出来做很多的解读，更多jwt的知识可以参考阮一峰的博客：<br><a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html</a></p>
+<p>对于认证授权来说，只需要先了解到这个jwt是一种通用规范和格式的数据，安全、通用就好。<br>jwt是一种token规范，那么在用户登录的时候，就可以生成这种规范的token，这样在后续解码、签名验签、数据处理等需求上就可以减少很多的沟通成本。<br>但是<strong>jwt只是处理token规范的问题，却不处理其他token规范之外业务的问题，比如token如何能方便刷新的问题，比如究竟是简单地登录业务，还是涉及到第三方服务的授权业务，还是带有授权和认证的业务等等。</strong><br>而这个问题，就引申出了oauth2。</p>
+<h1 id="四、认证和授权的理解"><a href="#四、认证和授权的理解" class="headerlink" title="四、认证和授权的理解"></a>四、认证和授权的理解</h1><p>要想弄清oauth2，实际上必须先弄清认证和授权这两个概念。<br>从英语单词来看，认证和授权其实非常的像，分别是 authentication 和 authorization，在实际开发中，很多人也不太能分清楚。<br>即使是我自己，虽然近段时间有一定的理解，却不敢保证就是对的，只能说现阶段我觉得是这样。<br><strong>我理解的认证，从字面意思说，就是身份的认证；而授权，则是资源的授权。</strong><br><strong>借用网络上别人写的：认证解决的是你是谁，而授权解决的是可以给你什么。</strong><br>那么从这个角度来说，一个常规的登录获取token，之后在其他业务中校验token，其实只能算是认证的一个范畴，因为这个token的作用只是校验访问者的身份以及是否检验过这个身份，只要身份验证通过，所有资源都可以用。<br>假如在服务端的接口中涉及到了不同的权限问题，然后能够从token中获取到这些权限，并根据这些权限确定是否要处理该请求的资源，那么这里才算是真的涉及到了授权。<br>需要注意的是，这里的权限是资源的权限，而不是用户的角色权限这些，这是两个概念。<br>更多认证授权的理解，也可以参考其他的博客，例如：<br><a href="https://www.cnblogs.com/jinhengyu/p/10257792.html" target="_blank" rel="noopener">https://www.cnblogs.com/jinhengyu/p/10257792.html
+</a></p>
+<h1 id="五、oauth2的理解"><a href="#五、oauth2的理解" class="headerlink" title="五、oauth2的理解"></a>五、oauth2的理解</h1><p>和jwt一样，oauth2也是一种规范，因为规范，就逐渐的形成了一些特定的解决方案，例如spring的oauth2。在认证和授权的业务中，oauth2解决的就是授权规范的问题。<br>在业务交互的过程中，oauth2授权直观的提现，也是通过token。<br>标准的oauth2的token同样是遵循jwt标准，不同的是，在普通jwt的token基础上加入了更多的内容。<br><strong>oauth2标准的token有两个：access_token和refresh_token。</strong><br><strong>access_token用来访问资源时授权，包含基础授权信息，refresh_token的作用是在access_token失效后直接续签access_token，即上边说的如何方便刷新和续签token的问题。</strong><br>同时，oauth2中的授权分为客户端模式、授权模式、简化模式、密码模式四种，可以根据不同的业务场景。<br>和上边用户名密码登陆不同的是，oauth2中解决的更多是涉及到第三方服务的业务。<br>对于oauth2的详细理解和四种授权模式，可以参考后边链接中的内容，不过有些地方可能需要参考更多其他博客，不见得都对。<br><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html</a></p>
+<h1 id="六、oidc"><a href="#六、oidc" class="headerlink" title="六、oidc"></a>六、oidc</h1><p>大多数系统，实际上用到oauth2就已经足够了，因为即使说服务涉及到了第三方，但是大多数时候这些第三方资源可能都是公司内，或者一个大的团队内。<br>但是随着互联网的发展，越来越多的系统或应用会集成外部的第三方，例如支付宝等第三方支付、例如QQ等第三方登录。<br>因此，openid这个技术和规范就应运而生，这个技术解决的就是外部第三方交互时的一个身份认证问题。<br>结合上边所说，认证和授权分别属于不同的范畴，解决的也都是不同的问题，因此在这种涉及到第三方，如果再涉及到资源权限的系统中，就会引入一个新的规范，即oidc。<br><strong>OIDC=(Identity, Authentication) + oauth2，我的理解就是openid+oauth2。</strong><br>具体的用法和实现上就是，OIDC在oauth2的基础上又加了一个token，叫做id_token。<br>id_token同样的遵循jwt规范，只不过里边的内容是能够体现用户身份的信息。<br>因此，<strong>OIDC里就会有三个token：access_token、refresh_token和id_token。</strong><br>对于实际使用来说，理解到这里应该就差不多能够明白为什么的有的应用会一次返回三个token，不知道究竟该使用那个了。<br>若想了解OIDC更多的内容，可以参考下边的博客：<br><a href="https://www.cnblogs.com/linianhui/p/openid-connect-extension.html" target="_blank" rel="noopener">https://www.cnblogs.com/linianhui/p/openid-connect-extension.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2019/10/15/jwt/" data-id="ckbk4uka300080svh5zub2gan" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jwt/" rel="tag">jwt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oauth2/" rel="tag">oauth2</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2019/10/17/zongjie5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          记软件开发满五年——人怕入错行，男儿当自强
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/08/08/keycloak1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">springboot2集成oauth2和keycloak以及admin rest api记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一、认证授权业务场景理解"><span class="toc-number">2.</span> <span class="toc-text">一、认证授权业务场景理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、token的理解"><span class="toc-number">3.</span> <span class="toc-text">二、token的理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、jwt的理解"><span class="toc-number">4.</span> <span class="toc-text">三、jwt的理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、认证和授权的理解"><span class="toc-number">5.</span> <span class="toc-text">四、认证和授权的理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五、oauth2的理解"><span class="toc-number">6.</span> <span class="toc-text">五、oauth2的理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#六、oidc"><span class="toc-number">7.</span> <span class="toc-text">六、oidc</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

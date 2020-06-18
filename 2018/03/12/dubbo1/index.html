@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>dubbo学习——基础环境搭建过程及要点记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="网上关于dubbo的资料其实已经不少了，尤其是还有一个比较全面的官方文档教程。但是正所谓知易行难，很多事不动动手，就总不知道里边的一些细节。虽然早就想学一下dubbo，但是奈何需要学的东西太多，于是就以“工作为主导”的出发点，先学了其他技术。这次，也是基于上边的出发点，我们某个项目需要重构成dubbo的项目，于是便正好从dubbo基础环境搭建开始学一下，并写一篇笔记备忘。这篇笔记大概会包含如下一些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dubbo学习——基础环境搭建过程及要点记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/03/12/dubbo1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="网上关于dubbo的资料其实已经不少了，尤其是还有一个比较全面的官方文档教程。但是正所谓知易行难，很多事不动动手，就总不知道里边的一些细节。虽然早就想学一下dubbo，但是奈何需要学的东西太多，于是就以“工作为主导”的出发点，先学了其他技术。这次，也是基于上边的出发点，我们某个项目需要重构成dubbo的项目，于是便正好从dubbo基础环境搭建开始学一下，并写一篇笔记备忘。这篇笔记大概会包含如下一些">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-12T07:09:42.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:30:55.888Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="dubbo">
+<meta property="article:tag" content="zookeeper">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-dubbo1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/12/dubbo1/" class="article-date">
+  <time datetime="2018-03-12T07:09:42.000Z" itemprop="datePublished">2018-03-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      dubbo学习——基础环境搭建过程及要点记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>网上关于dubbo的资料其实已经不少了，尤其是还有一个比较全面的官方文档教程。<br>但是正所谓知易行难，很多事不动动手，就总不知道里边的一些细节。<br>虽然早就想学一下dubbo，但是奈何需要学的东西太多，于是就以“工作为主导”的出发点，先学了其他技术。<br>这次，也是基于上边的出发点，我们某个项目需要重构成dubbo的项目，于是便正好从dubbo基础环境搭建开始学一下，并写一篇笔记备忘。<br>这篇笔记大概会包含如下一些内容：<br>1、搭建过程记录<br>2、遇到的问题和解决办法记录，这一点会在搭建过程记录的同时进行说明，不另外指出</p>
+<a id="more"></a>
+
+<p>整个过程基本如下：</p>
+<h2 id="zookeeper注册中心"><a href="#zookeeper注册中心" class="headerlink" title="zookeeper注册中心"></a>zookeeper注册中心</h2><h3 id="注册中心的理解"><a href="#注册中心的理解" class="headerlink" title="注册中心的理解"></a>注册中心的理解</h3><p>由于之前学习过springcloud微服务，所以对于zookeeper注册中心的理解，我觉得还是比较容易的。具体的理解可以参考当时写的springcloud的注册中心那篇文章： <a href="http://blog.csdn.net/tuzongxun/article/details/72650100" target="_blank" rel="noopener">http://blog.csdn.net/tuzongxun/article/details/72650100</a><br>比较明显的不同是，这里的zookeeper需要下载安装一个zookeeper软件。</p>
+<h3 id="zookeeper安装"><a href="#zookeeper安装" class="headerlink" title="zookeeper安装"></a>zookeeper安装</h3><p>我在安装的时候主要是参考了“小宝鸽”的博客，他写的很是详细，所以我觉得没有必要在重复造轮子，只需要记住在哪里可以查到参考资料。他关于zookeeper安装的博客地址如下：<br><a href="http://blog.csdn.net/u013142781/article/details/50395650" target="_blank" rel="noopener">http://blog.csdn.net/u013142781/article/details/50395650</a></p>
+<h2 id="dubbo管理平台"><a href="#dubbo管理平台" class="headerlink" title="dubbo管理平台"></a>dubbo管理平台</h2><p>由于管理平台与业务逻辑本身没有关系，所以我没有深入了解，也是直接参考“小宝鸽”的博客：<br><a href="http://blog.csdn.net/u013142781/article/details/50396621" target="_blank" rel="noopener">http://blog.csdn.net/u013142781/article/details/50396621</a></p>
+<h2 id="dubbo服务者"><a href="#dubbo服务者" class="headerlink" title="dubbo服务者"></a>dubbo服务者</h2><h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><p>根据目前的主流，我这里是在eclipse中创建了一个maven管理的web项目。</p>
+<h3 id="基础依赖"><a href="#基础依赖" class="headerlink" title="基础依赖"></a>基础依赖</h3><p>项目基础依赖主要参考dubbo官方指导文档的说明<a href="http://dubbo.io/books/dubbo-user-book/dependencies.html" target="_blank" rel="noopener">http://dubbo.io/books/dubbo-user-book/dependencies.html</a><br>按照这个文档上所说，需要包含如下一些依赖组件，分别是：<br>dubbo.jar<br>spring.jar<br>log4j.jar<br>commons-logging.jar<br>javassist.jar<br>netty.jar<br>在实际导入的时候会发现，dubbo.jar已经依赖了spring.jar和netty.jar，这个版本也是根据导入的dubbo.jar的版本来定的。<br>为了避免冲突，也为了使用自己想要的版本的spring和netty，于是在导入dubbo.jar时需要把这两个先进行排除配置，之后的pom.xml中依赖包的配置基本如下：</p>
+<pre>
+&lt;dependency>
+    &lt;groupId>log4j&lt;/groupId>
+    &lt;artifactId>log4j&lt;/artifactId>
+    &lt;version>1.2.15&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+    &lt;groupId>commons-logging&lt;/groupId>
+    &lt;artifactId>commons-logging&lt;/artifactId>
+    &lt;version>1.2&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+    &lt;groupId>org.jboss.netty&lt;/groupId>
+    &lt;artifactId>netty&lt;/artifactId>
+    &lt;version>3.2.5.Final&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+    &lt;groupId>org.springframework&lt;/groupId>
+    &lt;artifactId>spring-context&lt;/artifactId>
+    &lt;version>4.3.9.RELEASE&lt;/version>
+&lt;/dependency>
+&lt;dependency>
+    &lt;groupId>com.alibaba&lt;/groupId>
+    &lt;artifactId>dubbo&lt;/artifactId>
+    &lt;version>2.5.3&lt;/version>
+    &lt;exclusions>
+        &lt;exclusion>
+            &lt;groupId>org.springframework&lt;/groupId>
+            &lt;artifactId>spring&lt;/artifactId>
+        &lt;/exclusion>
+        &lt;exclusion>
+            &lt;groupId>org.jboss.netty&lt;/groupId>
+            &lt;artifactId>netty&lt;/artifactId>
+        &lt;/exclusion>
+    &lt;/exclusions>
+&lt;/dependency>
+</pre>
+
+<h3 id="spring配置"><a href="#spring配置" class="headerlink" title="spring配置"></a>spring配置</h3><p>dubbo本身就整合了spring，因此spring的配置是必不可少的，这里也是使用最简单的配置,文件头就先省略：</p>
+<pre>
+&lt;context:property-placeholder location="classpath:config.properties" />
+&lt;import resource="spring-dubbo-provider.xml" />
+</pre>
+
+<h3 id="config-properties配置"><a href="#config-properties配置" class="headerlink" title="config.properties配置"></a>config.properties配置</h3><p>配置dubbo服务，需要指定zookeeper注册中心的地址，以及使用dubbo暴露服务的端口等，这些配置配在config.properties文件中：</p>
+<pre>
+dubbo.zookepper.address=127.0.0.1:2181
+dubbo.provider.port=29880
+</pre>
+
+<h3 id="dubbo配置"><a href="#dubbo配置" class="headerlink" title="dubbo配置"></a>dubbo配置</h3><p>要把我们的项目作为一个服务注册到zookeeper注册中心，就需要进行相应的配置，配置如下：</p>
+<pre>
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    &lt;!-- 提供方应用信息，用于计算依赖关系-->
+    &lt;dubbo:application name="dubboServerDemo-pro"/>
+    &lt;!-- 注册中心配置，file值为application name加实例名 -->
+    &lt;dubbo:registry protocol="zookeeper" address="${dubbo.zookepper.address}" file="dubboServerDemo-pro-1.cache"/>
+    &lt;!-- 用dubbo协议在20880端口暴露服务,dubbo访问日志输出到应用日志 -->
+    &lt;dubbo:protocol name="dubbo" port="${dubbo.provider.port}" accesslog="true"/>
+    &lt;!-- 声明需要暴露的服务接口  超时时间90分钟,超时不重试-->
+    &lt;dubbo:service interface="dubboServerTest.DubboServerService" ref="dubboServiceTest" cluster="failfast" timeout="5400000" />
+    &lt;!-- 和本地bean一样实现服务 -->
+    &lt;bean id="dubboServiceTest" class="dubboServerTest.DubboServerServiceImpl" /> 
+&lt;/beans>
+</pre>
+
+<h3 id="dubbo具体服务接口和实现"><a href="#dubbo具体服务接口和实现" class="headerlink" title="dubbo具体服务接口和实现"></a>dubbo具体服务接口和实现</h3><p>dubbo的具体服务接口和实现就是很普通的java接口和类，如下：</p>
+<pre>
+package dubboServerTest;
+public interface DubboServerService {
+    public void sayHello();
+}
+</pre>
+
+<pre>
+package dubboServerTest;
+public class DubboServerServiceImpl implements DubboServerService {
+    @Override
+    public void sayHello() {
+        System.out.println("dubbo测试");
+    }
+}
+</pre>
+
+<h3 id="web-xml配置"><a href="#web-xml配置" class="headerlink" title="web.xml配置"></a>web.xml配置</h3><p>spring.xml文件需要被加载，可以用java代码加载，也可以用其他方式，我这里就选择使用web.xml的配置来加载，web.xml配置如下：</p>
+<pre>
+&lt;context-param>
+    &lt;param-name>contextConfigLocation&lt;/param-name>
+    &lt;param-value>classpath:spring.xml&lt;/param-value>
+&lt;/context-param>
+&lt;listener>
+    &lt;listener-class>org.springframework.web.context.ContextLoaderListener&lt;/listener-class>
+&lt;/listener>
+&lt;welcome-file-list>
+    &lt;welcome-file>index.jsp&lt;/welcome-file>
+&lt;/welcome-file-list>
+</pre>
+
+<h3 id="问题说明"><a href="#问题说明" class="headerlink" title="问题说明"></a>问题说明</h3><p>按理说,照上边的做法程序应该是可以运行，并且可以再管理平台中显示出服务者的，但是实际上我启动后却抛出了如下异常：</p>
+<pre>
+java.lang.NoClassDefFoundError: org/I0Itec/zkclient/exception/ZkNoNodeException
+</pre>
+<p>原因是少了zookeeper的依赖包，需要在pom.xml中补上如下的依赖配置：</p>
+<pre>
+&lt;dependency> 
+    &lt;groupId>com.101tec&lt;/groupId> 
+    &lt;artifactId>zkclient&lt;/artifactId>
+    &lt;version>0.10&lt;/version>
+&lt;/dependency>
+</pre>
+
+<h2 id="消费者"><a href="#消费者" class="headerlink" title="消费者"></a>消费者</h2><h3 id="项目搭建"><a href="#项目搭建" class="headerlink" title="项目搭建"></a>项目搭建</h3><p>消费者的项目搭建其实和服务者差不多，区别在于dubbo的配置略有区别，消费者的配置大致如下：</p>
+<pre>
+&lt;!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+&lt;dubbo:application name="consumer-of-helloworld-app"  />
+&lt;!-- 使用multicast广播注册中心暴露发现服务地址 -->
+&lt;dubbo:registry address="${dubbo.zookepper.address}" />
+&lt;!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+&lt;dubbo:reference id="demoService" interface="dubboServerTest.DubboServerService" />
+</pre>
+
+<p>同样的，这里的也需要指定注册中心的地址,也是配置在config.properties中：</p>
+<pre>
+dubbo.zookepper.address=zookeeper://127.0.0.1:2181
+</pre>
+
+<p>需要注意的是，这里配置的zookeeper注册中心地址的写法，和服务中心配置的写法也略有不同。</p>
+<h3 id="接口声明"><a href="#接口声明" class="headerlink" title="接口声明"></a>接口声明</h3><p>消费端，需要一个和服务端一样的接口，但是不用实现这个接口。这里的做法实际上和webservice接口比较类似，像cxf、xfire、hessian都差不多。</p>
+<h3 id="服务调用"><a href="#服务调用" class="headerlink" title="服务调用"></a>服务调用</h3><p>在消费端可以直接调用上边声明的接口的抽象方法，而实际上运行的就是服务端的具体实现，调用处的代码如下：</p>
+<pre>
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import dubboServerTest1.DubboServerService;
+public class MyController {
+    public static void main(String[] args) {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+                "classpath:spring.xml");
+        DubboServerService dubboServerService = (DubboServerService) applicationContext
+                .getBean("demoService");
+        dubboServerService.sayHello();
+    }
+}
+</pre>
+
+<h3 id="问题说明-1"><a href="#问题说明-1" class="headerlink" title="问题说明"></a>问题说明</h3><p>消费者这里相对比较简单，但是除了说对于zookeeper注册中心地址的配置处有细节需要注意外，对于接口的声明也需要特别注意。<br>为了验证是否和webservice一样的，消费端接口包括包名在内都必须和服务端一样，我在声明接口时特意使用了不一样的包名，使得实际的类内容以及在dubbo配置文件中的配置如下：</p>
+<pre>
+package dubboServerTest1;
+public interface DubboServerService {
+    public void sayHello();
+}
+</pre>
+
+<pre>
+&lt;dubbo:reference id="demoService" interface="dubboServerTest1.DubboServerService" />
+</pre>
+
+<p>然后运行main方法的时候，就会抛出如下异常：</p>
+<pre>
+Caused by: java.lang.IllegalStateException: Failed to check the status of the service dubboServerTest1.DubboServerService. No provider available for the service
+</pre>
+
+<p>由此也就证明，消费端的接口声明，包括包名在内，都必须和服务端一模一样。针对这个问题，有一种推荐的做法，就是把这个接口类打包，让服务端和消费端公用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/03/12/dubbo1/" data-id="ckbk4uk9p00020svh5mpnb10r" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/" rel="tag">zookeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/04/16/mysql-jichu14/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          mysql常用操作语法（十三）~~存储过程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/02/java2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">记java动态加载配置文件不成功的问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper注册中心"><span class="toc-number">1.</span> <span class="toc-text">zookeeper注册中心</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#注册中心的理解"><span class="toc-number">1.1.</span> <span class="toc-text">注册中心的理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper安装"><span class="toc-number">1.2.</span> <span class="toc-text">zookeeper安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dubbo管理平台"><span class="toc-number">2.</span> <span class="toc-text">dubbo管理平台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dubbo服务者"><span class="toc-number">3.</span> <span class="toc-text">dubbo服务者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目"><span class="toc-number">3.1.</span> <span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基础依赖"><span class="toc-number">3.2.</span> <span class="toc-text">基础依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring配置"><span class="toc-number">3.3.</span> <span class="toc-text">spring配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#config-properties配置"><span class="toc-number">3.4.</span> <span class="toc-text">config.properties配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dubbo配置"><span class="toc-number">3.5.</span> <span class="toc-text">dubbo配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dubbo具体服务接口和实现"><span class="toc-number">3.6.</span> <span class="toc-text">dubbo具体服务接口和实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web-xml配置"><span class="toc-number">3.7.</span> <span class="toc-text">web.xml配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题说明"><span class="toc-number">3.8.</span> <span class="toc-text">问题说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#消费者"><span class="toc-number">4.</span> <span class="toc-text">消费者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目搭建"><span class="toc-number">4.1.</span> <span class="toc-text">项目搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#接口声明"><span class="toc-number">4.2.</span> <span class="toc-text">接口声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务调用"><span class="toc-number">4.3.</span> <span class="toc-text">服务调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题说明-1"><span class="toc-number">4.4.</span> <span class="toc-text">问题说明</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

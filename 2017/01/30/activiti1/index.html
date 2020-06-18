@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>activiti基础操作 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="获取流程引擎ProcessEngines.getDefaultProcessEngine()会在第一次调用时初始化并创建一个流程引擎，以后再调用就会返回相同的流程引擎。使用对应的方法可以创建和关闭所有流程引擎：ProcessEngines.init() 和  ProcessEngines.destroy()。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="activiti基础操作">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/01/30/activiti1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="获取流程引擎ProcessEngines.getDefaultProcessEngine()会在第一次调用时初始化并创建一个流程引擎，以后再调用就会返回相同的流程引擎。使用对应的方法可以创建和关闭所有流程引擎：ProcessEngines.init() 和  ProcessEngines.destroy()。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-01-30T07:19:45.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:16:57.767Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="activiti">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-activiti1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/30/activiti1/" class="article-date">
+  <time datetime="2017-01-30T07:19:45.000Z" itemprop="datePublished">2017-01-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      activiti基础操作
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="获取流程引擎"><a href="#获取流程引擎" class="headerlink" title="获取流程引擎"></a>获取流程引擎</h2><p><code>ProcessEngines.getDefaultProcessEngine()</code>会在第一次调用时初始化并创建一个流程引擎，以后再调用就会返回相同的流程引擎。<br>使用对应的方法可以创建和关闭所有流程引擎：<code>ProcessEngines.init()</code> 和  <code>ProcessEngines.destroy()</code>。  </p>
+<a id="more"></a>
+<pre>
+private ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();  
+</pre> 
+
+<h2 id="部署流程定义（发布流程）"><a href="#部署流程定义（发布流程）" class="headerlink" title="部署流程定义（发布流程）"></a>部署流程定义（发布流程）</h2><pre>
+public void actDeployement() {  
+        // 使用zip文件形式部署流程定义  
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("actTest1.zip");  
+        ZipInputStream zipInputStream = new ZipInputStream(inputStream);  
+        processEngine.getRepositoryService().createDeployment().name("activiti测试").addZipInputStream(zipInputStream).deploy();  
+}  
+</pre> 
+
+<h2 id="删除流程定义"><a href="#删除流程定义" class="headerlink" title="删除流程定义"></a>删除流程定义</h2><pre>
+public void deleteDeployement() {  
+        List<Deployment> lists = processEngine.getRepositoryService() .createDeploymentQuery().list();  
+        if (!isEmpty(lists)) {  
+            for (Deployment deployment : lists) {  
+                processEngine.getRepositoryService().deleteDeployment(deployment.getId());  
+            }  
+        }  
+}  
+</pre>
+
+<h2 id="启动流程实例"><a href="#启动流程实例" class="headerlink" title="启动流程实例"></a>启动流程实例</h2><pre>
+public void startProcessInstance() {  
+        // 这里根据流程定义的key启动，也可以根据id，还可以在启动的时候加入流程变量,  
+        // 启动流程实例后会获得一个任务task,这里是在流程图中已经写死了任务所有者是张三，因此启动的时候会创建一个任务给张三  
+        String processDefinitionKey = "myProcess";  
+        processEngine.getRuntimeService().startProcessInstanceByKey(processDefinitionKey);  
+}  
+</pre>
+
+<h2 id="查询当前活动的流程实例"><a href="#查询当前活动的流程实例" class="headerlink" title="查询当前活动的流程实例"></a>查询当前活动的流程实例</h2><pre>
+public void findCurrentProInstance() {  
+        List<ProcessInstance> lists = processEngine.getRuntimeService().createProcessInstanceQuery().list();  
+        if (!isEmpty(lists)) {  
+            for (ProcessInstance processInstance : lists) {  
+                System.out.println(processInstance.getId());  
+            }  
+        }  
+}  
+</pre> 
+
+<h2 id="查询个人任务及相关信息"><a href="#查询个人任务及相关信息" class="headerlink" title="查询个人任务及相关信息"></a>查询个人任务及相关信息</h2><pre>
+public void findMyTask() {  
+        // String userName = "张三";  
+        String userName = "李四";  
+        List<Task> lists = processEngine.getTaskService().createTaskQuery() .taskAssignee(userName).list();  
+        if (!isEmpty(lists)) {  
+            for (Task task : lists) {  
+                System.out.println(task.getId() + "," + task.getName() + "," + task.getAssignee() + "," + task.getCreateTime());  
+            }  
+        }  
+}  
+</pre>
+
+<h2 id="完成个人任务"><a href="#完成个人任务" class="headerlink" title="完成个人任务"></a>完成个人任务</h2><pre>
+public void endMyTask() {  
+        String taskId = "5002";  
+        processEngine.getTaskService().complete(taskId);  
+}  
+</pre>
+
+<h2 id="查询历史流程实例"><a href="#查询历史流程实例" class="headerlink" title="查询历史流程实例"></a>查询历史流程实例</h2><pre>
+public void findHisProInstance() {  
+        List<HistoricProcessInstance> lists = processEngine.getHistoryService()  
+                .createHistoricProcessInstanceQuery().list();  
+        if (!isEmpty(lists)) {  
+            for (HistoricProcessInstance hisPro : lists) {  
+                System.out.println(hisPro.getId() + "," + hisPro.getStartTime()+ "," + hisPro.getEndTime());  
+            }  
+        }  
+}  
+</pre>
+
+<h2 id="查询历史任务列表"><a href="#查询历史任务列表" class="headerlink" title="查询历史任务列表"></a>查询历史任务列表</h2><pre>
+public void findHisTask() {  
+        List<HistoricTaskInstance> lists = processEngine.getHistoryService()  
+                .createHistoricTaskInstanceQuery().list();  
+        if (!isEmpty(lists)) {  
+            for (HistoricTaskInstance hisTask : lists) {  
+                System.out.println(hisTask.getId() + "," + hisTask.getAssignee() + "," + hisTask.getName() + "," + hisTask.getStartTime() + "," + hisTask.getEndTime());  
+            }  
+        }  
+} 
+</pre> 
+
+<h2 id="上边代码中用到的工具方法，简单非空判断"><a href="#上边代码中用到的工具方法，简单非空判断" class="headerlink" title="上边代码中用到的工具方法，简单非空判断"></a>上边代码中用到的工具方法，简单非空判断</h2><pre>
+public boolean isEmpty(Object object) {  
+        if (object instanceof List) {  
+            List list = (List) object;  
+            if (list != null && list.size() > 0) {  
+                return false;  
+            } else {  
+                return true;  
+            }  
+        } else {  
+            if (object != null) {  
+                return false;  
+            } else {  
+                return true;  
+            }  
+        }  
+}
+</pre>  
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/01/30/activiti1/" data-id="ckbk4ukaa000i0svhdbyp26b6" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/activiti/" rel="tag">activiti</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/01/30/email1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          JAVA代码发送邮件示例和解释笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/11/07/mongo2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Mongodb3.0.5副本集搭建及spring和java连接副本集配置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取流程引擎"><span class="toc-number">1.</span> <span class="toc-text">获取流程引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署流程定义（发布流程）"><span class="toc-number">2.</span> <span class="toc-text">部署流程定义（发布流程）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除流程定义"><span class="toc-number">3.</span> <span class="toc-text">删除流程定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动流程实例"><span class="toc-number">4.</span> <span class="toc-text">启动流程实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询当前活动的流程实例"><span class="toc-number">5.</span> <span class="toc-text">查询当前活动的流程实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询个人任务及相关信息"><span class="toc-number">6.</span> <span class="toc-text">查询个人任务及相关信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完成个人任务"><span class="toc-number">7.</span> <span class="toc-text">完成个人任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询历史流程实例"><span class="toc-number">8.</span> <span class="toc-text">查询历史流程实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询历史任务列表"><span class="toc-number">9.</span> <span class="toc-text">查询历史任务列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上边代码中用到的工具方法，简单非空判断"><span class="toc-number">10.</span> <span class="toc-text">上边代码中用到的工具方法，简单非空判断</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

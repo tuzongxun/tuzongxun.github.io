@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记1——七大面向对象设计原则 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言根据这一次的学习计划，系统学习设计模式之前，先系统学习和理解设计原则。面向对象设计原则有如下几类。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记1——七大面向对象设计原则">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/17/yuanze1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言根据这一次的学习计划，系统学习设计模式之前，先系统学习和理解设计原则。面向对象设计原则有如下几类。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-17T10:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:27:07.156Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-yuanze1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/17/yuanze1/" class="article-date">
+  <time datetime="2017-11-17T10:43:58.000Z" itemprop="datePublished">2017-11-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记1——七大面向对象设计原则
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>根据这一次的学习计划，系统学习设计模式之前，先系统学习和理解设计原则。面向对象设计原则有如下几类。</p>
+<a id="more"></a>
+<h3 id="原则一：单一职责原则"><a href="#原则一：单一职责原则" class="headerlink" title="原则一：单一职责原则"></a>原则一：单一职责原则</h3><p>这是面向对象最简单的原则，对于定义，引用书中所说：</p>
+<blockquote>
+<p>单一职责原则(Single Responsibility Principle, SRP)：一个类只负责一个功能领域中的相应职责，或者可以定义为：就一个类而言，应该只有一个引起它变化的原因</p>
+</blockquote>
+<p>这里最重要的地方，我个人觉得应该是<code>一个功能领域</code>这一句。<br>设计的前提是思考，只有进行了思考才能谈得上设计，所以实际设计过程中最重要的还应该是思考究竟哪些才是<code>一个功能领域</code>，也只有确定了这个，才能真正的遵循单一职责原则。</p>
+<p>这个原则让我想起最近重构中一个功能设计的问题，很明显一开始的设计并没有遵循单一职责原则。<br>这项功能涉及到三个子系统A、B、C,我们需要从A系统向B系统发送http请求，发送过程中带了两个参数，一个是具体对象数据obj，一个是动态获取的B系统向C系统发送请求的请求url等相关信息。<br>我们当时是在A系统中写了一个httpService来处理向B系统发送请求，在一个方法中同时做了这样三件事：</p>
+<ol>
+<li>封装obj数据对象；</li>
+<li>动态获取B向C发送请求的相关请求信息；</li>
+<li>正式向B发送请求；</li>
+</ol>
+<p>很明显的，这个类的这个方法看起来做的都是跟发送请求相关的事，但是仔细分析后会发现其实引起这个方法改变的原因至少会有三个，因此至少应该把这三件事分为三个方法来处理。</p>
+<h3 id="原则二：开闭原则"><a href="#原则二：开闭原则" class="headerlink" title="原则二：开闭原则"></a>原则二：开闭原则</h3><p>开闭原则引用书中的定义如下：</p>
+<blockquote>
+<p>开闭原则(Open-Closed Principle, OCP)：一个软件实体应当对扩展开放，对修改关闭。即软件实体应尽量在不修改原有代码的情况下进行扩展</p>
+</blockquote>
+<p>这里最重要的应该是<code>软件实体</code>四个字，只有正确的理解了何为软件实体，才能更好的用好开闭原则，书中对软件实体定义如下：</p>
+<blockquote>
+<p>在开闭原则的定义中，软件实体可以指一个软件模块、一个由多个类组成的局部结构或一个独立的类。</p>
+</blockquote>
+<p>对于开闭原则，我个人理解就是说，可以继承或实现某个类，在这个类的基础上增加功能，但是不能直接去改这个类。<br>然而，在实际实施的过程中显然是不太容易做到的，这通常需要一定的开发功力，可能还需要先遵循其他一些原则，这个原则才会具有实现的可能。<br>就比如上边说的单一职责原则，如果没有非常好的遵循单一职责原则，各种功能糅合在一起，那么必然在后期拓展的过程中难以做到很好的开闭。这时候可能能对拓展开放，却未必能对修改做到关闭，可能发现很多时候必须修改原本的类才行。</p>
+<p>同样是上边举例的那个功能，根据单一职责原则，我们把三件事分到了三个方法中实现，但是依然存在着其他的问题。<br>就比如封装数据对象这件事，由于很多个业务公用一个请求，在参数个数固定的情况下，不同的业务数据使用的数据对象封装就必然会有所不同。<br>当我们用一个方法处理这些数据封装的时候，就必须使用若干个if/else这样的判断语句，那么一旦后边有新业务加入或者旧业务需要修改，必然需要改动这个方法和这个类，所以更好的办法应该是针对不同业务的不同数据使用不同的方法或者类来进行处理。</p>
+<h3 id="原则三：里氏替换原则"><a href="#原则三：里氏替换原则" class="headerlink" title="原则三：里氏替换原则"></a>原则三：里氏替换原则</h3><p>里氏替换原则引用书中的定义如下：</p>
+<blockquote>
+<p>里氏代换原则(Liskov Substitution Principle, LSP)：所有引用基类（父类） 的地方必须能透明地使用其子类的对象</p>
+</blockquote>
+<p>在我目前记下的三个原则中，这个恐怕是我觉得最好理解也是最容易做到的了，因为平常开发的过程中几乎时时刻刻都在写着接口和实现类。<br>而这个原则简单点理解，就是说用接口或者其他类型的父类调用的任何一个方法，都必须要能用这个父类的任何一个子类进行调用；任何一个用父类作为参数的地方，要也都能用任何一个子类作为参数。<br>里氏替换，其实可以理解为就是用子类代替父类。</p>
+<h3 id="原则四：依赖倒转原则"><a href="#原则四：依赖倒转原则" class="headerlink" title="原则四：依赖倒转原则"></a>原则四：依赖倒转原则</h3><p>依赖倒转原则引用书中的定义如下：</p>
+<blockquote>
+<p>依赖倒转原则(Dependency Inversion Principle, DIP)：抽象不应该依赖于细节，细节应当依赖于抽象。换言之，要针对接口编程，而不是针对实现编程</p>
+</blockquote>
+<p>这个原则和上一个原则乍一看起来我觉得好像是雷同了，但是仔细分析一下后发现其实并没有。<br>里氏替换原则更具体点理解，说的是父类和子类在各自定义的时候应该遵循的一种原则，重点在于父类和子类的定义。<br>而依赖倒转原则说的则应该是如何更合理使用父类和子类，重点在于如何使用。<br>但是这两个原则说的都是父类和子类的问题，因此很显然也有必然的联系，只有遵循里氏替换原则合理的定义了父类和子类，才可能更合理的遵循依赖倒转原则。<br>因此这也涉及到一个问题，子类虽然从语法上来说可以有自己的对外开放的方法，那么是否应该提供这样的方法呢？<br>很显然的，如果要完全遵循依赖倒转原则，子类就不应该定义自己的对外开放的方法，否则针对接口编程的时候，那子类的那些对外开放的特有方法就成了摆设。</p>
+<h3 id="原则五：接口隔离原则"><a href="#原则五：接口隔离原则" class="headerlink" title="原则五：接口隔离原则"></a>原则五：接口隔离原则</h3><p>接口隔离原则引用书中的定义如下：</p>
+<blockquote>
+<p>接口隔离原则(Interface Segregation Principle, ISP)：使用多个专门的接口，而不使用单一的总接口，即客户端不应该依赖那些它不需要的接口。</p>
+</blockquote>
+<p>对于这个原则，我倒觉得他更像是单一职责原则的补充，或者说是一个更小维度的单一职责原则，因为我觉得接口实际上也可以理解成单一职责原则中说的<code>某个功能领域</code>。<br>而“使用多个专门的接口而不是一个总接口”，这也直接体现了单一职责，只不过这里可能是更小维度的单一职责，目的是为了避免一个接口中过多的功能造成依赖于他的客户端做出一些不必要的工作。<br>那么如果再结合前两个原则来说，我更觉得他们就是一个整体，首先里氏替换原则概括的说明了父类和子类应该以何种关系定义，然后依赖倒转原则又说了父类和子类应该如何使用，再然后这里的接口隔离原则就更进一步具体说明了父类接口应该如何更好的定义。</p>
+<h3 id="原则六：合成复用原则"><a href="#原则六：合成复用原则" class="headerlink" title="原则六：合成复用原则"></a>原则六：合成复用原则</h3><p>合成复用原则引用书中的定义如下：</p>
+<blockquote>
+<p>合成复用原则(Composite Reuse Principle, CRP)：尽量使用对象组合，而不是继承来达到复用的目的</p>
+</blockquote>
+<p>根据我的理解，复用一般指的是自己本身不具备的方法，但可以拿来使用，而实现方式通常是组合、聚合和继承。<br>继承指的是，在父类中写的方法被子类继承后，子类不需要再写一遍这个方法，子类的对象就可以调用。<br>组合指的是，声明一个类的时候，把另一个类以属性的方式声明，然后在这个类的对象中便包含了那个类的对象，然后这个类的对象中就可以调用那个类中的方法，从而实现自己不用定义，当能实现某些功能。<br>而聚合通常是说把另一个类的对象以参数的方式传进来，然后这个类的对象的方法中也就可以调用参数对象的方法，这样也实现了自己不定义，但能实现某些功能。<br>以上三种方式都能实现代码和功能的福永，减少了重复代码，但是继承会破坏类的封装性，把父类的实现细节暴露给子类，同时如果父类声明为不可被继承，那么还不能被复用，这些都是非必要，不建议使用继承复用的原因。<br>相反的，组合和聚合就更加的灵活，具体的实现也不会暴露给其他组合的类，因此建议使用组合和聚合实现代码和功能的复用，也就是合成复用原则。</p>
+<h3 id="原则七：迪米特法则"><a href="#原则七：迪米特法则" class="headerlink" title="原则七：迪米特法则"></a>原则七：迪米特法则</h3><p>迪米特法则引用书中的定义如下：</p>
+<blockquote>
+<p>迪米特法则(Law of Demeter, LoD)：一个软件实体应当尽可能少地与其他实体发生相互作用</p>
+</blockquote>
+<p>迪米特法则又称为最少知识原则、最少知道原则，说白了，就是一个类中定义的属性、方法这些应当严格定义访问权限，只暴露必须暴露出来的，而私有不必要暴露出来的。<br>之所以要这样做，是因为当一个类暴露出过多的内容在外边时，一方面会使引起他变化的因素变多，情况变得复杂，另一方面也会使得使用这个类的时候造成选择的困难。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/17/yuanze1/" data-id="ckbk4ukea008f0svh0dqkae4z" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/20/pattern2-simfactory/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记2——简单工厂模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/15/yuanze-shuoming/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记0——说明</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则一：单一职责原则"><span class="toc-number">2.</span> <span class="toc-text">原则一：单一职责原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则二：开闭原则"><span class="toc-number">3.</span> <span class="toc-text">原则二：开闭原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则三：里氏替换原则"><span class="toc-number">4.</span> <span class="toc-text">原则三：里氏替换原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则四：依赖倒转原则"><span class="toc-number">5.</span> <span class="toc-text">原则四：依赖倒转原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则五：接口隔离原则"><span class="toc-number">6.</span> <span class="toc-text">原则五：接口隔离原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则六：合成复用原则"><span class="toc-number">7.</span> <span class="toc-text">原则六：合成复用原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原则七：迪米特法则"><span class="toc-number">8.</span> <span class="toc-text">原则七：迪米特法则</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

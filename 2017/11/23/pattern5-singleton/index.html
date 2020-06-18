@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记5——单例模式【高并发拓展】 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义单例模式又称为单件模式，这个模式大概是设计模式中最好理解的了，我起初就打算从这里开始学，甚至还记过另一篇单例模式学习的笔记。但是之后跟着《设计模式》这本书系统的学，就索性从第一页开始，而单例模式算是复习，也算是再深入的理解一次。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记5——单例模式【高并发拓展】">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/23/pattern5-singleton/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="定义单例模式又称为单件模式，这个模式大概是设计模式中最好理解的了，我起初就打算从这里开始学，甚至还记过另一篇单例模式学习的笔记。但是之后跟着《设计模式》这本书系统的学，就索性从第一页开始，而单例模式算是复习，也算是再深入的理解一次。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-23T07:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:28:10.309Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern5-singleton" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/23/pattern5-singleton/" class="article-date">
+  <time datetime="2017-11-23T07:43:58.000Z" itemprop="datePublished">2017-11-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记5——单例模式【高并发拓展】
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>单例模式又称为单件模式，这个模式大概是设计模式中最好理解的了，我起初就打算从这里开始学，甚至还记过另一篇单例模式学习的笔记。<br>但是之后跟着《设计模式》这本书系统的学，就索性从第一页开始，而单例模式算是复习，也算是再深入的理解一次。</p>
+<a id="more"></a>
+<p>之所以要这么做，是因为上一次写的没有给出更标准的定义，同时，当时只介绍了基础的懒汉式和饿汉式，对于并发时候的单例却没有涉及，所以这篇学习的重点应当在于高并发时如何保证我们的单例依旧是单例。<br>单例模式引用书中的定义如下：</p>
+<blockquote>
+<p>单例模式(Singleton Pattern)：确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。单例模式是一种对象创建型模式</p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>由于之前写过一篇单例模式的记录，里边对基础饿汉式和懒汉式的介绍都还算详细，因此整个基础饿汉式和懒汉式的使用及理解这里就没有必要赘述，以下是那篇的链接：</br><br><a href="https://tuzongxun.github.io/2017/09/24/pattern1_danli/" target="_blank" rel="noopener">https://tuzongxun.github.io/2017/09/24/pattern1_danli/</a></br><br><a href="https://yq.aliyun.com/articles/210401?spm=5176.8091938.0.0.1wWDAm" target="_blank" rel="noopener">https://yq.aliyun.com/articles/210401?spm=5176.8091938.0.0.1wWDAm</a></br><br><a href="http://blog.csdn.net/tuzongxun/article/details/78009213" target="_blank" rel="noopener">http://blog.csdn.net/tuzongxun/article/details/78009213</a></br><br></br></p>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><p>饿汉式和懒汉式的不同，在于单例对象的创建时机，一个是直到第一次被用的时候才创建，一个是不管有没有人用，反正先创建了放这里再说。<br>这就映射了现实生活中的两类人，一类是有备无患，一种是临时抱佛脚。<br>既然他们都是单例模式，自然就有属于单例模式的共性，总结下来基本如下：</p>
+<ol>
+<li>构造器私有化，不允许自己之外的他人创建 </li>
+<li>在上一条的前提下，就必须自己创建自己的实例对象</li>
+<li>为了保证实例对象唯一，这个实例对象必须是静态的，属于类 </li>
+<li>外部不能用new获得这个对象，那么就必须提供一个外部能访问的静态方法，返回自己的实例对象 </li>
+</ol>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>开篇说到这一篇的重点应该在于高并发时如何保证单例对象还是单例，那么首先必须是高并发时会出现不再单例的问题，这个问题实际上只会出现在懒汉式的情况中。（注：这似乎也警示着人们，人还是勤快点好啊）<br>那么我们先来看一下饿汉式的写法：</p>
+<pre>
+package patterntest.singletonpattern;
+/**
+ *单例模式——饿汉式
+ *@author tzx
+ *@date 2017年11月23日
+ */
+public class SingletonPattern1 {
+    private static SingletonPattern1 singletonPattern1 = new SingletonPattern1();
+    private SingletonPattern1() {
+    }
+    public static SingletonPattern1 getInstance() {
+        return singletonPattern1;
+    }
+}
+</pre>
+<p>在饿汉式中，一开始初始化类的时候就创建了类的实例对象，也就是说在被使用之前就已经创建，这时候即便是多个线程同时来取这个对象，也依旧还是这同一个对象，不会有任何问题。<br>然后再看一下懒汉式的写法：</p>
+<pre>
+package patterntest.singletonpattern;
+/**
+ *单例模式——懒汉式
+ *@author tzx
+ *@date 2017年11月23日
+ */
+public class SingletonPattern2 {
+    private static SingletonPattern2 singletonPattern2;
+    private SingletonPattern2() {
+    }
+    public static SingletonPattern2 getInstance() {
+        if (singletonPattern2 == null) {
+            singletonPattern2 = new SingletonPattern2();
+        }
+        return singletonPattern2;
+    }
+}
+</pre>
+<p>在懒汉式中，当有消费者需要获取当前类的对象时，会先判断该对象是否是null，如果是，才会创建一个对象。<br>那么我们知道在高并发的时候，线程可能在任何时候让出cpu，也就是说如果有两条线程，当第一条读到<code>singletonPattern2 == null</code>为true后，还没有来得及new一个对象，这时候让出了cpu，另一个线程接手了。<br>然后第二个线程再进行if判断的时候会发现依旧是true，然后他就new了一个对象出来，然后让出cpu。<br>结果第一个线程接手后接着之前的判断结果进行处理，就会再new一个对象出来，这时候我们的单例便不再是单例了。<br>为了演示这种情况，我们对懒汉模式稍作改造：</p>
+<pre>
+package patterntest.singletonpattern;
+/**
+ *单例模式——懒汉式
+ *@author tzx
+ *@date 2017年11月23日
+ */
+public class SingletonPattern2 {
+    private static SingletonPattern2 singletonPattern2;
+    private SingletonPattern2() {
+    }
+    public static SingletonPattern2 getInstance() {
+        if (singletonPattern2 == null) {
+            try {
+                Thread.yield();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            singletonPattern2 = new SingletonPattern2();
+        }
+        return singletonPattern2;
+    }
+}
+</pre>
+<p>在上边的代码中，我们调用<code>Thread.yield()</code>手动在new一个对象之前使当前线程让出剩余cpu时间，这时候下一个线程就会执行，然后写一个测试多线程调用的类及方法：</p>
+<pre>
+package patterntest.singletonpattern;
+/**
+ *单例模式测试
+ *@author tzx
+ *@date 2017年11月23日
+ */
+public class Consumer {
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new MyRunnable());
+        thread1.start();
+        Thread thread2 = new Thread(new MyRunnable());
+        thread2.start();
+    }
+}
+class MyRunnable implements Runnable {
+    public void run() {
+        SingletonPattern2 singletonPattern2 = SingletonPattern2.getInstance();
+        System.out.println(singletonPattern2 + ":" + singletonPattern2.hashCode());
+        SingletonPattern1 singletonPattern1 = SingletonPattern1.getInstance();
+        System.out.println(singletonPattern1 + ":" + singletonPattern1.hashCode());
+    }
+}
+</pre>
+
+<p>上述代码应该比较简单，启动两个线程，在线程的run方法里获取我们的单例对象，然后打印出hashcode。我们知道，同一个对象的hashcode应该是一样的，但是运行上边的代码之后结果如下：</p>
+<pre>
+patterntest.singletonpattern.SingletonPattern2@51ab0bbe:1370164158
+patterntest.singletonpattern.SingletonPattern2@4ab73ee:78345198
+patterntest.singletonpattern.SingletonPattern1@5f6cfffb:1600978939
+patterntest.singletonpattern.SingletonPattern1@5f6cfffb:1600978939
+</pre>
+<p>很明显，两个Pattern2的hashcode值不一样，而两个Pattern1的hashcode是完全一样的，进一步证明了懒汉式的单例模式并不能保证在多线程、高并发时保证单例，那么这时候就需要涉及到线程同步的知识，可以使用同步锁synchronized锁住我们的getInstance方法，代码就可以改成这样：</p>
+<pre>
+public synchronized static SingletonPattern2 getInstance() {
+    if (singletonPattern2 == null) {
+        try {
+            Thread.yield();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        singletonPattern2 = new SingletonPattern2();
+    }
+    return singletonPattern2;
+}
+</pre>
+<p>这时候无论我们再运行多少次测试方法，可以保证Pattern2的所有对象的hashcode都是同一个，也就是保证了Pattern2对象是一个单例对象，就像下边这样：</p>
+<pre>
+patterntest.singletonpattern.SingletonPattern2@4ab73ee:78345198
+patterntest.singletonpattern.SingletonPattern2@4ab73ee:78345198
+patterntest.singletonpattern.SingletonPattern1@a6c9d0b:174890251
+patterntest.singletonpattern.SingletonPattern1@a6c9d0b:174890251
+</pre>
+<p>上边的问题确实解决了多线程高并发时单例对象不单例的问题，然后由于锁定的是方法，所以必然在高并发时影响性能，所以我们需要进一步优化，从锁方法缩小到只锁住创建对象的那一段代码,也就是所谓的锁定代码块：</p>
+<pre>
+// public synchronized static SingletonPattern2 getInstance() {
+    public static SingletonPattern2 getInstance() {
+        // if (singletonPattern2 == null) {
+        // try {
+        // Thread.yield();
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // singletonPattern2 = new SingletonPattern2();
+        // }
+        if (singletonPattern2 == null) {
+            try {
+                Thread.yield();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            synchronized (SingletonPattern2.class) {
+                singletonPattern2 = new SingletonPattern2();
+            }
+        }
+        return singletonPattern2;
+    }
+</pre>
+<p>但是仔细看上边的代码，或者运行一下测试方法会发现，这种写法实际上并不能解决单例对象不单例的情况，此时的锁其实是个无意义的锁。所以我们需要把这个锁进一步优化，使用<code>双重检查锁定</code>机制，然后代码就应该是这样：</p>
+<pre>
+public static SingletonPattern2 getInstance() {
+    if (singletonPattern2 == null) {
+        try {
+            Thread.yield();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        synchronized (SingletonPattern2.class) {
+            if (singletonPattern2 == null) {
+            singletonPattern2 = new SingletonPattern2();
+            }
+        }
+    }
+    return singletonPattern2;
+}
+</pre>
+<p>这样一来，在调用这个getInstance方法的时候就不会被直接锁住，而是先进行一个判断后才锁定，提升了系统性能。<br>同时，由于锁里边又进行了判断，就可以进一步保证对象的唯一性。<br>然而，上边的结论其实是我想当然的结论，按书中所说，这样也并不能完全保证单例，还需要给对象增加一个修饰词<code>volatile</code>，然后整个类就应该是这个样子：</p>
+<pre>
+package patterntest.singletonpattern;
+/**
+ *单例模式——懒汉式
+ *@author tzx
+ *@date 2017年11月23日
+ */
+public class SingletonPattern2 {
+    private volatile static SingletonPattern2 singletonPattern2;
+    private SingletonPattern2() {
+    }
+    public static SingletonPattern2 getInstance() {
+        if (singletonPattern2 == null) {
+            try {
+                Thread.yield();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            synchronized (SingletonPattern2.class) {
+                if (singletonPattern2 == null) {
+                singletonPattern2 = new SingletonPattern2();
+                }
+            }
+        }
+        return singletonPattern2;
+    }
+}
+</pre>
+<p>不过那种不加volatile修饰符而出现不单例的情况应该并不多见，因为为了验证这一情况，我写了一个for循环创建线程来测试，即便是循环数万次，也依旧没有出现不一致的情况。</p>
+<p>demo源码可在github下载：<a href="https://github.com/tuzongxun/mypattern" target="_blank" rel="noopener">https://github.com/tuzongxun/mypattern</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/11/23/pattern5-singleton/" data-id="ckbk4ukax001u0svh678fcyfq" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/11/29/tzxblog1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          业余小项目——tzxblog博客系统
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/22/pattern4-absfactory/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记4——抽象工厂模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解"><span class="toc-number">2.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要点"><span class="toc-number">3.</span> <span class="toc-text">要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拓展"><span class="toc-number">4.</span> <span class="toc-text">拓展</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

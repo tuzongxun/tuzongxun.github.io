@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>mysql常用操作语法（十三）~~存储过程 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="为什么要使用存储过程在系统实际开发应用中，有可能只需要单条sql语句就能实现想要的功能，但是有时候，要完整实现某个业务，却需要同时执行多条sql才能达到目的。在这种业务场景中，如果不希望通过客户端屡次执行多条sql，那么存储过程就是其中一个较好的实现方式。因此，存储过程可以简单的理解为就是多条sql的集合，虽然在存储过程中实际也可以是单条sql。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql常用操作语法（十三）~~存储过程">
+<meta property="og:url" content="https://blog.tzxcode.cn/2018/04/16/mysql-jichu14/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="为什么要使用存储过程在系统实际开发应用中，有可能只需要单条sql语句就能实现想要的功能，但是有时候，要完整实现某个业务，却需要同时执行多条sql才能达到目的。在这种业务场景中，如果不希望通过客户端屡次执行多条sql，那么存储过程就是其中一个较好的实现方式。因此，存储过程可以简单的理解为就是多条sql的集合，虽然在存储过程中实际也可以是单条sql。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-16T15:42:11.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:31:18.275Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql-jichu14" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/16/mysql-jichu14/" class="article-date">
+  <time datetime="2018-04-16T15:42:11.000Z" itemprop="datePublished">2018-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql常用操作语法（十三）~~存储过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="为什么要使用存储过程"><a href="#为什么要使用存储过程" class="headerlink" title="为什么要使用存储过程"></a>为什么要使用存储过程</h2><p>在系统实际开发应用中，有可能只需要单条sql语句就能实现想要的功能，但是有时候，要完整实现某个业务，却需要同时执行多条sql才能达到目的。<br>在这种业务场景中，如果不希望通过客户端屡次执行多条sql，那么存储过程就是其中一个较好的实现方式。<br>因此，存储过程可以简单的理解为就是多条sql的集合，虽然在存储过程中实际也可以是单条sql。</p>
+<a id="more"></a>
+<h2 id="对存储过程的理解"><a href="#对存储过程的理解" class="headerlink" title="对存储过程的理解"></a>对存储过程的理解</h2><p>除了上述的存储过程就是sql语句的集合外，作为一个java程序员，个人觉得也可以把存储过程理解成java中的方法，其实就是一个封装的过程，通过封装可以提升移植性和重用性。<br>只不过，在数据库的概念中，除了存储过程，还有自定义函数，这两个大同小异，都可以看做java的方法。</p>
+<h2 id="示例准备"><a href="#示例准备" class="headerlink" title="示例准备"></a>示例准备</h2><p>为了对后边语法使用举例，这里先创建一个表：</p>
+<pre>
+CREATE TABLE `user` (
+   `id` int(11) DEFAULT NULL,
+   `name` varchar(20) DEFAULT NULL
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+</pre>
+
+<h2 id="存储过程的创建"><a href="#存储过程的创建" class="headerlink" title="存储过程的创建"></a>存储过程的创建</h2><p>就像java方法有一定的语法规则一样，数据库存储过程的创建也需要遵循一定的语法规则，大致如下：</p>
+<pre>
+CREATE PROCEDURE  自定义名称(参数列表)
+  [characteristic]  存储过程body
+</pre>
+<p>其中，参数列表的格式为：[INT/OUT/INOUT] 参数名 参数类型，这里的in代表输入，out代表输出。<br>characteristic是可选的定义，可以是注释，也可以是对存储过程body的约束，在具体使用的过程中可以再通过网络查询细节。<br>而存储过程body，就是具体的逻辑sql了。<br>另外还需要注意的是，自定义名称要尽量使用proce_**这种。<br>示例如下：</p>
+<pre>
+CREATE PROCEDURE proce_test4(IN NAME VARCHAR(10))
+INSERT INTO USER VALUES(4,NAME);
+</pre>
+<p>上边的示例的意思是：创建一个名称为proce_test4的存储过程，这个存储过程需要一个varchar类型的输入参数，长度限制为10，参数名是name。这个存储过程要做的事，就是向user表插入一条数据，id是4，name就是调用这个存储过程的时候传入的参数</p>
+<h3 id="多条sql语句的存储过程"><a href="#多条sql语句的存储过程" class="headerlink" title="多条sql语句的存储过程"></a>多条sql语句的存储过程</h3><p>我们知道，在mysql中，“；”是代表结束的标示，所以在上边的示例中，“；”也就代表这个存储过程的创建结束了，那么如果这个存储过程中需要多条sql怎么办呢？<br>这个时候显然不能在“；”后边直接加，因为上一个“；”已经代表了结束。<br>也不能去掉之前的“；”号再加，因为这样的话数据库会误以为是一条sql，而出现语法错误，正确的做法是使用类似下边的写法：</p>
+<pre>
+DELIMITER $$
+CREATE PROCEDURE proce_test5(IN NAME VARCHAR(10))
+BEGIN
+INSERT INTO USER VALUES(5,NAME);
+SELECT * FROM USER;
+END$$
+DELIMITER;
+</pre>
+<p>大概意思就是，使用<code>$$</code>作为分解符，在两个<code>$$</code>之间的语句当做一个整体。<br>而上边这个示例所做的事也比较简单，就是：先插入一条数据到user表中，然后查询出user表中所有的数据。</p>
+<h2 id="存储过程的调用"><a href="#存储过程的调用" class="headerlink" title="存储过程的调用"></a>存储过程的调用</h2><p>要验证上述示例的正确性，就需要使用这个存储过程看一下效果，调用存储过程的基本语法如下：</p>
+<pre>
+CALL 存储过程名(参数);
+</pre>
+<p>例如：</p>
+<pre>
+CALL proce_test5('ptest5');
+</pre>
+
+<h2 id="存储过程的查询"><a href="#存储过程的查询" class="headerlink" title="存储过程的查询"></a>存储过程的查询</h2><p>存储过程创建以后，存放在mysql的系统表中，有时候可能需要查看当前有哪些存储过程，或者某个存储过程具体信息，这就需要用到存储过程的查询：<br>1、查询某个数据库下有那些存储过程</p>
+<pre>
+SELECT name FROM mysql.proc WHERE db='数据库名';
+</pre>
+<p>2、查询某个数据库下所有存储过程的状态信息，例如创建时间、修改时间等</p>
+<pre>
+SHOW PROCEDURE STATUS WHERE db='数据库名';
+</pre>
+<p>3、查看某个存储过程详细信息，可以看到里边具体的sql，前提是需要知道存储过程的名字</p>
+<pre>
+SHOW CREATE PROCEDURE 数据库.存储过程名;
+</pre>
+
+<h2 id="存储过程的删除"><a href="#存储过程的删除" class="headerlink" title="存储过程的删除"></a>存储过程的删除</h2><p>存储过程是一种手段，那么就有他的应用场景，因此也就存在失去作用的时候，这时候可能就需要删除，从而减少数据库资源的消耗，删除语法比较简单：</p>
+<pre>
+DROP PROCEDURE 存储过程名称
+</pre>
+
+<h2 id="存储过程的修改"><a href="#存储过程的修改" class="headerlink" title="存储过程的修改"></a>存储过程的修改</h2><p>存储过程是可以修改的，但是据我目前所知，只能修改名称以及characteristic这些，而不能修改存储过程body，也就是里边具体的sql。<br>如果需要修改这个存储过程，网上建议的方法就是先删再建。<br>因此，对于存储过程的修改，暂时觉得可能应用场景不够多，就暂时放弃细究。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/04/16/mysql-jichu14/" data-id="ckbk4ukap001g0svhheyx647q" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/04/18/mysql-jichu13/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          mysql常用操作语法（十四）~~复杂的存储过程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/12/dubbo1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">dubbo学习——基础环境搭建过程及要点记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要使用存储过程"><span class="toc-number">1.</span> <span class="toc-text">为什么要使用存储过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对存储过程的理解"><span class="toc-number">2.</span> <span class="toc-text">对存储过程的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例准备"><span class="toc-number">3.</span> <span class="toc-text">示例准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储过程的创建"><span class="toc-number">4.</span> <span class="toc-text">存储过程的创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多条sql语句的存储过程"><span class="toc-number">4.1.</span> <span class="toc-text">多条sql语句的存储过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储过程的调用"><span class="toc-number">5.</span> <span class="toc-text">存储过程的调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储过程的查询"><span class="toc-number">6.</span> <span class="toc-text">存储过程的查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储过程的删除"><span class="toc-number">7.</span> <span class="toc-text">存储过程的删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储过程的修改"><span class="toc-number">8.</span> <span class="toc-text">存储过程的修改</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

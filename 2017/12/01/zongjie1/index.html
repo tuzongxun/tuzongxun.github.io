@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>技术问题小总结1 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言做项目是提高技术最高效的手段，这句话从某种程度上而言真是太对了。因为不论是大项目还是小项目，不论是正式项目还是个人业务项目，只要在做，就总能遇到各种各样的问题，从而能直接着重于某个点去学习。以下便是最近做业余小项目-tzxbloghttps:&#x2F;&#x2F;github.com&#x2F;tuzongxun&#x2F;tzxblog时遇到的一些问题和解决办法记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="技术问题小总结1">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/12/01/zongjie1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言做项目是提高技术最高效的手段，这句话从某种程度上而言真是太对了。因为不论是大项目还是小项目，不论是正式项目还是个人业务项目，只要在做，就总能遇到各种各样的问题，从而能直接着重于某个点去学习。以下便是最近做业余小项目-tzxbloghttps:&#x2F;&#x2F;github.com&#x2F;tuzongxun&#x2F;tzxblog时遇到的一些问题和解决办法记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/logging.png">
+<meta property="article:published_time" content="2017-12-01T07:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:26:47.245Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="问题整理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/logging.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-zongjie1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/01/zongjie1/" class="article-date">
+  <time datetime="2017-12-01T07:43:58.000Z" itemprop="datePublished">2017-12-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      技术问题小总结1
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>做项目是提高技术最高效的手段，这句话从某种程度上而言真是太对了。<br>因为不论是大项目还是小项目，不论是正式项目还是个人业务项目，只要在做，就总能遇到各种各样的问题，从而能直接着重于某个点去学习。<br>以下便是最近做<code>业余小项目-tzxblog</code><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a>时遇到的一些问题和解决办法记录。</p>
+<a id="more"></a>
+
+<h2 id="springboot日志的问题"><a href="#springboot日志的问题" class="headerlink" title="springboot日志的问题"></a>springboot日志的问题</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>springboot默认的是logback日志框架，不做任何配置的情况下，日志输出在控制台。<br>我想要通过配置把日志内容输出到指定的文件中，于是做了如下的配置：</p>
+<pre>
+logging.level.root=warn
+logging.level.com.tzx.blog=warn
+logging.file=mylog.log
+logging.path=C:/Users/tzx/Desktop/mylog/
+</pre>
+
+<p>我下意识的认为<code>logging.file</code>是日志文件名，<code>logging.path</code>是日志文件输出的目录。<br>但是实际运行时发现我想要的<code>C:/Users/tzx/Desktop/mylog/mylog.log</code>文件没有出现。</p>
+<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h3><p>经查阅springboot官方文档，发现了如下的一些内容：<br><img src="/images/logging.png" alt="logg"></p>
+<p>很显然，官方文档中并没有我这种配置。<br>根据上边的描述可知这里的日志有三种配置方式：</p>
+<ol>
+<li><code>logging.file</code>和<code>logging.path</code>都不做任何配置，则默认日志输出到控制台</li>
+<li>只配置<code>logging.file</code>，如果这里只是一个文件名，则会在当前目录下输出一个日志文件；如果是一个绝对路径下的文件名，则会在生成一个该绝对路径的文件</li>
+<li>只配置<code>logging.path</code>，在配置的目录下生成一个<code>spring.log</code>日志文件</li>
+</ol>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>根据上边分析，我选择的解决方式如下：<br>去掉<code>logging.path</code>,直接在<code>logging.file</code>中配置成<code>C:/Users/tzx/Desktop/mylog/mylog.log</code>。</p>
+<h2 id="markdown语法解析"><a href="#markdown语法解析" class="headerlink" title="markdown语法解析"></a>markdown语法解析</h2><h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>由于之前写博客时，那些博客网站基本都支持markdown语法，经过使用后，发现确实很方便，于是决定自己写的这个博客系统也使用markdown。</p>
+<h3 id="问题分析-1"><a href="#问题分析-1" class="headerlink" title="问题分析"></a>问题分析</h3><p>markdown语法解析需要引入markdown相关的js，并使用该js中定义的方法格式化博客内容。</p>
+<h3 id="解决办法-1"><a href="#解决办法-1" class="headerlink" title="解决办法"></a>解决办法</h3><p>引入<code>showdown.min.js</code>文件，同时使用如下自定义代码格式化博客内容：</p>
+<pre>
+var text = data.blogContent;
+var converter = new showdown.Converter();
+var html = converter.makeHtml(text);
+document.getElementById("curcontent").innerHTML = html;
+</pre>
+
+<h2 id="jpa关联查询的问题"><a href="#jpa关联查询的问题" class="headerlink" title="jpa关联查询的问题"></a>jpa关联查询的问题</h2><h3 id="问题描述-2"><a href="#问题描述-2" class="headerlink" title="问题描述"></a>问题描述</h3><p>博客中实体类的初始设计是单独的<code>userModel</code>和<code>blogModel</code>,如果要在显示某篇博客时显示出作者名称等信息，则需要根据blog表中的userId字段再查user表。</p>
+<h3 id="问题分析-2"><a href="#问题分析-2" class="headerlink" title="问题分析"></a>问题分析</h3><p>jpa里边也可以自定义sql，但是总感觉这样会很麻烦。<br>而且从某种程度而言，jpa应该不至于连这么简单的需求都无法处理，于是经过查找，得到了关联关系的解决办法。</p>
+<h3 id="解决办法-2"><a href="#解决办法-2" class="headerlink" title="解决办法"></a>解决办法</h3><p>blog表和user表都保持不变，在blog表中有一个字段userid用来保存作者的id。<br>userModel保持不变，在blogModel中userId的属性使用如下定义：</p>
+<pre>
+/**
+*多个博客对应一个人，关联字段bloginfo表中user_id字段
+*/
+@JoinColumn(name = "user_id")
+@ManyToOne
+private Userinfo userinfo;
+</pre>
+
+<p><code>@JoinColumn</code>注解指定了关联字段，<code>@ManyToOne</code>声明关联关系是多对一。<br>之后使用jpa的查询方法，例如<code>userDao.findAll()</code>,进行查询时，每一条blog记录中都会带上相应的user对象，也就只需要一次查询数据库就够了。</p>
+<h2 id="使用thymeleaf模板后，不能返回对象给前台"><a href="#使用thymeleaf模板后，不能返回对象给前台" class="headerlink" title="使用thymeleaf模板后，不能返回对象给前台"></a>使用thymeleaf模板后，不能返回对象给前台</h2><h3 id="问题描述-3"><a href="#问题描述-3" class="headerlink" title="问题描述"></a>问题描述</h3><p>使用thymeleaf模板渲染页面的时候，spring的controller的方法只需要return一个html的页面文件名就行了，例如<code>index.html</code>，就写成<code>return &quot;index&quot;;</code>。<br>使用过程发现这里不是只需要写成<code>return &quot;index&quot;</code>，而是必须写成这样，还必须有这个页面存在，否则报错。<br>例如我本来想在某个方法中返回一个blog对象给前台，但是向这个方法发起请求时后台报错如下：</p>
+<pre>
+org.thymeleaf.exceptions.TemplateInputException: Error resolving template 
+"tzxblog/openBlog", template might not exist or might not be accessible by any of
+the configured Template Resolvers
+</pre>
+
+<h3 id="问题分析-3"><a href="#问题分析-3" class="headerlink" title="问题分析"></a>问题分析</h3><p>看到上边的问题，我猜测可能是用了模板以后，会对所有return的内容进行解析渲染，但是对象是不能直接渲染成html的，因此就解析出错。<br>这个时候我有两种解决办法，一种是把数据放到modelMap中，然后使用类似th:text这样的方式取得数据，之后还是return回一个html页面。<br>但是这个地方我不想这样，因为我用了ajax请求，就想要在ajax中获取到返回的数据后进行一定的前台处理，因此就必须要找到能让我返回对象的办法，好在后来在查询的过程中，从其他地方获取到了对的解决办法。</p>
+<h3 id="解决办法-3"><a href="#解决办法-3" class="headerlink" title="解决办法"></a>解决办法</h3><p>在需要返回对象或者普通数据的方法上加上<code>@ResponseBody</code>注解，有了这个注解以后，thymeleaf模板就不会再做其他的处理，也就相当于暂时和thymeleaf没了关系。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/12/01/zongjie1/" data-id="ckbk4ukec008l0svh0w4o8ast" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/12/04/pattern6-prototype/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记6——原型模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/29/tzxblog1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">业余小项目——tzxblog博客系统</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#springboot日志的问题"><span class="toc-number">2.</span> <span class="toc-text">springboot日志的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">2.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题分析"><span class="toc-number">2.2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决办法"><span class="toc-number">2.3.</span> <span class="toc-text">解决办法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#markdown语法解析"><span class="toc-number">3.</span> <span class="toc-text">markdown语法解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述-1"><span class="toc-number">3.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题分析-1"><span class="toc-number">3.2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决办法-1"><span class="toc-number">3.3.</span> <span class="toc-text">解决办法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jpa关联查询的问题"><span class="toc-number">4.</span> <span class="toc-text">jpa关联查询的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述-2"><span class="toc-number">4.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题分析-2"><span class="toc-number">4.2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决办法-2"><span class="toc-number">4.3.</span> <span class="toc-text">解决办法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用thymeleaf模板后，不能返回对象给前台"><span class="toc-number">5.</span> <span class="toc-text">使用thymeleaf模板后，不能返回对象给前台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述-3"><span class="toc-number">5.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题分析-3"><span class="toc-number">5.2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决办法-3"><span class="toc-number">5.3.</span> <span class="toc-text">解决办法</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

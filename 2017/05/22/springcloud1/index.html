@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>springcloud微服务一：spring boot基础项目搭建及问题处理 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言公司接下来某个项目打算使用微服务架构，使用springcloud以及它集成的一些相关项目，因此虽然在其他方面的很多技术上还感觉急需提高，却又不得不以工作为重，先放下其他来了解一下这方面的技术。 一番了解后发现，spring cloud是建立在spring boot的基础上的，而之前虽然听说过，也随便看了一下spring boot，却没有真正使用，因此还必须先花时间学一下spring boot。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springcloud微服务一：spring boot基础项目搭建及问题处理">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/05/22/springcloud1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言公司接下来某个项目打算使用微服务架构，使用springcloud以及它集成的一些相关项目，因此虽然在其他方面的很多技术上还感觉急需提高，却又不得不以工作为重，先放下其他来了解一下这方面的技术。 一番了解后发现，spring cloud是建立在spring boot的基础上的，而之前虽然听说过，也随便看了一下spring boot，却没有真正使用，因此还必须先花时间学一下spring boot。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s1.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s2.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s3.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s4.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/springcloud/s5.png">
+<meta property="article:published_time" content="2017-05-22T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-10-17T03:28:56.888Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springcloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/springcloud/s1.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springcloud1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/22/springcloud1/" class="article-date">
+  <time datetime="2017-05-22T07:09:42.000Z" itemprop="datePublished">2017-05-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springcloud微服务一：spring boot基础项目搭建及问题处理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>公司接下来某个项目打算使用微服务架构，使用springcloud以及它集成的一些相关项目，因此虽然在其他方面的很多技术上还感觉急需提高，却又不得不以工作为重，先放下其他来了解一下这方面的技术。</p>
+<p>一番了解后发现，spring cloud是建立在spring boot的基础上的，而之前虽然听说过，也随便看了一下spring boot，却没有真正使用，因此还必须先花时间学一下spring boot。</p>
+<a id="more"></a>
+
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p><strong>spring boot的理念是“习惯优于配置”，我个人的理解就是尽量减少开发过程中手动的spring相关的配置文件。同时使用spring boot还有一个优点就是，它可以内嵌很多容器，例如tomcat，使得原本可能需要安装tomcat才能运行的web项目，可以直接以运行jar文件的形式启动运行。</strong></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>spring boot项目创建有多种方式，鉴于目前工作中使用的是eclipse开发工具，因此整个学习过程中，也都是在eclipse中进行。</p>
+<p>而eclipse中的创建实际上也是可以有两种方式的，一种是在安装了STS插件之后直接创建，另一种是创建简单的maven项目后，修改pom.xml文件，为了提高效率，我这里就安装了STS插件，以第一种方式创建。</p>
+<p>这个过程中还有一个小插曲，我原本的eclipse版本是Mars.1 Release (4.5.1)，安装STS的时候安装不成功，说是eclipse版本不匹配，于是安装了新版的eclipse，版本号Neon.3 Release (4.6.3)。但是当我在新版的eclipse中安装好STS后，再来尝试在旧版安装时，居然又一路畅通无阻的成功了。</p>
+<p> eclipse中STS安装也有几种方式，我的STS的安装过程是这样的：  help –&gt; Eclipse  Marketplace –&gt;Popular，然后选择下图中的插件install。<br><img src="/images/springcloud/s1.png" alt="cloud1"></p>
+<p>这个插件安装成功以后，就可以看到在eclipse中new project时会有spring这个选项了（当然了，不知这一个地方有变化），打开之后还会有几个子选项，如图：<br><img src="/images/springcloud/s2.png" alt="cloud2"></p>
+<p>而我快速创建spring boot项目的时候，使用的就是上图中第三个子选项Spring Starter Project。具体步骤是：new –&gt;Project –&gt;Spring Starter Project –&gt;出现的界面中name选项后输入项目名称 –&gt;接下来出现如下图所示界面：<br><img src="/images/springcloud/s3.png" alt="cloud3"><br>这里我主要是使用了两个地方，第一个就是选择spring boot version，第二个就是在标示2的位置选择要创建的具体spring boot项目，有很多选项可供选择，而我就选了一个web项目。</p>
+<p>创建好的web项目基本结构如下图：<br><img src="/images/springcloud/s4.png" alt="cloud4"><br>创建的时候它会自动生成一个带有main方法的类，这个main方法实际上就是spring boot项目的程序入口，我在里边加入了一个@RestController和这样一段代码：</p>
+<pre>
+@RequestMapping("/")
+String index(){
+    return "Hello Spring Boot";
+}
+</pre>
+
+<p>之后整个类的代码如下：</p>
+<pre>
+package com.springTest.demo;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+@SpringBootApplication
+public class SpringBootDemo1Application {
+    @RequestMapping("/")
+    String index(){
+        return "Hello Spring Boot";
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootDemo1Application.class, args);
+    }
+}
+</pre>
+
+<p>当安装好STS插件之后，创建一个简单的spring boot的web项目就是这么简单，不需要像传统的spring项目一样还要配置spring.xml等配置文件以及web.xml文件。</p>
+<p>但是需要注意的是，我在第一次创建的时候，spring boot相关的jar包下载不下来，因为公司的maven仓库中没有对应版本的，于是自己修改了maven的配置文件，加入了阿里云的maven仓库：</p>
+<pre>
+&lt;mirror>  
+      &lt;id>alimaven&lt;/id>  
+      &lt;name>aliyun maven&lt;/name>  
+      &lt;url>http://maven.aliyun.com/nexus/content/groups/public/&lt;/url>  
+      &lt;mirrorOf>central&lt;/mirrorOf>          
+&lt;/mirror>  
+</pre>
+
+<p>当重新配置maven仓库，使得程序编译没有问题后，就可以启动项目了，eclipse中使用run as –&gt;Spring Boot App就可以直接运行，不需要像传统web项目那样要加入到tomcat中才行。</p>
+<p>启动成功后浏览器访问localhost:8080，会看到页面如下，一个简单的spring boot web项目就成功创建了。<br><img src="/images/springcloud/s5.png" alt="cloud5"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/05/22/springcloud1/" data-id="ckbk4ukbf002u0svhbm26c75z" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/05/23/springcloud2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          springcloud微服务二：Eureka服务治理之服务注册中心
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/30/email2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">JAVA代码发送邮件示例和解释(二)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍"><span class="toc-number">2.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

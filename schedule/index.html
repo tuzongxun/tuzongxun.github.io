@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>技术点梳理 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="随着接触的技术越来越多，深感学习过程的茫然，因此觉得有必要对所有了解过的、听说过的、用过的技术和重要知识点做一个全面的梳理，并且在不断完善和接触新技术的时候不断更新补充。所有技术点大概分为四类:必须深入的，一般是那些基础的、不变的，例如设计模式、jvm、算法、数据库通用sql、TCP&#x2F;IP协议等,以及后续可能成为自己招牌的技术。需熟练使用的，一般指比较常用的技术，目前和未来工作中被用几率很高的技术">
+<meta property="og:type" content="website">
+<meta property="og:title" content="技术点梳理">
+<meta property="og:url" content="https://blog.tzxcode.cn/schedule/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="随着接触的技术越来越多，深感学习过程的茫然，因此觉得有必要对所有了解过的、听说过的、用过的技术和重要知识点做一个全面的梳理，并且在不断完善和接触新技术的时候不断更新补充。所有技术点大概分为四类:必须深入的，一般是那些基础的、不变的，例如设计模式、jvm、算法、数据库通用sql、TCP&#x2F;IP协议等,以及后续可能成为自己招牌的技术。需熟练使用的，一般指比较常用的技术，目前和未来工作中被用几率很高的技术">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-01T01:34:18.000Z">
+<meta property="article:modified_time" content="2017-12-04T03:14:26.362Z">
+<meta property="article:author" content="涂宗勋">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/schedule/index.html" class="article-date">
+  <time datetime="2017-11-01T01:34:18.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+    
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      技术点梳理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>随着接触的技术越来越多，深感学习过程的茫然，因此觉得有必要对所有了解过的、听说过的、用过的技术和重要知识点做一个全面的梳理，并且在不断完善和接触新技术的时候不断更新补充。</br><br>所有技术点大概分为四类:</br><br><strong>必须深入的</strong>，一般是那些基础的、不变的，例如设计模式、jvm、算法、数据库通用sql、TCP/IP协议等,以及后续可能成为自己招牌的技术。</br><br><strong>需熟练使用的</strong>，一般指比较常用的技术，目前和未来工作中被用几率很高的技术。</br><br><strong>会用就好的</strong>，一般指那些目前工作中需要用，但是未来工作中可能不用的技术。</br><br><strong>了解就好的</strong>，一般指那些目工作中基本不用，但未来可能会用，也可能不会用的。暂时先了解，在前两项搞定的基础上，就可以进一步。</br></p>
+<hr>
+<p>针对上述四类，均要标明完成状态，以便于随时查看并清楚当前学习状态。</br><br>对于那些新接触的、新了解的，还不确定具体分类的，也先放到最后一类，待后续完善。</br><br>同时，这四类应随着个人知识的加深和时间的推移而有所变化，不应一成不变。</p>
+<hr>
+<p><strong>必须深入的</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th align="center">Status</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>算法</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>spring 源码</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>动态代理</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>设计模式</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>泛型</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>并发</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">目标：核心竞争力</td>
+</tr>
+<tr>
+<td>io流</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">目标：核心竞争力</td>
+</tr>
+<tr>
+<td>servlet</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>gc策略</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>jvm</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>TCP/IP协议</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>http协议</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>异常设计</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>mongodb</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">目标：核心竞争力</td>
+</tr>
+<tr>
+<td>mysql</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">目标：核心竞争力</td>
+</tr>
+<tr>
+<td>redis</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">目标：核心竞争力</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>需熟练使用的</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th align="center">Status</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>java基础</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>打jar包</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>打war包</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>对象排序</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>框架搭建</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>xml操作</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>cookie和session</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>过滤器、拦截器</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>spring常用技术使用</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>mybatis</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>junit</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>activiti</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>maven</td>
+<td align="center"><font color='orange'>阶段性结束</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>linux</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>git</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>svn</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>tomcat</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>mq</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>会用就好的</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th align="center">Status</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>java定时器</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>发短信</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>发邮件</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>poi</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>文件上传和下载</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>jdbc</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>druid连接池</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>cxf</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>xfire</td>
+<td align="center"><font color='blue'>已完成</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>sping定时器</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>springcloud</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>spring boot</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>ehcache</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>logback</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>javascript</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>jsp</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>html</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>css</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>了解就好的</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th align="center">Status</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cas</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>jbpm</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>python</td>
+<td align="center"><font color='green'>进行中</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>strom</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td>flume</td>
+<td align="center"><font color='red'>未开始</font></td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/schedule/index.html" data-id="ckbk4ukeg008w0svhh197dfz3" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title recent-posts">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/18/zongjie2/">记一次开发过程中的思维转换</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/14/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/13/tzxblog7/">前后台打通之vue和vant前端要点及设计问题记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/05/tzxblog6/">前后台打通之springboot后台要点记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/01/tzxblog5/">vue前端项目搭建和要点记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

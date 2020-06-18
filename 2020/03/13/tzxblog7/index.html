@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>前后台打通之vue和vant前端要点及设计问题记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接着上一次的后台要点记录，这次再总结一下前台的要点，同时对于整体搭建过程中的一些感想也一并记录。相对于后台来说，前台是弱项，也不是目前的本职，所以前台的记录可能就更基础。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前后台打通之vue和vant前端要点及设计问题记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/03/13/tzxblog7/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="接着上一次的后台要点记录，这次再总结一下前台的要点，同时对于整体搭建过程中的一些感想也一并记录。相对于后台来说，前台是弱项，也不是目前的本职，所以前台的记录可能就更基础。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020031321174787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3R1em9uZ3h1bg==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200313211821965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3R1em9uZ3h1bg==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-03-13T10:09:42.000Z">
+<meta property="article:modified_time" content="2020-03-14T00:38:14.295Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="业余项目">
+<meta property="article:tag" content="tzxblog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2020031321174787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3R1em9uZ3h1bg==,size_16,color_FFFFFF,t_70">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-tzxblog7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/13/tzxblog7/" class="article-date">
+  <time datetime="2020-03-13T10:09:42.000Z" itemprop="datePublished">2020-03-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      前后台打通之vue和vant前端要点及设计问题记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>接着上一次的后台要点记录，这次再总结一下前台的要点，同时对于整体搭建过程中的一些感想也一并记录。<br>相对于后台来说，前台是弱项，也不是目前的本职，所以前台的记录可能就更基础。</p>
+<a id="more"></a>
+<h1 id="前端要点记录"><a href="#前端要点记录" class="headerlink" title="前端要点记录"></a>前端要点记录</h1><h2 id="vant组件使用"><a href="#vant组件使用" class="headerlink" title="vant组件使用"></a>vant组件使用</h2><p>除开vue本身的使用之外，这一次前台的重点应该就是vant了，属于ui层面的这一块技术一直是弱项中的弱项。<br>使用vant之前，需要先安装vant依赖，网络好的情况下可以使用<code>npm</code>，如果网络不好，最好就还是使用<code>cnpm</code>，操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i vant -S</span><br></pre></td></tr></table></figure>
+
+<p>依赖安装之后，正常来说就可以在代码中使用相应的组件了，使用之前需要引入。引入的方式有很多种，但是为了性能更好以及避免大量无用组件的引入，我根据官网说明选择自动按需引入的方式，这个方式就需要再安装一个插件，操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i babel-plugin-import -D</span><br></pre></td></tr></table></figure>
+
+<p>依赖安装好之后，就可以敲代码了，拿导航栏来说，我这里选择的是标签页样式作为导航，就可以在js中按如下方式引入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Tab, Tabs &#125; from &#39;vant&#39;;</span><br><span class="line">Vue.use(Tab);</span><br><span class="line">Vue.use(Tabs);</span><br></pre></td></tr></table></figure>
+
+<p>有了上边的引用，那么在需要设计导航栏的地方就可以使用vant组件了，我的这个功能写在TopNav,vue中，可以前往具体代码中参考使用，代码连接见文章末尾，标签页使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;van-tabs v-model&#x3D;&quot;active&quot;&gt;</span><br><span class="line">  &lt;van-tab title&#x3D;&quot;首页&quot; name&#x3D;&quot;a&quot;&gt;内容 1&lt;&#x2F;van-tab&gt;</span><br><span class="line">  &lt;van-tab title&#x3D;&quot;下载&quot; name&#x3D;&quot;b&quot;&gt;内容 2&lt;&#x2F;van-tab&gt;</span><br><span class="line">  &lt;van-tab title&#x3D;&quot;登录&quot; name&#x3D;&quot;c&quot;&gt;内容 3&lt;&#x2F;van-tab&gt;</span><br><span class="line">&lt;&#x2F;van-tabs&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上边的内容就引出了一个vue对象绑定的知识点，即<code>v-model</code>，这里绑定了一个变量active，所以就需要在js中进行声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">export default&#123;</span><br><span class="line">		data()&#123;</span><br><span class="line">			return&#123;</span><br><span class="line">				active:1</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上便是vant组件的基本使用记录，对着官网的说明，使用起来应该说比较简单，这里为vant官网点个赞。<a href="https://youzan.github.io/vant/#/zh-CN/" target="_blank" rel="noopener">vant官网</a><br>那么这次的博客截止到目前，已经使用了十几个组件，虽然整体手撸的页面依旧不是那么好看，但是比起之前写的一些来说，还是要好看多了，以下是博客展示页的截图（首页截图可以继续往下翻）：<br><img src="https://img-blog.csdnimg.cn/2020031321174787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3R1em9uZ3h1bg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="前台模块间传值"><a href="#前台模块间传值" class="headerlink" title="前台模块间传值"></a>前台模块间传值</h2><p>除了借助vant来设计界面之外，数据交互就还是要回到vue本身了。<br>像基本的数据绑定、属性绑定、点击事件等应该算是较常规的知识点，这里就不做记录，要特别记录的就是模块间数据传值。<br>不论是在首页点击分类改变首页博客列表，还是点击首页博客列表进入博客浏览，都需要用到这种模块间的传值。<br>这种传值，首先需要定义一个js文件，例如Msg.js，名称不一定要这样，js里的内容很简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &quot;vue&quot;</span><br><span class="line">export default new Vue</span><br></pre></td></tr></table></figure>
+
+<p>有了这个文件之后，在需要传值的地方就可以引入之后进行使用。<br>例如我需要在首页分类列表点击某个分类时，传递分类id以改变博客列表，那么在js里首先要引入上边的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import Msg from &#39;.&#x2F;msg.js&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>之后在需要传值的地方就可以使用如下代码传值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Msg.$emit(&quot;cateId&quot;,cateId,1);</span><br></pre></td></tr></table></figure>
+
+<p>像我这里，就是在分类列表有一个点击事件，点击事件会调用定义的方法，那么就可以在该方法里使用上边的代码传值。<br>就目前我的理解是，上边第一个参数是传值标示，起一个绑定作用，用以接收时候的识别，后边就是具体要传的数据，有几个就写几个，以逗号分隔。<br>有了上边的传值，之后就是接收，接收数据的js同样要先引入msg.js文件，引入之后接收数据的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mounted()&#123;</span><br><span class="line">	var _this&#x3D;this;</span><br><span class="line">	Msg.$on(&quot;cateId&quot;,function(cateId,cuPage)&#123;</span><br><span class="line">		_this.cateId&#x3D;cateId;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="v-if和v-for的使用"><a href="#v-if和v-for的使用" class="headerlink" title="v-if和v-for的使用"></a>v-if和v-for的使用</h2><p><code>v-if</code>和<code>v-for</code>的使用，相对比较简单，尤其是之前使用过<code>augularjs</code>，有着基本一样的用法，<code>v-if</code>后边的表达式或者变量需要是一个boolean类型的结果，<code>v-for</code>使用<code>in</code>关键字进行集合数组的遍历，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div v-if&#x3D;&quot;type&#x3D;&#x3D;1 || type&#x3D;&#x3D;0&quot;&gt;</span><br><span class="line">	&lt;div v-if&#x3D;&quot;homeCotentType &#x3D;&#x3D;1 || homeCotentType &#x3D;&#x3D;0&quot;&gt;111&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line">&lt;div v-else-if&#x3D;&quot;type&#x3D;&#x3D;2&quot;&gt;222&lt;&#x2F;div&gt;</span><br><span class="line">&lt;van-sidebar class&#x3D;&quot;cateList&quot; v-model&#x3D;&quot;activeKey&quot; @change&#x3D;&quot;onChange&quot;&gt;</span><br><span class="line">	&lt;van-sidebar-item v-for&#x3D;&quot;cate in list&quot; :title&#x3D;&quot;cate.name&quot; @click&#x3D;&quot;choose(cate.id)&quot;&gt;</span><br><span class="line">	&lt;van-icon name&#x3D;&quot;wap-home&quot; &#x2F;&gt;&lt;&#x2F;van-sidebar-item&gt;</span><br><span class="line">&lt;&#x2F;van-sidebar&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以上两部分在BlogHome.vue和HomeLeft.vue两个文件中有所体现，后续可能也会在很多地方用到。</p>
+<p>前端要记录的知识点其实是很多的，不是本职，不常用，就很容易遗忘，哪怕很简单的地方。<br>但是单从架构和项目搭建以及前后台打通来说，似乎也没有那么多需要记录的，本项目中前后台交互的关键在于<code>axios</code>，这个在最初的前端项目搭建时已经说了，也就没必要赘述。</p>
+<h1 id="部署调用"><a href="#部署调用" class="headerlink" title="部署调用"></a>部署调用</h1><p>前台和后台打通之后，直观的表现形式就是浏览器可访问，并且数据是从后台读取，这就涉及到vue和springboot前后台的部署。<br>使用eclipse开发，springboot后台项目直接在eclipse中运行即可，根据本项目的配置，后台就会运行在8089端口上。<br>对于vue前台，就需要使用npm启动，在本项目中，就是在tzxblog目录下的tzxblog目录下执行<code>npm run serve</code>，那么前天就会运行在8088端口。<br>前后台都启动之后，浏览器访问<code>localhost:8088</code>,结果会如图所示：<br><img src="https://img-blog.csdnimg.cn/20200313211821965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3R1em9uZ3h1bg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="设计问题"><a href="#设计问题" class="headerlink" title="设计问题"></a>设计问题</h1><p>在先设计后开发的流程中，非常的考验经验和大局观。如果没有相关经验，或者考虑的不是那么周全，就会发现实际写代码时总会有各种地方需要在原本设计的基础上改动。<br>我不知道是否有那种真的一次设计，后边就完全按设计开发而不再改动的项目。<br>但是不论是过往的工作项目，还是现在的业余项目，几乎都是会在后续的开发中改动一定的设计，尤其是接口定义。<br>要改善这个问题，除了堆时间累经验，恐怕就只能是自己想办法做一些完整的项目了，如果永远都是只负责模块，那么必然无法形成整体的大局观。</p>
+<h1 id="前台和后台"><a href="#前台和后台" class="headerlink" title="前台和后台"></a>前台和后台</h1><p>对于前台和后台的概念，可能刚入行的时候总想弄个明白，随着经验多了，慢慢就不再那么执着。<br>但是在这一次整体项目实施的过程中，却又突然开始想这个问题，虽然可能并没有太大的意义。<br>何谓前台，何谓后台，可能有时候还要看站在什么角度。<br>曾经，我觉得java web项目中java是后台，js和html就是前台，但是随着技术的发展会发现，js和html有时候也会在本身分出一个前后台。<br>例如vue中，使用node.js可以启动一个服务，甚至可以不需要java这种后台语言而直接操作数据库，因此很多纯前端的同学可能就会说页面是前台，js也是后台。<br>虽然很多时候这种区分并没有什么影响，但是有的时候认知上的不同却也可能带来沟通上的偏差，最终后果就是影响处理问题的效率。</p>
+<h1 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h1><p>项目代码和文档均以github托管，地址如下：<br><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/03/13/tzxblog7/" data-id="ckbk4ukbz00440svh59e9e97d" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/06/14/test/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          test
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/05/tzxblog6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">前后台打通之springboot后台要点记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端要点记录"><span class="toc-number">1.</span> <span class="toc-text">前端要点记录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vant组件使用"><span class="toc-number">1.1.</span> <span class="toc-text">vant组件使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#前台模块间传值"><span class="toc-number">1.2.</span> <span class="toc-text">前台模块间传值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#v-if和v-for的使用"><span class="toc-number">1.3.</span> <span class="toc-text">v-if和v-for的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#部署调用"><span class="toc-number">2.</span> <span class="toc-text">部署调用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#设计问题"><span class="toc-number">3.</span> <span class="toc-text">设计问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#前台和后台"><span class="toc-number">4.</span> <span class="toc-text">前台和后台</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#项目地址"><span class="toc-number">5.</span> <span class="toc-text">项目地址</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

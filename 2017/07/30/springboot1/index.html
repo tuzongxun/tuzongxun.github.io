@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>一篇文章学会spring boot（包括jms和hessian的集成） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之前在学习spring cloud微服务的时候，由于spring cloud的基础是spring boot，因此曾简单地了解过spring boot，但也只是简单的了解过而已。而现在，需要把struts2项目改为spring boot，一开始时以为是整个项目重构，不仅限于struts2部分，因此就相对更系统、更细致的学了一下spring boot。整个过程由易到难，大概分成了这么些模块：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一篇文章学会spring boot（包括jms和hessian的集成）">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/07/30/springboot1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="之前在学习spring cloud微服务的时候，由于spring cloud的基础是spring boot，因此曾简单地了解过spring boot，但也只是简单的了解过而已。而现在，需要把struts2项目改为spring boot，一开始时以为是整个项目重构，不仅限于struts2部分，因此就相对更系统、更细致的学了一下spring boot。整个过程由易到难，大概分成了这么些模块：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-07-30T07:57:44.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:32:32.034Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springboot">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springboot1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/30/springboot1/" class="article-date">
+  <time datetime="2017-07-30T07:57:44.000Z" itemprop="datePublished">2017-07-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      一篇文章学会spring boot（包括jms和hessian的集成）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>之前在学习spring cloud微服务的时候，由于spring cloud的基础是spring boot，因此曾简单地了解过spring boot，但也只是简单的了解过而已。<br>而现在，需要把struts2项目改为spring boot，一开始时以为是整个项目重构，不仅限于struts2部分，因此就相对更系统、更细致的学了一下spring boot。<br>整个过程由易到难，大概分成了这么些模块：</p>
+<a id="more"></a>
+<h2 id="创建简单的spring-boot-web项目"><a href="#创建简单的spring-boot-web项目" class="headerlink" title="创建简单的spring boot web项目"></a>创建简单的spring boot web项目</h2><p>很多时候学一个新的东西，都需要从最简单的地方开始，然后让自己看到成功后的效果，这样才能更有信心继续下去，至于这第一步，我在写spring cloud相关学习记录的时候，第一篇就是spring boot，因此便不需要再写一遍，那一篇博客是：<br>springcloud微服务一：spring boot基础项目搭建及问题处理</p>
+<h2 id="配置文件加载类"><a href="#配置文件加载类" class="headerlink" title="配置文件加载类"></a>配置文件加载类</h2><p>虽然说spring boot原则上是建议去掉xml配置文件，但是对于一个已经成型并上线运行着的项目而言，不论是代码还是配置都是非常庞大而且复杂的。<br>这些配置文件不只是spring的、struts2的，还有spring和mq集成的，还有spring和hessian集成的等等。<br>仅涉及到spring和struts2的配置文件比较好改，而spring和mq以及hessian集成的就稍微有些麻烦。<br>因此在一开始我心中便有了一个设想，就是mq集成和hessian集成的部分先还是以配置文件的方式不变，等简单易改的部分搞定后再说，于是便需要知道在没有了web.xml文件的spring boot项目中，我需要如何引入加载这些暂时不能去掉的xml文件。<br>经了解之后发现其实还是很简单的，只需要自己再写一个空的java类，然后使用两个注解就好：</p>
+<pre>
+@Configuration
+@ImportResource(value = "classpath:spring.xml")
+public class ConfigClass {
+}
+</pre>
+
+<p><code>@Configuration</code>是向spring声明这是个配置类，<code>@ImportResource</code>则是指明需要引入的配置文件路径。</p>
+<h2 id="使用注解给属性赋值"><a href="#使用注解给属性赋值" class="headerlink" title="使用注解给属性赋值"></a>使用注解给属性赋值</h2><p>在过去的项目中，有一些数据存放在properties文件中，然后在spring的xml文件中引用，从而给特定的对象的属性赋值。<br>而如果整个项目改成spring boot，就需要尽可能去掉能去掉的xml配置文件，就没有了这种注入赋值，所以还需要知道怎样在spring boot中达到xml文件配置一样的赋值效果。<br>经了解后发现也是比较简单地，只需要在对应的属性上使用@Value注解：</p>
+<pre>
+public class User {
+    @Value("${tuser.name}")
+    private String name;
+    @Value("${tuser.age}")
+    private int name;
+}
+</pre>
+
+<p>当然了，这种写法的前提是在properties文件中有相应的属性配置，例如：</p>
+<pre>
+tuser.name=testtttttt
+tuser.age=123
+</pre>
+
+<p>并且spring boot项目启动后能够加载到这个properties文件，spring boot默认会加载resources目录下的application.properties文件，如果我们这些配置不在这个文件中，还需要进行其他的配置，例如在application.properties文件中使用spring.profiles.active进行指定。</p>
+<h2 id="使用注解给对象赋值："><a href="#使用注解给对象赋值：" class="headerlink" title="使用注解给对象赋值："></a>使用注解给对象赋值：</h2><p>虽然说在java中有一切皆对象的说法，属性和属性所属对象都统称对象，但是这里为了区分，我只能在上边更精确的说到属性。<br>而上边那种赋值方式有个很明显的缺陷，就是每个属性都需要使用@Value注解，如果这个类恰好很大，有几十个属性，那么这种赋值将是一个很让人烦躁的工作。<br>而spring boot中也正好提供了一个更加方便的方式，只需要一个注解，就可以引用配置文件中的内容给整个对象赋值。<br>例如配置文件中有如下内容：</p>
+<pre>
+mytest:
+  user:
+    name: test
+    age: 22
+    phone: 13533559797
+</pre>
+
+<p>上边这种写法是yaml文件的写法，也就是在spring boot中默认识别properties类型的配置文件和yaml的配置文件。<br>上边的写法实际上等同于properties文件中如下的写法：</p>
+<pre>
+mytest.user.name=test
+mytest.user.age=22
+mytest.user.phone=13533559797
+</pre>
+
+<p>而我们要把这样一些配置直接赋值给特定对象的方式，就是使用@ConfigurationProperties注解：</p>
+<pre>
+@ConfigurationProperties(prefix = "mytest.user")
+public class User {
+    // @Value("${test.user.name}")
+    private String name;
+    // @Value("${age}")
+    private int age;
+    // @Value("${phone}")
+    private String phone;
+}
+</pre>
+
+<p>类上边的那个注解等同于下边被注释掉的三个注解，当然了，不论哪种方式，实现的前提都是这个user类能够被spring 扫描到，也就是说能够被spring所管理。</p>
+<h2 id="filter过滤器"><a href="#filter过滤器" class="headerlink" title="filter过滤器"></a>filter过滤器</h2><p>在原本的spring web项目中，web.xml文件是必不可少的，启动tomcat后就会来加载这个文件。<br>通常我们都会在这个文件中配置一些servlet以及过滤器，例如字符集过滤器，而spring boot不再使用web.xml，就需要我们能够用其他方式解决原本web.xml中的过滤器的问题。<br>这里写一个过滤器也很简单，要实现javax.servlet.Filter接口，并借助几个注解，只不过这个功能应该是java自己的，而不是spring boot新提供的：</p>
+<pre>
+/**
+*@auth tuzongxun
+*/
+@WebFilter(filterName = "myFilter", urlPatterns = "/*")
+public class MyFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        System.out.println("进入filter");
+    }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+        chain.doFilter(request, response);
+    }
+    @Override
+    public void destroy() {
+        System.out.println("走出filter");
+    }
+}
+</pre>
+
+<h2 id="listener监听器"><a href="#listener监听器" class="headerlink" title="listener监听器"></a>listener监听器</h2><p>说到了过滤器，接下来自然要说的就是监听器，在java web项目中，过滤器和监听器都用的很多，也都常常在web.xml文件中有相应的配置。<br>在spring boot中写一个监听器就更加简单，比如就仅仅是下边的几行代码就够了：</p>
+<pre>
+@WebListener
+public class MyListener implements ServletContextListener {
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("contextlistener init");
+    }
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("contextlistener destroy");
+    }
+}
+</pre>
+
+<p>同样的，上边的类所实现的接口以及相应的注解也都不是spring boot的，而是javax.servlet的。<br>上边例子中我们写的是一个contextListener，同样的也可以写一个requestListener以及其他的listener，例如：</p>
+<pre>
+@WebListener
+public class MyListener1 implements ServletRequestListener {
+    @Override
+    public void requestDestroyed(ServletRequestEvent sre) {
+        System.out.println("requestlistener destroy");
+    }
+    @Override
+    public void requestInitialized(ServletRequestEvent sre) {
+        System.out.println("requestlistener init");
+    }
+}
+</pre>
+
+<h2 id="ERROR错误页面"><a href="#ERROR错误页面" class="headerlink" title="ERROR错误页面"></a>ERROR错误页面</h2><p>在web.xml中除了配置了filter和listener外，比较常见的就还有配置error错误页面，我们项目中也同样这么做了，因此在抛弃web.xml的时候，也必然要考虑error页面的问题，那么在spring boot中也同样是非常的简单，比如写这样一个类：</p>
+<pre>
+@Component
+public class Test {
+@Bean
+public EmbeddedServletContainerCustomizer containerCustomizer() {
+return new EmbeddedServletContainerCustomizer() {
+@Override
+public void customize(ConfigurableEmbeddedServletContainer container) {
+  ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+  ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+  container.addErrorPages(error404Page, error500Page);
+            }
+        };
+    }
+}
+</pre>
+
+<p>需要注意的是，我这种写法是jdk1.6可用的，还有一种写法需要jdk1.7以上版本才行，这里就不举例了。<br>并且我这里是写了一个新的类，我们也可以直接把具体的方法写到启动类那里，效果是一样的，只要都能被spring 扫描到。</p>
+<h2 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h2><p>原本项目中使用了quartz定时任务，使用了大量的xml配置文件，这里就使用schedule替代。<br>不过，这一条虽然列在了这里，但是实际上我觉得可以不用列出来，因为这里使用schedule代替quartz，实际上也是spring原本就有的，并不是有了spring boot之后才出现，具体的我也曾写过相应的博客，例如：<br>spring schedule定时任务（一）：注解的方式<br>只不过，在spring boot中更加的简单，不需要我们再做任何的动作，只需要这个简单的类和注解就ok了：</p>
+<pre>
+@Component
+@EnableScheduling
+public class MySchedule {
+    @Scheduled(cron = "*/2 * * * * ?")
+    public void sTest() {
+        System.out.println(Calendar.getInstance().getTime());
+    }
+}
+</pre>
+
+<h2 id="返回页面"><a href="#返回页面" class="headerlink" title="返回页面"></a>返回页面</h2><p>返回页面，在spring boot中叫引用模板，需要特定的依赖，例如：</p>
+<pre>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+</pre>
+
+<p>当然了，这只是其中一种。<br>引入了相应的依赖后，我们在spring boot项目的resources目录下的templates目录下建立具体的html页面，然后具体的controller中只需要返回相应的html的文件名，即能成功返回页面。<br>例如templates下有index.html文件，在controller中就可以写成这样：</p>
+<pre>
+@RequestMapping("/index")
+public String index(ModelMap map) {
+        map.put("name", "testfsdfdsfdsfsdf");
+        return "index";
+}
+</pre>
+
+<p>不过这里我觉得应该也可以使用modelandview，但并没有尝试，不知是否可行，而且即便可行，在性能上如何也还未曾测试。</p>
+<h2 id="spring-boot-集成activemq，即jms"><a href="#spring-boot-集成activemq，即jms" class="headerlink" title="spring boot 集成activemq，即jms"></a>spring boot 集成activemq，即jms</h2><p>前文中我有说到我们原本的项目中使用了spring 整合activemq，那么改为spring boot后不可能就把activemq扔掉，还需要找到可行的集成方案，可喜的是，spring boot中有jms专门集成activemq。<br>要实现这种集成，我们首先还需要导入jms相应的依赖，创建项目的时候选择jms，会在pom.xml文件中生成如下内容：</p>
+<pre>
+<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-activemq</artifactId>
+</dependency>
+</pre>
+
+<p>使用activemq发送消息需要有消息队列，因此接下来就需要我们生成一个消息队列的配置类，用来指定queue：</p>
+<pre>
+@Configuration
+@EnableJms
+public class ActiveMQConfig {
+    @Bean // 配置一个消息队列
+    public Queue queue() {
+        return new ActiveMQQueue("sample.queue");
+    }
+}
+</pre>
+
+<p>有了队列以后，然后就是发送消息：</p>
+<pre>
+@Service
+public class MQProduceService {
+    @Autowired
+    private JmsMessagingTemplate jmsMessagingTemplate;
+    @Autowired
+    private Queue queue;
+    public void send(String msg) {// 向指定队列中发送消息
+        this.jmsMessagingTemplate.convertAndSend(this.queue, msg);
+    }
+}
+</pre>
+
+<p>就这样简单两步，我们的activemq消息服务器就算是写好了，如果再其他地方调用这个service中对应的方法，就可以实现消息的发送。<br>有了发送端，还需要有接受端，或者说消费端。也是需要先配置队列，因为我这里都写在一个项目中，所以就公用同一个配置就好，具体的消费端代码如下：</p>
+<pre>
+@Service
+public class MQConsumerService {
+    private String text;
+    @JmsListener(destination = "sample.queue") // 监听指定消息队列
+    public void receiveQueue(String text) {
+        this.text = text;
+        System.out.println(text);
+    }
+    public String receive() {
+        return text;
+    }
+}
+</pre>
+
+<p>不论是发送端还是消费端，代码都很简单，为了更直观的看到结果，我编写了一个controller来调用相应的服务实现发送和接受，代码如下：</p>
+<pre>
+@RestController
+public class MQController {
+    @Autowired
+    private MQProduceService produceService;
+    @Autowired
+    private MQConsumerService consumerService;
+    @RequestMapping("/send")
+    public String send() {
+        produceService.send("this is an activemq message");
+        return "send";
+    }
+    @RequestMapping("/receive")
+    public String receive() {
+        String str = consumerService.receive();
+        return str;
+    }
+}
+</pre>
+
+<p>这个代码非常的常规，也就不做多的解释了。</p>
+<h2 id="spring-boot中使用hessian"><a href="#spring-boot中使用hessian" class="headerlink" title="spring boot中使用hessian"></a>spring boot中使用hessian</h2><p>mq分为发送端和消费端，而hessian作为一种webservice，也是一样具有服务端和消费端，不过与mq不同的是，hessian需要在web.xml进行一定的配置。<br>与之前hessian的实现方式一样的是，服务端需要有相应的接口类和实现类，例如：</p>
+<pre>
+public interface HelloWorld {
+    public String hello();
+    public Map<String, String> helloMap();
+}
+</pre>
+
+<pre>
+@Service("helloWorld")
+public class HelloWorldImpl implements HelloWorld {
+    private static final long serialVersionUID = 1L;
+    @Override
+    public String hello() {
+        return "hello hessian";
+    }
+    @Override
+    public Map<String, String> helloMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("message", "hello word!!!!!");
+        return map;
+    }
+}
+</pre>
+
+<p>而不同的是，之前使用web.xml时在web.xml中进行了配置，而在这里则是使用了一个类来暴露接口：</p>
+<pre>
+@Component
+public class HService {
+    @Autowired
+    private HelloWorld helloWorld;
+    @Bean(name = "/springBootDemo/HelloService")
+    public HessianServiceExporter exportHelloService() {
+        HessianServiceExporter exporter = new HessianServiceExporter();
+        exporter.setService(helloWorld);
+        exporter.setServiceInterface(HelloWorld.class);
+        return exporter;
+    }
+}
+</pre>
+
+<p>就这样，在不使用web.xml的情况下我们也一样实现了spring boot和hessian服务端的集成，或者更准确的说，是spring和hessian服务端的集成。<br>而至于客户端的集成，目前我还没有整出可行的方案，因此便只能继续先使用之前xml文件配置的方式，引入这个xml文件然后进行后续的操作，具体的不用xml的方式还需要进一步探索，如果有朋友用过，欢迎指点和交流！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/07/30/springboot1/" data-id="ckbk4ukbe002r0svhcyw9806n" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springboot/" rel="tag">springboot</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2017/09/07/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          使用github和hexo写博客要点记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/26/springcloud4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">springcloud微服务四：服务容错保护Hystrix断路器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建简单的spring-boot-web项目"><span class="toc-number">1.</span> <span class="toc-text">创建简单的spring boot web项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置文件加载类"><span class="toc-number">2.</span> <span class="toc-text">配置文件加载类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用注解给属性赋值"><span class="toc-number">3.</span> <span class="toc-text">使用注解给属性赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用注解给对象赋值："><span class="toc-number">4.</span> <span class="toc-text">使用注解给对象赋值：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#filter过滤器"><span class="toc-number">5.</span> <span class="toc-text">filter过滤器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#listener监听器"><span class="toc-number">6.</span> <span class="toc-text">listener监听器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ERROR错误页面"><span class="toc-number">7.</span> <span class="toc-text">ERROR错误页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定时任务"><span class="toc-number">8.</span> <span class="toc-text">定时任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#返回页面"><span class="toc-number">9.</span> <span class="toc-text">返回页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-boot-集成activemq，即jms"><span class="toc-number">10.</span> <span class="toc-text">spring boot 集成activemq，即jms</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-boot中使用hessian"><span class="toc-number">11.</span> <span class="toc-text">spring boot中使用hessian</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

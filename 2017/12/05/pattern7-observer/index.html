@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>《设计模式》学习笔记7——观察者模式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定义观察者模式是使用频率最高的设计模式之一，也是最容易理解的设计模式之一，这种模式在生活中随处可见。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式》学习笔记7——观察者模式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2017/12/05/pattern7-observer/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="定义观察者模式是使用频率最高的设计模式之一，也是最容易理解的设计模式之一，这种模式在生活中随处可见。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-12-05T07:43:58.000Z">
+<meta property="article:modified_time" content="2018-12-20T01:28:25.289Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-pattern7-observer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/05/pattern7-observer/" class="article-date">
+  <time datetime="2017-12-05T07:43:58.000Z" itemprop="datePublished">2017-12-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      《设计模式》学习笔记7——观察者模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>观察者模式是使用频率最高的设计模式之一，也是最容易理解的设计模式之一，这种模式在生活中随处可见。</p>
+<a id="more"></a>
+<p>观察者模式引用书中的定义如下：</p>
+<blockquote>
+<p>观察者模式(Observer Pattern)：定义对象之间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。观察者模式的别名包括发布-订阅（PublishSubscribe） 模式、模型-视图（Model/View） 模式、源-监听器（Source/Listener）模式或从属者（Dependents） 模式。观察者模式是一种对象行为型模式</p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>观察者模式在生活中随处可见，路口的红绿灯和行人及车辆的关系是一种观察者模式，演员和观众是一种观察者模式，甚至于一个人说话，其他人听，也是一种观察者模式。<br>说白了，就是一个对象发出了某种信号，其他对象会根据这个对象立即作出某些动作或反应（什么也不做也是一种动作和反应）。<br>根据理解，我写了一个新闻网站根据中央气象台气象信息更新各自网站主页天气信息的小例子。</p>
+<h3 id="被观察者"><a href="#被观察者" class="headerlink" title="被观察者"></a>被观察者</h3><p>在这里，中央气象台充当被观察者，各大网站充当观察者，首先我们定义一个被观察者的接口（但从实现观察者模式来说可以不用接口，但为了更好的拓展，这里使用接口编程）。</p>
+<pre>
+package patterntest.observerpattern.subject;
+import java.util.ArrayList;
+import java.util.List;
+import patterntest.observerpattern.observer.WebSite;
+/**
+ *气象台接口
+ *@author tzx
+ *@date 2017年12月5日
+ */
+public interface MyObservatory {
+    /*
+     *存放观察者集合
+     */
+    List<WebSite> weblist = new ArrayList<WebSite>();
+    /**
+     *增加新观察者
+     *@param webSite
+     */
+    public void addWebSite(WebSite webSite);
+    /**
+     *删除观察者
+     *@param webSite
+     */
+    public void removeWebSite(WebSite webSite);
+    /**
+     *发布天气信息
+     */
+    public void pubMsg();
+}
+</pre>
+
+<p>在这个接口中有几个必要因素：</p>
+<ol>
+<li>保存所有观察者对象的集合</li>
+<li>新增观察者对象的方法</li>
+<li>删除观察者对象的方法</li>
+<li>发布信息的方法，也称为通知观察者的方法</li>
+</ol>
+<p>然后写一个实现上述接口的实现类，把抽象方法实现：</p>
+<pre>
+package patterntest.observerpattern.subject;
+import patterntest.observerpattern.observer.WebSite;
+public class WeatherObservatory implements MyObservatory {
+    @Override
+    public void addWebSite(WebSite webSite) {
+        weblist.add(webSite);
+    }
+    @Override
+    public void removeWebSite(WebSite webSite) {
+        weblist.remove(webSite);
+    }
+    @Override
+    public void pubMsg() {
+        for (WebSite webSite : weblist) {
+            webSite.update();
+        }
+    }
+}
+</pre>
+
+<p>add和remove方法应该不需要多说，就是向list集合加元素和删元素。重点在于pubMsg方法，也就是这里的发布天气信息的方法，这是观察者模式的核心所在。<br>在这个方法中，会遍历保存着所有观察者对象的集合，然后调用每个观察者对象的具体行为方法。当然了，这里边的逻辑可以自定义，未必就是通知所有观察者。</p>
+<h3 id="观察者"><a href="#观察者" class="headerlink" title="观察者"></a>观察者</h3><p>有了被观察者，接下来就是创建观察者，在上边的pubMsg方法中，我们调用了WebSite对象的update方法，但是现在还没有定义相应的对象。<br>观察者模式一般是一对多的关系，虽然说实际一对一也是没问题的，但是似乎就有些大材小用了。所以我们这里的观察者就使用多对象，这些对象都是观察者，所以有一个共同的父类：观察者接口。</p>
+<pre>
+package patterntest.observerpattern.observer;
+/**
+ *观察者：网站接口
+ *@author tzx
+ *@date 2017年12月5日
+ */
+public interface WebSite {
+    /**
+     *根据观察到的信息采取行动
+     */
+    public void update();
+}
+</pre>
+
+<p>可以看到观察者接口的定义相对于被观察者就简单多了，只有一个update方法，也就是观察到被观察对象的状态变化后采取的行动。<br>观察者是一个抽象的说法，就需要有更具体的观察者，相对于这里的网站接口，我就给他两个观察者子类：新浪网和腾讯网。</p>
+<pre>
+package patterntest.observerpattern.observer;
+public class Sina implements WebSite {
+    @Override
+    public void update() {
+        System.out.println("新浪天气更新");
+    }
+}
+</pre>
+
+<pre>
+package patterntest.observerpattern.observer;
+public class Tencent implements WebSite {
+    @Override
+    public void update() {
+        System.out.println("腾讯天气更新");
+    }
+}
+</pre>
+
+<p>上边两个观察者做的事太过于简单，所以就不多说了。接下来就模拟新浪网、腾讯网相继开始观察中央气象台的天气信息，然后中央气象台发布新的气象并通知两大网站。</p>
+<pre>
+import patterntest.observerpattern.observer.Sina;
+import patterntest.observerpattern.observer.Tencent;
+import patterntest.observerpattern.observer.WebSite;
+import patterntest.observerpattern.subject.MyObservatory;
+import patterntest.observerpattern.subject.WeatherObservatory;
+import patterntest.observerpattern.subject.WindObservatory;
+/**
+ *观察者模式测试
+ *@author tzx
+ *@date 2017年12月5日
+ */
+public class ObserverTest {
+    public static void main(String[] args) {
+        // 建立中央气象台
+        MyObservatory observatory = new WeatherObservatory();
+        // 创建新浪网
+        WebSite sina = new Sina();
+        // 新浪网开始观察中央气象台信息公告
+        observatory.addWebSite(sina);
+        // 创建腾讯网
+        WebSite tencent = new Tencent();
+        // 腾讯网开始观察中央气象台信息公告
+        observatory.addWebSite(tencent);
+        // 中央气象台发布新的天气信息
+        int i = 0;
+        do {
+        observatory.pubMsg();
+            i++;
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (i < 10);
+    }
+}
+</pre>
+
+<p>上边的测试方法中，先创建了一个中央气象台对象，然后创建新浪网和腾讯网对象并加入到气象观察队列。<br>之后循环10次调用气象台信息发布方法，新浪网对象和腾讯网对象就都会执行自己的update方法。<br>如果以后有新的观察者，例如搜狐网也要根据中央气象台的信息更新网站天气，那么只需要new一个搜狐网对象，然后调用addWebSite方法就行了。</p>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><p>根据上边的实例和分析，观察者模式包含如下一些要点：</p>
+<ol>
+<li>需要一个被观察者，也称作观察目标</li>
+<li>观察目标中需要有一个保存所有观察者对象的集合</li>
+<li>观察目标中需要有增加观察者对象的方法</li>
+<li>观察目标中需要有删除观察者对象的方法</li>
+<li>观察目标中需要有发布信息，也称作通知观察者对象的方法</li>
+<li>观察者需要有一个提供给被观察者的方法</li>
+</ol>
+<p>由上边总结的一些要点，应该很容易就写出一个观察者模式了，但是在观察者模式中还有一些需要特别说明的地方：</p>
+<ol>
+<li>java提供了对观察者模式的支持，java.util包中有关于观察者模式的两个接口Observer和Observable。所以要写一个观察目标的类，可以实现Observable接口；要写一个观察者的类，可以实现Observer接口。</li>
+<li>观察者模式的实现逻辑上，可能与现实中的某些理解稍有差异。就如上边气象台的例子，原则上来说，气象台并不知道有哪些网站在观察气象信息，网站更新天气信息的主动权在网站手上。但是在代码实现观察者模式的时候，却是由观察目标来通知观察者的，观察目标那里需要保存所有观察者对象。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>观察者模式不论是理解还是具体实现都比较简单，可能也是因为简单，所以生活中随处可见，也可能是因为生活中随处可见，所以理解起来才显得简单。<br>观察者模式中保存了所有观察者对象，当使用抽象编程的时候，只需要维护一个观察者父类的集合，这样以后有了新的观察者，也不用改变观察目标，实现了一定程度的松耦合。<br>但是从上边示例中就可以看到，通知观察者的方法会遍历观察者对象集合，然后依次调用每个观察者对象的相应方法。所以如果这个观察者集合非常大，观察者非常多，或者相应的方法并不能很快结束。则必然影响整体的效率，也会出现数据延迟的问题。<br>同时，虽然可以通过参数传递的方式使观察者知道观察目标的状态，却无法知道观察目标的具体状态具体是如何变化的。</p>
+<p>demo源码可在github下载：<a href="https://github.com/tuzongxun/mypattern" target="_blank" rel="noopener">https://github.com/tuzongxun/mypattern</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2017/12/05/pattern7-observer/" data-id="ckbk4ukb700290svh8rdvgw08" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2018/01/05/pattern8-facade/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          《设计模式》学习笔记8——外观模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/04/pattern6-prototype/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">《设计模式》学习笔记6——原型模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解"><span class="toc-number">2.</span> <span class="toc-text">理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#被观察者"><span class="toc-number">2.1.</span> <span class="toc-text">被观察者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#观察者"><span class="toc-number">2.2.</span> <span class="toc-text">观察者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要点"><span class="toc-number">3.</span> <span class="toc-text">要点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

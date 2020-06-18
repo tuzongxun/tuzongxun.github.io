@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>前后台打通之springboot后台要点记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接着之前的vue前端项目搭建成功，在实现了一些基本的页面功能之后，现在再搭建一下基础的后台，从而实现前后台打通，以下是整个打通过程中的一些关键点及感悟记录： springboot的后台项目搭建比较简单，如果单纯的实现接口的话，实际上没什么好说的，但是为了看起来不那么单调，就先暂时集成了一些非常基础的组件，例如logback、mybatis、lombok等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前后台打通之springboot后台要点记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/03/05/tzxblog6/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="接着之前的vue前端项目搭建成功，在实现了一些基本的页面功能之后，现在再搭建一下基础的后台，从而实现前后台打通，以下是整个打通过程中的一些关键点及感悟记录： springboot的后台项目搭建比较简单，如果单纯的实现接口的话，实际上没什么好说的，但是为了看起来不那么单调，就先暂时集成了一些非常基础的组件，例如logback、mybatis、lombok等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-05T10:09:42.000Z">
+<meta property="article:modified_time" content="2020-03-14T00:33:23.087Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="业余项目">
+<meta property="article:tag" content="tzxblog">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-tzxblog6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/05/tzxblog6/" class="article-date">
+  <time datetime="2020-03-05T10:09:42.000Z" itemprop="datePublished">2020-03-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      前后台打通之springboot后台要点记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>接着之前的vue前端项目搭建成功，在实现了一些基本的页面功能之后，现在再搭建一下基础的后台，从而实现前后台打通，以下是整个打通过程中的一些关键点及感悟记录：</p>
+<p>springboot的后台项目搭建比较简单，如果单纯的实现接口的话，实际上没什么好说的，但是为了看起来不那么单调，就先暂时集成了一些非常基础的组件，例如logback、mybatis、lombok等。</p>
+<a id="more"></a>
+
+<h2 id="mybatis关联查询和特定标签使用"><a href="#mybatis关联查询和特定标签使用" class="headerlink" title="mybatis关联查询和特定标签使用"></a>mybatis关联查询和特定标签使用</h2><p>springboot操作mysql实际有更简单的方案，例如jpa，但是考虑到这个项目是为了巩固工作中的技术，并期望在实现的过程中发现更多知识盲点，所以还是选用mybatis-plus。<br>mybatis-plus基本和mybatis是一样的，常规操作也都差不多，并且目前涉及的业务也都不是太复杂，所以这里也仅是对关联查询进行一个记录。<br>例如系统需要查询博客列表，而博客列表除了博客本身信息外，还需要基本的用户信息以及访问量等信息，所以这里其实就涉及到了另外两个信息的关联查询，除非选择在后台代码中循环遍历查询，这肯定是不可取的。<br>对于关联查询，主要是返回结果的关联映射，时间长了不写可能就忘记细节，关键在于association 标签的使用，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;resultMap id&#x3D;&quot;blogResultMap&quot;</span><br><span class="line">		type&#x3D;&quot;com.tzx.blog.entity.BlogInfo&quot;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;id&quot; jdbcType&#x3D;&quot;VARCHAR&quot; property&#x3D;&quot;id&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;title&quot; jdbcType&#x3D;&quot;VARCHAR&quot; property&#x3D;&quot;title&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;desc&quot; jdbcType&#x3D;&quot;VARCHAR&quot; property&#x3D;&quot;desc&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;content&quot; jdbcType&#x3D;&quot;VARCHAR&quot; property&#x3D;&quot;content&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;type&quot; jdbcType&#x3D;&quot;VARCHAR&quot; property&#x3D;&quot;type&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;cate_id&quot; jdbcType&#x3D;&quot;VARCHAR&quot; property&#x3D;&quot;cateId&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;create_time&quot; jdbcType&#x3D;&quot;TIMESTAMP&quot; property&#x3D;&quot;createTime&quot; &#x2F;&gt;</span><br><span class="line">		&lt;result column&#x3D;&quot;update_time&quot; jdbcType&#x3D;&quot;TIMESTAMP&quot; property&#x3D;&quot;updateTime&quot; &#x2F;&gt;</span><br><span class="line">		&lt;association property&#x3D;&quot;userInfo&quot; javaType&#x3D;&quot;com.tzx.blog.entity.UserInfo&quot;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;id&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;id&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;name&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;name&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;img&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;img&quot;&#x2F;&gt;</span><br><span class="line">        	&lt;&#x2F;association&gt;</span><br><span class="line">       		&lt;association property&#x3D;&quot;blogDetailInfo&quot; javaType&#x3D;&quot;com.tzx.blog.entity.BlogDetailInfo&quot;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;id&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;id&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;blogId&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;blog_id&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;fabulousCount&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;fabulous_count&quot;&#x2F;&gt;</span><br><span class="line">           		 &lt;result property&#x3D;&quot;readCount&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;read_count&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;commentCount&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;comment_count&quot;&#x2F;&gt;</span><br><span class="line">           		&lt;result property&#x3D;&quot;forwardCount&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;forward_count&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;cateType&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;cate_type&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;power&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;power&quot;&#x2F;&gt;</span><br><span class="line">            		&lt;result property&#x3D;&quot;blogType&quot; jdbcType&#x3D;&quot;VARCHAR&quot; column&#x3D;&quot;blog_type&quot;&#x2F;&gt;</span><br><span class="line">        	&lt;&#x2F;association&gt;</span><br><span class="line">&lt;&#x2F;resultMap&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="跨域问题"><a href="#跨域问题" class="headerlink" title="跨域问题"></a>跨域问题</h2><p>使用vue和springboot前后端分离模式，前后台都要独立部署，这也就必然不可能在一台机器上使用一样的端口号，所以我后台使用8089，前台vue使用8088。<br>这样一来，当我前台访问后台接口时会抛出异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource.</span><br></pre></td></tr></table></figure>
+
+<p>实际上就是跨域访问的问题，对于springboot项目，目前我了解到的解决方式有两种，一种是注解方式，一种是配置方式。<br>注解方式又分为类注解和方法注解，类注解的意思就是在controller类上边加注解，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@CrossOrigin(value &#x3D; &quot;http:&#x2F;&#x2F;localhost:8088&quot;)</span><br><span class="line">@RequestMapping(&quot;&#x2F;tzxblog&#x2F;blog&quot;)</span><br><span class="line">public class BlogController &#123;</span><br></pre></td></tr></table></figure>
+
+<p>方法注解就是在要访问的接口方法上加注解，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@CrossOrigin(value &#x3D; &quot;http:&#x2F;&#x2F;localhost:8088&quot;)</span><br><span class="line">@GetMapping(&quot;&#x2F;category-list&quot;)</span><br><span class="line">public TzxResVO&lt;List&lt;CategoryInfo&gt;&gt; findCategories</span><br></pre></td></tr></table></figure>
+
+<p>使用方法就如上边所示，使用<code>@CrossOrigin</code>注解，然后填上允许跨域的域名、端口。<br>那么上边用法的弊端就是哪里需要跨域，那里就要加注解，可能会需要加很多。<br>所以也可以使用下边配置的方式，在一个地方进行统一的管理，代码示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class WebMvcConfig implements WebMvcConfigurer &#123;</span><br><span class="line">	@Override</span><br><span class="line">	public void addCorsMappings(CorsRegistry registry) &#123;</span><br><span class="line">	registry.addMapping(&quot;&#x2F;**&quot;).allowedOrigins(&quot;http:&#x2F;&#x2F;localhost:8088&quot;).allowedMethods(&quot;*&quot;).allowedHeaders(&quot;*&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边这个配置类，能解决跨域的问题，同时还能解决静态资源访问，例如图片访问的问题。</p>
+<h2 id="图片资源访问"><a href="#图片资源访问" class="headerlink" title="图片资源访问"></a>图片资源访问</h2><p>常规来说，博客有作者，作者有头像，加载博客列表可能就同时加载了作者昵称和头像。<br>对于头像获取的实现方式可能是是多样化的，有的直接以流的方式提供，有的可能以ftp的方式提供，有的可能就像我这里一样直接使用静态资源，只是需要进行一定的配置进行映射，从而实现网络路径和本地文件路径的对接。<br>这个功能实现起来也不难，只需在上边配置类中增加一个重写方法即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void addResourceHandlers(ResourceHandlerRegistry registry) &#123;</span><br><span class="line">		registry.addResourceHandler(&quot;&#x2F;static&#x2F;**&quot;).addResourceLocations(&quot;file:&#x2F;&#x2F;&#x2F;&quot; + imgConfig.getFilepath());</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边代码的意思，就是当网络访问/static/下的资源时，系统访问本地某个文件路径的内容，就是一层虚拟服务的映射。<br>上边文件路径使用配置的方式，没有在代码中写死，所以就又用到了spring属性配置的内容。</p>
+<h2 id="自定义属性配置"><a href="#自定义属性配置" class="headerlink" title="自定义属性配置"></a>自定义属性配置</h2><p>一般系统开发可能是在windows系统中，这个文件系统是以各种盘符开头，而后期的使用则很可能是部署在linux环境，盘符则又是一种规则，所以代码中写死肯定是不明智的。<br>因此，我直接把路径配在了springboog的配置文件<code>application-dev.yml</code>中，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imgs:</span><br><span class="line">  filepath: E:&#x2F;img&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>然后在代码中使用<code>@Value</code>获取时，会发现启动都报错，实际上是还需要引入一定的依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt; org.springframework.boot &lt;&#x2F;groupId&gt;</span><br><span class="line">	&lt;artifactId&gt; spring-boot-configuration-processor &lt;&#x2F;artifactId&gt;</span><br><span class="line">	&lt;optional&gt; true &lt;&#x2F;optional&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后注入配置属性的代码指定配置内容，就可以在代码中读取自定义配置了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">@ConfigurationProperties(prefix &#x3D; &quot;imgs&quot;)</span><br><span class="line">@Data</span><br><span class="line">public class ImgConfig &#123;</span><br><span class="line">	&#x2F;&#x2F; 上传路径</span><br><span class="line">	private String filepath;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于lombok"><a href="#关于lombok" class="headerlink" title="关于lombok"></a>关于lombok</h2><p>在上边的自定义配置映射类中，有一个<code>@Data</code>注解，这个注解是lombok的功能，lombok可以简化开发工作，替代自己写的get、set以及toString等方法。<br>除了<code>@Data</code>注解，我们目前常用的还有<code>@Slf4j</code>，用来代替常规的自定义log变量方式。<br>但是lombok也有一定的弊端存在，例如有父子继承关系的对象的equals方法就有一定的问题，同时，一旦使用了lombok，那么所有用这个项目的人也都必须安装lombok插件，实际上是很不友好的。</p>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p>项目代码和文档均以github托管，地址如下：<br><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/03/05/tzxblog6/" data-id="ckbk4ukbv003x0svhd1l22wcu" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/03/13/tzxblog7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          前后台打通之vue和vant前端要点及设计问题记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/01/tzxblog5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">vue前端项目搭建和要点记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mybatis关联查询和特定标签使用"><span class="toc-number">1.</span> <span class="toc-text">mybatis关联查询和特定标签使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跨域问题"><span class="toc-number">2.</span> <span class="toc-text">跨域问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图片资源访问"><span class="toc-number">3.</span> <span class="toc-text">图片资源访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义属性配置"><span class="toc-number">4.</span> <span class="toc-text">自定义属性配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于lombok"><span class="toc-number">5.</span> <span class="toc-text">关于lombok</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目地址"><span class="toc-number">6.</span> <span class="toc-text">项目地址</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

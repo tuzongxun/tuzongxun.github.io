@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>tzxblog博客系统-概要设计 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="v1.0系统概述tzxblog博客系统旨在创建一个可持续迭代的，以博客系统为基础并辅以文件下载、论坛讨论、商城等功能为一体的综合性站点。重在持续性迭代，巩固工作中主流技术的同时，练习工作中未使用但主流或者不可或缺的技术。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tzxblog博客系统-概要设计">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/02/01/tzxblog3/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="v1.0系统概述tzxblog博客系统旨在创建一个可持续迭代的，以博客系统为基础并辅以文件下载、论坛讨论、商城等功能为一体的综合性站点。重在持续性迭代，巩固工作中主流技术的同时，练习工作中未使用但主流或者不可或缺的技术。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/tzxblog/tzxblog%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.png">
+<meta property="article:published_time" content="2020-02-01T06:09:42.000Z">
+<meta property="article:modified_time" content="2020-02-01T02:34:09.995Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="业余项目">
+<meta property="article:tag" content="tzxblog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/tzxblog/tzxblog%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-tzxblog3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/01/tzxblog3/" class="article-date">
+  <time datetime="2020-02-01T06:09:42.000Z" itemprop="datePublished">2020-02-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tzxblog博客系统-概要设计
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="v1-0"><a href="#v1-0" class="headerlink" title="v1.0"></a>v1.0</h2><h3 id="系统概述"><a href="#系统概述" class="headerlink" title="系统概述"></a>系统概述</h3><p>tzxblog博客系统旨在创建一个可持续迭代的，以博客系统为基础并辅以文件下载、论坛讨论、商城等功能为一体的综合性站点。<br/><br>重在持续性迭代，巩固工作中主流技术的同时，练习工作中未使用但主流或者不可或缺的技术。</p>
+<a id="more"></a>
+
+<hr>
+<h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h3><p>系统整体采用前后台分离思想，后台以springboot为基础框架，前台以vue为基础技术，辅以redis缓存、mysql存储、nginx转发以及ssl通信，力求软件生命周期内涉及开发的内容均可得到提现。<br><img src="/images/tzxblog/tzxblog%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.png" alt="技术架构"></p>
+<hr>
+<h3 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h3><h4 id="代码版本"><a href="#代码版本" class="headerlink" title="代码版本"></a>代码版本</h4><p>前后台代码均托管github，以不同分支管理大的版本，遵循如下要求：</p>
+<blockquote>
+<p>master：最新可运行版本，从develop合并；<br>develop: 最新开发版本，可能不能运行，主要作用是代码备份，防止本地最新文件丢失；<br>realese-X.X: X.X为数字泛指，如1.0、1.1、2.0，作为稳定大功能的发布版本，由master拉出；<br>tags：tag版本作为废弃不用的版本存档。</p>
+</blockquote>
+<h4 id="文档版本"><a href="#文档版本" class="headerlink" title="文档版本"></a>文档版本</h4><p>项目周期内各种文档，尽量以两种方式呈现，分别是博客文章和docx文档，类似接口文档、数据库这种不太好博客展示的，就仅以附件文档的格式输出。<br/><br>其中docx文档存放于项目doc目录下，和代码一起托管于github，同时docx文档每次修改变更均要变更版本号并标注具体变更说明。</p>
+<hr>
+<h3 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h3><p>详见doc中数据库设计和sql脚本，后续补充。</p>
+<hr>
+<h3 id="缓存设计"><a href="#缓存设计" class="headerlink" title="缓存设计"></a>缓存设计</h3><p>为提高系统性能，使用频率高的数据需要存放于redis缓存中。</p>
+<hr>
+<h3 id="安全设计"><a href="#安全设计" class="headerlink" title="安全设计"></a>安全设计</h3><p>对于接口层面，前后台接口需要有签名校验，防止网络攻击。<br/><br>对于如密码这种敏感数据，传输和存储均应加密处理。<br/><br>系统前期可使用http协议，功能稳定后采用自签名证书和https交互。</p>
+<hr>
+<h3 id="功能设计"><a href="#功能设计" class="headerlink" title="功能设计"></a>功能设计</h3><h4 id="首页"><a href="#首页" class="headerlink" title="首页"></a>首页</h4><ol>
+<li>用户访问首页，前台向后台页面发起首页需要的各种请求：分类列表、文章列表、推荐列表，列表条数和推荐列表条数均可配置，默认分别为10和5；</li>
+<li>后台收到请求后查询redis缓存或者mysql数据库，组装数据响应前台；</li>
+<li>前台展示首页相关内容；</li>
+<li>成功进入首页后，分类列表、文章列表、推荐列表、导航按钮均可进行点击后进入具体的文章页、功能页。</li>
+</ol>
+<h4 id="文章详情"><a href="#文章详情" class="headerlink" title="文章详情"></a>文章详情</h4><ol>
+<li>用户点击文章列表、推荐列表具体文章，前台根据文章id向后台发起文章详情查询；</li>
+<li>后台收到请求后查询redis或者mysql，组装数据后响应前台；</li>
+<li>文章详情包含文章内容和阅读量、评论数、评论列表分页；</li>
+<li>文章详情页面三栏布局，顶部导航，下左方用户信息，下右方文章详情。</li>
+</ol>
+<h4 id="用户基础信息"><a href="#用户基础信息" class="headerlink" title="用户基础信息"></a>用户基础信息</h4><ol>
+<li>文章详情左侧显示用户基本信息，用户头像、昵称、简介、签名、以及用户文章分类和归档等信息；</li>
+<li>点击用户头像或昵称均可进入用户个人首页。</li>
+</ol>
+<h4 id="个人首页"><a href="#个人首页" class="headerlink" title="个人首页"></a>个人首页</h4><ol>
+<li>个人首页整体布局和文章详情类似，把文章详情区域的内容替换为文章列表。</li>
+</ol>
+<h4 id="文章评论"><a href="#文章评论" class="headerlink" title="文章评论"></a>文章评论</h4><ol>
+<li>文章详情末尾展示评论框，可输入文字评论；</li>
+<li>评论框下方展示评论列表，评论列表条数可配置，默认展示5条，评论必须登录。</li>
+</ol>
+<h4 id="分类查询"><a href="#分类查询" class="headerlink" title="分类查询"></a>分类查询</h4><ol>
+<li>个人首页或首页点击分类列表中的具体分类，前台向后台发起分类文章查询；</li>
+<li>后台查询具体分类的文章分页列表后，返回前台；</li>
+<li>前台在个人首页的下右方主区域或者首页的下中区展示存档文章列表。</li>
+</ol>
+<h4 id="存档查询"><a href="#存档查询" class="headerlink" title="存档查询"></a>存档查询</h4><ol>
+<li>个人首页点击存档列表中的具体月份，前台向后台发起存档文章查询；</li>
+<li>后台查询具体月份的文章分页列表后，返回前台；</li>
+<li>前台在个人首页的下右方主区域展示存档文章列表。</li>
+</ol>
+<h4 id="文章发布"><a href="#文章发布" class="headerlink" title="文章发布"></a>文章发布</h4><ol>
+<li>用户登录后，在顶部导航栏展示发布文章按钮，点击后进入文章编辑页面；</li>
+<li>文章内容使用markdown格式，编辑完成后点击发布；</li>
+<li>编辑页面包含文章标题、主内容、分类、是否原创、是否公开等信息。</li>
+</ol>
+<h4 id="文章管理"><a href="#文章管理" class="headerlink" title="文章管理"></a>文章管理</h4><ol>
+<li>用户登录后，在顶部导航栏展示文章管理按钮，点击后进入文章列表页面；</li>
+<li>对列表后展示删除、修改、分类、权限等按钮，均可进行编辑。</li>
+</ol>
+<h4 id="文件列表"><a href="#文件列表" class="headerlink" title="文件列表"></a>文件列表</h4><ol>
+<li>用户点击顶部导航中的下载页面，进入下载资源列表页面；</li>
+<li>下载页面展示可下载资源列表，同时提供上传按钮。</li>
+</ol>
+<h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h4><ol>
+<li>用户在文件列表页面可以点击文件上传按钮上传文件；</li>
+<li>上传文件必须登录。</li>
+</ol>
+<h4 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h4><ol>
+<li>文件列表中的文件可以直接下载，不需登录，后期考虑引入积分制。</li>
+</ol>
+<hr>
+<h3 id="通用异常设计"><a href="#通用异常设计" class="headerlink" title="通用异常设计"></a>通用异常设计</h3><p>系统中的异常均需要人工捕获，避免直接出现系统类异常。<br/><br>500、404等均需要有自定义的友好提示，自定义异常尽可能详细，使得前台提示更加清晰。</p>
+<hr>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p>项目代码和文档均以github托管，地址如下：<br><a href="https://github.com/tuzongxun/tzxblog" target="_blank" rel="noopener">https://github.com/tuzongxun/tzxblog</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/02/01/tzxblog3/" data-id="ckbk4ukbr003m0svh43pycrvm" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/02/02/tzxblog4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          tzxblog博客系统-接口文档
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/30/tzxblog2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">tzxblog博客系统-需求及立项说明</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#v1-0"><span class="toc-number">1.</span> <span class="toc-text">v1.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#系统概述"><span class="toc-number">1.1.</span> <span class="toc-text">系统概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#整体架构"><span class="toc-number">1.2.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本控制"><span class="toc-number">1.3.</span> <span class="toc-text">版本控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码版本"><span class="toc-number">1.3.1.</span> <span class="toc-text">代码版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文档版本"><span class="toc-number">1.3.2.</span> <span class="toc-text">文档版本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库设计"><span class="toc-number">1.4.</span> <span class="toc-text">数据库设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存设计"><span class="toc-number">1.5.</span> <span class="toc-text">缓存设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全设计"><span class="toc-number">1.6.</span> <span class="toc-text">安全设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能设计"><span class="toc-number">1.7.</span> <span class="toc-text">功能设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#首页"><span class="toc-number">1.7.1.</span> <span class="toc-text">首页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文章详情"><span class="toc-number">1.7.2.</span> <span class="toc-text">文章详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用户基础信息"><span class="toc-number">1.7.3.</span> <span class="toc-text">用户基础信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#个人首页"><span class="toc-number">1.7.4.</span> <span class="toc-text">个人首页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文章评论"><span class="toc-number">1.7.5.</span> <span class="toc-text">文章评论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类查询"><span class="toc-number">1.7.6.</span> <span class="toc-text">分类查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存档查询"><span class="toc-number">1.7.7.</span> <span class="toc-text">存档查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文章发布"><span class="toc-number">1.7.8.</span> <span class="toc-text">文章发布</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文章管理"><span class="toc-number">1.7.9.</span> <span class="toc-text">文章管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件列表"><span class="toc-number">1.7.10.</span> <span class="toc-text">文件列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件上传"><span class="toc-number">1.7.11.</span> <span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件下载"><span class="toc-number">1.7.12.</span> <span class="toc-text">文件下载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通用异常设计"><span class="toc-number">1.8.</span> <span class="toc-text">通用异常设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目地址"><span class="toc-number">2.</span> <span class="toc-text">项目地址</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

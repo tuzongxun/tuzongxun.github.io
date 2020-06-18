@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>不使用spring的情况下用java原生代码操作mongodb数据库的两种方式 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="由于更改了mongodb3.0数据库的密码，导致这几天storm组对数据进行处理的时候，一直在报mongodb数据库连接不上的异常。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不使用spring的情况下用java原生代码操作mongodb数据库的两种方式">
+<meta property="og:url" content="https://blog.tzxcode.cn/2016/11/07/mongodb1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="由于更改了mongodb3.0数据库的密码，导致这几天storm组对数据进行处理的时候，一直在报mongodb数据库连接不上的异常。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/mongodb/mongo1.png">
+<meta property="article:published_time" content="2016-11-07T07:09:42.000Z">
+<meta property="article:modified_time" content="2019-08-13T07:47:12.629Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="mongodb">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/mongodb/mongo1.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mongodb1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/07/mongodb1/" class="article-date">
+  <time datetime="2016-11-07T07:09:42.000Z" itemprop="datePublished">2016-11-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      不使用spring的情况下用java原生代码操作mongodb数据库的两种方式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>由于更改了mongodb3.0数据库的密码，导致这几天storm组对数据进行处理的时候，一直在报mongodb数据库连接不上的异常。</p>
+<a id="more"></a>
+<p>主要原因实际上是和mongodb本身无关的，因为他们改的是配置文件的密码，而实际上这个密码在代码中根本就没有使用，他们在代码中已经把用户验证信息写死。</p>
+<p>在协助他们解决这个问题的时候，我看到他们代码中在和mongodb数据库交互时使用了已经不被建议使用的方法，于是便抽时间尝试了一下另一种被建议的方式实现各功能。</p>
+<p>当然了，生产环境中用的是mongodb集群，验证时的写法和单机时会略有不同，我这里就只拿单机试验。</p>
+<p>使用原生的Java代码操作mongodb数据库，就不需要和spring集成的那些jar包，只用到了mongodb-java-driver3.0.3.jar，代码如下，一些需要注意的地方也都写在注释中：</p>
+<pre> 
+package monAndMysql;  
+import java.util.ArrayList;  
+import java.util.Date;  
+import java.util.List;  
+import java.util.Set;  
+import org.bson.BsonDocument;  
+import org.bson.BsonString;  
+import org.bson.Document;  
+import org.bson.conversions.Bson;  
+import com.mongodb.BasicDBObject;  
+import com.mongodb.DB;  
+import com.mongodb.DBCollection;  
+import com.mongodb.DBCursor;  
+import com.mongodb.DBObject;  
+import com.mongodb.MongoClient;  
+import com.mongodb.MongoCredential;  
+import com.mongodb.ServerAddress;  
+import com.mongodb.client.FindIterable;  
+import com.mongodb.client.MongoCollection;  
+import com.mongodb.client.MongoCursor;  
+import com.mongodb.client.MongoDatabase;  
+import com.mongodb.client.model.Filters;  
+/** 
+ *mongodb和mysql性能测试  
+ *@author tuzongxun123  
+ */  
+public class MonAndMysqlTest {  
+    public static void main(String[] args) {  
+       mongodbTest();  
+    }  
+    public static void mongodbTest() {  
+       ServerAddress sa = new ServerAddress("192.168.0.7", 27017);  
+       List<MongoCredential> mongoCredentialList = newArrayList<MongoCredential>();  
+       // java代码连接mongodb3.0数据库验证，userName,dbName,password  
+       mongoCredentialList.add(MongoCredential.createMongoCRCredential(  
+              "admin", "admin", "123456".toCharArray()));  
+       MongoClient client = new MongoClient(sa, mongoCredentialList);  
+       // 第一种方式  
+       // 第一种方式获取db，该方法已经不建议使用  
+       DB mongoDB = client.getDB("mongoTest1");  
+       DBCollection collection1 = mongoDB.getCollection("userTest1");  
+       // 这里的数据类型是dbobject  
+       DBObject document1 = new BasicDBObject();  
+       document1.put("name", "mongoTest1");  
+       document1.put("createTime", new Date().getTime());  
+       // 插入数据  
+       collection1.insert(document1);  
+       // 查询数据  
+       DBCursor cursor1 = collection1.find();  
+       System.out.println("第一种方式插入数据的结果：");  
+       while (cursor1.hasNext()) {  
+           DBObject object = cursor1.next();  
+           Set<String> keySet = object.keySet();  
+           for (String key : keySet) {  
+              System.out.println(key + ":" + object.get(key));  
+           }  
+       }  
+       // 更改数据  
+       DBObject query = new BasicDBObject();  
+       DBObject update = new BasicDBObject();  
+       query.put("name", "mongoTest1");  
+       update.put("$set", new BasicDBObject("name", "update1"));  
+       collection1.update(query, update);  
+       System.out  
+           .println("--------------------------------------------------------------------------------------");  
+       System.out.println("第一种方式修改数据的结果：");  
+       DBCursor cursor11 = collection1.find();  
+       while (cursor11.hasNext()) {  
+           DBObject object = cursor11.next();  
+           Set<String> keySet = object.keySet();  
+           for (String key : keySet) {  
+              System.out.println(key + ":" + object.get(key));  
+           }  
+       }  
+       // 删除数据  
+       DBObject query1 = new BasicDBObject();  
+       query1.put("name", "update1");  
+       collection1.remove(query1);  
+       System.out  
+           .println("--------------------------------------------------------------------------------------");  
+       System.out.println("第一种方式删除数据的结果：");  
+       DBCursor cursor12 = collection1.find();  
+       while (cursor12.hasNext()) {  
+           DBObject object = cursor12.next();  
+           Set<String> keySet = object.keySet();  
+           for (String key : keySet) {  
+              System.out.println(key + ":" + object.get(key));  
+           }  
+       }  
+       // 第二种方式  
+       System.out  
+               .println("****************************************************************************");  
+       // 第二种方式获取db及插入数据和查询操作。推荐方式  
+       MongoDatabase database = client.getDatabase("mongoTest2");  
+       // 注意这里的数据类型是document  
+       Document document2 = new Document();  
+       document2.put("name", "mongoTest2");  
+       document2.put("createTime", new Date().getTime());  
+       MongoCollection collection2 = database.getCollection("userTest2");  
+       // 插入数据  
+       collection2.insertOne(document2);  
+       // 查询数据，注意这里直接查询出的结果不是游标，还需要转换  
+       FindIterable<Document> findIterable = collection2.find();  
+       MongoCursor<Document> cursor2 = findIterable.iterator();  
+       System.out.println("第二种方式插入数据的结果：");  
+       while (cursor2.hasNext()) {  
+           Document document = cursor2.next();  
+           Set<String> keySet = document.keySet();  
+           for (String key : keySet) {  
+              System.out.println(key + ":" + document.get(key));  
+           }  
+       }  
+       // 更改数据  
+       Bson filter = Filters.eq("name", "mongoTest2");  
+       BsonDocument update2 = new BsonDocument();  
+       update2.put("$set", new BsonDocument("name", new BsonString("update2")));  
+       collection2.updateOne(filter, update2);  
+       System.out  
+           .println("--------------------------------------------------------------------------------------");  
+       MongoCursor<Document> cursor21 = findIterable.iterator();  
+       System.out.println("第二种方式更改数据的结果：");  
+       while (cursor21.hasNext()) {  
+           Document document = cursor21.next();  
+           Set<String> keySet = document.keySet();  
+           for (String key : keySet) {  
+              System.out.println(key + ":" + document.get(key));  
+           }  
+       }  
+       // 删除数据  
+       Bson filter2 = Filters.eq("name", "update2");  
+       collection2.deleteOne(filter2);  
+       System.out  
+           .println("--------------------------------------------------------------------------------------");  
+       MongoCursor<Document> cursor22 = findIterable.iterator();  
+       System.out.println("第二种方式删除数据的结果：");  
+       while (cursor22.hasNext()) {  
+           Document document = cursor22.next();  
+           Set<String> keySet = document.keySet();  
+           for (String key : keySet) {  
+              System.out.println(key + ":" + document.get(key));  
+           }  
+       }  
+       // 关闭数据库连接  
+       client.close();  
+    }   
+}  
+</pre>
+
+<p>执行main方法后，控制台打印结果如下图所示，证明操作都是没有问题的：<br><img src="/images/mongodb/mongo1.png" alt="结果"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2016/11/07/mongodb1/" data-id="ckbk4ukao001d0svh7iyva4rc" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2016/11/07/java1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          cookie、session和java过滤器理解和使用
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title recent-posts">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/18/zongjie2/">记一次开发过程中的思维转换</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/14/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/13/tzxblog7/">前后台打通之vue和vant前端要点及设计问题记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/05/tzxblog6/">前后台打通之springboot后台要点记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/01/tzxblog5/">vue前端项目搭建和要点记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
