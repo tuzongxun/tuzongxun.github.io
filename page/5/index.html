@@ -102,55 +102,6 @@ var _hmt = _hmt || [];
       <div class="outer">
         <section id="main">
   
-    <article id="post-springcloud5" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/03/springcloud5/" class="article-date">
-  <time datetime="2018-09-03T07:09:42.000Z" itemprop="datePublished">2018-09-03</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/03/springcloud5/">springcloud微服务五：客户端负载均衡ribbon</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="基本概念理解"><a href="#基本概念理解" class="headerlink" title="基本概念理解"></a>基本概念理解</h1><p>ribbon用在客户端，或者说消费端，被称作客户端负载均衡。<br>对于这个称呼，可以解析为三个部分，一个是客户端，一个是负载均衡，然后就是客户端负载均衡。<br>根据个人理解，所有发起请求的一端、去拿东西的一端，都可以称之为客户端或消费端。<br>而负载均衡，一般则是针对于至少两个以上的集群而言，重点在于均衡。从相对论的角度而言，一切都是相对的，那么也就不存在绝对的均衡，因此所谓的均衡就需要一定的标准，如何达到这个标准，则需要一定的控制，即负载均衡策略，也可以称之为规则。<br>对于客户端负载均衡，则可以很好的理解为，这是相对于服务端负载均衡而言。相对于服务端负载均衡而言，客户端负载均衡的好处就在于各个客户端自己实现负载均衡运算，从而降低了服务端的压力。坏处在于客户端要自己实现负载，就需要清楚服务端集群的状态，增加了客户端的复杂度以及多个客户端下可能看起来的功能冗余。</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/09/03/springcloud5/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2018/09/03/springcloud5/" data-id="ckbk547g3003hxwvh9d0gd0gn" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-mysql-jichu15" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/25/mysql-jichu15/" class="article-date">
@@ -187,7 +138,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2018/04/25/mysql-jichu15/" data-id="ckbk547f90024xwvh0rq2fdg5" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2018/04/25/mysql-jichu15/" data-id="ckbk5hswr00258ovhc45x9sfu" class="article-share-link">分享</a>
       
       
       
@@ -236,7 +187,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2018/04/19/wenti/" data-id="ckbk547go004txwvhgd0z6qnb" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2018/04/19/wenti/" data-id="ckbk5hsxx004r8ovh117jfed0" class="article-share-link">分享</a>
       
       
       
@@ -285,7 +236,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2018/04/18/mysql-jichu13/" data-id="ckbk547f5001yxwvh3xkccmpj" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2018/04/18/mysql-jichu13/" data-id="ckbk5hswm001y8ovhhjrddu1v" class="article-share-link">分享</a>
       
       
       
@@ -334,11 +285,60 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2018/04/16/mysql-jichu14/" data-id="ckbk547f70020xwvhcrxr5zgh" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2018/04/16/mysql-jichu14/" data-id="ckbk5hswn00208ovh1cz5eb5r" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-dubbo1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/12/dubbo1/" class="article-date">
+  <time datetime="2018-03-12T07:09:42.000Z" itemprop="datePublished">2018-03-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/12/dubbo1/">dubbo学习——基础环境搭建过程及要点记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>网上关于dubbo的资料其实已经不少了，尤其是还有一个比较全面的官方文档教程。<br>但是正所谓知易行难，很多事不动动手，就总不知道里边的一些细节。<br>虽然早就想学一下dubbo，但是奈何需要学的东西太多，于是就以“工作为主导”的出发点，先学了其他技术。<br>这次，也是基于上边的出发点，我们某个项目需要重构成dubbo的项目，于是便正好从dubbo基础环境搭建开始学一下，并写一篇笔记备忘。<br>这篇笔记大概会包含如下一些内容：<br>1、搭建过程记录<br>2、遇到的问题和解决办法记录，这一点会在搭建过程记录的同时进行说明，不另外指出</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/12/dubbo1/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2018/03/12/dubbo1/" data-id="ckbk5hsva00048ovh2bz57gba" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dubbo/" rel="tag">dubbo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/" rel="tag">zookeeper</a></li></ul>
 
     </footer>
   </div>
@@ -379,10 +379,6 @@ var _hmt = _hmt || [];
       <ul>
         
           <li>
-            <a href="/2020/06/18/zongjie2/">记一次开发过程中的思维转换</a>
-          </li>
-        
-          <li>
             <a href="/2020/03/13/tzxblog7/">前后台打通之vue和vant前端要点及设计问题记录</a>
           </li>
         
@@ -396,6 +392,10 @@ var _hmt = _hmt || [];
         
           <li>
             <a href="/2020/02/02/tzxblog4/">tzxblog博客系统-接口文档</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/01/tzxblog3/">tzxblog博客系统-概要设计</a>
           </li>
         
       </ul>
