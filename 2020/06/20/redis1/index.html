@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>redis系统性学习一：缓存和redis相关基础知识 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="redis其实用了很久了，只是一直局限于基础的使用，都是简单的命令行操作，以及简单的java集成和api调用。对于这样一个分布式场景不可或缺的中间件，还是很有必要系统性的学习和理解一下的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis系统性学习一：缓存和redis相关基础知识">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/06/20/redis1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="redis其实用了很久了，只是一直局限于基础的使用，都是简单的命令行操作，以及简单的java集成和api调用。对于这样一个分布式场景不可或缺的中间件，还是很有必要系统性的学习和理解一下的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/redis/jiagou1.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/redis/jiagou2.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/redis/jiagou3.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/redis/jiagou4.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/redis/jiagou5.png">
+<meta property="article:published_time" content="2020-06-20T14:09:42.000Z">
+<meta property="article:modified_time" content="2020-06-20T14:17:55.335Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/redis/jiagou1.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，现居武汉，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-redis1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/20/redis1/" class="article-date">
+  <time datetime="2020-06-20T14:09:42.000Z" itemprop="datePublished">2020-06-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis系统性学习一：缓存和redis相关基础知识
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>redis其实用了很久了，只是一直局限于基础的使用，都是简单的命令行操作，以及简单的java集成和api调用。<br>对于这样一个分布式场景不可或缺的中间件，还是很有必要系统性的学习和理解一下的。</p>
+<a id="more"></a>
+
+<h2 id="redis是什么"><a href="#redis是什么" class="headerlink" title="redis是什么"></a>redis是什么</h2><p>提到redis，很多人可能都知道这是一个缓存，并且由于支持持久化存储，也有人叫它缓存数据库。<br>redis一般用作缓存，但是用作缓存的却不止redis这一个，记得我刚入行的时候，用的缓存其实是memcached。<br>memcached和redis一样，都是基于K:V和内存的，但是不同的是，memcached的value只支持String类型，而redis的value却支持5种数据类型。同时，redis还支持本地方法，以及持久化存储。<br>不论是更多的数据类型，还是本地方法，都使得redis的应用场景相较memcache更广泛、更方便。</p>
+<h2 id="缓存的作用"><a href="#缓存的作用" class="headerlink" title="缓存的作用"></a>缓存的作用</h2><p>缓存更多的意义应该能够理解为暂存，存的当然就是数据。<br>对于任何一个软件系统来说，必须是有数据才会有实际的意义，不论这个数据来源于数据采集、用户输入、静态定义、初始化导入还是网络传输。<br>不管是何种数据来源，大多数系统都会选择存储一定的数据，存储方式通俗的讲可能有数据库、文件、内存、缓存，但是仔细想想会发现其实应该就是两种。<br>数据库的持久化存储最终其实也是以文件的方式存储，只不过数据库存储数据的文件和普通文本不一样而已。<br>缓存其实也是基于内存的，只是通常所说的缓存基本都是基于一定中间件，例如memcached和redis，而拿java开发语言来说，如map、list、array这些容器，也能存储数据，不过是一般直接称作内存而已。<br>这两种存储，涉及到不同的硬件，一是硬盘，一是内存，两种不同的硬件支持的存储容量和存取速度不一样，也就直接影响了两种数据存取方式的差异。<br>内存更快，也就使得缓存在高性能的业务场景下必不可少了。</p>
+<h2 id="分布式的理解"><a href="#分布式的理解" class="headerlink" title="分布式的理解"></a>分布式的理解</h2><p>分布式是个现在很火的概念，开头也说了redis是分布式场景下现在不可或缺的一个中间件。<br>那么分布式到底是什么呢，想了想，似乎不太容易一两句话说清楚。<br>简单的说，分布式系统就是相对于传统的单体应用，进行了一定的拆分，从而实现了多点处理或者多点部署，从架构层面加上了负载均衡。<br>传统的单体应用，所有的功能都在一起，高度的耦合，架构可能如下：</p>
+<p><img src="/images/redis/jiagou1.png" alt="jiagou1"></p>
+<p>这种架构维护起来非常简单，对于java来说就是一个project，开发完了往tomcat等服务器里一扔。<br>但是由于数据库的操作总是涉及到磁盘的io，所以一旦用户量和请求量多了，数据库就成了系统的瓶颈，于是这种系统进一步发展为数据库集群模式，如下图：</p>
+<p><img src="/images/redis/jiagou2.png" alt="jiagou1"></p>
+<p>那么这种架构是否就算是分布式了呢？在没有一个绝对的定义下，我觉得应该某种程度来讲就已经算了，只不过这是局部的分布式。<br>这时候可能就有一个疑惑，分布式和分部式，是不是一样的东西，因为乍一看起来，这就是数据库加了节点部署，可能是主从集群，可能是副本集，也可能是分片。<br>数据库加节点，一定程度上解决了数据库性能问题，但是这不是唯一的解决方案，另一个技术就是缓存。<br>本人从事软件工作也才五六年而已，因此究竟是数据库集群先出现，还是缓存技术先出现，还真不是很确定，只知道从目前的的多数系统来说，数据层面可能都是数据库集群和缓存同时存在，于是整个系统可能进一步发展为如下所示：</p>
+<p><img src="/images/redis/jiagou3.png" alt="jiagou2"></p>
+<p>经过互联网进一步发展，网络用户越来越多，硬件性能也越来越好，再加上缓存的加入，最终数据库的瓶颈在各方面影响下，不再是瓶颈，而后台系统本身的性能以及健壮性就成了问题。<br>在计算机中，一个应用是一个进程，由cpu管理，一个进程本身的资源和性能肯定是有限的，当各种功能模块都在一个应用中时，性能和可用性都会互相影响，于是应用本身的多节点部署，再借助负载均衡，就演变成了新的架构模式：</p>
+<p><img src="/images/redis/jiagou4.png" alt="jiagou3"></p>
+<p>这种架构，严格来讲只能算是部署架构，是原本的单节点应用多节点部署，再使用硬件负载均衡F5或者软件负载均衡nginx实现请求的路由转发。<br>这种架构，看起来，从开发层面来讲，没有太大的区别。但实际上多节点的部署必然涉及到数据的共享，从某种程度而言，这时候用到的缓存如果是redis，可能就还会使用redis保证某些数据的一致性。<br>这种架构一定程度上解决了大量用户和大量请求时处理不过来的问题，但是从开发和代码维护等各方面考虑，系统各功能本身的耦合性依旧太高，于是系统本身再进一步拆分，从单体应用演变成模块化的多点应用：</p>
+<p><img src="/images/redis/jiagou5.png" alt="jiagou5"></p>
+<p>系统从单体按模块拆分成不同的应用，这时候新的问题除了数据共享之外，不同应用间的交互也是问题，可以是单纯的http，也可以是性能更好的rpc远程过程调用，从我以往经历的项目来看，都是存在的。<br>但是不论哪种，如果都是单纯的开发自己实现，其实还是会显得麻烦。于是进一步就出现了分布式注册中心，以及微服务这些架构，在我看来，其实就是更好的解决了应用模块化拆分，和应用间信息交互。<br>单体应用拆分多点应用，各模块多点部署，消息队列及缓存等中间件进一步提升系统可用性，加上各种负载均衡的路由分发，以及最后的数据分析和日志分析及运维管理，就组成了现在这种架构更加复杂的分布式架构和分布式系统。</p>
+<h2 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h2><p>说到分布式，学习redis，一开始有两个重要的概念，即并发和并行，这两个词是很有区别的。在上边的架构演进图中，其实也可以看到。<br>首先，有两个客户端，同时发起请求，其实这就是并发。那么顾名思义，高并发其实就是非常多的客户端在一段时间内发起大量的请求。<br>而并行，实际可以理解为同样的功能多点部署，同时运行，并行来处理同样的请求。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/06/20/redis1/" data-id="ckbnq931i002lzkvh2crf6w8n" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/19/hexo2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">hexo博客迁移记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis是什么"><span class="toc-number">1.</span> <span class="toc-text">redis是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缓存的作用"><span class="toc-number">2.</span> <span class="toc-text">缓存的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式的理解"><span class="toc-number">3.</span> <span class="toc-text">分布式的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发和并行"><span class="toc-number">4.</span> <span class="toc-text">并发和并行</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
