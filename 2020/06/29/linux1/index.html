@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>VMware虚拟机Linux系统NAT模式网络配置及虚拟机克隆要点 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="VMware虚拟机及Linux系统，实际安装过多次，但一直都是网上搜一篇傻瓜式教程，然后几乎不假思索的装完。无论是VMware本身，还是在VMware里安装虚拟机，还是在虚拟机里安装Linux系统，应该都是比较简单的。但是个人很多次的安装，以及了解到的其他一些同事安装，都经常会卡在网络上，安装完之后翻来覆去就是连不上网，然后可能就再不断的搜索和尝试，实际还都是盲人摸象，再来一次的时候又是各种问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VMware虚拟机Linux系统NAT模式网络配置及虚拟机克隆要点">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/06/29/linux1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="VMware虚拟机及Linux系统，实际安装过多次，但一直都是网上搜一篇傻瓜式教程，然后几乎不假思索的装完。无论是VMware本身，还是在VMware里安装虚拟机，还是在虚拟机里安装Linux系统，应该都是比较简单的。但是个人很多次的安装，以及了解到的其他一些同事安装，都经常会卡在网络上，安装完之后翻来覆去就是连不上网，然后可能就再不断的搜索和尝试，实际还都是盲人摸象，再来一次的时候又是各种问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/linux/net.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/linux/net2.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/linux/net3.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/linux/net4.png">
+<meta property="og:image" content="https://blog.tzxcode.cn/images/linux/net5.png">
+<meta property="article:published_time" content="2020-06-29T14:09:42.000Z">
+<meta property="article:modified_time" content="2020-06-30T01:16:33.576Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.tzxcode.cn/images/linux/net.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，现居武汉，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/29/linux1/" class="article-date">
+  <time datetime="2020-06-29T14:09:42.000Z" itemprop="datePublished">2020-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      VMware虚拟机Linux系统NAT模式网络配置及虚拟机克隆要点
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>VMware虚拟机及Linux系统，实际安装过多次，但一直都是网上搜一篇傻瓜式教程，然后几乎不假思索的装完。<br>无论是VMware本身，还是在VMware里安装虚拟机，还是在虚拟机里安装Linux系统，应该都是比较简单的。<br>但是个人很多次的安装，以及了解到的其他一些同事安装，都经常会卡在网络上，安装完之后翻来覆去就是连不上网，然后可能就再不断的搜索和尝试，实际还都是盲人摸象，再来一次的时候又是各种问题。<br>之前的安装，网络都是选的桥接模式，这一次也是根据一定的教程，选择了NAT模式，与之前不同的是，这次所掌握的内容可以保证以后的安装都不再受网络困扰。</p>
+<a id="more"></a>
+
+<blockquote>
+<p>网络配置本身，不论是windows，还是Linux，其实大的来说都分两步，第一步就是找到网卡配置的位置，第二步就是配置网络。</p>
+</blockquote>
+<h2 id="windows中网络配置"><a href="#windows中网络配置" class="headerlink" title="windows中网络配置"></a>windows中网络配置</h2><p>windows习惯于图形界面的操作，一般步骤是：</p>
+<ol>
+<li>电脑右下角网络图标位置，右键然后选择“打开网络和internet设置”；</li>
+<li>选择以太网或者其他具体网络类型；</li>
+<li>选择更改适配器选项；</li>
+<li>以上出现的界面中会有很多种网卡配置，如果选在的是以太网，这里就双击打开以太网那一项；</li>
+<li>点击属性，然后再双击“internet 协议配置4”，这里就是ipv4的配置。</li>
+<li>在ipv4配置界面，就可以选择是自动获取ip地址和dns地址，还是手动配置静态的ip以及dns这些。</li>
+</ol>
+<p>上边前3部可以理解为找到网卡配置位置，后三步就可以理解为是对网卡的配置。对于windows系统来说，没太注意这个细节，似乎是默认的自动获取可以不用配置。</p>
+<h2 id="VMware中Linux网络配置"><a href="#VMware中Linux网络配置" class="headerlink" title="VMware中Linux网络配置"></a>VMware中Linux网络配置</h2><p>Linux系统也有图形界面，但是对于我们这些用这个系统的大部分人来说，可能更习惯也更习惯命令行操作。<br>在命令行操作模式下，网卡配置大的来说依然是和windows一样分为找网卡配置位置和配置网络两个步骤。</p>
+<h3 id="网卡配置文件位置"><a href="#网卡配置文件位置" class="headerlink" title="网卡配置文件位置"></a>网卡配置文件位置</h3><p>lcentos 系统中网卡配置文件位置在/etc/sysconfig/network-scripts目录中，个人使用的话，直接就用ifcfg-eth0这个文件即可。</p>
+<h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><p>刚安装好的Linux系统，打开上边的网卡配置，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;eth0</span><br><span class="line">HWADDR&#x3D;00:0C:29:A4:2A:31</span><br><span class="line">TYPE&#x3D;Ethernet</span><br><span class="line">UUID&#x3D;da6741e2-9b2c-464f-9a5b-cbe65402e21c</span><br><span class="line">ONBOOT&#x3D;no</span><br><span class="line">NM_CONTROLLED&#x3D;yes</span><br><span class="line">BOOTPORTO&#x3D;dhcp</span><br></pre></td></tr></table></figure>
+
+<p>以上各项含义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DEVICE：网卡的名字</span><br><span class="line">HWADDR：HWADDR HardWare Address 硬件地址 MAC地址</span><br><span class="line">TYPE：网络类型 Ethernet以太网</span><br><span class="line">UUID：唯一编号</span><br><span class="line">ONBOOT：在开机或重启网卡的时候是否启动网卡</span><br><span class="line">NM_CONTROLLED：是否受network程序管理</span><br><span class="line">BOOTPROTO：网卡获取ip地址的方式，分为dhcp自动获取ip地址，none固定的ip地址，static固定的ip地址</span><br></pre></td></tr></table></figure>
+
+<p>对于上述配置，要改成NAT模式，先把ONBOOT的值改为yes，然后需要把ip获取方式改为静态，即static.<br>如果后边需要克隆当前虚拟机，最好是把HWADDR和UUID都删掉。这两个本身就是保证虚拟机网络的唯一性，如果不删，就导致克隆后的网卡和唯一编号重复，可能导致无法上网。</p>
+<p>昨晚上述修改之后，既然是静态ip，就需要做静态ip相关的配置，要再加四项配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IPADDR：设置的静态IP</span><br><span class="line">NETMASK：子网掩码</span><br><span class="line">GATEWAY：网关</span><br><span class="line">DNS：dns解析地址</span><br></pre></td></tr></table></figure>
+
+<p>上述四个配置，DNS比较好选，一般是<code>114.114.114.114</code>，这是国内第一个、全球第三个开放的DNS服务地址。<br>DNS可以配置多个，所以这里可以配成<code>DNS1=114.114.114.114</code>。</p>
+<p>剩下的几个怎么配置就比较关键，要设置静态IP，就必须知道网段是什么，需要知道哪些IP是可以用的。<br>这时候可以借助VMware的功能来获取，如下图所示：</p>
+<p><img src="/images/linux/net.png" alt="net"></p>
+<p>首先点击编号1处的编辑，就会弹出右侧2号界面，然后再3号位置选择以管理员身份更改设置，再接下来的弹出框点击确定后会出现如下界面：</p>
+<p><img src="/images/linux/net2.png" alt="net2"></p>
+<p>上图中首先最上边需要选择NAT模式，然后就会看到有一个子网IP192.168.139.0，证明我们的网络实际处在这个网段，并且192.168.139.0是被用了的。<br>然后编号2处，就是我们需要的子网掩码，那么我们的配置就可以修改为<code>NETMASK=255.255.255.0</code>了。<br>接下来再点击编号3处”NAT设置”，会看到如下弹出界面：</p>
+<p><img src="/images/linux/net3.png" alt="net3"></p>
+<p>上图标红的位置，其实也可以看到上边的子网ip和子网掩码，同时，我们还能找到需要的网关，那么配置又可以进一步完善<code>GATEWAY=192.168.139.2</code>，同时也表示又有一个当前网段的ip我们自己是不能用了。<br>到这里，看起来就可以配置静态的IPADDR了，实际上还有一个点小问题，如下图：</p>
+<p><img src="/images/linux/net4.png" alt="net4"></p>
+<p>编号4的位置，会使实际物理机的网络和虚拟机网络连接起来，会在物理机上创建一个虚拟网卡，也就是VMnet8：</p>
+<p><img src="/images/linux/net5.png" alt="net5"></p>
+<p>双击打开之后，点击详情会发现，里边有一个ip是<code>192.168.139.1</code>，代表的是主机虚拟网卡的ip，也就说明这个ip我们也不能用。<br>因此最终确认需要配置的IP网段是192.168.139，最后的IP不能用255、0、1、2，在这些数字之外选择一个小于255的IP之后，完整的网络配置就可以修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DEVICE&#x3D;eth0</span><br><span class="line">HWADDR&#x3D;00:0C:29:A4:2A:31</span><br><span class="line">TYPE&#x3D;Ethernet</span><br><span class="line">UUID&#x3D;da6741e2-9b2c-464f-9a5b-cbe65402e21c</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">NM_CONTROLLED&#x3D;yes</span><br><span class="line">BOOTPORTO&#x3D;static</span><br><span class="line">DNS1&#x3D;114.114.114.114</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">GATEWAY&#x3D;192.168.139.2</span><br><span class="line">IPADDR&#x3D;192.168.139.99</span><br></pre></td></tr></table></figure>
+
+<p>以上配置保存后，执行网卡重启命令<code>service network restart</code>，虚拟机便可以成功上网了，可以用<code>ping www.baidu.com</code>进行验证。</p>
+<p>以上便是VMware中Linux系统里NAT模式网络配置步骤以及技巧，相信有了这次的配置，后边再也不用为虚拟机上网问题发愁了，也希望能对其他同学有所帮助。</p>
+<h2 id="VMware中虚拟机克隆"><a href="#VMware中虚拟机克隆" class="headerlink" title="VMware中虚拟机克隆"></a>VMware中虚拟机克隆</h2><p>学习大数据技术，往往需要多个虚拟机节点，如果每一个都按普通的步骤安装，会很耗时间，所以更便捷的方法就是克隆已有的虚拟机。<br>克隆之前最好先把源虚拟机生成快照，然后再次基础上克隆。<br>克隆后的虚拟机，无论网卡、ip还是hostname都和原来的一模一样，这是有问题的，所以实际上克隆之后需要修改新的虚拟机系统配置。<br>由上边的网络配置只是可知，需要修改不通的IPADDR。如果在没有删除物理网卡和UUID的情况下，还需要修改这两项，最好就是删除。<br>除此之外，还要修改hostname，用过kafka的可能知道，这个hostname非常重要，这个配置在<code>/etc/sysconfig/network</code>文件中。<br>最后一个需要修改的地方，就还是和物理网卡有关，需要删除<code>/etc/udev/rules.d</code>目录下的70-persistent-net.rules文件，删除之后重启网卡的时候就会重新生成这个文件，并且不会和克隆的一样，也就可以避免这种网络问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/06/29/linux1/" data-id="ckc1lh1p500358cvh2p8r5pf9" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/20/redis1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">redis系统性学习一：缓存和redis相关基础知识</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#windows中网络配置"><span class="toc-number">1.</span> <span class="toc-text">windows中网络配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VMware中Linux网络配置"><span class="toc-number">2.</span> <span class="toc-text">VMware中Linux网络配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#网卡配置文件位置"><span class="toc-number">2.1.</span> <span class="toc-text">网卡配置文件位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网络配置"><span class="toc-number">2.2.</span> <span class="toc-text">网络配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VMware中虚拟机克隆"><span class="toc-number">3.</span> <span class="toc-text">VMware中虚拟机克隆</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
