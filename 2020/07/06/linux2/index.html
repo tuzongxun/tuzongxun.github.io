@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>Linux中redis安装及软件安装相关Linux知识要点 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="无论是Linux还是windows安装软件，都要先有一个安装包。这个安装包可以是直接本机下载，也可以是从其他机器传过来。在Linux中软件安装方式也有多种，我目前知道了就有yum安装、直接本机下载安装包安装以及他机传递安装包进行安装，这些方式可能常常会搭配着使用，哪个方便用哪个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中redis安装及软件安装相关Linux知识要点">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/07/06/linux2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="无论是Linux还是windows安装软件，都要先有一个安装包。这个安装包可以是直接本机下载，也可以是从其他机器传过来。在Linux中软件安装方式也有多种，我目前知道了就有yum安装、直接本机下载安装包安装以及他机传递安装包进行安装，这些方式可能常常会搭配着使用，哪个方便用哪个。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-06T15:09:42.000Z">
+<meta property="article:modified_time" content="2020-07-06T15:26:10.960Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，现居武汉，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/06/linux2/" class="article-date">
+  <time datetime="2020-07-06T15:09:42.000Z" itemprop="datePublished">2020-07-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>►<a class="article-category-link" href="/categories/redis/linux/">linux</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux中redis安装及软件安装相关Linux知识要点
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>无论是Linux还是windows安装软件，都要先有一个安装包。这个安装包可以是直接本机下载，也可以是从其他机器传过来。<br>在Linux中软件安装方式也有多种，我目前知道了就有yum安装、直接本机下载安装包安装以及他机传递安装包进行安装，这些方式可能常常会搭配着使用，哪个方便用哪个。</p>
+<a id="more"></a>
+<p>就我个人以往的使用来说，场景大概如下：</p>
+<blockquote>
+<p>yum：常用来安装一些系统级命令以及软件；<br>本机直接下载安装包：建立在本机能连接外网的基础上，需要使用到Linux的wget命令；<br>他机传递安装包：常用于已经有了安装包或者需要安装软件的机器不能访问外网，通常需要使用到FtP工具；</p>
+</blockquote>
+<p>下边以一个刚安装的纯净版CentOS系统中安装Redis为例，记录wget安装方式的过程及各操作细节分析。（此描述可能不准确，wget实际只是下载安装包）<br>使用wget方式的原因，是因为能联网的情况下，这种方式比他机传递更方便，而yum方式不是太熟，也不清楚是否能用yum安装Redis。</p>
+<h2 id="yum安装wget"><a href="#yum安装wget" class="headerlink" title="yum安装wget"></a>yum安装wget</h2><p>wget下载安装包，需要系统有这个命令，而这个刚安装的系统中还没有wget命令，就需要先安装一下，这里采用的就是yum方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install wget</span><br></pre></td></tr></table></figure>
+
+<p>注：yum是什么？yum是RedHat、CentOS等Linux系统中Shell前端软件包管理器，可以管理一些基础软件的安装、查找和删除，这是一个系统自带的功能。更详细的只是可参考如下博客：<br><a href="https://blog.csdn.net/shuaigexiaobo/article/details/79875730" target="_blank" rel="noopener">https://blog.csdn.net/shuaigexiaobo/article/details/79875730</a></p>
+<h2 id="wget下载Redis安装包"><a href="#wget下载Redis安装包" class="headerlink" title="wget下载Redis安装包"></a>wget下载Redis安装包</h2><p>wget下载安装包，需要先知道安装包的下载地址，对于redis来说，可以在官网中找到。<br>Redis官网地址是：<a href="https://redis.io/，中文版的官网地址是：http://www.redis.cn/，不管哪个，打开首页都能看到Download或者下载选项，在下边就能看到下载链接，右键选择复制链接即可，我复制到的链接如下：" target="_blank" rel="noopener">https://redis.io/，中文版的官网地址是：http://www.redis.cn/，不管哪个，打开首页都能看到Download或者下载选项，在下边就能看到下载链接，右键选择复制链接即可，我复制到的链接如下：</a><br><a href="http://download.redis.io/releases/redis-6.0.5.tar.gz" target="_blank" rel="noopener">http://download.redis.io/releases/redis-6.0.5.tar.gz</a></p>
+<p>有了链接之后，就可以使用wget下载了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-6.0.5.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="tar解压安装包"><a href="#tar解压安装包" class="headerlink" title="tar解压安装包"></a>tar解压安装包</h2><p>tar本身功能是用来文件归档的，所以其实并不具备压缩和解压功能，之所以说使用tar解压安装包，是因为它能够调用系统的解压和压缩软件，实际上就是后边参数的作用。<br>tar部分参数解释如下;</p>
+<blockquote>
+<p>-v –verbose 显示详细的tar处理的文件信息<br>-f –file 要操作的文件名<br>-x  –extract, –get 解压文件<br>-z –gzip, –gunzip, –ungzip      通过 gzip 来进行归档压缩</p>
+</blockquote>
+<p>上边只列出了四个参数，其实也是我一直习惯用的，只是之前一直只是用，也没有想各个参数的含义。<br>那么其实从上边的解释来看，z和v实际都不是必要的，而且z是指特定的压缩格式，或许加了反而会导致某些格式的压缩包解压失败。<br>所以，这里的解压命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xf redis-5.0.5.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>注：若想了解更多tar知识，可参考后边的博客：<a href="https://blog.csdn.net/u014642915/article/details/86579575" target="_blank" rel="noopener">https://blog.csdn.net/u014642915/article/details/86579575</a></p>
+<h2 id="帮助文档readme"><a href="#帮助文档readme" class="headerlink" title="帮助文档readme"></a>帮助文档readme</h2><p>大部分软件包解压后都会一个Readme文件，实际上不论是安装还是使用，都可以从这里得到很多帮助和指引。<br>拿我安装Redis和mongodb来说，Redis里很详细的说明了如何安装和基本使用，mongo虽然没有那么详细，但是里边也指明了安装需要去看哪里的文档。<br>所以这个readme文件应该是最权威的新手指引文档之一了。<br>对Redis来说，从readme文件里，就能看到源码安装实际就是一个<code>make</code>命令。</p>
+<h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><p>make实际可以看做是一个构建工具，常用语c语言编写的程序源码构建安装某个软件，然是它不限于c语言，而这里redis源码是用c语言编写的，所以使用make。<br>make执行的根源，其实是执行目录下的一个Makefile文件，make会根据这个文件里的内容做一些事情。<br>而在redis源码目录下，Makefile文件直接是又执行了另一个Makefile文件，打开这个Makefile文件会发现指向了src目录下的Makefile，而这个Makefile里的内容才是make真正要做的事。</p>
+<h2 id="cc"><a href="#cc" class="headerlink" title="cc"></a>cc</h2><p>上边说redis源码是c语言编写的，因此对于这个源文件的编译，就需要c语言的编译器，从Makefile文件也能看出来有执行cc，所以对于新安装的Linux系统来说，直接执行make一般是会报错<code>cc: command not found</code>.<br>报错是因为没有c语言编译器，所以就需要再先安装c语言编译器，而常用的可能就是gcc，g是GNU的意思，可理解为就是自由和开源，gcc安装命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc</span><br></pre></td></tr></table></figure>
+
+<h2 id="make-distclean"><a href="#make-distclean" class="headerlink" title="make distclean"></a>make distclean</h2><p>安装好gcc以后，重新执行make可能会报错，原因是上一次的make会有一些错误残留文件，因此需要执行清理动作，即README.md里也能看到的<code>make distclean</code>命令。<br>清理动作完成后，重新make，一般就能够把源码安装包构建成可运行的软件。像这里的redis，就会在src目录下创建一些redis相关的可执行文件，例如redis-server、redis-client等。直接在此目录执行相应的执行文件，就可以初步使用redis了。</p>
+<p>注：如果是最新的安装包，可能还要注意gcc的版本问题，可能因为gcc版本过低，导致make依然报错，那就需要升级gcc。</p>
+<h2 id="make-install"><a href="#make-install" class="headerlink" title="make install"></a>make install</h2><p>上述内容虽然已经可以使用redis了，但是每次启动redis以及使用redis相关可执行程序，都要到这个目录，或者指定绝对路径，就显得很不方便。<br>因此，很多这种软件都会做成系统的服务，即service。<br>根据README.md文件说明，redis安装成服务有两步，一步是<code>make install</code>，一步<code>install_server.sh</code>。<br><code>make install</code>如果没有其他参数，就会默认安装到<code>/usr/local/bin</code>目录，如果想要自定义路径，就可以加上“PREFIX”参数，例如<code>make install PREFIX=/opt/soft/redis</code>，这一步其实就是做了一个数据移动，会把src目录下的可执行文件移动到默认或者指定的目录下，相当于把安装后的可执行和原本就有的非可执行程序做了一个分离。</p>
+<h2 id="etc-profile系统配置"><a href="#etc-profile系统配置" class="headerlink" title="/etc/profile系统配置"></a>/etc/profile系统配置</h2><p>在windows安装过低版本jdk的可能知道，需要自己安装完之后配置一个jdk的环境变量。环境变量配置的目的，一方面是有的软件默认需要加载这个内容，不配置可能导致运行问题，另一方面也是减少手动指定的工作量。<br>我们这里需要配置redis环境变量，目的就是在智行<code>install_server.sh</code>的时候减少一些输入。<br>根据我上边的步骤，在这个系统配置文件末尾可以加上如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export REDIS_HOME&#x3D;&#x2F;opt&#x2F;soft&#x2F;redis</span><br><span class="line">export PATH&#x3D;$PATH:$REDIS_HOME&#x2F;bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="source重新加载系统配置"><a href="#source重新加载系统配置" class="headerlink" title="source重新加载系统配置"></a>source重新加载系统配置</h2><p>上边配置文件是静态的，修改之后不会立即生效，所以需要执行<code>source /etc/profile</code>以使配置生效。</p>
+<h2 id="install-server"><a href="#install-server" class="headerlink" title="install_server"></a>install_server</h2><p>有了上述环境变量的配置后，再回到redis的utils目录，就可以执行<code>install_server.sh</code>了，对于默认配置的redis来说，这时候就会把redis安装到系统的service服务中。<br>后续在系统任何文件目录下都可以执行<code>service ** start</code>、<code>service ** status</code>、<code>service ** restart</code>等命令操作相关服务。<br>上边“**”我可以简单理解为服务名，实际上对应的是<code>/etc/init.d</code>目录下的一个脚本文件，像这里使用默认配置安装的redis服务，就会在init.d目录下生成一个<code>redis_6379</code>脚本。<br>所有linux系统的服务，都会在<code>/etc/init.d</code>目录生成一个相应的脚本文件，这算是一个linux常识。<br>上边的命令，其实做了很多事，把redis安装成系统服务的同时，还会直接启动这个服务，在本机上我们就可以进行一定的redis操作了。</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>默认的redis配置文件，里边有一行<code>bind 127.0.0.1</code>，指向本机，所以对于虚拟机来说，如果想要在外部windows系统中使用redis客户端工具连接就连接不上，所以需要修改一下。<br>可以改成具体的机器ip，也可以改成<code>bind 0.0.0.0</code>，这样任意机器就都可以访问了。<br>至于bind具体用法，可以参考下边博客：<br><a href="https://blog.csdn.net/cw_hello1/article/details/83444013" target="_blank" rel="noopener">https://blog.csdn.net/cw_hello1/article/details/83444013</a></p>
+<h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><p>上边说修改了bind后，windows就可以使用redis客户端工具连接了，其实也不对。因为默认开启的Linux系统是开启了防火墙的，那么redis的默认6379端口不在这个防火墙允许的端口内，所以外部依旧无法访问，这就需要进行处理。<br>处理方式有多重，可以是配置防火墙，把需要的端口加进去；可以是关闭防火墙。而关闭防火墙又可以是永久性关闭和临时关闭。<br>通常我个人都是使用的临时关闭，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop</span><br></pre></td></tr></table></figure>
+
+<p>至此，redis算是正式安装完毕，相应环节中有许多通用内容，也是对基础知识的一个良好补充。相信有了这些知识后，后边安装mongo也好，nginx也好，应该都能节省很多不必要的麻烦。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/07/06/linux2/" data-id="ckcanr1oq000qmkvh3syl3wld" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/29/linux1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">VMware虚拟机Linux系统NAT模式网络配置及虚拟机克隆要点</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#yum安装wget"><span class="toc-number">1.</span> <span class="toc-text">yum安装wget</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget下载Redis安装包"><span class="toc-number">2.</span> <span class="toc-text">wget下载Redis安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tar解压安装包"><span class="toc-number">3.</span> <span class="toc-text">tar解压安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#帮助文档readme"><span class="toc-number">4.</span> <span class="toc-text">帮助文档readme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make"><span class="toc-number">5.</span> <span class="toc-text">make</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cc"><span class="toc-number">6.</span> <span class="toc-text">cc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-distclean"><span class="toc-number">7.</span> <span class="toc-text">make distclean</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#make-install"><span class="toc-number">8.</span> <span class="toc-text">make install</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#etc-profile系统配置"><span class="toc-number">9.</span> <span class="toc-text">&#x2F;etc&#x2F;profile系统配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#source重新加载系统配置"><span class="toc-number">10.</span> <span class="toc-text">source重新加载系统配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-server"><span class="toc-number">11.</span> <span class="toc-text">install_server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">12.</span> <span class="toc-text">bind</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#防火墙"><span class="toc-number">13.</span> <span class="toc-text">防火墙</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
