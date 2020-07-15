@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?20f0ea98b3ba0ec3c95a03b3caf626d9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>redis数据类型要点知识及应用场景 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="redis是基于键值对的，它的key类型实际是object，所以一般所谓的redis数据类型其实是value的数据类型。从大的方面来分，主要有如下五种：  string list hash set sorted_set">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis数据类型要点知识及应用场景">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/07/15/redis2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="redis是基于键值对的，它的key类型实际是object，所以一般所谓的redis数据类型其实是value的数据类型。从大的方面来分，主要有如下五种：  string list hash set sorted_set">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-15T13:59:42.000Z">
+<meta property="article:modified_time" content="2020-07-15T13:59:00.553Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">收藏</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">5年java工作经验，现居武汉，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-redis2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/15/redis2/" class="article-date">
+  <time datetime="2020-07-15T13:59:42.000Z" itemprop="datePublished">2020-07-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis数据类型要点知识及应用场景
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>redis是基于键值对的，它的key类型实际是object，所以一般所谓的redis数据类型其实是value的数据类型。从大的方面来分，主要有如下五种：</p>
+<ol>
+<li>string</li>
+<li>list</li>
+<li>hash</li>
+<li>set</li>
+<li>sorted_set</li>
+</ol>
+<a id="more"></a>
+<h2 id="string"><a href="#string" class="headerlink" title="string"></a>string</h2><p>string类型，应该是redis里最常用的一种，它可以存字符串，可以存数值，还可以存二进制位图bitmap。<br><strong>那么string类型实际到底存的是什么呢，实际上是字节数组</strong>。redis对于string类型的操作有很多的命令，使用string长度查询命令就可以验证究竟存的是字符还是字节。<br>验证流程是，在不同字符集编码下存储中文字符，会发现使用<code>STRLEN</code>结果并不是字符的数量，而是对应字符集编码下相应字符对应的字节长度。</p>
+<p><strong>string类型可以存储字符串</strong>，因此也提供了很多基础的常用的字符串操作的功能，例如字符串拼接<code>append</code>、长度查询<code>strlen</code>、获取特定位置字符<code>getrange</code>等。<br>在不少涉及到权限系统的设计中，经常会使用string类型存储token，并设置一定的有效期。</p>
+<p>以上操作，以及以下操作，都可以在redis-cli中通过<code>help</code>进行查询，例如要查询string支持的功能，就可以使用<code>help @string</code>。</p>
+<p><strong>string类型可以存储数值</strong>，所以也提供了很多对于数值的操作功能，例如加一<code>incr</code>、减一<code>decr</code>、加特定数值<code>incrby</code>、减特定数值<code>decrby</code>等。<br>这个功能对于某些系统某些功能的访问量、评论量、在线离线量等业务场景中，会有很好的应用。</p>
+<p><strong>string类型可以存储bitmap</strong>，也提供了很多对于位图的操作，例如设置位图<code>setbit</code>、获取位图数据<code>getbit</code>、位图统计<code>bitcount</code>、复合统计<code>bitop</code>等。<br>bitmap是基于二进制位的操作，可以使用很小的内存表示大量的数据，对于很多统计类的业务非常实用，例如周、月、天这些特定场景的数据统计。<br>需要注意的是，bitmap中的offset是有限制的，不能超过Integer的最大限制，否则会抛异常，存储失败。</p>
+<p>string类型在设值的时候，可以使用单一的操作<code>set</code>，也可以使用多元素操作<code>mset</code>，不论是单一元素操作，还是多元素的操作，都有一个末尾带着<code>nx</code>的操作，这个操作支持<code>nx</code>和<code>xx</code>操作，一个是只有key不存在时才能设值成功，一个是只有key存在时才能设值成功。<br>这个功能可以一定程度上保证数据的原子性，因此在分布式应用场景下经常用于分布式锁。（确切的说，是多元素操作时保证原子性，由于redis是单进程、单线程的，所以单一元素操作也不存在原子性问题）</p>
+<h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><p>list类型也是redis里很常用的类型，在list类型key中带有head和tail属性，分别指向list中第一个元素和最后一个元素，这种设计使得list类型可以模拟多种常用的数据结构。</p>
+<p>往list中存入元素，可以选择从左或者从右追加推入数据，也可以选择<code>linsert</code>这种操作在特定位置插入数据，还可以使用<code>lset</code>这种操作替换特定位置的数据。<br>以上追加推入的方式，有对应的弹出数据操作，可以选择同向取出，也可以选择反向取出。<br>对于同向取出操作，即<code>lpush</code>和<code>lpop</code>，以及<code>rpush</code>和<code>rpop</code>，这种操作的结果就是数据后进先出，刚好<strong>和java中的栈这种数据结构的设计一样</strong>。<br>而反向取出，即<code>lpush</code>对应<code>rpop</code>，或者<code>rpush</code>对应<code>lpop</code>，这种操作的结果就是先进先出，即所谓的FIFO，<strong>刚好和java中队列这种数据结构一样</strong>。<br>而<code>linsert</code>、<code>lset</code>这种操作又<strong>和java中的数组结构操作一样</strong>。<br>同时，list还支持异步阻塞，例如<code>blpop</code>、<code>brpop</code>，这种操作会阻塞客户端，直到取到相应key的数组，这种操作就可以实现一些单播订阅的业务需求。<br>list类型中，元素是允许重复的，并且从可以按存的顺序取，能够看出他是有序的，这个序就是存数据的顺序。<br>综上，redis的list类型可以代替一些java中常用的api和数据结构，可以在某种程度上更好的保证数据的可靠性。</p>
+<p>list类型有很多操作，不限于上边所列，和string类型一样，也可以使用<code>help @list</code>方式查询redis自带的帮助文档，在需要的时候实际对应的学习了解。</p>
+<h2 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h2><p>redis本身是键值结构，这里的hash指的是value本身又是一个键值对，这种结构如同java中hashmap里边又嵌套了一个hashmap。<br>因此，对于value的hash类型本身，就像是redis的string类型一样了，而实际上hash的大部分操作也和String类型的极其相似。<br>从操作命令上来说，几乎就是string相应命令前边加了一个<code>h</code>字符，存入数据的操作就是在原有key的基础上再加一个内层的key，只是这里标准的叫法是field。<br>get取数据，set存数据，以及对于数值的加减操作，都和string很像。</p>
+<p>hash的这种结构，很适用于一个对象、多个属性，这种的数据存储。例如热门商品的部分属性存储，车联网中某辆车车况数据存储，可以减少热门数据使用时对数据库的操作，同时又能很方便高效的对数据进行修改。</p>
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p>单纯从存取数据来说，redis中list类型和set类型，与java中的list和set其实是很像的，在java中，list和set都是集合，都是容器，都能存很多其他的东西在里边，不同的是list允许重复，且是有序的，而set不允许重复。<br>至于说set顺序的问题，在java中set子类众多，有的无序，有的有序，所以不能一概而论。<br>而redis中，和java相似的是，set也是不允许重复，但是这里的set就是无序。<br><strong>set不允许重复的特性，有很多应用场景，例如可以用来统计某段时间内在线用户，可以直接去除多次在线的用户。</strong></p>
+<p>除了set数据类型本身的特性之外，redis还为这个类型提供了一些很有用的api命令，例如<code>sinter</code>可以取两个set数据的交集，<code>sdiff</code>可以取两个set的差集，<code>sunion</code>可以取两个set的并集。<br>这里需要注意的是，<code>sdiff</code>实际是有方向，会以最左边一个key内容为准，所以实际的方向需要使用的时候自己控制。<br>另外，上述三个操作，都有一个带着<code>store</code>的操作，这个操作需要提供一个额外的key，会把交集、并集、差集的结果存到这个额外的key里边。</p>
+<p>set类型还有一个非常好的操作，可以根据给定的key生成一定的随机数，命令是<code>srandmember</code>，这个操作，需要一个key参数，同时还需要一个数字，即生成随机数的个数。<br>这个数字是有一定讲究的，如果是正数，且小于set本身元素的数量，就会随机返回给定数量不重复的数据。如果是正数，且大于set本身元素数量，则会返回给定数据的数据，但是会有重复。如果是负数，且小于set本身元素数量，则结果可能重复，也可能不重复。如果是负数且大于set本身元素数量，则也会返回给定数量的数据，会有重复。<br>以上这个功能，就<strong>很适合类似验证码、抽奖之类的业务场景。</strong></p>
+<p>对于set，有一个需要注意的操作，即<code>smembers</code>，这个操作可以列出某个key下的所有元素，但是这是一个消耗redis吞吐量的操作，需要谨慎使用。</p>
+<h2 id="sorted-set"><a href="#sorted-set" class="headerlink" title="sorted_set"></a>sorted_set</h2><p>sorted_set是有序的set集合，从某种意义上来讲，sorted_set更像是对list和set的一个补充。list是有序的（存入顺序），但是不去重，而set是去重的，却又无序。<br>这些设计自然都是各有各的好处，各有各的应用场景，但是去重并且有序，这个需求其实也是很常见的，而sorted_set就是这样一个类型，只不过这里的有序和list不同，不是存入顺序，而是排序。</p>
+<p>以上说法其实是一个理解，可以说sorted_set是list和set的补充，也可以说是一个综合。因为sorted_set的操作更像是综合了list和set的操作，和set一样有交集、并集、差集操作，又和list一样有阻塞取数据的操作。</p>
+<p>sorted_set是有排序的有序类型，这里的排序需要在存数据的时候给定一个分值。这个分值可以决定相应元素的顺序，但是这个分值不是说给定了就不变的，可以进行加减操作，并且对分值进行操作之后，相应的顺序也会同时发生改变。<br>这种特性就很适用于一些实时的排行榜数据操作，例如歌曲排行榜、博客排行榜、销量排行榜等等。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/07/15/redis2/" data-id="ckcnfl4wp0035hcvhck2kawxb" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/07/06/linux2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Linux中redis安装及软件安装相关Linux知识要点</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#string"><span class="toc-number">1.</span> <span class="toc-text">string</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#list"><span class="toc-number">2.</span> <span class="toc-text">list</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hash"><span class="toc-number">3.</span> <span class="toc-text">hash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set"><span class="toc-number">4.</span> <span class="toc-text">set</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sorted-set"><span class="toc-number">5.</span> <span class="toc-text">sorted_set</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">收藏</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
