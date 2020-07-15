@@ -39,7 +39,7 @@ var _hmt = _hmt || [];
 <meta property="og:description" content="redis是基于键值对的，它的key类型实际是object，所以一般所谓的redis数据类型其实是value的数据类型。从大的方面来分，主要有如下五种：  string list hash set sorted_set">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-15T13:59:42.000Z">
-<meta property="article:modified_time" content="2020-07-15T13:59:00.553Z">
+<meta property="article:modified_time" content="2020-07-15T14:29:36.556Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -161,13 +161,14 @@ var _hmt = _hmt || [];
 <p>set类型还有一个非常好的操作，可以根据给定的key生成一定的随机数，命令是<code>srandmember</code>，这个操作，需要一个key参数，同时还需要一个数字，即生成随机数的个数。<br>这个数字是有一定讲究的，如果是正数，且小于set本身元素的数量，就会随机返回给定数量不重复的数据。如果是正数，且大于set本身元素数量，则会返回给定数据的数据，但是会有重复。如果是负数，且小于set本身元素数量，则结果可能重复，也可能不重复。如果是负数且大于set本身元素数量，则也会返回给定数量的数据，会有重复。<br>以上这个功能，就<strong>很适合类似验证码、抽奖之类的业务场景。</strong></p>
 <p>对于set，有一个需要注意的操作，即<code>smembers</code>，这个操作可以列出某个key下的所有元素，但是这是一个消耗redis吞吐量的操作，需要谨慎使用。</p>
 <h2 id="sorted-set"><a href="#sorted-set" class="headerlink" title="sorted_set"></a>sorted_set</h2><p>sorted_set是有序的set集合，从某种意义上来讲，sorted_set更像是对list和set的一个补充。list是有序的（存入顺序），但是不去重，而set是去重的，却又无序。<br>这些设计自然都是各有各的好处，各有各的应用场景，但是去重并且有序，这个需求其实也是很常见的，而sorted_set就是这样一个类型，只不过这里的有序和list不同，不是存入顺序，而是排序。</p>
-<p>以上说法其实是一个理解，可以说sorted_set是list和set的补充，也可以说是一个综合。因为sorted_set的操作更像是综合了list和set的操作，和set一样有交集、并集、差集操作，又和list一样有阻塞取数据的操作。</p>
+<p>以上说法其实是一个理解，可以说sorted_set是list和set的补充，也可以说是一个综合。因为sorted_set的操作更像是综合了list和set的操作，和set一样有交集、并集、差集操作，又和list一样有阻塞取数据的操作。<br>但有区别的是，sorted_set中的集合操作，还带有权重和聚合的操作，可以取最大、最小值及求和，也使得它有了更多的应用场景。</p>
 <p>sorted_set是有排序的有序类型，这里的排序需要在存数据的时候给定一个分值。这个分值可以决定相应元素的顺序，但是这个分值不是说给定了就不变的，可以进行加减操作，并且对分值进行操作之后，相应的顺序也会同时发生改变。<br>这种特性就很适用于一些实时的排行榜数据操作，例如歌曲排行榜、博客排行榜、销量排行榜等等。</p>
+<p>一般来说，有排序必然就有其他额外的数据维护，也必然导致同等情况下效率会低。<br>而sorted_set的特别之处在于，底层存储结构是skip list跳跃表，这个结构比set的key存储了更多的内容，使得sorted_sort在效率上得到了提升（具体结构细节待补充）</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/07/15/redis2/" data-id="ckcnfl4wp0035hcvhck2kawxb" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/07/15/redis2/" data-id="ckcngnyy6003d5ovh7h67e4zb" class="article-share-link">分享</a>
       
       
       
