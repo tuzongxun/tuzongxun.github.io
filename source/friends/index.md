@@ -1,6 +1,10 @@
 ---
-title: 主页
+title: 友链
 date: 2017-10-11 10:14:43
 toc: true
-type: "friends"
 ---
+| [我的CSDN](https://blog.csdn.net/tuzongxun) | [我的CSDN](https://blog.csdn.net/tuzongxun) |
+| ------------------------- | ------------------------------------------- |
+| [我的CSDN](https://blog.csdn.net/tuzongxun) | [我的CSDN](https://blog.csdn.net/tuzongxun) |
+| [我的CSDN](https://blog.csdn.net/tuzongxun) | [我的CSDN](https://blog.csdn.net/tuzongxun) |
+| [我的CSDN](https://blog.csdn.net/tuzongxun) | [我的CSDN](https://blog.csdn.net/tuzongxun) |

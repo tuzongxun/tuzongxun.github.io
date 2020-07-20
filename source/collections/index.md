@@ -5,6 +5,12 @@ toc: true
 type: "about"
 ---
 ***
+# 工具
+[JSON格式化](https://tool.oschina.net/codeformat/json/)
+[MD5在线解密](https://www.somd5.com/)
+[JWT令牌解析](http://jwt.calebb.net/)
+[多吉搜索](https://www.dogedoge.com/)
+
 # 个人it网站/博客
 [江南白衣](http://calvin1978.blogcn.com/)
 [左潇龙](http://www.zuoxiaolong.com/)
@@ -26,7 +32,7 @@ type: "about"
 [stamen的程序员之路](http://stamen.iteye.com/)
 [麦田博客](http://blog.itmyhome.com/)
 [言曌博客](https://liuyanzhao.com/)
-
+[二赛君](https://www.ersaijun.cn/blog/)
 
 # 技术社区类/博客网站
 [importnew](http://www.importnew.com/)
@@ -71,3 +77,4 @@ type: "about"
 [征信中心](https://ipcrs.pbccrc.org.cn/)
 [武汉公积金,IE打开](https://whgjj.hkbchina.com/portal/pc/main.html)
 [武汉社保，IE打开](https://221.232.64.242:7022/grws/jsp/framework/main.jsp)
+[社保在线转移](http://si.12333.gov.cn/146765.jhtml)

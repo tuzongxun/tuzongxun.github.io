@@ -4,7 +4,7 @@
 
 # Site
 title: 涂宗勋的博客
-subtitle: 5年java工作经验，CSDN博客专家，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun
+subtitle: 5年java工作经验，现居武汉，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun
 description: 
 author: 涂宗勋
 language: zh-CN
@@ -90,14 +90,7 @@ neat_js:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-#theme: pure
 theme: cafe
-#theme: obsidian
-#theme: hexo-theme-snippet
-#theme: 3-hexo
-#theme: ace
-#theme: theme-ad
-#theme: BlueLake
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -107,4 +100,4 @@ deploy:
   repo:
     github: git@github.com:tuzongxun/tuzongxun.github.io.git
     #gitee: git@gitee.com:tuzongxun/tzxBlog.git
-  branch: hexo
+  branch: master
