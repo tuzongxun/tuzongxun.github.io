@@ -140,7 +140,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/02/01/tzxblog3/" data-id="ckcxd5qxr0042s0vh6p3q3x9n" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/02/01/tzxblog3/" data-id="ckcy3j5wt0049yovhfiks4szn" class="article-share-link">分享</a>
       
       
       
@@ -189,7 +189,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/01/30/tzxblog2/" data-id="ckcxd5qy7004qs0vhhjsk4n00" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/01/30/tzxblog2/" data-id="ckcy3j5y8006eyovhftzi9s2k" class="article-share-link">分享</a>
       
       
       
@@ -238,7 +238,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/01/28/vue1/" data-id="ckcxd5r0s009ts0vh59j23gip" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/01/28/vue1/" data-id="ckcy3j5x4004zyovh32rv6ia0" class="article-share-link">分享</a>
       
       
       
@@ -289,7 +289,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/01/16/zongjie7/" data-id="ckcxd5r0q009ps0vh9x0m4l15" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/01/16/zongjie7/" data-id="ckcy3j5y40067yovhbbr07eed" class="article-share-link">分享</a>
       
       
       
@@ -338,7 +338,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2019/11/15/zongjie6/" data-id="ckcxd5r0o009js0vh6x2ldqrw" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2019/11/15/zongjie6/" data-id="ckcy3j5xv005zyovh5ccn24rc" class="article-share-link">分享</a>
       
       
       
@@ -421,6 +421,7 @@ var _hmt = _hmt || [];
       &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
 	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
 	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
 		 	</div>
     </div>
@@ -433,7 +434,27 @@ var _hmt = _hmt || [];
  
 <script src="/jquery/jquery.min.js"></script>
 
- 
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
     </div>
     <nav id="mobile-nav">
   
