@@ -28,21 +28,20 @@ var _hmt = _hmt || [];
 </script>
 
   
-  <title>《maven实战》学习笔记4——maven坐标和依赖 | 涂宗勋的博客</title>
+  <title>redis常用高级功能小记（上篇） | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="maven坐标maven坐标是什么坐标一词最让人熟悉的就是读书时学的x、y轴的横竖坐标，平面中由x、y决定一个唯一的点，x、y就是坐标。三维中，x、y、z决定一个唯一的点，x、y、z就是坐标。而在maven中，就是groupId、artifactId、version、packaging等属性决定一个唯一的项目模块，这些属性就是maven项目的坐标。">
+  <meta name="description" content="redis拥有五种数据类型，不同类型的数据有不同的特性，恰当的使用可以实现很多特别的功能，除此之外，redis自身也封装了或者支持一些特殊的操作，可以称为redis的高级功能。 redis基本数据结构和应用场景介绍可以参考之前的博客 redis数据类型要点知识及应用场景 redis高级功能很多，这里只准备记录如下几种：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《maven实战》学习笔记4——maven坐标和依赖">
-<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/13/maven4/index.html">
+<meta property="og:title" content="redis常用高级功能小记（上篇）">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/07/29/redis3/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="maven坐标maven坐标是什么坐标一词最让人熟悉的就是读书时学的x、y轴的横竖坐标，平面中由x、y决定一个唯一的点，x、y就是坐标。三维中，x、y、z决定一个唯一的点，x、y、z就是坐标。而在maven中，就是groupId、artifactId、version、packaging等属性决定一个唯一的项目模块，这些属性就是maven项目的坐标。">
+<meta property="og:description" content="redis拥有五种数据类型，不同类型的数据有不同的特性，恰当的使用可以实现很多特别的功能，除此之外，redis自身也封装了或者支持一些特殊的操作，可以称为redis的高级功能。 redis基本数据结构和应用场景介绍可以参考之前的博客 redis数据类型要点知识及应用场景 redis高级功能很多，这里只准备记录如下几种：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-11-13T07:09:42.000Z">
-<meta property="article:modified_time" content="2019-08-13T07:28:42.203Z">
+<meta property="article:published_time" content="2020-07-29T13:59:42.000Z">
+<meta property="article:modified_time" content="2020-07-29T00:53:01.822Z">
 <meta property="article:author" content="涂宗勋">
-<meta property="article:tag" content="开发工具">
-<meta property="article:tag" content="maven">
+<meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
   
   
@@ -108,14 +107,14 @@ var _hmt = _hmt || [];
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-maven4" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-redis3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/13/maven4/" class="article-date">
-  <time datetime="2017-11-13T07:09:42.000Z" itemprop="datePublished">2017-11-13</time>
+    <a href="/2020/07/29/redis3/" class="article-date">
+  <time datetime="2020-07-29T13:59:42.000Z" itemprop="datePublished">2020-07-29</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+    <a class="article-category-link" href="/categories/redis/">redis</a>
   </div>
 
 </span>
@@ -127,7 +126,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      《maven实战》学习笔记4——maven坐标和依赖
+      redis常用高级功能小记（上篇）
     </h1>
   
 
@@ -137,40 +136,97 @@ var _hmt = _hmt || [];
       
         <!-- Table of Contents -->
         
-        <h3 id="maven坐标"><a href="#maven坐标" class="headerlink" title="maven坐标"></a>maven坐标</h3><h4 id="maven坐标是什么"><a href="#maven坐标是什么" class="headerlink" title="maven坐标是什么"></a>maven坐标是什么</h4><p>坐标一词最让人熟悉的就是读书时学的x、y轴的横竖坐标，平面中由x、y决定一个唯一的点，x、y就是坐标。三维中，x、y、z决定一个唯一的点，x、y、z就是坐标。而在maven中，就是groupId、artifactId、version、packaging等属性决定一个唯一的项目模块，这些属性就是maven项目的坐标。</p>
+        <p>redis拥有五种数据类型，不同类型的数据有不同的特性，恰当的使用可以实现很多特别的功能，除此之外，redis自身也封装了或者支持一些特殊的操作，可以称为redis的高级功能。</p>
+<p>redis基本数据结构和应用场景介绍可以参考之前的博客</p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/107371302" target="_blank" rel="noopener">redis数据类型要点知识及应用场景</a></p>
+<p>redis高级功能很多，这里只准备记录如下几种：</p>
 <a id="more"></a>
-<h4 id="maven坐标详解"><a href="#maven坐标详解" class="headerlink" title="maven坐标详解"></a>maven坐标详解</h4><p>对于groupId、artifactId、version、packaging，上一篇实际上我已经根据自己的理解说过，但是这本书学到这里后，却发现有些地方略有些偏差，因此还需要进行补充和修正。<br>对于groupId，我说是项目所属的组，一般可能是公司网址，当时我的理解其实就是公司的网址。<br>但是读到这一章，却发现groupId实际上应该是针对开源项目发布之后的项目网址，而并非是公司网址。只不过在我之前所接触的项目中，很多人写的全是公司网址而已。<br>究其原因，可能是因为写的人对maven规范并不是很了解，也或者是公司项目不多，所以也就无所谓怎么写。而根据书中所说，maven的规范是不应该都写公司网址的。<br>至于artifactId，我之前理解的就是项目名，书学到这里，个人觉得也还是项目名。不过这个项目名应该更具体的理解为项目里边的模块名，一个模块其实也就是一个单独的子项目。<br>至于version和packaging比较好理解，和之前的没区别，但了解了一个新的、在我看来不怎么常用的属性classifier，这个属性定义maven项目一些附属构件，由maven插件决定，不能像前几个属性一个样直接定义值。由于这个属性我目前不常用，因此只做了解。</p>
-<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><h4 id="依赖配置"><a href="#依赖配置" class="headerlink" title="依赖配置"></a>依赖配置</h4><p>在学习maven一开始就了解到了maven是一个优秀的依赖管理工具，这也是在我看来maven最重要的特性，通常一个比较完整的maven依赖配置是这样的（下边的例子只是为了演示用法，一般不太可能真的从webmvc排除web）：</p>
-<pre>
-&lt;dependency>
-    &lt;groupId>org.springframework&lt;/groupId>
-    &lt;artifactId>spring-webmvc&lt;/artifactId>
-    &lt;version>4.0.9.RELEASE&lt;/version>
-    &lt;scope>test&lt;/scope>
-    &lt;type>jar&lt;/type>
-    &lt;optional>true&lt;/optional>
-    &lt;exclusions>
-       &lt;exclusion>
-          &lt;groupId>org.springframework&lt;/groupId>
-          &lt;artifactId>spring-web&lt;/artifactId>
-          &lt;version>4.0.9.RELEASE&lt;/version>
-       &lt;/exclusion>
-    &lt;/exclusions>
-&lt;/dependency>
-</pre>
-<p>以上配置中前三个属性就是上边说的最常用的maven坐标，scope是生效范围，例如示例中的test，指的是只有在测试阶段有效，也就是运行测试类的测试方法的时候有用。<br>scope默认值时compile，表示对编译、测试、运行阶段都有效。除开test和compile，还有runtime、system等，我目前基本不怎么用，也就暂时略过。<br>type指的是依赖类型，默认是jar，可以理解成jar包，type可以是jar、war和pom等。<br>optional代表的是可选，值为true代表选择，值为false为不选择，这个属性实际用的也不多。<br>exclusions、exclusion是排除依赖，例如这里需要带入spring-webmvc的jar包，spring-webmvc依赖于spring-web的jar包，也就是说使用maven显示导入spring-webmvc的jar包时，maven也会把spring-web的jar包也导入进来，如果我们不需要spring-web，就可以在这个地方配置spring-web的坐标排除掉，然后就不会再导入这个依赖包。</p>
-<h4 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h4><p>还是如上边所示的例子，我们要导入spring-webmvc的jar包，spring-webmvc依赖于spring-web，所以在我们的项目中也会把spring-web的jar包导入进来。<br>根据上边对依赖配置的解释，我们知道配置中有scope，即依赖范围，如果spring-webmvc中配置的对spring-web的scope是compile，那么在我们的项目中默认导入进来的spring-web的依赖范围就也是compile。<br>但是上边的结论的前提是我们我们项目中对spring-webmvc的依赖范围和spring-webmvc中对spring-web的依赖范围一致。<br>但这两个依赖范围不一致的时候，就需要理解第一直接依赖和第二直接依赖这样的概念。就比如上述例子中，我们的项目队spring-webmvc就是第一直接依赖，我们的项目对spring-web就是第二直接依赖。<br>因此这里需要特备注意的是，有时候如果有第二直接依赖的包，但没有生效，可以从这个角度去考虑一下。<br>还有一个问题就是，针对配置了可选依赖选项的jar，将不会被传递，如果需要，必须另外手动导入才行。</p>
-<h4 id="依赖调解"><a href="#依赖调解" class="headerlink" title="依赖调解"></a>依赖调解</h4><p>maven之所以能根据一定的配置就准确的导入我们需要的依赖，那是因为我们的配置，也就是所说的坐标保证了依赖的唯一性，而一旦出现不唯一的情况，那么就需要进行选择，这就涉及到依赖调解，或者就理解成依赖选择。<br>之所以会出现这种不唯一的情况，一般都是因为依赖传递。<br>例如我一个项目导入了A.jar和B.jar两个jar包，而A.jar和B.jar都依赖于C.jar，但是这两个C.jar的版本version又不一样，这时候我们的项目就需要选择究竟是使用哪一个C.jar，这就是所谓的依赖调解。<br>那么首先，根据最短路径原则选择。<br>联系上边的知识，可以理解成第几直接依赖的问题。比如刚才A、B、C的例子，由于两个C.jar都是第二直接依赖，所以他们路径就是一样长。假如这里是A.jar依赖于C-1.jar，而B.jar依赖于D.jar，而D.jar再依赖于C-2.jar，那么这时候C-1是第二直接依赖，c-2就是第三直接依赖，也就是c-1的路径比较短，那么这时候就会选择c-1而不是c-2。<br>当然了，上边是假设B.jar依赖于D.jar，那么如果就是一开始那样B.jar就是直接依赖C-2.jar呢，这时候两个的路径是一样的，那就涉及到第一声明优先原则，也就是说在pom.xml中A和B谁在前，谁就会被选择，需要注意的是这个原则是maven2.0.9之后才有的。</p>
-<h4 id="依赖优化"><a href="#依赖优化" class="headerlink" title="依赖优化"></a>依赖优化</h4><p>根据上边所有的知识，可是知道一个项目的第一、第二乃至第n个直接依赖可能会有若干个重复的依赖声明，但是根据一些原则，最终被实际用到的确实唯一的，这些被最终确认的依赖称为解析依赖，可以通过<code>mvn dependency:list</code>来进行查看，然后可以看到各依赖是第几依赖，是根据哪个依赖进来的，然后就可以进行一定的优化。</p>
+
+<p>&gt;管道</p>
+<p>事务</p>
+<p>发布/订阅</p>
+<p>过期</p>
+<p>布隆过滤器</p>
+<p>## 管道</p>
+<p>个人理解，管道操作应该不算redis独有的特性，只是它也支持而已。</p>
+<p>redis是基于客户端-服务端的TCP服务，通常一个客户端向服务端发起请求并监听socket返回，这个过程是阻塞模式，会等待服务端响应了才能进行下一个操作。</p>
+<p>这种模式在同一个客户端多次操作的情景下，交互次数也非常多，redis管道实际就是把多个客户端操作请求一次发送给服务端，然后服务端再一次返回，有点像打包传送的过程。</p>
+<p>少了交互次数，从某种意义上来讲，是能提升性能的。</p>
+<p>redis管道操作基本命令如下，使用到了linux的echo和nc命令：</p>
+<p>```</p>
+<p>echo -e “set k1 123456\nget k1” | nc loalhost 6379</p>
+<p>```</p>
+<p>上边示例中就是给redis的k1设值为123456，然后再get出k1的值，两个操作一次发送个服务端，使用nc建立tcp连接交互。</p>
+<p>操作本身比较简单，但是需要知道echo和nc的一些用法，我也刚好借此机会多了解一点。</p>
+<p>一开始我对echo的了解其实就是写文件，因为本身用的也不多，但是仔细了解了一下，发现echo能做的事其实蛮多的</p>
+<p>### echo输出到命令行</p>
+<p>```</p>
+<p>echo “test”</p>
+<p>echo test</p>
+<p>```</p>
+<p>以上两个命令实际效果是一样的，都会在命令行界面输出echo后边的字符串内容，这应该也是echo最简单的用法了。</p>
+<p>### echo写入到文件</p>
+<p>```</p>
+<p>echo test&gt; test.txt</p>
+<p>```</p>
+<p>### echo追加到文件</p>
+<p>```</p>
+<p>echo test&gt;&gt; test.txt</p>
+<p>```</p>
+<p>### echo转义</p>
+<p>```</p>
+<p>echo -e “set k1 2\nget k1”</p>
+<p>```</p>
+<p>这里-e参数用来处理转义，上边示例其实就是一开始redis管道操作示例内容，引号中间的<code>\n</code>是换行符的意思，加了-e参数就会解析成换行。</p>
+<p>### echo使用变量输出</p>
+<p>这个地方其实是要写linux脚本的，以下是简单shell脚本示例，例如有一个文件叫test.sh，内容如下：</p>
+<p>```</p>
+<p>#!/bin/sh</p>
+<p>read name</p>
+<p>echo “$name is me”</p>
+<p>```</p>
+<p>执行上述shell脚本，就会先让输入一个内容，赋值给变量name，之后会在下一行输出。</p>
+<p>### chmod文件权限</p>
+<p>在上边实例中，要模拟echo使用变量并输出，又使用到了简单的shell脚本，而脚本文件在初始创建的时候是只有读写权限的，不能执行，因此就需要chmod命令为文件修改权限，刚好也再补充一下这个命令相关的一些知识。</p>
+<p>文件权限一般使用八进制数字或者英文字符表示:</p>
+<p>&gt;4代表可读，字符r；</p>
+<p>2代表可写，字符w；</p>
+<p>1代表可执行，字符x；</p>
+<p>0代表无权限，字符-；</p>
+<p>例如要给文件test.sh赋予所有用户可读可写可执行的权限，如下三个命令都可以，作用 一样，不过看起来数字方式最方便：</p>
+<p>```</p>
+<p>chmod 777 test.sh；</p>
+<p>chmod u=rwx,g=rwx,o=rwx test.sh</p>
+<p>chmod ugo=rwx test.sh</p>
+<p>```</p>
+<p>u代表文件所属用户</p>
+<p>g代表文件所属用户组</p>
+<p>o代表其他用户</p>
+<p>### nc</p>
+<p>上述管道操作还用到了nc命令，nc是netcat的命令，和echo一样也有很多参数和用法，不加参数默认建立一个tcp连接，例如：</p>
+<p>```</p>
+<p>nc 127.0.0.1 6379</p>
+<p>```</p>
+<p>上述操作会以tcp方式连接到本地的redis服务，之后我们可以进行像redis-cli进入redis客户端之后的操作一样的操作。</p>
+<p>nc除了建立普通连接，还有一个很方便的功能就是传输文件，一方建立tcp连接接收，一方建立tcp连接传送，接收方使用-l参数监听，实例如下：</p>
+<p>```</p>
+<p>nc -l 9999 &gt; t.txt</p>
+<p>```</p>
+<p>服务端发送示例如下：</p>
+<p>```</p>
+<p>nc localhost 999 &lt;a.txt</p>
+<p>```</p>
+<p>nc参数较多，非专业运维可能用到的就不会太多，如果想更详细的了解，更多nc参数和用法内容可参考如下链接中的内容:</p>
+<p><a href="https://www.cnblogs.com/guge-94/p/10719016.html" target="_blank" rel="noopener">https://www.cnblogs.com/guge-94/p/10719016.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2017/11/13/maven4/" data-id="ckd6noczb006gagvh7xgefn7r" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/07/29/redis3/" data-id="ckd6nocx9004zagvhc0zmccv6" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">开发工具</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
 
     </footer>
   </div>
@@ -249,19 +305,10 @@ head.appendChild(script);
 	
 <nav id="article-nav">
   
-    <a href="/2017/11/13/maven5/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          《maven实战》学习笔记5——maven仓库和镜像
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/11/07/maven3/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/07/24/zhuangxiu/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">《maven实战》学习笔记3——maven使用入门</div>
+      <div class="article-nav-title">装修纪~~从装修中体味人生</div>
     </a>
   
 </nav>
@@ -283,24 +330,42 @@ head.appendChild(script);
     
   
     
-    <div class="widget-wrap">
+  
     
-      <div class="widget" id="toc-widget-fixed">
-      
-        <strong class="toc-title">文章目录</strong>
-        <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#maven坐标"><span class="toc-number">1.</span> <span class="toc-text">maven坐标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#maven坐标是什么"><span class="toc-number">1.1.</span> <span class="toc-text">maven坐标是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maven坐标详解"><span class="toc-number">1.2.</span> <span class="toc-text">maven坐标详解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven依赖"><span class="toc-number">2.</span> <span class="toc-text">maven依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖配置"><span class="toc-number">2.1.</span> <span class="toc-text">依赖配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖传递"><span class="toc-number">2.2.</span> <span class="toc-text">依赖传递</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖调解"><span class="toc-number">2.3.</span> <span class="toc-text">依赖调解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖优化"><span class="toc-number">2.4.</span> <span class="toc-text">依赖优化</span></a></li></ol></li></ol>
-          </div>
-      </div>
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title recent-posts">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/07/29/redis3/">redis常用高级功能小记（上篇）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/24/zhuangxiu/">装修纪~~从装修中体味人生</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/22/jiaxun1/">诫子书（诸葛亮）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/redis2/">redis数据类型要点知识及应用场景</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/06/linux2/">Linux中redis安装及软件安装相关Linux知识要点</a>
+          </li>
+        
+      </ul>
     </div>
+  </div>
 
-  
-    
-
-  
-    
-  
-    
   
     
 
