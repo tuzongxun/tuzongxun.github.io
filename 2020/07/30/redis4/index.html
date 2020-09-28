@@ -31,15 +31,15 @@ var _hmt = _hmt || [];
   <title>redis常用高级功能小记（下篇) | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有： &gt;管道 事务 发布&#x2F;订阅 过期 布隆过滤器 ## 事务 除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
+  <meta name="description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：  管道  事务 发布&#x2F;订阅 过期 布隆过滤器 事务除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis常用高级功能小记（下篇)">
 <meta property="og:url" content="https://blog.tzxcode.cn/2020/07/30/redis4/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有： &gt;管道 事务 发布&#x2F;订阅 过期 布隆过滤器 ## 事务 除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
+<meta property="og:description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：  管道  事务 发布&#x2F;订阅 过期 布隆过滤器 事务除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-30T03:59:42.000Z">
-<meta property="article:modified_time" content="2020-07-30T03:34:54.075Z">
+<meta property="article:modified_time" content="2020-09-28T06:12:08.100Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -137,92 +137,69 @@ var _hmt = _hmt || [];
         <!-- Table of Contents -->
         
         <p>上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：</p>
-<p>&gt;管道</p>
+<blockquote>
+<p>管道</p>
+</blockquote>
 <p>事务</p>
 <p>发布/订阅</p>
 <p>过期</p>
 <p>布隆过滤器</p>
-<p>## 事务</p>
-<p>除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到<code>multi</code>、<code>exec</code>、<code>watch</code>以及<code>unwatch</code>这些关键词。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到<code>multi</code>、<code>exec</code>、<code>watch</code>以及<code>unwatch</code>这些关键词。</p>
 <a id="more"></a>
 
 <p>一个事务以multi开头，然后可以进行很多操作指令，直到输入了exec后正式执行。</p>
 <p>假如有两个客户端，A客户端先输入multi，然后输入了一连串的redis操作，之后B客户端在输入multi，然后也输入了一串操作，但是B客户端先执行了exec，A客户端后执行exec，实际上最终先执行的会是B的操作。</p>
 <p>当然了，更准确的说法是，上边的先后指的是服务端接收到的时间，由于网络等原因，先输入不代表先接收。</p>
 <p>一个事务操作示例如下：</p>
-<p>```</p>
-<p>multi</p>
-<p>set k1 111</p>
-<p>get k1</p>
-<p>exec</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">multi</span><br><span class="line"></span><br><span class="line">set k1 111</span><br><span class="line"></span><br><span class="line">get k1</span><br><span class="line"></span><br><span class="line">exec</span><br></pre></td></tr></table></figure>
+
 <p>除了上边这种操作外，事务还可以配合watch使用，watch用来监听某个或者多个key的变化，如果监听过程中相应的key值发生了改变，则接下来执行事务将会失败，例如：</p>
 <p>client1先监听一个key，然后开启事务，再进行一些操作，但是不执行exec</p>
-<p>```</p>
-<p>watch k1</p>
-<p>multi</p>
-<p>set k1 111</p>
-<p>get k1</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">watch k1</span><br><span class="line"></span><br><span class="line">multi</span><br><span class="line"></span><br><span class="line">set k1 111</span><br><span class="line"></span><br><span class="line">get k1</span><br></pre></td></tr></table></figure>
+
 <p>然后client2改变key的值</p>
-<p>```</p>
-<p>set k1 222</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">set k1 222</span><br></pre></td></tr></table></figure>
+
 <p>接下来回到client1执行exec，就会发现返回结果nil，实际就是watch监听的数据发生了改变，导致整个事务失败。</p>
-<p>## 发布/订阅</p>
-<p>在说redis基础数据结构的时候，list中有一个异步阻塞功能，使用<code>blpop</code>、<code>brpop</code>命令可以阻塞客户端，直到取到结果为止。</p>
+<h2 id="发布-订阅"><a href="#发布-订阅" class="headerlink" title="发布/订阅"></a>发布/订阅</h2><p>在说redis基础数据结构的时候，list中有一个异步阻塞功能，使用<code>blpop</code>、<code>brpop</code>命令可以阻塞客户端，直到取到结果为止。</p>
 <p>这个功能在一定程度上可以实现类似消息监听和消费，只不过一取到数据就结束了。</p>
 <p>而redis本身实现了真正的消息发布订阅功能，使用<code>publish</code>、<code>subscribe</code>命令进行操作，例如：</p>
 <p>消费端使用subscribe监听某个channel通道：</p>
-<p>```</p>
-<p>subscribe channel1</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">subscribe channel1</span><br></pre></td></tr></table></figure>
+
 <p>重开一个命令行窗口，使用publish向上边的channel通道发布消息：</p>
-<p>```</p>
-<p>publish channel1 hello</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">publish channel1 hello</span><br></pre></td></tr></table></figure>
+
 <p>发布之后，上边第一个窗口就会立即接收到消息并打印出来。</p>
 <p>虽然redis带有发布订阅功能，但是却又一个问题存在，也就是之后消费端订阅之后的，或者说正开着订阅的情况下，消息才会接收到，如果客户端断开连接，也只能接收重连之后再重新订阅的消息，断线过程中的消息依然会丢掉。</p>
-<p>## 过期</p>
-<p>redis虽然可以持久化存储，但是实际上多数情况下都是被用作缓存，缓存也就是暂时存储，在这方面redis提供了一个很方便的功能，即设置超时。</p>
+<h2 id="过期"><a href="#过期" class="headerlink" title="过期"></a>过期</h2><p>redis虽然可以持久化存储，但是实际上多数情况下都是被用作缓存，缓存也就是暂时存储，在这方面redis提供了一个很方便的功能，即设置超时。</p>
 <p>设置超时方式有两种，一种是在设值的时候同时设置超时时间，这个方式只适用于string类型，其他类型的操作暂时没有此选项。</p>
 <p>另一种是使用expire功能对需要设置超时的key设置超时时间，这个就是通用的，可以对任何redis支持的类型设置超时。</p>
 <p>对于string类型数据直接设置超时时间，会有两个参数可选，一个是<code>ex</code>一个是<code>px</code>，其中ex代表秒为单位，px代表毫秒为单位，例如：</p>
-<p>```</p>
-<p>set k1 111 ex 2000</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">set k1 111 ex 2000</span><br></pre></td></tr></table></figure>
+
 <p>上边的操作会把k1在redis中保存2000秒，而下边的操作则只会保存2秒：</p>
-<p>```</p>
-<p>set k2 111 px 2000</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">set k2 111 px 2000</span><br></pre></td></tr></table></figure>
+
 <p>但是对于通用的expire来说，就不支持毫秒参数了，后边只能是秒为单位，例如：</p>
-<p>```</p>
-<p>expire k1 2000</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">expire k1 2000</span><br></pre></td></tr></table></figure>
+
 <p>这里的2000代表的也是2000秒，而不是2000毫秒。</p>
 <p>redis超时需要注意的是，缓存一个重要的作用实际就是为了减少数据库的io操作，又因为内存资源问题，所以正常缓存的应该是热数据，经常使用到的数据就是热数据。</p>
 <p>所以可能会有人觉得是不是经常被读取的数据，会自动延长超时时间，而实际上读数据并不会延长改变过期时间。</p>
 <p>重新写数据的时候，是会改变过期时间的，如果重新给了过期时间则变成新的过期时间，如果没有给新的过期时间则会变成永久，直到redis服务宕机，另外，对数据进行计算也不会改变过期时间。</p>
-<p>## 布隆过滤器</p>
-<p>上边也提到了，redis的一大作用就是缓存热数据，从而减少数据库的频繁io，就相当于数据库之前的一道屏障，进而提升系统的整体性能以及可用性。</p>
+<h2 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h2><p>上边也提到了，redis的一大作用就是缓存热数据，从而减少数据库的频繁io，就相当于数据库之前的一道屏障，进而提升系统的整体性能以及可用性。</p>
 <p>那么在很多实际业务中，就会有缓存查不到就去查数据库的逻辑，以保证业务的整体性和可靠性。</p>
 <p>但是这样一来，就又会存在redis缓存中没有，数据库中实际也没有，这种场景就称作redis缓存穿透，如果有大量的这种请求，可想而知数据库就很容易出现问题，而布隆过滤器就刚好可以一定程度上解决缓存穿透这个问题。</p>
 <p>布隆过滤器不是redis的基础功能，而是一个额外的模块，若要使用，就需要先下载和挂在，大致步骤如下</p>
-<p>```</p>
-<p>wget <a href="https://github.com/RedisBloom/RedisBloom/archive/master.zip" target="_blank" rel="noopener">https://github.com/RedisBloom/RedisBloom/archive/master.zip</a></p>
-<p>unzip master.zip</p>
-<p>make</p>
-<p>redis-server –loadmodule /opt/soft/rdisbloom.so</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">wget https:&#x2F;&#x2F;github.com&#x2F;RedisBloom&#x2F;RedisBloom&#x2F;archive&#x2F;master.zip</span><br><span class="line"></span><br><span class="line">unzip master.zip</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">redis-server --loadmodule &#x2F;opt&#x2F;soft&#x2F;rdisbloom.so</span><br></pre></td></tr></table></figure>
+
 <p>上述第一行应该不用多说，就是linux基本的wget下载，第二步解压zip文件应该也不需多说，第三步是对于源码的编译更不用多说。</p>
 <p>第四步是关键，这里是启动redis服务的时候挂在布隆过滤器，需要注意的是，后边的so文件，就是make生成的，具体的路径要视情况而定，并且一定要写绝对路径。</p>
 <p>当然了，这个内容也可以配置到redis的配置文件中，就不需要每次启动都手动配置。</p>
 <p>有了上边的操作，就可以使用布隆过滤器了，关键的操作有三个，分别是<code>bf.add</code>、<code>bf.exists</code>和<code>bf.reserve</code>，add的作用是往过滤器中添加内容，exists用来判断是否存在，而reserve可以设置错误率和预计容量以自定义处理，示例如下：</p>
-<p>```</p>
-<p>bf.add filter1 111</p>
-<p>bf.exists filter1 111</p>
-<p>bf.reserve filter2  0.01 100</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">bf.add filter1 111</span><br><span class="line"></span><br><span class="line">bf.exists filter1 111</span><br><span class="line"></span><br><span class="line">bf.reserve filter2  0.01 100</span><br></pre></td></tr></table></figure>
+
 <p>上边的filter1和filter2可以理解为过滤器的名称，使用exists判定的时候，过滤器中有的就返回1，没有的就返回0.</p>
 <p>对于reserve，除了过滤器名字之外，还需要给一个错误率，一个预计容量，错误率越低，消耗的存储空间越大，实际数据超出了预计容量，误判率就会升高。</p>
 <p>同时还要注意的是，reserve只能用于还不存在的过滤器上，对已有的过滤器执行这个操作会抛出异常。</p>
@@ -232,7 +209,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/07/30/redis4/" data-id="ckd88z1b3004wagvhexo6gbg3" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/07/30/redis4/" data-id="ckfm4xk2l002zvcvh7uzo6owh" class="article-share-link">分享</a>
       
       
       
@@ -340,42 +317,24 @@ head.appendChild(script);
     
   
     
-  
+    <div class="widget-wrap">
     
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/07/30/redis4/">redis常用高级功能小记（下篇)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/29/redis3/">redis常用高级功能小记（上篇）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/24/zhuangxiu/">装修纪~~从装修中体味人生</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/22/jiaxun1/">诫子书（诸葛亮）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/15/redis2/">redis数据类型要点知识及应用场景</a>
-          </li>
-        
-      </ul>
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#事务"><span class="toc-number">1.</span> <span class="toc-text">事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发布-订阅"><span class="toc-number">2.</span> <span class="toc-text">发布&#x2F;订阅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过期"><span class="toc-number">3.</span> <span class="toc-text">过期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#布隆过滤器"><span class="toc-number">4.</span> <span class="toc-text">布隆过滤器</span></a></li></ol>
+          </div>
+      </div>
     </div>
-  </div>
 
+  
+    
+
+  
+    
+  
+    
   
     
 
