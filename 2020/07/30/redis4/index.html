@@ -31,15 +31,15 @@ var _hmt = _hmt || [];
   <title>redis常用高级功能小记（下篇) | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：  管道  事务 发布&#x2F;订阅 过期 布隆过滤器 事务除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
+  <meta name="description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：  管道事务发布&#x2F;订阅过期布隆过滤器  事务除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis常用高级功能小记（下篇)">
 <meta property="og:url" content="https://blog.tzxcode.cn/2020/07/30/redis4/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：  管道  事务 发布&#x2F;订阅 过期 布隆过滤器 事务除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
+<meta property="og:description" content="上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：  管道事务发布&#x2F;订阅过期布隆过滤器  事务除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到multi、exec、watch以及unwatch这些关键词。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-30T03:59:42.000Z">
-<meta property="article:modified_time" content="2020-09-28T06:12:08.100Z">
+<meta property="article:modified_time" content="2020-09-28T06:14:21.161Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -138,12 +138,8 @@ var _hmt = _hmt || [];
         
         <p>上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：</p>
 <blockquote>
-<p>管道</p>
+<p>管道<br>事务<br>发布/订阅<br>过期<br>布隆过滤器</p>
 </blockquote>
-<p>事务</p>
-<p>发布/订阅</p>
-<p>过期</p>
-<p>布隆过滤器</p>
 <h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到<code>multi</code>、<code>exec</code>、<code>watch</code>以及<code>unwatch</code>这些关键词。</p>
 <a id="more"></a>
 
@@ -209,7 +205,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/07/30/redis4/" data-id="ckfm4xk2l002zvcvh7uzo6owh" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/07/30/redis4/" data-id="ckfm4zzta003kikvh1d241drq" class="article-share-link">分享</a>
       
       
       
