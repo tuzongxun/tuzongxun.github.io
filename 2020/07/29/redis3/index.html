@@ -39,7 +39,7 @@ var _hmt = _hmt || [];
 <meta property="og:description" content="redis拥有五种数据类型，不同类型的数据有不同的特性，恰当的使用可以实现很多特别的功能，除此之外，redis自身也封装了或者支持一些特殊的操作，可以称为redis的高级功能。 redis基本数据结构和应用场景介绍可以参考之前的博客 redis数据类型要点知识及应用场景 redis高级功能很多，这里只准备记录如下几种：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-29T13:59:42.000Z">
-<meta property="article:modified_time" content="2020-07-29T00:53:01.822Z">
+<meta property="article:modified_time" content="2020-09-28T06:20:52.943Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -142,87 +142,61 @@ var _hmt = _hmt || [];
 <p>redis高级功能很多，这里只准备记录如下几种：</p>
 <a id="more"></a>
 
-<p>&gt;管道</p>
-<p>事务</p>
-<p>发布/订阅</p>
-<p>过期</p>
-<p>布隆过滤器</p>
-<p>## 管道</p>
-<p>个人理解，管道操作应该不算redis独有的特性，只是它也支持而已。</p>
+<blockquote>
+<p>管道<br>事务<br>发布/订阅<br>过期<br>布隆过滤器</p>
+</blockquote>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>个人理解，管道操作应该不算redis独有的特性，只是它也支持而已。</p>
 <p>redis是基于客户端-服务端的TCP服务，通常一个客户端向服务端发起请求并监听socket返回，这个过程是阻塞模式，会等待服务端响应了才能进行下一个操作。</p>
 <p>这种模式在同一个客户端多次操作的情景下，交互次数也非常多，redis管道实际就是把多个客户端操作请求一次发送给服务端，然后服务端再一次返回，有点像打包传送的过程。</p>
 <p>少了交互次数，从某种意义上来讲，是能提升性能的。</p>
 <p>redis管道操作基本命令如下，使用到了linux的echo和nc命令：</p>
-<p>```</p>
-<p>echo -e “set k1 123456\nget k1” | nc loalhost 6379</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -e &quot;set k1 123456\nget k1&quot; | nc loalhost 6379</span><br></pre></td></tr></table></figure>
+
 <p>上边示例中就是给redis的k1设值为123456，然后再get出k1的值，两个操作一次发送个服务端，使用nc建立tcp连接交互。</p>
 <p>操作本身比较简单，但是需要知道echo和nc的一些用法，我也刚好借此机会多了解一点。</p>
 <p>一开始我对echo的了解其实就是写文件，因为本身用的也不多，但是仔细了解了一下，发现echo能做的事其实蛮多的</p>
-<p>### echo输出到命令行</p>
-<p>```</p>
-<p>echo “test”</p>
-<p>echo test</p>
-<p>```</p>
+<h3 id="echo输出到命令行"><a href="#echo输出到命令行" class="headerlink" title="echo输出到命令行"></a>echo输出到命令行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;test&quot;</span><br><span class="line"></span><br><span class="line">echo test</span><br></pre></td></tr></table></figure>
+
 <p>以上两个命令实际效果是一样的，都会在命令行界面输出echo后边的字符串内容，这应该也是echo最简单的用法了。</p>
-<p>### echo写入到文件</p>
-<p>```</p>
-<p>echo test&gt; test.txt</p>
-<p>```</p>
-<p>### echo追加到文件</p>
-<p>```</p>
-<p>echo test&gt;&gt; test.txt</p>
-<p>```</p>
-<p>### echo转义</p>
-<p>```</p>
-<p>echo -e “set k1 2\nget k1”</p>
-<p>```</p>
+<h3 id="echo写入到文件"><a href="#echo写入到文件" class="headerlink" title="echo写入到文件"></a>echo写入到文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo test&gt; test.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="echo追加到文件"><a href="#echo追加到文件" class="headerlink" title="echo追加到文件"></a>echo追加到文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo test&gt;&gt; test.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="echo转义"><a href="#echo转义" class="headerlink" title="echo转义"></a>echo转义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -e &quot;set k1 2\nget k1&quot;</span><br></pre></td></tr></table></figure>
+
 <p>这里-e参数用来处理转义，上边示例其实就是一开始redis管道操作示例内容，引号中间的<code>\n</code>是换行符的意思，加了-e参数就会解析成换行。</p>
-<p>### echo使用变量输出</p>
-<p>这个地方其实是要写linux脚本的，以下是简单shell脚本示例，例如有一个文件叫test.sh，内容如下：</p>
-<p>```</p>
-<p>#!/bin/sh</p>
-<p>read name</p>
-<p>echo “$name is me”</p>
-<p>```</p>
+<h3 id="echo使用变量输出"><a href="#echo使用变量输出" class="headerlink" title="echo使用变量输出"></a>echo使用变量输出</h3><p>这个地方其实是要写linux脚本的，以下是简单shell脚本示例，例如有一个文件叫test.sh，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line"></span><br><span class="line">read name</span><br><span class="line"></span><br><span class="line">echo &quot;$name is me&quot;</span><br></pre></td></tr></table></figure>
+
 <p>执行上述shell脚本，就会先让输入一个内容，赋值给变量name，之后会在下一行输出。</p>
-<p>### chmod文件权限</p>
-<p>在上边实例中，要模拟echo使用变量并输出，又使用到了简单的shell脚本，而脚本文件在初始创建的时候是只有读写权限的，不能执行，因此就需要chmod命令为文件修改权限，刚好也再补充一下这个命令相关的一些知识。</p>
+<h3 id="chmod文件权限"><a href="#chmod文件权限" class="headerlink" title="chmod文件权限"></a>chmod文件权限</h3><p>在上边实例中，要模拟echo使用变量并输出，又使用到了简单的shell脚本，而脚本文件在初始创建的时候是只有读写权限的，不能执行，因此就需要chmod命令为文件修改权限，刚好也再补充一下这个命令相关的一些知识。</p>
 <p>文件权限一般使用八进制数字或者英文字符表示:</p>
-<p>&gt;4代表可读，字符r；</p>
-<p>2代表可写，字符w；</p>
-<p>1代表可执行，字符x；</p>
-<p>0代表无权限，字符-；</p>
+<blockquote>
+<p>4代表可读，字符r；<br>2代表可写，字符w；<br>1代表可执行，字符x；<br>0代表无权限，字符-；</p>
+</blockquote>
 <p>例如要给文件test.sh赋予所有用户可读可写可执行的权限，如下三个命令都可以，作用 一样，不过看起来数字方式最方便：</p>
-<p>```</p>
-<p>chmod 777 test.sh；</p>
-<p>chmod u=rwx,g=rwx,o=rwx test.sh</p>
-<p>chmod ugo=rwx test.sh</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 test.sh；</span><br><span class="line"></span><br><span class="line">chmod u&#x3D;rwx,g&#x3D;rwx,o&#x3D;rwx test.sh</span><br><span class="line"></span><br><span class="line">chmod ugo&#x3D;rwx test.sh</span><br></pre></td></tr></table></figure>
+
 <p>u代表文件所属用户</p>
 <p>g代表文件所属用户组</p>
 <p>o代表其他用户</p>
-<p>### nc</p>
-<p>上述管道操作还用到了nc命令，nc是netcat的命令，和echo一样也有很多参数和用法，不加参数默认建立一个tcp连接，例如：</p>
-<p>```</p>
-<p>nc 127.0.0.1 6379</p>
-<p>```</p>
+<h3 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h3><p>上述管道操作还用到了nc命令，nc是netcat的命令，和echo一样也有很多参数和用法，不加参数默认建立一个tcp连接，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 127.0.0.1 6379</span><br></pre></td></tr></table></figure>
+
 <p>上述操作会以tcp方式连接到本地的redis服务，之后我们可以进行像redis-cli进入redis客户端之后的操作一样的操作。</p>
 <p>nc除了建立普通连接，还有一个很方便的功能就是传输文件，一方建立tcp连接接收，一方建立tcp连接传送，接收方使用-l参数监听，实例如下：</p>
-<p>```</p>
-<p>nc -l 9999 &gt; t.txt</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9999 &gt; t.txt</span><br></pre></td></tr></table></figure>
+
 <p>服务端发送示例如下：</p>
-<p>```</p>
-<p>nc localhost 999 &lt;a.txt</p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc localhost 999 &lt;a.txt</span><br></pre></td></tr></table></figure>
+
 <p>nc参数较多，非专业运维可能用到的就不会太多，如果想更详细的了解，更多nc参数和用法内容可参考如下链接中的内容:</p>
 <p><a href="https://www.cnblogs.com/guge-94/p/10719016.html" target="_blank" rel="noopener">https://www.cnblogs.com/guge-94/p/10719016.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/07/29/redis3/" data-id="ckfm4zzt8003hikvh2xu5fgjg" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/07/29/redis3/" data-id="ckfm58tkg003sqgvh9r9n8pq6" class="article-share-link">分享</a>
       
       
       
@@ -339,42 +313,24 @@ head.appendChild(script);
     
   
     
-  
+    <div class="widget-wrap">
     
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/07/30/redis4/">redis常用高级功能小记（下篇)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/29/redis3/">redis常用高级功能小记（上篇）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/24/zhuangxiu/">装修纪~~从装修中体味人生</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/22/jiaxun1/">诫子书（诸葛亮）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/15/redis2/">redis数据类型要点知识及应用场景</a>
-          </li>
-        
-      </ul>
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#管道"><span class="toc-number">1.</span> <span class="toc-text">管道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#echo输出到命令行"><span class="toc-number">1.1.</span> <span class="toc-text">echo输出到命令行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo写入到文件"><span class="toc-number">1.2.</span> <span class="toc-text">echo写入到文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo追加到文件"><span class="toc-number">1.3.</span> <span class="toc-text">echo追加到文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo转义"><span class="toc-number">1.4.</span> <span class="toc-text">echo转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo使用变量输出"><span class="toc-number">1.5.</span> <span class="toc-text">echo使用变量输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chmod文件权限"><span class="toc-number">1.6.</span> <span class="toc-text">chmod文件权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nc"><span class="toc-number">1.7.</span> <span class="toc-text">nc</span></a></li></ol></li></ol>
+          </div>
+      </div>
     </div>
-  </div>
 
+  
+    
+
+  
+    
+  
+    
   
     
 
