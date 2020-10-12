@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>springboot集成和使用redis常用功能 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="纯粹的redis命令行操作，可能就跟纯粹的mysql命令行操作一样，会有一种就是为了用而用的感觉。所以一般来说redis作为一个缓存中间件，都会辅以其他的客户端语言进行操作，比如java。redis是开源的，java也是开源的，这就注定了java中连接redis的客户端不止一种，常见的有jedis、redisson、lettuce。在如今一切都在高速运行的社会环境下，java软件开发也是极其追求代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot集成和使用redis常用功能">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/08/04/redis5/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="纯粹的redis命令行操作，可能就跟纯粹的mysql命令行操作一样，会有一种就是为了用而用的感觉。所以一般来说redis作为一个缓存中间件，都会辅以其他的客户端语言进行操作，比如java。redis是开源的，java也是开源的，这就注定了java中连接redis的客户端不止一种，常见的有jedis、redisson、lettuce。在如今一切都在高速运行的社会环境下，java软件开发也是极其追求代">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-04T03:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-12T06:08:19.024Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-redis5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/04/redis5/" class="article-date">
+  <time datetime="2020-08-04T03:59:42.000Z" itemprop="datePublished">2020-08-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springboot集成和使用redis常用功能
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>纯粹的redis命令行操作，可能就跟纯粹的mysql命令行操作一样，会有一种就是为了用而用的感觉。所以一般来说redis作为一个缓存中间件，都会辅以其他的客户端语言进行操作，比如java。<br>redis是开源的，java也是开源的，这就注定了java中连接redis的客户端不止一种，常见的有jedis、redisson、lettuce。<br>在如今一切都在高速运行的社会环境下，java软件开发也是极其追求代码产出效率，所以随处可见的都是springcloud、springboot。<br>springboot约定优于配置的思想，一定程度上也确实大大简化了开发工作，所以在学习java中的redis集成和使用时，我也一样选择了使用springboot。</p>
+<a id="more"></a>
+<h2 id="springboot集成redis"><a href="#springboot集成redis" class="headerlink" title="springboot集成redis"></a>springboot集成redis</h2><p>springboot中集成redis，和springboot集成其他一些组件类似，基本都是引入一个starter即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据源连接配置"><a href="#数据源连接配置" class="headerlink" title="数据源连接配置"></a>数据源连接配置</h2><p>有了依赖的引入后，接下来就是配置redis，springboot中如果是使用yml格式，则基础配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">    redis:</span><br><span class="line">        host: 192.168.139.9</span><br><span class="line">        password:</span><br><span class="line">        database: 0</span><br><span class="line">        port: 6379</span><br></pre></td></tr></table></figure>
+
+<p>以上host指向Redis服务器的ip，这里是我自己虚拟机的ip，没有设置密码，所以密码没有。<br>redis默认有16个database，可以在配置文件中修改，我没有修改，还是使用默认的16个，而这里客户端连接使用0号database。同样的，端口号使用默认6379.</p>
+<h2 id="restTemplate使用"><a href="#restTemplate使用" class="headerlink" title="restTemplate使用"></a>restTemplate使用</h2><p>springboot中对redis的大多数操作都进行了统一的封装，即RedisTemplate，对于之前说到的redis的五种基本数据类型以及一些常用高级功能的操作，都是通过RedisTemplate进行。</p>
+<blockquote>
+<p>redisTemplate.opsForValue()可以获取一个对string类型的操作；<br>redisTemplate.opsForList()可以获取一个对list类型的操作；<br>redisTemplate.opsForHash()可以获取一个对hash类型的操作；<br>redisTemplate.opsForSet()可以获取一个对set类型的操作；<br>redisTemplate.opsForZSet()可以获取一个对sorted_set类型的操作</p>
+</blockquote>
+<p>基于上边的内容，就可以演示5种类型对数据的基本存储操作，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redisTemplate.opsForValue().set(key,value);</span><br><span class="line">redisTemplate.opsForList().leftPush(key,value);</span><br><span class="line">redisTemplate.opsForHash().put(key,key,value);</span><br><span class="line">redisTemplate.opsForSet().add(key,value);</span><br><span class="line">redisTemplate.opsForZSet().add(key,value,0);</span><br></pre></td></tr></table></figure>
+
+<p>在基础数据类型中说道，string里边其实还要很多类型，比如bitmap，目前我使用的springboot-redis版本似乎还不完全支持bitmap的所有操作，例如保存bitmap有现成的封装，可以写成下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redisTemplate.opsForValue().setBit(key,0,true);</span><br></pre></td></tr></table></figure>
+<p>但是像bitmap的统计bitcount就没有直接操作的方法，需要自己写回调函数进行操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redisTemplate.execute((RedisCallback&lt;Long&gt;)connection -&gt; connection.bitCount((key).getBytes()));</span><br></pre></td></tr></table></figure>
+
+<p>除了基础数据类型的简单操作，redisTemplte也可以进行过期设置，以及管道等高级功能的操作，例如;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">redisTemplate.expire(&quot;k111&quot;,200, TimeUnit.SECONDS);</span><br><span class="line">redisTemplate.expireAt(&quot;k111&quot;,new Date());</span><br><span class="line"></span><br><span class="line">redisTemplate.executePipelined(new RedisCallback&lt;Object&gt;() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public Object doInRedis(RedisConnection connection) throws DataAccessException &#123;</span><br><span class="line">        connection.openPipeline();</span><br><span class="line">        connection.set(&quot;k111&quot;.getBytes(),&quot;t111&quot;.getBytes());</span><br><span class="line">        connection.set(&quot;k222&quot;.getBytes(),&quot;t222&quot;.getBytes());</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>过期操作其实也很简单，和其他一些操作一样，都和命令行操作极其相似，基本上点一下api提示就可以看懂用法，管道操作就相对复杂一点，也是需要自己实现一定的回调函数进行处理，但是实际也比较简单。</p>
+<h2 id="连接池简单配置"><a href="#连接池简单配置" class="headerlink" title="连接池简单配置"></a>连接池简单配置</h2><p>实际使用redis的时候，都不会是上边那样仅仅配置ip和端口等就行了，而是还会加上其他的配置，例如连接池。<br>上边说java中连接redis常用的客户端有三种，springboot默认使用的就是lettuce，所以默认连接池的配置也是使用lettuce，加上连接池的几个简单配置后，redis配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">    redis:</span><br><span class="line">        host: 192.168.139.9</span><br><span class="line">        password:</span><br><span class="line">        database: 0</span><br><span class="line">        port: 6379</span><br><span class="line">        lettuce:</span><br><span class="line">            shutdown-timeout: 100ms</span><br><span class="line">            pool:</span><br><span class="line">                maxIdle: 5</span><br><span class="line">                maxActive: 20</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的是，lettuce连接池虽然可以配置，但是实际上还缺少依赖，如果就这样启动，会发现启动会报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.lang.NoClassDefFoundError: org&#x2F;apache&#x2F;commons&#x2F;pool2&#x2F;impl&#x2F;GenericObjectPoolConfig</span><br><span class="line">	at org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration$LettucePoolingClientConfigurationBuilder.&lt;init&gt;(LettucePoolingClientConfiguration.java:94) ~[spring-data-redis-2.3.1.RELEASE.jar:2.3.1.RELEASE]</span><br><span class="line">	at org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration.builder(LettucePoolingClientConfiguration.java:51) ~[spring-data-redis-2.3.1.RELEASE.jar:2.3.1.RELEASE]</span><br></pre></td></tr></table></figure>
+
+<p>上边错误提示其实很明显了，就是缺少commons-pool2相关的类，所以这里就需要再引入相关依赖;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.apache.commons&lt;&#x2F;groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;commons-pool2&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>有了上边依赖之后，再次启动，便可以正常使用了。</p>
+<h2 id="key显示不正常问题"><a href="#key显示不正常问题" class="headerlink" title="key显示不正常问题"></a>key显示不正常问题</h2><p>上边的操作看起来没什么，但其实会有一个问题，如果取一下数据就会发现数据的key并不是我们存进去的内容，会有一部分像是乱码一样。<br>解决办法之一是使用springboot封装的高阶API，即StringRedisTemplate，另一个办法就是配置redis序列化，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Autowired(required &#x3D; false)</span><br><span class="line">  public void setRedisTemplate(RedisTemplate redisTemplate) &#123;</span><br><span class="line">      RedisSerializer stringSerializer &#x3D; new StringRedisSerializer();</span><br><span class="line">      redisTemplate.setKeySerializer(stringSerializer);</span><br><span class="line">      redisTemplate.setValueSerializer(stringSerializer);</span><br><span class="line">      redisTemplate.setHashKeySerializer(stringSerializer);</span><br><span class="line">      redisTemplate.setHashValueSerializer(stringSerializer);</span><br><span class="line">      this.redisTemplate &#x3D; redisTemplate;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>相关文章</strong></p>
+<p><a href="https://tuzongxun.blog.csdn.net/article/details/106878541" target="_blank" rel="noopener">缓存和redis相关基础知识</a><br><a href="https://tuzongxun.blog.csdn.net/article/details/107170447" target="_blank" rel="noopener">Linux中redis安装及软件安装相关Linux知识要点</a><br><a href="https://tuzongxun.blog.csdn.net/article/details/107371302" target="_blank" rel="noopener">redis数据类型要点知识及应用场景</a><br><a href="https://tuzongxun.blog.csdn.net/article/details/107646610" target="_blank" rel="noopener">redis管道、事务、发布订阅、过期、过滤器等常用高级功能小记（上篇）</a><br><a href="https://tuzongxun.blog.csdn.net/article/details/107686577" target="_blank" rel="noopener">redis管道、事务、发布订阅、过期、过滤器等常用高级功能小记（下篇)</a><br><a href="https://blog.csdn.net/tuzongxun/article/details/107794207" target="_blank" rel="noopener">springboot集成和使用redis常用功能</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/08/04/redis5/" data-id="ckg64y7t5003r3svhfbmq6c8x" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/07/30/redis4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">redis常用高级功能小记（下篇)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#springboot集成redis"><span class="toc-number">1.</span> <span class="toc-text">springboot集成redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据源连接配置"><span class="toc-number">2.</span> <span class="toc-text">数据源连接配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#restTemplate使用"><span class="toc-number">3.</span> <span class="toc-text">restTemplate使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接池简单配置"><span class="toc-number">4.</span> <span class="toc-text">连接池简单配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#key显示不正常问题"><span class="toc-number">5.</span> <span class="toc-text">key显示不正常问题</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
