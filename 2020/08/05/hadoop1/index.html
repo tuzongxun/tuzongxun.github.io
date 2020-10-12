@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>hadoop安装环境准备和关联知识解析 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本想一口气把redis多学一点，奈何还有常见的如穿透、雪崩、击穿、分布式锁、redis并发原理、linux多路复用、redis集群等都还没梳理清楚，而项目就需要先学习一下hadoop等大数据相关技术，于是不得不暂停redis，转而进入hadoop系列的摸石头过河。  据我了解，一般正式环境的hadoop使用都是需要zookeeper的，但是使用hadoop是否一定要zookeeper这个事，对于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop安装环境准备和关联知识解析">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/08/05/hadoop1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="本想一口气把redis多学一点，奈何还有常见的如穿透、雪崩、击穿、分布式锁、redis并发原理、linux多路复用、redis集群等都还没梳理清楚，而项目就需要先学习一下hadoop等大数据相关技术，于是不得不暂停redis，转而进入hadoop系列的摸石头过河。  据我了解，一般正式环境的hadoop使用都是需要zookeeper的，但是使用hadoop是否一定要zookeeper这个事，对于">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-05T03:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-12T06:26:52.672Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hadoop1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/05/hadoop1/" class="article-date">
+  <time datetime="2020-08-05T03:59:42.000Z" itemprop="datePublished">2020-08-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      hadoop安装环境准备和关联知识解析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <blockquote>
+<p>本想一口气把redis多学一点，奈何还有常见的如穿透、雪崩、击穿、分布式锁、redis并发原理、linux多路复用、redis集群等都还没梳理清楚，而项目就需要先学习一下hadoop等大数据相关技术，于是不得不暂停redis，转而进入hadoop系列的摸石头过河。</p>
+</blockquote>
+<p>据我了解，一般正式环境的hadoop使用都是需要zookeeper的，但是使用hadoop是否一定要zookeeper这个事，对于刚开始学习hadoop的我来说，还是一个未知数。尤其是网上有的教程写了zookeeper，有的又没写，也就更加的茫然。<br>茫然不可怕，怕的是一直茫然，而解决茫然最好的办法就是行动起来，只要动起来就会有结果，然后便能自然而然的触发下一步，进而一点一点的从茫然中走出来。<br>那么第一步自然是先想办法把环境搭起来，根据已知的内容一步步摸索，如果抛开zookeeper不谈，能确定的是jdk和hadoop本身是一定不可或缺的。</p>
+<a id="more"></a>
+<h2 id="linux中jdk安装"><a href="#linux中jdk安装" class="headerlink" title="linux中jdk安装"></a>linux中jdk安装</h2><p>我现在的虚拟机安装的是迷你纯净版的centos系统，一开始连wget、nc等常用命令都没有，所以就更不用说jdk了，这里其实想说的是，建议大家装虚拟机的时候尽量装纯净版，这样其实能体验很多非纯净版体会不了的乐趣。</p>
+<p>jdk的安装实际也很简单，windows中老的版本还需要手动配置环境变量，现在已经精简到就鼠标点点点，然后自动配置环境变量的地步了。<br>而linux中，虽然还没有自动配置环境变量那么便捷，但也不复杂，配置环境变量本身就是一个通用的技术，操作多了也就像windows中点点点一样简单。<br>linux安装jdk大体分三步，分别是下载、解压、配环境变量，如果一定要说的话，也可以再加一步，那就是验证。</p>
+<p><strong>下载jdk</strong><br>jdk版本现在升级很快，目前已经到14了，但有项目中实际使用的还是8，所以我自然也还是以8为基础，首先是选择对应的安装包，选择页面如下;<br><a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html" target="_blank" rel="noopener">https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html</a><br>选择安装包时有一个需要注意的细节是，一定要选择正确位数的安装包，例如centos系统只支持64位，如果下载选择打的是i586而不是x64,则安装以后执行java相关命令会发现报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java: &#x2F;lib&#x2F;ld-linux.so.2: bad ELF interpreter: No such file or directory</span><br></pre></td></tr></table></figure>
+<p>在此基础上，我选择的安装包是jdk-8u261-linux-x64.tar.gz，在下载页复制到的下载链接是：<br><a href="https://download.oracle.com/otn/java/jdk/8u261-b12/a4634525489241b9a9e1aa73d9e118e6/jdk-8u261-linux-x64.tar.gz" target="_blank" rel="noopener">https://download.oracle.com/otn/java/jdk/8u261-b12/a4634525489241b9a9e1aa73d9e118e6/jdk-8u261-linux-x64.tar.gz</a></p>
+<p>这个地方就又可以引申出一些别的知识了，实际上在安装redis的时候也提到过，就是安装包获取方式，既可以直接用windows下载，又可以直接在虚拟机中使用wget命令下载。<br>实际工作中我们使用最高效可行的方式就可以了，但是既然是学习，自然是要一定程度上为了应用而应用一下，所以之前redis使用的wget，这里就直接windows下载。</p>
+<p><strong>文件传输</strong><br>windows下载以后要传到虚拟机中，又有不同的选择，可以使用专门的ftp工具传输，还可以使用redis管道学习的时候拓展到的nc命令。<br>ftp上传就是纯粹工具的使用，拖拽就完了，所以这里自然是要以看起来高大上的nc来操作。<br>首先，在我的虚拟机中开启nc文件下载的监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l 9999 &gt; jdk-8u261-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>然后，在windows的cmd命令窗口，进入到jdk安装包存放目录使用nc执行文件上传：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 192.168.139.9 9999 &gt; jdk-8u261-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>如果直接按照这个步骤操作，可能会发现windows执行nc命令找不到，这是因为windows中默认也是没有这个的，所以还需要在windows中先安装一下nc。<br>nc下载地址：<a href="https://eternallybored.org/misc/netcat/" target="_blank" rel="noopener">https://eternallybored.org/misc/netcat/</a><br>下载下来的zip文件解压，解压后可能会还有一层，不管有几层，需要把最内层的所有文件复制到C:\Windows\System32下，然后重启cmd窗口，就能正常使用nc了。<br>需要注意的是，linux系统本身也没有nc，我是使用redis的时候装过，如果有人linux中也执行不了，那么也需要先安装一下，非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum instal nc</span><br></pre></td></tr></table></figure>
+<p>需要提一点的是，实际操作发现，在使用nc传文件的时候，windows向linux传输，文件传输完成了也不会自动断开连接，而linux向linux传输，文件传输完成就会自动断开连接。<br>所以windows向linux传输时，如果看到文件大小显示已经传输完成不再变化了，可以ctrl+c主动断开连接。<br>还要注意的是，上边9999端口是随便写的，不和本机现有端口冲突即可，但是由于防火墙存在，可能会连接失败。因此，要么关闭防火墙，要么端口加白名单，我这里就是临时起意试一下，所以防火墙也就使用临时关闭的方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop</span><br></pre></td></tr></table></figure>
+
+<p><strong>解压</strong><br>有了安装包以后，下一步是解压，这个就更简单了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf jdk-8u261-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>tar相关内容可以参考redis安装的那篇文章：<a href="https://blog.csdn.net/tuzongxun/article/details/107170447" target="_blank" rel="noopener">https://blog.csdn.net/tuzongxun/article/details/107170447</a></p>
+<p><strong>环境变量配置</strong><br>之所以说环境变量的配置简单，是因为这些软件不同，但基本规律一样，像之前redis配置环境变量，就是执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export REDIS_HOME&#x3D;&#x2F;opt&#x2F;soft&#x2F;redis5</span><br><span class="line">export PATH&#x3D;$PATH:$REDIS_HOME&#x2F;bin</span><br></pre></td></tr></table></figure>
+<p>实际就是在PATH环境变量里指向软件的bin目录，linux中多数软件的操作功能命令都是在bin目录下，所以jdk的环境变量配置其实也是这样的，没有一点特殊：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;root&#x2F;soft&#x2F;jdk1.8.0_261</span><br><span class="line">export PATH&#x3D;$PATH:$JAVA_HOME&#x2F;bin</span><br></pre></td></tr></table></figure>
+<p>不同的，也就是安装目录不一样而已。有了上边配置后，不能忘记的是需要让配置生效，即执行<code>source /etc/profile</code>命令。</p>
+<p><strong>验证</strong><br>我们说安装好了不代表真的好了，所以需要进行验证，任意目录执行java版本查询命令即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+<p>正常的情况下就会看到输出几行java版本相关的数据，如果安装包不正确，比如上边说到的位数不对，就会提示相关的错误，我这里输出如下;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java version &quot;1.8.0_261&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_261-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.261-b12, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<h2 id="hadoop下载安装"><a href="#hadoop下载安装" class="headerlink" title="hadoop下载安装"></a>hadoop下载安装</h2><p>安装好了jdk，下一步是下载hadoop安装包，我一开始参考网上教程选择的安装包地址是<br><a href="http://archive.apache.org/dist/hadoop/core/hadoop-2.7.5/" target="_blank" rel="noopener">http://archive.apache.org/dist/hadoop/core/hadoop-2.7.5/</a><br>同样的，有了下载地址，下载方式就可以多种选择，可以windows下载，也可以wget下载，这里就不在重复了。<br>需要注意的是，上边这个网址流量有限制，目前看到的是每天10G，所以有可能存在下载不成功的情况，会提示当天流量已经超过了10G。</p>
+<p>hadoop一般是集群方式出现，所以我准备了3台虚拟机，这里实际也有偷懒的方式，即先一台机器装好一套环境，然后使用虚拟机快照和克隆功能快速的创建多个。<br>但是还是上边说的为了应用和练习，我以及采用一个一个手动创建和安装各种环境的方式。<br>这种方式便又涉及到安装包获取问题，根据之前的操作，已知的就有wget直接下载、windows下载+ftp工具上传、windows下载+nc上传，实际还有更多方式，比如这里我就采用新的方式scp。<br>在192.168.139.9这台机，我已经有了jdk和hadoop安装包，另两台机分别是192.168.139.19和192.168.139.29，则可以使用scp复制文件到另两台机器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp jdk-8u261-linux-x64.tar.gz root@192.168.139.19:&#x2F;root&#x2F;soft&#x2F;zip&#x2F;</span><br><span class="line">scp jdk-8u261-linux-x64.tar.gz root@192.168.139.29:&#x2F;root&#x2F;soft&#x2F;zip&#x2F;</span><br></pre></td></tr></table></figure>
+<p>这样一来，安装包获取方式就又增加一个选择，即wget直接下载、windows下载+ftp工具上传、windows下载+nc上传、系统间scp复制。</p>
+<p><strong>补充</strong><br>上边的安装包是可以使用的，但是实际现在官网最新版已经到了3.3，所以为了不至于落伍太多，后边又重新下载了较新的3.1.3版本，可以到hadoop官网下载：<br><a href="https://hadoop.apache.org/releases.html" target="_blank" rel="noopener">https://hadoop.apache.org/releases.html</a></p>
+<p>而后续部署也发现2.6和3.1.3的版本操作上还是有不少区别的，后续操作将会以3.1.3为准，但是部分遇到的差异也会有所提及。</p>
+<p>至此，第一步的环境准备以及知识拓展告一段落。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/08/05/hadoop1/" data-id="ckg65mgv5000gmsvh9f05gkrh" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/08/04/redis5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">springboot集成和使用redis常用功能</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux中jdk安装"><span class="toc-number">1.</span> <span class="toc-text">linux中jdk安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hadoop下载安装"><span class="toc-number">2.</span> <span class="toc-text">hadoop下载安装</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
