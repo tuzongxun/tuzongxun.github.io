@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>hbase-ha模式搭建要点和问题记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之前搭建了单机的hbase，使用伪分布式的hdfs作为数据存储，具体搭建要点和问题有所记录：https:&#x2F;&#x2F;blog.csdn.net&#x2F;tuzongxun&#x2F;article&#x2F;details&#x2F;107915720后来，伪分布式的hdfs升级为ha模式，hbase自然也是要同步升级成ha的，本以为应该会很顺利，但实际上花的时间还是比预想中的多，因此还是做一个简单的记录，尤其是其中卡住的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hbase-ha模式搭建要点和问题记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/09/23/hadoop8/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="之前搭建了单机的hbase，使用伪分布式的hdfs作为数据存储，具体搭建要点和问题有所记录：https:&#x2F;&#x2F;blog.csdn.net&#x2F;tuzongxun&#x2F;article&#x2F;details&#x2F;107915720后来，伪分布式的hdfs升级为ha模式，hbase自然也是要同步升级成ha的，本以为应该会很顺利，但实际上花的时间还是比预想中的多，因此还是做一个简单的记录，尤其是其中卡住的问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-23T11:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T04:29:45.229Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="hadoop">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hadoop8" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/23/hadoop8/" class="article-date">
+  <time datetime="2020-09-23T11:59:42.000Z" itemprop="datePublished">2020-09-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      hbase-ha模式搭建要点和问题记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>之前搭建了单机的hbase，使用伪分布式的hdfs作为数据存储，具体搭建要点和问题有所记录：<br><a href="https://blog.csdn.net/tuzongxun/article/details/107915720" target="_blank" rel="noopener">https://blog.csdn.net/tuzongxun/article/details/107915720</a><br>后来，伪分布式的hdfs升级为ha模式，hbase自然也是要同步升级成ha的，本以为应该会很顺利，但实际上花的时间还是比预想中的多，因此还是做一个简单的记录，尤其是其中卡住的问题。</p>
+<a id="more"></a>
+<h2 id="机器规划"><a href="#机器规划" class="headerlink" title="机器规划"></a>机器规划</h2><p>本次hbase-ha模式搭建规划使用三台机，主机名分别是<code>node001</code>、<code>node002</code>、<code>node003</code>，其中node001为master，node003为back master，而三台都作为regionserver。</p>
+<h2 id="准备条件"><a href="#准备条件" class="headerlink" title="准备条件"></a>准备条件</h2><p>hbase-ha模式搭建，按官网说明，以及目前验证来看，似乎必须要用hdfs，因此主要的依赖条件如下：</p>
+<blockquote>
+<p>jdk<br>hdfs-ha集群<br>zookeeper集群<br>ssh免密</p>
+</blockquote>
+<h2 id="hbase-env-sh"><a href="#hbase-env-sh" class="headerlink" title="hbase-env.sh"></a>hbase-env.sh</h2><p>之前单机的时候，zookeeper也是使用的hbase自带的，因此在<code>hbase-env.sh</code>文件中有这样一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export HBASE_MANAGES_ZK&#x3D;true</span><br></pre></td></tr></table></figure>
+
+<p>在搭建ha模式的hdfs时已经搭建好了独立的zookeeper集群，所以hbase的ha自然也可以直接使用这个zookeeper集群，而不再使用自带的，因此这里需要修改成不使用自带的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export HBASE_MANAGES_ZK&#x3D;false</span><br></pre></td></tr></table></figure>
+
+<h2 id="hbase-site-xml"><a href="#hbase-site-xml" class="headerlink" title="hbase-site.xml"></a>hbase-site.xml</h2><p>hbase主要的一些配置都在这个文件里，先列一下最终的文件主要内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;hdfs:&#x2F;&#x2F;mycluster&#x2F;hbase3&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.tmp.dir&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;&#x2F;var&#x2F;bigdata&#x2F;hbase&#x2F;data-local3&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.unsafe.stream.capability.enforce&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;false&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.master&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;node001:60000&lt;&#x2F;value&gt;</span><br><span class="line"> &lt;&#x2F;property&gt;</span><br><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.quorum&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;node002,node003,node004&lt;&#x2F;value&gt;</span><br><span class="line"> &lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+<p>上述第一个配置<code>hbase.rootdir</code>指向hbase的存储路径，这里还是使用hdfs存储，但是不同的是，把之前固定的ip和端口改成了hdfs集群的名称。<br>之后的<code>hbase.cluster.distributed</code>为<code>true</code>开启分布式，<code>hbase.tmp.dir</code>配置临时存储目录，<code>hbase.unsafe.stream.capability.enforce</code>这个配置保持不变，为了保证启动不报错（具体原因待深究），<code>hbase.master</code>指定一个主节点(网上说这个可以不配置，交给zookeeper来选择，时间问题暂时未验证)，<code>hbase.zookeeper.quorum</code>配置外部zookeeper的节点。</p>
+<h2 id="regionservers"><a href="#regionservers" class="headerlink" title="regionservers"></a>regionservers</h2><p>根据官网说明，需要把集群中的region节点主机写入到这个文件中，这个文件也在<code>conf</code>目录下，只不过原本里边只有一个<code>localhost</code>，修改之后如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node001</span><br><span class="line">node002</span><br><span class="line">node003</span><br></pre></td></tr></table></figure>
+
+<h2 id="backup-masters"><a href="#backup-masters" class="headerlink" title="backup-masters"></a>backup-masters</h2><p>这个文件原本是没有的，是一个master备份节点的配置，可以不要。但是正常的ha模式一般来说是需要有备份master节点的，所以还是需要这个文件。由于原本没有，就需要手动在<code>conf</code>目录下创建并制定备份master节点，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node003</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="core-site-xml和hdfs-site-xml"><a href="#core-site-xml和hdfs-site-xml" class="headerlink" title="core-site.xml和hdfs-site.xml"></a>core-site.xml和hdfs-site.xml</h2><p>原以为有了上边的配置就可以了，但是使用<code>start-hbase.sh</code>启动时，发现<code>hbase-root-regionserver-node001.log</code>日志出现如下的error信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.lang.IllegalArgumentException: java.net.UnknownHostException: mycluster</span><br><span class="line">        at org.apache.hadoop.security.SecurityUtil.buildTokenService(SecurityUtil.java:417)</span><br><span class="line">        at org.apache.hadoop.hdfs.NameNodeProxiesClient.createProxyWithClientProtocol(NameNodeProxiesClient.java:132)</span><br><span class="line">        at org.apache.hadoop.hdfs.DFSClient.&lt;init&gt;(DFSClient.java:351)</span><br><span class="line">        at org.apache.hadoop.hdfs.DFSClient.&lt;init&gt;(DFSClient.java:285)</span><br><span class="line">        at org.apache.hadoop.hdfs.DistributedFileSystem.initialize(DistributedFileSystem.java:160)</span><br><span class="line">        at org.apache.hadoop.fs.FileSystem.createFileSystem(FileSystem.java:2812)</span><br></pre></td></tr></table></figure>
+
+<p>上边的<code>mycluster</code>并非主机名，而是hdfs的集群名称，看起来是这里不能识别。经过查询，解决方案是复制hadoop里边的<code>core-site.xml</code>和<code>hdfs-site.xml</code>到hbase的<code>conf</code>目录下，然后重新启动。</p>
+<h2 id="Master-is-initializing"><a href="#Master-is-initializing" class="headerlink" title="Master is initializing"></a>Master is initializing</h2><p>上边操作之后重新启动hbase不在抛error异常，原以为这次成功了，但是使用<code>hbase shell</code>操作时却不能正常的操作，而是在命令行界面跑出如下异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ERROR: org.apache.hadoop.hbase.PleaseHoldException: Master is initializing</span><br><span class="line">        at org.apache.hadoop.hbase.master.HMaster.checkInitialized(HMaster.java:2811)</span><br><span class="line">        at org.apache.hadoop.hbase.master.HMaster.createTable(HMaster.java:2018)</span><br><span class="line">        at org.apache.hadoop.hbase.master.MasterRpcServices.createTable(MasterRpcServices.java:659)</span><br><span class="line">        at org.apache.hadoop.hbase.shaded.protobuf.generated.MasterProtos$MasterService$2.callBlockingMethod(MasterProtos.java)</span><br><span class="line">        at org.apache.hadoop.hbase.ipc.RpcServer.call(RpcServer.java:418)</span><br><span class="line">        at org.apache.hadoop.hbase.ipc.CallRunner.run(CallRunner.java:133)</span><br><span class="line">        at org.apache.hadoop.hbase.ipc.RpcExecutor$Handler.run(RpcExecutor.java:338)</span><br><span class="line">        at org.apache.hadoop.hbase.ipc.RpcExecutor$Handler.run(RpcExecutor.java:318)</span><br></pre></td></tr></table></figure>
+
+<p>这个异常在搭建单机hbase的时候实际已经出现过，但是当时等了一会儿就好了，而这次这个异常却没有随时间变化而解决，在网上找了很多解决方案均是失败的情况下，我重新一行行的看了下日志，结果发现在<code>hbase-root-master-node001.log</code>文件中有如下几行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2020-09-23 09:17:17,383 WARN  [master&#x2F;node001:16000:becomeActiveMaster] master.HMaster: hbase:meta,,1.1588230740 is NOT online; state&#x3D;&#123;1588230740 state&#x3D;OPEN, ts&#x3D;1600823703586, server&#x3D;node001,16020,1599788244145&#125;; ServerCrashProcedures&#x3D;true. Master startup cannot progress, in holding-pattern until region onlined.</span><br></pre></td></tr></table></figure>
+<p>这个日志只是WARN，所以一开始没有注意到，仔细读了之后猜测可能就是我shell无法操作的原因，于是通过搜索这个问题找到了解决方案，目前不完全确定根本原因，但猜测应该是zookeeper中对于hbase的状态管理出现了异常数据。<br>因为我的hbase不是直接搭建成ha模式，而是从单机使用本地文件改成hdfs，又改成ha模式，这期间为了处理和验证各种异常还手动删除过<code>/tmp</code>等目录下的内容，不确定是否这些操作导致zookeeper里出现了不一致的数据。<br>最终解决办法就是删除zookeeper里<code>meta-region-server</code>，具体操作是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zkCli.sh</span><br><span class="line">deleteall &#x2F;hbase&#x2F;meta-region-server</span><br></pre></td></tr></table></figure>
+
+<p>实际上网上的答案几乎千篇一律是<code>rmr /hbase-unsecure/meta-region-server</code>，但是我发现我的zookeeper进去之后并没有<code>rmr</code>命令，也没有<code>hbase-unsecure</code>目录，后来看到有地方说<code>rmr</code>是过期指令，多半是我的zookeeper-3.6.1比较新，已经完全删除了这个操作，取而代之的是<code>deleteall</code>。<br>而<code>hbase-unsecure</code>应该是和<code>mycluster</code>一样只是一个集群名字，而我这里就叫<code>hbase</code>。<br>里边诸多细节还有待深究和验证，好在最终再重启hbase之后，不论是<code>hbase shell</code>还是<code>phoenix</code>都能正常操作了。</p>
+<p>注：除了细节上，hbase本身ha搭建还是较简单，需要注意的是需要保证各集群节点内的配置文件一致，包括从hadoop复制来的文件。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/23/hadoop8/" data-id="ckg7khyfu001jv8vhda8t9ibn" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/10/13/flink1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          flink初识及集群搭建和简单验证
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/08/linux3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">centos7中redis、mongodb、kafka安装记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#机器规划"><span class="toc-number">1.</span> <span class="toc-text">机器规划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备条件"><span class="toc-number">2.</span> <span class="toc-text">准备条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hbase-env-sh"><span class="toc-number">3.</span> <span class="toc-text">hbase-env.sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hbase-site-xml"><span class="toc-number">4.</span> <span class="toc-text">hbase-site.xml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#regionservers"><span class="toc-number">5.</span> <span class="toc-text">regionservers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#backup-masters"><span class="toc-number">6.</span> <span class="toc-text">backup-masters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#core-site-xml和hdfs-site-xml"><span class="toc-number">7.</span> <span class="toc-text">core-site.xml和hdfs-site.xml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Master-is-initializing"><span class="toc-number">8.</span> <span class="toc-text">Master is initializing</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

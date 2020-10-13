@@ -143,7 +143,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/10/13/flink1/" data-id="ckg7ekbk1000czcvh4zwnet7e" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/10/13/flink1/" data-id="ckg7khyf0000iv8vh9nwo2axm" class="article-share-link">分享</a>
       
       
       
@@ -156,10 +156,10 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-hadoop2" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-hadoop8" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/08/06/hadoop2/" class="article-date">
-  <time datetime="2020-08-06T08:59:42.000Z" itemprop="datePublished">2020-08-06</time>
+    <a href="/2020/09/23/hadoop8/" class="article-date">
+  <time datetime="2020-09-23T11:59:42.000Z" itemprop="datePublished">2020-09-23</time>
 </a>
     
   <div class="article-category">
@@ -175,7 +175,7 @@ var _hmt = _hmt || [];
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/06/hadoop2/">hadoop分布式安装及配置初步解析（坑坑不息）</a>
+      <a class="article-title" href="/2020/09/23/hadoop8/">hbase-ha模式搭建要点和问题记录</a>
     </h1>
   
 
@@ -183,17 +183,16 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>linux中hadoop的安装教程，网上也有不少了，例如我自己搭建过程中参考的这几篇：<br><a href="https://blog.csdn.net/weixin_44198965/article/details/89603788" target="_blank" rel="noopener">https://blog.csdn.net/weixin_44198965/article/details/89603788</a><br><a href="https://blog.csdn.net/qq_25615395/article/details/89083580" target="_blank" rel="noopener">https://blog.csdn.net/qq_25615395/article/details/89083580</a><br><a href="https://juejin.im/post/6856984821059895303/" target="_blank" rel="noopener">https://juejin.im/post/6856984821059895303/</a></p>
-<p>然而教程是不少，但或许是环境不一样，也或者思路不一样，所以参考实现的过程中总会发现这样那样的一些问题。<br>当然了，这些问题产生的原因很可能是每个人技术栈不一样，别人以为你应该知道的，实际你不知道，也就导致有些没说的细节就成了自己动手时的拦路虎。<br>所以，结合上边的几篇教程，再结合自己实际操作，我觉得还是可以记录一下的，万一刚好有看的人容易接受我的描述思路呢，那么这篇文章便有了更多的意义。</p>
+        <p>之前搭建了单机的hbase，使用伪分布式的hdfs作为数据存储，具体搭建要点和问题有所记录：<br><a href="https://blog.csdn.net/tuzongxun/article/details/107915720" target="_blank" rel="noopener">https://blog.csdn.net/tuzongxun/article/details/107915720</a><br>后来，伪分布式的hdfs升级为ha模式，hbase自然也是要同步升级成ha的，本以为应该会很顺利，但实际上花的时间还是比预想中的多，因此还是做一个简单的记录，尤其是其中卡住的问题。</p>
         
           <p class="article-more-link">
-            <a href="/2020/08/06/hadoop2/#more">继续阅读全文 »</a>
+            <a href="/2020/09/23/hadoop8/#more">继续阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/08/06/hadoop2/" data-id="ckg7ekbkv000qzcvhej6m6m6d" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/23/hadoop8/" data-id="ckg7khyfu001jv8vhda8t9ibn" class="article-share-link">分享</a>
       
       
       
@@ -206,10 +205,157 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-hadoop1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-linux3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/08/05/hadoop1/" class="article-date">
-  <time datetime="2020-08-05T03:59:42.000Z" itemprop="datePublished">2020-08-05</time>
+    <a href="/2020/09/08/linux3/" class="article-date">
+  <time datetime="2020-09-08T15:09:42.000Z" itemprop="datePublished">2020-09-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/08/linux3/">centos7中redis、mongodb、kafka安装记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个完整的java后台系统，通常会涉及到非常多的技术，例如数据库、缓存、消息中间件等，除此之外，从部署层面讲，可能还离不开nginx、docker这些，要更加熟练的使用这些技术，加深理解，必不可少的需要有自己的环境。<br>随着上次centos6.5的系统升级到centos7.8，打算把hadoop、redis、mongodb、kafka等这些软件都迁移到新的虚拟机系统中，docker和hadoop的安装部署最近都有相关记录，这次先补充redis、mongodb和kafka。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/09/08/linux3/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/08/linux3/" data-id="ckg7khyhf002jv8vh58ds49ar" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-docker2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/04/docker2/" class="article-date">
+  <time datetime="2020-09-04T11:59:42.000Z" itemprop="datePublished">2020-09-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/04/docker2/">使用docker部署springboot服务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上一篇，在centos7中搭建好了docker，并尝试了基础的image镜像和container容器的命令操作。<br>这一篇就尝试自己在docker容器中启动并使用springboot服务，基本步骤就是准备jar、配置Docker、构建image、启动container、测试服务功能。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/09/04/docker2/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/04/docker2/" data-id="ckg7khyeo0008v8vh3vogaikj" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-docker1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/03/docker1/" class="article-date">
+  <time datetime="2020-09-03T11:59:42.000Z" itemprop="datePublished">2020-09-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/03/docker1/">centos7安装docker及docker基础操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前使用腾讯TSF时，接触了一点docker相关的内容，但只是用了一点点，由于各种原因而没有好好了解，但是这件事始终都在心里搁着，现在总算可以正式来了解一下了。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/09/03/docker1/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/03/docker1/" data-id="ckg7khyei0004v8vhhced76zs" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hadoop7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/01/hadoop7/" class="article-date">
+  <time datetime="2020-09-01T11:59:42.000Z" itemprop="datePublished">2020-09-01</time>
 </a>
     
   <div class="article-category">
@@ -225,7 +371,7 @@ var _hmt = _hmt || [];
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/05/hadoop1/">hadoop安装环境准备和关联知识解析</a>
+      <a class="article-title" href="/2020/09/01/hadoop7/">HDFS-HA模式搭建（基于完全分布式模式升级）</a>
     </h1>
   
 
@@ -233,19 +379,18 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>本想一口气把redis多学一点，奈何还有常见的如穿透、雪崩、击穿、分布式锁、redis并发原理、linux多路复用、redis集群等都还没梳理清楚，而项目就需要先学习一下hadoop等大数据相关技术，于是不得不暂停redis，转而进入hadoop系列的摸石头过河。</p>
-</blockquote>
-<p>据我了解，一般正式环境的hadoop使用都是需要zookeeper的，但是使用hadoop是否一定要zookeeper这个事，对于刚开始学习hadoop的我来说，还是一个未知数。尤其是网上有的教程写了zookeeper，有的又没写，也就更加的茫然。<br>茫然不可怕，怕的是一直茫然，而解决茫然最好的办法就是行动起来，只要动起来就会有结果，然后便能自然而然的触发下一步，进而一点一点的从茫然中走出来。<br>那么第一步自然是先想办法把环境搭起来，根据已知的内容一步步摸索，如果抛开zookeeper不谈，能确定的是jdk和hadoop本身是一定不可或缺的。</p>
+        <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>本次HDFS-HA模式搭建基于之前的完全分布式，完全分布式搭建可参考之前的内容：</p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/107811747" target="_blank" rel="noopener">hadoop安装环境准备和关联知识解析</a></p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/107843326" target="_blank" rel="noopener">hadoop分布式安装及配置初步解析（坑坑不息）</a></p>
         
           <p class="article-more-link">
-            <a href="/2020/08/05/hadoop1/#more">继续阅读全文 »</a>
+            <a href="/2020/09/01/hadoop7/#more">继续阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/08/05/hadoop1/" data-id="ckg7ekbkr000nzcvh0sa72vrp" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/01/hadoop7/" data-id="ckg7khyfm001gv8vh3lyd5u8e" class="article-share-link">分享</a>
       
       
       
@@ -258,14 +403,14 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-redis5" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-hadoop6" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/08/04/redis5/" class="article-date">
-  <time datetime="2020-08-04T03:59:42.000Z" itemprop="datePublished">2020-08-04</time>
+    <a href="/2020/08/13/hadoop6/" class="article-date">
+  <time datetime="2020-08-13T11:59:42.000Z" itemprop="datePublished">2020-08-13</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/redis/">redis</a>
+    <a class="article-category-link" href="/categories/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/">修心•修性•修行</a>
   </div>
 
 </span>
@@ -277,7 +422,7 @@ var _hmt = _hmt || [];
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/04/redis5/">springboot集成和使用redis常用功能</a>
+      <a class="article-title" href="/2020/08/13/hadoop6/">寻道，思考人生的价值（观小米十周年演讲有感）</a>
     </h1>
   
 
@@ -285,20 +430,21 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>纯粹的redis命令行操作，可能就跟纯粹的mysql命令行操作一样，会有一种就是为了用而用的感觉。所以一般来说redis作为一个缓存中间件，都会辅以其他的客户端语言进行操作，比如java。<br>redis是开源的，java也是开源的，这就注定了java中连接redis的客户端不止一种，常见的有jedis、redisson、lettuce。<br>在如今一切都在高速运行的社会环境下，java软件开发也是极其追求代码产出效率，所以随处可见的都是springcloud、springboot。<br>springboot约定优于配置的思想，一定程度上也确实大大简化了开发工作，所以在学习java中的redis集成和使用时，我也一样选择了使用springboot。</p>
+        <p>这几天，各种朋友圈被小米十周年的演讲刷屏，我感触颇多，有些内容像是一语惊醒梦中人，使得一直思考人生价值的我，有种像是茅塞顿开的感觉。</p>
+<h2 id="成功是否等于价值？"><a href="#成功是否等于价值？" class="headerlink" title="成功是否等于价值？"></a>成功是否等于价值？</h2><p>很多人喜欢说成功两个字，而现在大多数人所谓的成功似乎都是以暂时看得到的权力、财富和地位来评判。<br>然而，现有的权力、财富和地位，是否就能证明成功呢？或许是吧。<br>但是，这种所谓的成功是否就能等价于他的价值呢？我认为一定不是的！</p>
         
           <p class="article-more-link">
-            <a href="/2020/08/04/redis5/#more">继续阅读全文 »</a>
+            <a href="/2020/08/13/hadoop6/#more">继续阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/08/04/redis5/" data-id="ckg7ekbmu003vzcvh568yb3hn" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/08/13/hadoop6/" data-id="ckg7khyfl001ev8vhbipzbczj" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/" rel="tag">修心•修性•修行</a></li></ul>
 
     </footer>
   </div>
@@ -307,14 +453,14 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-redis4" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-hadoop5" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/07/30/redis4/" class="article-date">
-  <time datetime="2020-07-30T03:59:42.000Z" itemprop="datePublished">2020-07-30</time>
+    <a href="/2020/08/11/hadoop5/" class="article-date">
+  <time datetime="2020-08-11T11:59:42.000Z" itemprop="datePublished">2020-08-11</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/redis/">redis</a>
+    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
   </div>
 
 </span>
@@ -326,7 +472,7 @@ var _hmt = _hmt || [];
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/30/redis4/">redis常用高级功能小记（下篇)</a>
+      <a class="article-title" href="/2020/08/11/hadoop5/">redis、hadoop和hbase等安装相关拓展知识补充</a>
     </h1>
   
 
@@ -334,24 +480,73 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：</p>
+        <p>从某种意义上来说，一项技术要学会不难，要学好就很难。<br>会，代表的是能用起来就可以了，照葫芦画瓢而已；好，就涉及到各种细节，一些重要的、频率高的操作，可能还需要知道部分原理。<br>就拿软件安装来说，linux中大部分软件的主要安装流程是大同小异的，仅是这种大同，也有许多的细节，以下便是我在redis、hadoop、hbase等安装过程中遇到的其中一部分，仅是一部分。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/08/11/hadoop5/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/08/11/hadoop5/" data-id="ckg7khyfj001dv8vhbhnng7xz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hadoop4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/10/hadoop4/" class="article-date">
+  <time datetime="2020-08-10T11:59:42.000Z" itemprop="datePublished">2020-08-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/hadoop4/">hadoop和hbase的关系及hbase安装与验证</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从hadoop官网首页就可以看到，hadoop项目本身自带的模块现在有五个，即：</p>
 <blockquote>
-<p>管道<br>事务<br>发布/订阅<br>过期<br>布隆过滤器</p>
+<p>hadoop common<br>hdfs<br>yarn<br>mapReduce<br>hadoop Ozone</p>
 </blockquote>
-<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到<code>multi</code>、<code>exec</code>、<code>watch</code>以及<code>unwatch</code>这些关键词。</p>
+<p>第一项从名称就可以看出来是基础功能模块，hdfs是文件存储系统，yarn是调度和集群管理，mapReduce是数据计算处理，这几个都是学习使用hadoop一开始就必然会接触的。<br>最后一个hadoop Ozone是分布式对象存储系统，这个是对hdfs的一种补充，是一个相对较新的内容，在人们口中出现的频率相对较低，可能很多人一开始都不知道，包括我。</p>
         
           <p class="article-more-link">
-            <a href="/2020/07/30/redis4/#more">继续阅读全文 »</a>
+            <a href="/2020/08/10/hadoop4/#more">继续阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/07/30/redis4/" data-id="ckg7ekbmt003uzcvh86jsd80b" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/08/10/hadoop4/" data-id="ckg7khyfh0019v8vh0pnudvt7" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
 
     </footer>
   </div>
@@ -363,7 +558,7 @@ var _hmt = _hmt || [];
 
 
   <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/">下一页&amp;raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">下一页&amp;raquo;</a>
   </nav>
 </section>
            
@@ -424,7 +619,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <h3 class="widget-title categories">分类</h3>
     <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/flink/">flink</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/springcloud/">springcloud</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/">修心•修性•修行</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A3%85%E4%BF%AE/">装修</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/">读后感</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flink/">flink</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/springcloud/">springcloud</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/">修心•修性•修行</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A3%85%E4%BF%AE/">装修</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/">读后感</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -434,7 +629,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/activiti/" style="font-size: 14px;">activiti</a> <a href="/tags/cookie/" style="font-size: 14px;">cookie</a> <a href="/tags/dubbo/" style="font-size: 14px;">dubbo</a> <a href="/tags/flink/" style="font-size: 14px;">flink</a> <a href="/tags/git/" style="font-size: 14px;">git</a> <a href="/tags/hadoop/" style="font-size: 15.22px;">hadoop</a> <a href="/tags/hexo/" style="font-size: 15.22px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jwt/" style="font-size: 14px;">jwt</a> <a href="/tags/keycloak/" style="font-size: 14px;">keycloak</a> <a href="/tags/linux/" style="font-size: 15.22px;">linux</a> <a href="/tags/maven/" style="font-size: 20.11px;">maven</a> <a href="/tags/mongodb/" style="font-size: 15.22px;">mongodb</a> <a href="/tags/mysql/" style="font-size: 16.44px;">mysql</a> <a href="/tags/oauth2/" style="font-size: 14px;">oauth2</a> <a href="/tags/redis/" style="font-size: 17.67px;">redis</a> <a href="/tags/session/" style="font-size: 14px;">session</a> <a href="/tags/sonar/" style="font-size: 14px;">sonar</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/springcloud/" style="font-size: 20.11px;">springcloud</a> <a href="/tags/tzxblog/" style="font-size: 18.89px;">tzxblog</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" style="font-size: 21.33px;">业余项目</a> <a href="/tags/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/" style="font-size: 20.11px;">修心•修性•修行</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 14px;">前端</a> <a href="/tags/%E5%AE%B6%E8%AE%AD/" style="font-size: 14px;">家训</a> <a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 22.56px;">开发工具</a> <a href="/tags/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/" style="font-size: 16.44px;">思考总结</a> <a href="/tags/%E6%94%AF%E4%BB%98/" style="font-size: 15.22px;">支付</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 18.89px;">数据库</a> <a href="/tags/%E8%A3%85%E4%BF%AE/" style="font-size: 14px;">装修</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 23.78px;">设计模式</a> <a href="/tags/%E8%AF%BB%E5%90%8E%E6%84%9F/" style="font-size: 14px;">读后感</a> <a href="/tags/%E8%BF%87%E6%BB%A4%E5%99%A8/" style="font-size: 14px;">过滤器</a> <a href="/tags/%E9%82%AE%E4%BB%B6/" style="font-size: 15.22px;">邮件</a> <a href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" style="font-size: 16.44px;">问题整理</a>
+      <a href="/tags/activiti/" style="font-size: 14px;">activiti</a> <a href="/tags/cookie/" style="font-size: 14px;">cookie</a> <a href="/tags/docker/" style="font-size: 15.22px;">docker</a> <a href="/tags/dubbo/" style="font-size: 14px;">dubbo</a> <a href="/tags/flink/" style="font-size: 14px;">flink</a> <a href="/tags/git/" style="font-size: 14px;">git</a> <a href="/tags/hadoop/" style="font-size: 20.11px;">hadoop</a> <a href="/tags/hexo/" style="font-size: 15.22px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jwt/" style="font-size: 14px;">jwt</a> <a href="/tags/keycloak/" style="font-size: 14px;">keycloak</a> <a href="/tags/linux/" style="font-size: 16.44px;">linux</a> <a href="/tags/maven/" style="font-size: 20.11px;">maven</a> <a href="/tags/mongodb/" style="font-size: 15.22px;">mongodb</a> <a href="/tags/mysql/" style="font-size: 16.44px;">mysql</a> <a href="/tags/oauth2/" style="font-size: 14px;">oauth2</a> <a href="/tags/redis/" style="font-size: 17.67px;">redis</a> <a href="/tags/session/" style="font-size: 14px;">session</a> <a href="/tags/sonar/" style="font-size: 14px;">sonar</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/springcloud/" style="font-size: 20.11px;">springcloud</a> <a href="/tags/tzxblog/" style="font-size: 18.89px;">tzxblog</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" style="font-size: 21.33px;">业余项目</a> <a href="/tags/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/" style="font-size: 21.33px;">修心•修性•修行</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 14px;">前端</a> <a href="/tags/%E5%AE%B6%E8%AE%AD/" style="font-size: 14px;">家训</a> <a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 22.56px;">开发工具</a> <a href="/tags/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/" style="font-size: 16.44px;">思考总结</a> <a href="/tags/%E6%94%AF%E4%BB%98/" style="font-size: 15.22px;">支付</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 18.89px;">数据库</a> <a href="/tags/%E8%A3%85%E4%BF%AE/" style="font-size: 14px;">装修</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 23.78px;">设计模式</a> <a href="/tags/%E8%AF%BB%E5%90%8E%E6%84%9F/" style="font-size: 14px;">读后感</a> <a href="/tags/%E8%BF%87%E6%BB%A4%E5%99%A8/" style="font-size: 14px;">过滤器</a> <a href="/tags/%E9%82%AE%E4%BB%B6/" style="font-size: 15.22px;">邮件</a> <a href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" style="font-size: 16.44px;">问题整理</a>
     </div>
   </div>
 
@@ -450,19 +645,19 @@ var _hmt = _hmt || [];
           </li>
         
           <li>
-            <a href="/2020/08/06/hadoop2/">hadoop分布式安装及配置初步解析（坑坑不息）</a>
+            <a href="/2020/09/23/hadoop8/">hbase-ha模式搭建要点和问题记录</a>
           </li>
         
           <li>
-            <a href="/2020/08/05/hadoop1/">hadoop安装环境准备和关联知识解析</a>
+            <a href="/2020/09/08/linux3/">centos7中redis、mongodb、kafka安装记录</a>
           </li>
         
           <li>
-            <a href="/2020/08/04/redis5/">springboot集成和使用redis常用功能</a>
+            <a href="/2020/09/04/docker2/">使用docker部署springboot服务</a>
           </li>
         
           <li>
-            <a href="/2020/07/30/redis4/">redis常用高级功能小记（下篇)</a>
+            <a href="/2020/09/03/docker1/">centos7安装docker及docker基础操作</a>
           </li>
         
       </ul>
@@ -474,7 +669,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 

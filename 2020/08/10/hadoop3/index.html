@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>hdfs基础操作（命令行和java代码） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="hadoop分布式模式初步搭建完成，无论是从命令行还是web界面都看起来是可用的，然后便可以进入下一步，可以说是进一步的验证，也可以说是hdfs相关的学习。hdfs是分布式文件存储系统，可以进行文件的增删改查操作，原生支持的就有基本的命令行，然后就是各种语言的客户端。这一部分，主要是记录和练习基本的操作，也当是进一步验证之前环境安装的是否可用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hdfs基础操作（命令行和java代码）">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/08/10/hadoop3/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="hadoop分布式模式初步搭建完成，无论是从命令行还是web界面都看起来是可用的，然后便可以进入下一步，可以说是进一步的验证，也可以说是hdfs相关的学习。hdfs是分布式文件存储系统，可以进行文件的增删改查操作，原生支持的就有基本的命令行，然后就是各种语言的客户端。这一部分，主要是记录和练习基本的操作，也当是进一步验证之前环境安装的是否可用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-10T08:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T03:51:14.269Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="hadoop">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hadoop3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/10/hadoop3/" class="article-date">
+  <time datetime="2020-08-10T08:59:42.000Z" itemprop="datePublished">2020-08-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      hdfs基础操作（命令行和java代码）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>hadoop分布式模式初步搭建完成，无论是从命令行还是web界面都看起来是可用的，然后便可以进入下一步，可以说是进一步的验证，也可以说是hdfs相关的学习。<br>hdfs是分布式文件存储系统，可以进行文件的增删改查操作，原生支持的就有基本的命令行，然后就是各种语言的客户端。<br>这一部分，主要是记录和练习基本的操作，也当是进一步验证之前环境安装的是否可用。</p>
+<a id="more"></a>
+<h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><p>以下内容均基于<code>hadoop3.1.3</code>版本。</p>
+<h2 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h2><h3 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h3><p>文件系统落到实际，自然就是目录和文件，所以首先是对文件目录的创建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -mkdir &#x2F;test1</span><br></pre></td></tr></table></figure>
+<p>网上很多教程这里写的是<code>hadoop</code>而不是<code>hdfs</code>，可能是旧版命令，现在如果使用<code>hadoop</code>操作，虽然也可以，但是会输出提示，让替换成<code>hdfs</code>。</p>
+<h2 id="列出文件和目录列表"><a href="#列出文件和目录列表" class="headerlink" title="列出文件和目录列表"></a>列出文件和目录列表</h2><p>上边创建了目录，要进一步验证目录是否创建成功，就可以执行下边命令列出文件目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -ls &#x2F;</span><br></pre></td></tr></table></figure>
+<p>上边意思是列出hdfs文件系统根目录下的目录和文件列表，要再三强调的是，是hdfs文件系统，额不是执行上述命令所在系统的文件系统。<br>如我这里，之前已经创建过几个目录，所以执行上述命令之后就会出现如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Found 4 items</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2020-08-07 22:23 &#x2F;demo1</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2020-08-07 01:27 &#x2F;foodir</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2020-08-10 18:56 &#x2F;hbase</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2020-08-10 19:15 &#x2F;test1</span><br></pre></td></tr></table></figure>
+
+<h3 id="linux中文件创建"><a href="#linux中文件创建" class="headerlink" title="linux中文件创建"></a>linux中文件创建</h3><p>有了目录之后，就可以上传文件到hdfs，这里拓展一下linux中文件创建的简单操作，首先是<code>echo</code>，之前实际上提到过，echo可以用如下方式创建文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;test&quot; &gt;test2.txt</span><br><span class="line">echo &quot;test1&quot; &gt;&gt; test3.txt</span><br></pre></td></tr></table></figure>
+<p>上述两个操作，如果文件不存在，都会创建文件并写入内容，如果文件存在，第二个会追加到文件中，第一个则会覆盖文件中的原有内容。<br>但是，像上边这样使用echo创建文件，必须是有内容写入，如果是<code>echo test2.txt</code>这样就不会创建文件，只会打印输出到控制台，创建空白文件需要使用<code>touch test2.txt</code>这样的操作。</p>
+<h3 id="文件上传到hdfs"><a href="#文件上传到hdfs" class="headerlink" title="文件上传到hdfs"></a>文件上传到hdfs</h3><p>有了文件后，就可以把本地文件上传到hdfs文件系统中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -put test3.txt &#x2F;test1&#x2F;</span><br></pre></td></tr></table></figure>
+<p>以上命令的意思是，把执行命令的当前目录下test3.txt文件上传到hdfs的/test1这个目录下。<br>这里要注意的是，如果我们再次执行上传命令，会发现不能再上传，而是报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2020-08-10 19:35:54,862 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">put: &#96;&#x2F;test1&#x2F;test3.txt&#39;: File exists</span><br></pre></td></tr></table></figure>
+<p>文件已经存在，则不允许再次上传，这里其实涉及到hdfs文件存储的设计思想。<br><strong>hdfs是一个分布式文件操作系统，底层都是很多的小文件，而这些小文件是把一个大文件解析成字节数组，然后以字节拆分。</strong><br><strong>除了最后一个小文件，其他的小文件里字节数是一样的，然后每个小文件会有偏移量，进而使得后续的大数据量的计算性能更高。</strong><br>由于这种设计，则如果要修改一个文件，就可能涉及到各个小文件的偏移量以及字节重组和拆分，这里边就会有非常多的问题存在。<br>因此，hdfs的文件修改，实际只支持在文件末尾追加内容，而不允许对已有内容做修改，也正因为如此，已存在文件时就无法再上传，底层不是想象中的覆盖那么简单。</p>
+<h3 id="追加文件内容"><a href="#追加文件内容" class="headerlink" title="追加文件内容"></a>追加文件内容</h3><p>如上所说，hdfs的文件修改实际只支持末尾追加，因为末尾追加智慧涉及到最后一个小文件的处理，而不至于可能要操作所有小文件，追加文件内容操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -appendToFile test3.txt &#x2F;test1&#x2F;test3.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看hdfs中某个文件内容"><a href="#查看hdfs中某个文件内容" class="headerlink" title="查看hdfs中某个文件内容"></a>查看hdfs中某个文件内容</h3><p>文件上传成功以后，可以用上边文件列表查看的方式确认是否上传成功，但是这个只能看到文件大概信息，如果要确认是否文件里的内容都已写入，则可以用查看文件内容的操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -cat &#x2F;test1&#x2F;test3.txt</span><br></pre></td></tr></table></figure>
+<p>如我这里操作后就会输出去如下信息，最后一行就是文件里的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2020-08-10 19:31:00,019 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">2020-08-10 19:31:02,046 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted &#x3D; false, remoteHostTrusted &#x3D; false</span><br><span class="line">test1</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><p>上边有了增查改，作为一个文件系统，自然也是要有删除操作的，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -rm &#x2F;test1&#x2F;test2.txt</span><br></pre></td></tr></table></figure>
+
+<p>以上便是基于hadoop自带的命令行进行hdfs的一些基础操作，再重复一句的是，我上边随便目录使用命令的前提，是要配置类hadoop相关的环境变量。<br>作为一个java程序员，如果学hadoop仅限于命令行，自然是不靠谱的，因此也尝试了java客户端进行了一些类似上边命令行的简单操作。<br>一下内容基本都是参考网上的内容，示例操作过于简单，所以没有太大改动，也没有太多说明，仅作为基础验证和记录。</p>
+<h2 id="java操作"><a href="#java操作" class="headerlink" title="java操作"></a>java操作</h2><h3 id="依赖包导入"><a href="#依赖包导入" class="headerlink" title="依赖包导入"></a>依赖包导入</h3><p>首先是依赖包导入，我的项目虽然是springboot项目，但是似乎现在还没有官方的springboot相关的hadoop的starter，所以就要直接引入hadoop的jar，由于有些依赖冲突，所以进行了排除，最终maven配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.apache.hadoop&lt;&#x2F;groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;hadoop-hdfs&lt;&#x2F;artifactId&gt;</span><br><span class="line">   &lt;version&gt;3.1.3&lt;&#x2F;version&gt;</span><br><span class="line">   &lt;exclusions&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;org.slf4j&lt;&#x2F;groupId&gt; &lt;artifactId&gt;slf4j-log4j12&lt;&#x2F;artifactId&gt;&lt;&#x2F;exclusion&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;log4j&lt;&#x2F;groupId&gt; &lt;artifactId&gt;log4j&lt;&#x2F;artifactId&gt; &lt;&#x2F;exclusion&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;javax.servlet&lt;&#x2F;groupId&gt; &lt;artifactId&gt;servlet-api&lt;&#x2F;artifactId&gt; &lt;&#x2F;exclusion&gt;</span><br><span class="line">   &lt;&#x2F;exclusions&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.apache.hadoop&lt;&#x2F;groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;hadoop-common&lt;&#x2F;artifactId&gt;</span><br><span class="line">   &lt;version&gt;3.1.3&lt;&#x2F;version&gt;</span><br><span class="line">   &lt;exclusions&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;org.slf4j&lt;&#x2F;groupId&gt; &lt;artifactId&gt;slf4j-log4j12&lt;&#x2F;artifactId&gt;&lt;&#x2F;exclusion&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;log4j&lt;&#x2F;groupId&gt; &lt;artifactId&gt;log4j&lt;&#x2F;artifactId&gt; &lt;&#x2F;exclusion&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;javax.servlet&lt;&#x2F;groupId&gt; &lt;artifactId&gt;servlet-api&lt;&#x2F;artifactId&gt; &lt;&#x2F;exclusion&gt;</span><br><span class="line">   &lt;&#x2F;exclusions&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.apache.hadoop&lt;&#x2F;groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;hadoop-client&lt;&#x2F;artifactId&gt;</span><br><span class="line">   &lt;version&gt;3.1.3&lt;&#x2F;version&gt;</span><br><span class="line">   &lt;exclusions&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;org.slf4j&lt;&#x2F;groupId&gt; &lt;artifactId&gt;slf4j-log4j12&lt;&#x2F;artifactId&gt;&lt;&#x2F;exclusion&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;log4j&lt;&#x2F;groupId&gt; &lt;artifactId&gt;log4j&lt;&#x2F;artifactId&gt; &lt;&#x2F;exclusion&gt;</span><br><span class="line">      &lt;exclusion&gt; &lt;groupId&gt;javax.servlet&lt;&#x2F;groupId&gt; &lt;artifactId&gt;servlet-api&lt;&#x2F;artifactId&gt; &lt;&#x2F;exclusion&gt;</span><br><span class="line">   &lt;&#x2F;exclusions&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取hdfs文件系统对象"><a href="#获取hdfs文件系统对象" class="headerlink" title="获取hdfs文件系统对象"></a>获取hdfs文件系统对象</h3><p>java操作hdfs，需要先获取到文件对象，执行url和用户名等，连接配置很多，需要实际项目需要时补充，基础可用的简单代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">private static String hdfsPath &#x3D; &quot;hdfs:&#x2F;&#x2F;192.168.139.9:9000&quot;;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 获取HDFS文件系统对象</span><br><span class="line"> *</span><br><span class="line"> * @return</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">private static FileSystem getFileSystem() throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    FileSystem fileSystem &#x3D; FileSystem.get(new URI(hdfsPath), getConfiguration(), &quot;root&quot;);</span><br><span class="line">    return fileSystem;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 获取HDFS配置信息</span><br><span class="line"> *</span><br><span class="line"> * @return</span><br><span class="line"> *&#x2F;</span><br><span class="line">private static Configuration getConfiguration() &#123;</span><br><span class="line">    Configuration configuration &#x3D; new Configuration();</span><br><span class="line">    configuration.set(&quot;fs.defaultFS&quot;, hdfsPath);</span><br><span class="line">    return configuration;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="java中hdfs基础的增删改查"><a href="#java中hdfs基础的增删改查" class="headerlink" title="java中hdfs基础的增删改查"></a>java中hdfs基础的增删改查</h3><p>连接上hdfs，获取到文件系统对象后，就可以进行相关的操作，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 在HDFS创建文件夹</span><br><span class="line"> *</span><br><span class="line"> * @param path</span><br><span class="line"> * @return</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void mkdir(String path) throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    FileSystem fs &#x3D; getFileSystem();</span><br><span class="line">    &#x2F;&#x2F; 目标路径</span><br><span class="line">    Path srcPath &#x3D; new Path(path);</span><br><span class="line">    boolean isOk &#x3D; fs.mkdirs(srcPath);</span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 读取HDFS目录信息</span><br><span class="line"> *</span><br><span class="line"> * @param path</span><br><span class="line"> * @return</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void readPathInfo(String path)</span><br><span class="line">    throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    FileSystem fs &#x3D; getFileSystem();</span><br><span class="line">    &#x2F;&#x2F; 目标路径</span><br><span class="line">    Path newPath &#x3D; new Path(path);</span><br><span class="line">    FileStatus[] statusList &#x3D; fs.listStatus(newPath);</span><br><span class="line">    List&lt;Map&lt;String, Object&gt;&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    if (null !&#x3D; statusList &amp;&amp; statusList.length &gt; 0) &#123;</span><br><span class="line">        for (FileStatus fileStatus : statusList) &#123;</span><br><span class="line">            System.out.print(&quot;filePath:&quot;+fileStatus.getPath());</span><br><span class="line">            System.out.println(&quot;,fileStatus:&quot;+ fileStatus.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * HDFS创建文件</span><br><span class="line"> *</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void createFile()</span><br><span class="line">    throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    File myFile &#x3D; new File(&quot;C:\\Users\\tuzongxun\\Desktop\\tzx.txt&quot;);</span><br><span class="line">    FileInputStream fis &#x3D; new FileInputStream(myFile);</span><br><span class="line">    String fileName &#x3D; myFile.getName();</span><br><span class="line">    FileSystem fs &#x3D; getFileSystem();</span><br><span class="line">    &#x2F;&#x2F; 上传时默认当前目录，后面自动拼接文件的目录</span><br><span class="line">    Path newPath &#x3D; new Path(&quot;&#x2F;demo1&#x2F;&quot; + fileName);</span><br><span class="line">    &#x2F;&#x2F; 打开一个输出流</span><br><span class="line">    ByteArrayOutputStream bos &#x3D; new ByteArrayOutputStream();</span><br><span class="line">    byte[] b &#x3D; new byte[1024];</span><br><span class="line">    int n;</span><br><span class="line">    while ((n &#x3D; fis.read(b)) !&#x3D; -1) &#123;</span><br><span class="line">        bos.write(b, 0, n);</span><br><span class="line">    &#125;</span><br><span class="line">    fis.close();</span><br><span class="line">    bos.close();</span><br><span class="line">    FSDataOutputStream outputStream &#x3D; fs.create(newPath);</span><br><span class="line">    outputStream.write(bos.toByteArray());</span><br><span class="line">    outputStream.close();</span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 读取文件列表</span><br><span class="line"> * @param path</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void listFile(String path)</span><br><span class="line">    throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    FileSystem fs &#x3D; getFileSystem();</span><br><span class="line">    &#x2F;&#x2F; 目标路径</span><br><span class="line">    Path srcPath &#x3D; new Path(path);</span><br><span class="line">    &#x2F;&#x2F; 递归找到所有文件</span><br><span class="line">    RemoteIterator&lt;LocatedFileStatus&gt; filesList &#x3D; fs.listFiles(srcPath, true);</span><br><span class="line">    while (filesList.hasNext()) &#123;</span><br><span class="line">        LocatedFileStatus next &#x3D; filesList.next();</span><br><span class="line">        String fileName &#x3D; next.getPath().getName();</span><br><span class="line">        Path filePath &#x3D; next.getPath();</span><br><span class="line">        System.out.println(&quot;##########################fileName:&quot; + fileName);</span><br><span class="line">        System.out.println(&quot;##########################filePath:&quot; + filePath.toString());</span><br><span class="line">    &#125;</span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 读取HDFS文件内容</span><br><span class="line"> *</span><br><span class="line"> * @param path</span><br><span class="line"> * @return</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static String readFile(String path) throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    FileSystem fs &#x3D; getFileSystem();</span><br><span class="line">    &#x2F;&#x2F; 目标路径</span><br><span class="line">    Path srcPath &#x3D; new Path(path);</span><br><span class="line">    FSDataInputStream inputStream &#x3D; null;</span><br><span class="line">    try &#123;</span><br><span class="line">        inputStream &#x3D; fs.open(srcPath);</span><br><span class="line">        &#x2F;&#x2F; 防止中文乱码</span><br><span class="line">        BufferedReader reader &#x3D; new BufferedReader(new InputStreamReader(inputStream));</span><br><span class="line">        String lineTxt &#x3D; &quot;&quot;;</span><br><span class="line">        StringBuffer sb &#x3D; new StringBuffer();</span><br><span class="line">        while ((lineTxt &#x3D; reader.readLine()) !&#x3D; null) &#123;</span><br><span class="line">            sb.append(lineTxt);</span><br><span class="line">        &#125;</span><br><span class="line">        return sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    finally &#123;</span><br><span class="line">        inputStream.close();</span><br><span class="line">        fs.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 上传HDFS文件</span><br><span class="line"> *</span><br><span class="line"> * @param path</span><br><span class="line"> * @param uploadPath</span><br><span class="line"> * @throws Exception</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void uploadFile(String path, String uploadPath) throws Exception</span><br><span class="line">&#123;</span><br><span class="line">    if (StringUtils.isEmpty(path) || StringUtils.isEmpty(uploadPath)) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    FileSystem fs &#x3D; getFileSystem();</span><br><span class="line">    &#x2F;&#x2F; 上传路径</span><br><span class="line">    Path clientPath &#x3D; new Path(path);</span><br><span class="line">    &#x2F;&#x2F; 目标路径</span><br><span class="line">    Path serverPath &#x3D; new Path(uploadPath);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 调用文件系统的文件复制方法，第一个参数是否删除原文件true为删除，默认为false</span><br><span class="line">    fs.copyFromLocalFile(false, clientPath, serverPath);</span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 调用</span><br><span class="line"> * @param args</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;创建目录</span><br><span class="line">        &#x2F;&#x2F;mkdir(&quot;&#x2F;test2&quot;);</span><br><span class="line">        &#x2F;&#x2F;列出目录列表</span><br><span class="line">        readPathInfo(&quot;&#x2F;&quot;);</span><br><span class="line">        &#x2F;&#x2F;列出文件列表</span><br><span class="line">        &#x2F;&#x2F; listFile(&quot;&#x2F;&quot;);</span><br><span class="line">        &#x2F;&#x2F; 创建文件</span><br><span class="line">        &#x2F;&#x2F;  createFile();</span><br><span class="line">        &#x2F;&#x2F; 读取文件内容</span><br><span class="line">         String a &#x3D; readFile(&quot;&#x2F;test&#x2F;test2.txt&quot;);</span><br><span class="line">        &#x2F;&#x2F; System.out.println(&quot;###########################&quot; + a);</span><br><span class="line">        &#x2F;&#x2F;上传文件</span><br><span class="line">        &#x2F;&#x2F;uploadFile(&quot;C:\\Users\\tuzongxun\\Desktop\\tzx.txt&quot;, &quot;&#x2F;test2&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：以上依赖包也可以改为springboot版，同时需要额外引入common-lang3相关jar：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.data&lt;&#x2F;groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-data-hadoop&lt;&#x2F;artifactId&gt;</span><br><span class="line">	&lt;version&gt;2.5.0.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/08/10/hadoop3/" data-id="ckg7khyfg0016v8vh0jl15r24" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/08/10/hadoop4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          hadoop和hbase的关系及hbase安装与验证
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/06/hadoop2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">hadoop分布式安装及配置初步解析（坑坑不息）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境说明"><span class="toc-number">1.</span> <span class="toc-text">环境说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令行操作"><span class="toc-number">2.</span> <span class="toc-text">命令行操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建目录"><span class="toc-number">2.1.</span> <span class="toc-text">创建目录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列出文件和目录列表"><span class="toc-number">3.</span> <span class="toc-text">列出文件和目录列表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#linux中文件创建"><span class="toc-number">3.1.</span> <span class="toc-text">linux中文件创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件上传到hdfs"><span class="toc-number">3.2.</span> <span class="toc-text">文件上传到hdfs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#追加文件内容"><span class="toc-number">3.3.</span> <span class="toc-text">追加文件内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看hdfs中某个文件内容"><span class="toc-number">3.4.</span> <span class="toc-text">查看hdfs中某个文件内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除文件"><span class="toc-number">3.5.</span> <span class="toc-text">删除文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java操作"><span class="toc-number">4.</span> <span class="toc-text">java操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖包导入"><span class="toc-number">4.1.</span> <span class="toc-text">依赖包导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取hdfs文件系统对象"><span class="toc-number">4.2.</span> <span class="toc-text">获取hdfs文件系统对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java中hdfs基础的增删改查"><span class="toc-number">4.3.</span> <span class="toc-text">java中hdfs基础的增删改查</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

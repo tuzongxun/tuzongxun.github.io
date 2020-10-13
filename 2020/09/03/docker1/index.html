@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>centos7安装docker及docker基础操作 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之前使用腾讯TSF时，接触了一点docker相关的内容，但只是用了一点点，由于各种原因而没有好好了解，但是这件事始终都在心里搁着，现在总算可以正式来了解一下了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos7安装docker及docker基础操作">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/09/03/docker1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="之前使用腾讯TSF时，接触了一点docker相关的内容，但只是用了一点点，由于各种原因而没有好好了解，但是这件事始终都在心里搁着，现在总算可以正式来了解一下了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-03T11:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T04:22:47.029Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-docker1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/03/docker1/" class="article-date">
+  <time datetime="2020-09-03T11:59:42.000Z" itemprop="datePublished">2020-09-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      centos7安装docker及docker基础操作
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>之前使用腾讯TSF时，接触了一点docker相关的内容，但只是用了一点点，由于各种原因而没有好好了解，但是这件事始终都在心里搁着，现在总算可以正式来了解一下了。</p>
+<a id="more"></a>
+
+<h2 id="centos7网络配置"><a href="#centos7网络配置" class="headerlink" title="centos7网络配置"></a>centos7网络配置</h2><p>根据docker官网安装文档的说明，使用centos系统安装需要版本是centos7以上，而之前学习redis和hadoop时，我为了方便就使用了很久以前保存的一个centos6.5系统，所以不得不再安装一个centos7的系统。<br>centos系统安装可以选择在线升级，据说6.5的只能先升到7.2，不过应该也够用了。但是出于对当前网速的不信任，我决定还是下载系统镜像重新安装，于是直接从其他同事那里拿来了centos7.8的安装包。<br>安装过程和centos6.5的大同小异，只是后边网络配置的时候，发现网络配置文件和centos的有所出入，这里简单记录。<br>centos6.5中之前是配置<code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>这个文件，而centos7.5已经没有了这个文件，于是找到了相似的另一个文件进行配置，即<code>/etc/sysconfig/network-scripts/ifcfg-ens33</code><br>至于具体配置细节，和centos6.5基本一样，可参考之前的内容：<br><a href="https://blog.csdn.net/tuzongxun/article/details/107031865" target="_blank" rel="noopener">VMware虚拟机Linux系统NAT模式网络配置及虚拟机克隆要点</a></p>
+<h2 id="yum换源及更新"><a href="#yum换源及更新" class="headerlink" title="yum换源及更新"></a>yum换源及更新</h2><p>由于是全新的虚拟机，再次出于对网络的不信任，所以第一时间把yum源改成了阿里云的并进行了升级，大概操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget</span><br><span class="line">cd &#x2F;etc&#x2F;yum.repos.d</span><br><span class="line">mv CentOS-Base.repo CentOS-Base.repo.old</span><br><span class="line">wget http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;Centos-7.repo</span><br><span class="line">mv Centos-7.repo CentOS-Base.repo</span><br><span class="line">yum update -y</span><br></pre></td></tr></table></figure>
+<p>这里要补充一点的是，据说yum操作实际会就近选择，所以更换yum源和不更换究竟有没有区别还是待定，我没有验证过。<br>还要补充的是，有些不太熟悉linux操作而又习惯于c/v操作的，可能会把上述几行一起复制粘贴执行，实际上上边每一行都是一个单独的操作。</p>
+<h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><p>以上操作算是基本环境准备，但是为了更方便的安装docker，还需要一项准备，需要借助<code>yum-utils</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils</span><br></pre></td></tr></table></figure>
+
+<p>然后，配置docker软件源的地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum-config-manager --add-repo https:&#x2F;&#x2F;download.docker.com&#x2F;linux&#x2F;centos&#x2F;docker-ce.repo</span><br></pre></td></tr></table></figure>
+<p>上边的url是docker官方的，指向的也是国外地址，但是我实际操作时还是挺快，如果网络更差，则可以选择下边这个阿里云的:<br><a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo" target="_blank" rel="noopener">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a></p>
+<p>指定安装源之后，就可以使用yum安装docker了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce</span><br></pre></td></tr></table></figure>
+
+<h2 id="docker基础使用"><a href="#docker基础使用" class="headerlink" title="docker基础使用"></a>docker基础使用</h2><p>上边操作就算初步装好了docker，非常简单，我之前试着在windows中安装过一次，最终没有成功，相对来说，linux中docker的安装实在是比windows中容易多了。</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>安装好之后，就可以启动docker服务进行相关的验证，作为一个linux服务，docker的启动和其他linux服务启动方式一样，如下两个选择都可以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service docker start</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="停止"><a href="#停止" class="headerlink" title="停止"></a>停止</h3><p>同样的，作为linux服务，docker服务的停止也是linux的通用操作，可以使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service docker stop</span><br><span class="line">systemctl stop docker</span><br></pre></td></tr></table></figure>
+<p>注：可能也有人更喜欢<code>kill -9</code>，如果只是自己用的话，也没啥关系。</p>
+<h3 id="镜像和容器操作"><a href="#镜像和容器操作" class="headerlink" title="镜像和容器操作"></a>镜像和容器操作</h3><p>docker服务启动后，就可以使用一些基础的docker命令使用docker，例如image镜像的操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br><span class="line">docker image rm imageName</span><br><span class="line">docker image pull library&#x2F;hello-world</span><br><span class="line">docker image pull hello-world</span><br></pre></td></tr></table></figure>
+<p>上边第一个命令和第二个分别是列出镜像和删除镜像，和linux文件系统以及hdfs文件系统的操作几乎都一样。第二个和第三个都是拉取一个远程镜像到本地，作用是一样的，之所以有两个，是因为docker默认的镜像组是library，所以可以省略，如果是其他的镜像组，就必须要显示的指定，不过，运行镜像时可以自动抓取image，所以其实不用先pull也是可以的。</p>
+<p>镜像文件是静态的，并不能提供服务，就类似java开发好的系统生成的jar或者war，只有运行之后才会提供服务或者说处理一些逻辑，要运行一个镜像，需要使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker container run imageName</span><br><span class="line">&#96;</span><br></pre></td></tr></table></figure>
+
+<p>以上命令指定镜像启动，每次都会运行一个新的实例，如果只是要启动已经运行过的实例，则可以使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container start containerId</span><br></pre></td></tr></table></figure>
+
+<p>对应的，有启动就会有停止，可以使用如下两个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker container stop containerId</span><br><span class="line">docker container kill containerId</span><br></pre></td></tr></table></figure>
+<p>上边两个不同的是，前一个相对安全，后一个会强制停止容器，就类似<code>kill -9</code>。</p>
+<p>image镜像是一个文件，容器运行后也会生成一个文件，查看操作和image类似：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker container ls</span><br><span class="line">docker container ls --all</span><br></pre></td></tr></table></figure>
+<p>上边第一个只会显示运行中的容器，后一个可以显示所有的容器，当使用上边命令查看到具体容器信息后，如果想要删除不再使用的容器实例，则可以使用如下操作删除：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container rm containerId</span><br></pre></td></tr></table></figure>
+
+<p>除了上边的基本启动、查看和删除外，对于docker运行情况，也可以使用命令查看运行日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container logs containerId</span><br></pre></td></tr></table></figure>
+<p>docker是容器，本身是虚拟机升级后的linux容器的一种，所以容器里边有很多东西，也支持进入容器操作，进入某个运行中的容器，基础命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container exec -it containerId</span><br></pre></td></tr></table></figure>
+
+<p>以上内容参考：<br><a href="https://www.cnblogs.com/nhdlb/p/11569191.html" target="_blank" rel="noopener">https://www.cnblogs.com/nhdlb/p/11569191.html</a><br><a href="http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html</a><br><a href="https://docs.docker.com/app/working-with-app/" target="_blank" rel="noopener">https://docs.docker.com/app/working-with-app/</a><br><a href="https://www.cnblogs.com/wang-yaz/p/10429899.html" target="_blank" rel="noopener">https://www.cnblogs.com/wang-yaz/p/10429899.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/03/docker1/" data-id="ckg7khyei0004v8vhhced76zs" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/09/04/docker2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          使用docker部署springboot服务
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/01/hadoop7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">HDFS-HA模式搭建（基于完全分布式模式升级）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#centos7网络配置"><span class="toc-number">1.</span> <span class="toc-text">centos7网络配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum换源及更新"><span class="toc-number">2.</span> <span class="toc-text">yum换源及更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker安装"><span class="toc-number">3.</span> <span class="toc-text">docker安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker基础使用"><span class="toc-number">4.</span> <span class="toc-text">docker基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动"><span class="toc-number">4.1.</span> <span class="toc-text">启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#停止"><span class="toc-number">4.2.</span> <span class="toc-text">停止</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像和容器操作"><span class="toc-number">4.3.</span> <span class="toc-text">镜像和容器操作</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

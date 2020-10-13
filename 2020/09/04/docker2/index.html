@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>使用docker部署springboot服务 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上一篇，在centos7中搭建好了docker，并尝试了基础的image镜像和container容器的命令操作。这一篇就尝试自己在docker容器中启动并使用springboot服务，基本步骤就是准备jar、配置Docker、构建image、启动container、测试服务功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用docker部署springboot服务">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/09/04/docker2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="上一篇，在centos7中搭建好了docker，并尝试了基础的image镜像和container容器的命令操作。这一篇就尝试自己在docker容器中启动并使用springboot服务，基本步骤就是准备jar、配置Docker、构建image、启动container、测试服务功能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-04T11:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T04:26:40.494Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-docker2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/04/docker2/" class="article-date">
+  <time datetime="2020-09-04T11:59:42.000Z" itemprop="datePublished">2020-09-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用docker部署springboot服务
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>上一篇，在centos7中搭建好了docker，并尝试了基础的image镜像和container容器的命令操作。<br>这一篇就尝试自己在docker容器中启动并使用springboot服务，基本步骤就是准备jar、配置Docker、构建image、启动container、测试服务功能。</p>
+<a id="more"></a>
+<h2 id="准备springboot的jar"><a href="#准备springboot的jar" class="headerlink" title="准备springboot的jar"></a>准备springboot的jar</h2><p>为了简单演示，我创建了一个新的springboot项目，只写了一个controller接口以供查看效果，controller接口代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping</span><br><span class="line">public class TestController &#123;</span><br><span class="line">    @GetMapping(&quot;&#x2F;hello&quot;)</span><br><span class="line">    public String hello()&#123;</span><br><span class="line">        return &quot;hello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>确定上述代码可以正常运行并在浏览器正常访问后，生成springboot可运行的jar，我这里命名为<code>demo.jar</code>，然后把这个文件上传到linux虚拟机中准备构建docker镜像的目录，例如<code>/root/docker/demo</code>。</p>
+<h2 id="配置Dockerfile"><a href="#配置Dockerfile" class="headerlink" title="配置Dockerfile"></a>配置Dockerfile</h2><p>有了jar之后，接下来就可以配置Dockerfile文件了，我这里是按这个顺序来的，因为Dockerfile里需要指定jar文件。<br>而实际上Dockerfile文件只是一个静态文件，在jar之前配置也没有问题，只需要后续生成的jar名字及路径和Dockerfile里的保持一致即可。<br>在上边jar所在目录，使用vi命令创建并编辑Dockerfile文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi Dockerfile</span><br></pre></td></tr></table></figure>
+<p>编辑文件内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FROM java:8</span><br><span class="line">VOLUME &#x2F;tmp</span><br><span class="line">COPY demo.jar app.jar</span><br><span class="line">RUN bash -c “touch &#x2F;app.jar”</span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;&#x2F;app.jar&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>以上内容的含义如下：</p>
+<blockquote>
+<p>第一行，本Dockerfile文件生成的image镜像，基于java8的镜像；<br>第三行，把当前目录下的<code>demo.jar</code>文件拷贝到docker容器中，同时重命名为<code>app.jar</code>；<br>第四行和第五行，运行<code>app.jar</code>,即启动spingboot服务。</p>
+</blockquote>
+<p>细心之人会发现，上边的解释没有提到第二行，这是因为这一行并不是必须的，只有需要使用到文件系统时才会用，即docker中的程序需要直接操作文件时就要配置这个。<br>并且，这种写法也只是docker和宿主机文件关联的方式之一，还有其他写法，后续再深入了解。</p>
+<p>以上配置和网上很多教程写的都类似，某种程度来说，可能会给不清楚的人造成一定误解，会以为很多就是固定写法，而实际上上边很多内容都是可以有其他写法的。<br>首先，上边每行开头的单词都是大写，但是和使用mysql查询时的sql关键字一样，这里的关键字并不是必须大写，也可以使用小写。<br>其次，如果需要第二行的话，后边指向的目录也不是必须使用tmp，也可以用其他。<br>然后就是本地文件添加到容器的操作，可以使用<code>copy</code>,也可以使用<code>add</code>，都是需要两个参数，一个是本地文件路径和文件名，一个是docker容器中的文件名。<br>所以，后边的app.jar自然也是可以叫其他名字的，只需要后边使用时保持一致就可以了。<br>因此，上边配置的写法，也可以改成下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from java:8</span><br><span class="line">volume &#x2F;test</span><br><span class="line">add demo.jar demo.jar</span><br><span class="line">run bash -c &quot;touch &#x2F;demo.jar&quot;</span><br><span class="line">entrypoint [&quot;java&quot;,&quot;-jar&quot;,&quot;&#x2F;demo.jar&quot;]</span><br></pre></td></tr></table></figure>
+
+<h2 id="image构建"><a href="#image构建" class="headerlink" title="image构建"></a>image构建</h2><p>有了需要运行的jar，也有了配置好的Dockerfile文件，准备工作就做好了，接下来就可以构建一个image镜像，使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t docker-spring .</span><br></pre></td></tr></table></figure>
+<p>上述命令尤其要注意末尾的点符号<code>.</code>，很容易被忽略，执行上述命令后会看到陆续输出如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Sending build context to Docker daemon  16.52MB</span><br><span class="line">Step 1&#x2F;6 : from java:8</span><br><span class="line"> ---&gt; d23bdf5b1b1b</span><br><span class="line">Step 2&#x2F;6 : volume &#x2F;test</span><br><span class="line"> ---&gt; Running in 5533951f04ca</span><br><span class="line">Removing intermediate container 5533951f04ca</span><br><span class="line"> ---&gt; 0965f253bac5</span><br><span class="line">Step 3&#x2F;6 : add demo.jar demo.jar</span><br><span class="line"> ---&gt; bff720047ccb</span><br><span class="line">Step 4&#x2F;6 : run bash -c &quot;touch &#x2F;demo.jar&quot;</span><br><span class="line"> ---&gt; Running in 900c847c14a4</span><br><span class="line">Removing intermediate container 900c847c14a4</span><br><span class="line"> ---&gt; edb32f0ef654</span><br><span class="line">Step 5&#x2F;6 : expose 8080</span><br><span class="line"> ---&gt; Running in c25a898a3e37</span><br><span class="line">Removing intermediate container c25a898a3e37</span><br><span class="line"> ---&gt; 55bbf5e81907</span><br><span class="line">Step 6&#x2F;6 : entrypoint [&quot;java&quot;,&quot;-jar&quot;,&quot;&#x2F;demo.jar&quot;]</span><br><span class="line"> ---&gt; Running in b891f3caeeb3</span><br><span class="line">Removing intermediate container b891f3caeeb3</span><br><span class="line"> ---&gt; 8caaec5d617b</span><br><span class="line">Successfully built 8caaec5d617b</span><br><span class="line">Successfully tagged docker-spring:latest</span><br></pre></td></tr></table></figure>
+<p>上述输出代表这个image已经构建成功了，如果是在这台机器第一次使用docker，没有java8的镜像，执行上述命令时就会慢一些，会从远程镜像库拉取java8镜像，如果不是第一次就会快很多，因为本地已经有了这个镜像，会直接使用。</p>
+<h2 id="启动container"><a href="#启动container" class="headerlink" title="启动container"></a>启动container</h2><p>镜像好了之后，就可以指定镜像启动容器，由于容器本身运行服务后会启动一个端口，但并不是直接使用物理机的端口，所以需要启动时把docker内服务端口和外部端口做映射。同时，为了方便操作，还可以使用后台运行的模式，使用<code>-d</code>，则最终启动命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8000:8080 docker-spring</span><br></pre></td></tr></table></figure>
+<p>以上操作，会启动docker-spring镜像，在docker容器中使用8080端口，并把8080端口映射到虚拟机的8000端口上。<br>需要注意的是，实际使用发现上边参数指定必须位于镜像名之前，如果先写镜像名后指定参数，则参数不生效。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>容器和服务启动完成，就可以在浏览器使用虚拟机ip和映射后的端口来访问docker内的服务，例如我的虚拟机是<code>192.168.139.91</code>，则根据开头的接口代码，就可以浏览器输入如下url：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.139.91:8000&#x2F;hello</span><br></pre></td></tr></table></figure>
+<p>会看到浏览器正常返回<code>hello</code>字符串，证明docker的springboot服务部署成功。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/04/docker2/" data-id="ckg7khyeo0008v8vh3vogaikj" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/09/08/linux3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          centos7中redis、mongodb、kafka安装记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/03/docker1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">centos7安装docker及docker基础操作</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#准备springboot的jar"><span class="toc-number">1.</span> <span class="toc-text">准备springboot的jar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Dockerfile"><span class="toc-number">2.</span> <span class="toc-text">配置Dockerfile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#image构建"><span class="toc-number">3.</span> <span class="toc-text">image构建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动container"><span class="toc-number">4.</span> <span class="toc-text">启动container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#验证"><span class="toc-number">5.</span> <span class="toc-text">验证</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

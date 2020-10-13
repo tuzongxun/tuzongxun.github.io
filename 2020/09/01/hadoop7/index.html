@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>HDFS-HA模式搭建（基于完全分布式模式升级） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="说明本次HDFS-HA模式搭建基于之前的完全分布式，完全分布式搭建可参考之前的内容： hadoop安装环境准备和关联知识解析 hadoop分布式安装及配置初步解析（坑坑不息）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDFS-HA模式搭建（基于完全分布式模式升级）">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/09/01/hadoop7/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="说明本次HDFS-HA模式搭建基于之前的完全分布式，完全分布式搭建可参考之前的内容： hadoop安装环境准备和关联知识解析 hadoop分布式安装及配置初步解析（坑坑不息）">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-01T11:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T04:23:20.897Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="hadoop">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hadoop7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/01/hadoop7/" class="article-date">
+  <time datetime="2020-09-01T11:59:42.000Z" itemprop="datePublished">2020-09-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HDFS-HA模式搭建（基于完全分布式模式升级）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>本次HDFS-HA模式搭建基于之前的完全分布式，完全分布式搭建可参考之前的内容：</p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/107811747" target="_blank" rel="noopener">hadoop安装环境准备和关联知识解析</a></p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/107843326" target="_blank" rel="noopener">hadoop分布式安装及配置初步解析（坑坑不息）</a></p>
+<a id="more"></a>
+
+<p>概括性来说，大概分为如下几个部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">JDK安装和JAVA_HOME配置</span><br><span class="line"></span><br><span class="line">HOSTS映射</span><br><span class="line"></span><br><span class="line">SSH免密登陆设置</span><br><span class="line"></span><br><span class="line">HADOOP配置文件修改</span><br><span class="line"></span><br><span class="line">配置HADOOP_HOME</span><br><span class="line"></span><br><span class="line">初始化（格式化）</span><br><span class="line"></span><br><span class="line">启动验证</span><br></pre></td></tr></table></figure>
+
+<p>hadoop项目常被提到的自身模块有yarn、hdfs、mapreduce，hdfs和yarn都可以搭建为高可用（HA），本篇先只介绍hdfs的HA搭建。</p>
+<h2 id="机器规划"><a href="#机器规划" class="headerlink" title="机器规划"></a>机器规划</h2><p>完全分布式和HA模式不仅在配置上有区别，在运行之后启动的进程方面也有很大的区别，之前的完全分布式各机器和主要进程大概如下</p>
+<h3 id="完全分布式"><a href="#完全分布式" class="headerlink" title="完全分布式"></a>完全分布式</h3><table>
+<thead>
+<tr>
+<th>host</th>
+<th>nomenode</th>
+<th>datanode</th>
+<th>resourceManager</th>
+<th>nodeManager</th>
+<th>secondaryNameNode</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.139.9master</td>
+<td>●</td>
+<td></td>
+<td>●</td>
+<td></td>
+<td>●</td>
+</tr>
+<tr>
+<td>192.168.139.19node01</td>
+<td></td>
+<td>●</td>
+<td></td>
+<td>●</td>
+<td></td>
+</tr>
+<tr>
+<td>192.168.139.29node02</td>
+<td></td>
+<td>●</td>
+<td></td>
+<td>●</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="HA模式"><a href="#HA模式" class="headerlink" title="HA模式"></a>HA模式</h3><p>相对于完全分布式模式，HA中加入了ZOOKEEPER、ZKFC、JOURNALNODE，但是没有了secondaryNameNode，搭建好或者说规划后的HA模式各进程及节点分布如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>host</th>
+<th>nomenode</th>
+<th>datanode</th>
+<th>journalnode</th>
+<th>zkfc</th>
+<th>zk</th>
+<th>nodeManager</th>
+<th>resourceManager</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.139.9<br />master</td>
+<td>●</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+<td></td>
+<td>●</td>
+</tr>
+<tr>
+<td>192.168.139.19<br />node01</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+</tr>
+<tr>
+<td>192.168.139.29<br />node02</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+</tr>
+<tr>
+<td>192.168.139.39<br />node03</td>
+<td>●</td>
+<td></td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+<td>●</td>
+</tr>
+</tbody></table>
+<p>需要注意的是，这里的resourceManager是在active节点，并不是两个namenode同时存在。</p>
+<h2 id="HDFS-HA的理解"><a href="#HDFS-HA的理解" class="headerlink" title="HDFS-HA的理解"></a>HDFS-HA的理解</h2><p>在完全分布式模式中，namenode节点只有一个，datanode是多个，而namenode用来管理datanode的源数据，一旦namenode出故障，则整个hdfs就会不可用。</p>
+<p>所以这里说的HDFS的HA模式，个人理解实际就是namenode的HA，为namenode增加主从模式，增加故障转移和自动主从切换，无论是新加入的zookeeper中间件，还是新加的journalnode进程，其主要作用就是保证namenode的高可用，使得原活跃节点故障后整体依然能提供正常服务。</p>
+<h2 id="基础环境准备"><a href="#基础环境准备" class="headerlink" title="基础环境准备"></a>基础环境准备</h2><p>从上边表格可以看出，相对于完全分布式，我这里又加了一台机，主要是怕三台撑不住。</p>
+<p>所以这里的基础环境准备，实际说的是新加的机器，因为基础环境是通用的，即jkd、ssh免密、hosts映射，具体操作可参考开头所列的两篇博客内容。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在之前的完全分布式模式中，配置了很多内容，例如hdfs-site.xml、hadoop-env.sh、core-site.xml、workers等，这次的HA模式搭建只需修改hdfs-site.xml、hadoop-env.sh、core-site.xml这三个。</p>
+<h3 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title="hdfs-site.xml"></a>hdfs-site.xml</h3><p>据说hadoop3.x最多可以支持5个namenode，但是自己电脑资源有限，就只使用了两个。在下边的配置中，主要分成四段，整体配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!--1--&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.nameservices&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;mycluster&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.ha.namenodes.mycluster&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;nn1,nn2&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.namenode.rpc-address.mycluster.nn1&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;master:8020&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.namenode.rpc-address.mycluster.nn2&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;node03:8020&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.namenode.http-address.mycluster.nn1&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;master:9870&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.namenode.http-address.mycluster.nn2&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;node03:9870&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--2--&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.namenode.shared.edits.dir&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;qjournal:&#x2F;&#x2F;master:8485;node01:8485;node02:8485&#x2F;mycluster&lt;</span><br><span class="line"></span><br><span class="line">&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.journalnode.edits.dir&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;&#x2F;root&#x2F;soft&#x2F;bigdata&#x2F;journal&#x2F;data&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--3--&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.client.failover.proxy.provider.mycluster&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.ha.fencing.methods&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;sshfence&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.ha.fencing.ssh.private-key-files&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;&#x2F;root&#x2F;.ssh&#x2F;id_rsa&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--4--&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;dfs.ha.automatic-failover.enabled&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;true&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上边第一部分是配置namenode集群，指定集群名字、节点名称以及节点主机，前边两个都是可以自定义的。</p>
+<p>第二部分指定journalnode节点所在机器和本地存储目录，后边启动journalnode就在这里配置的节点启动，相应的数据也会存到指定的目录中。</p>
+<p>第三部分指定HA角色切换代理类和方法，这里使用ssh免密方式。</p>
+<p>第四部分设置开启HA自动化，实际就是ZKFC。</p>
+<h3 id="core-site-xml"><a href="#core-site-xml" class="headerlink" title="core-site.xml"></a>core-site.xml</h3><p>core-site的配置相对于HDFS就要简单许多，配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;fs.defaultFS&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;hdfs:&#x2F;&#x2F;mycluster&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;ha.zookeeper.quorum&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;node01:2181,node02:2181,node03:2181&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line"></span><br><span class="line">&lt;name&gt;hadoop.tmp.dir&lt;&#x2F;name&gt;</span><br><span class="line"></span><br><span class="line">&lt;value&gt;&#x2F;opt&#x2F;hadoop&#x2F;hadoopdata&lt;&#x2F;value&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在完全分布式模式中，第一项配置的是具体的某台机的hostname或者ip，HA模式下就需要修改为上边定义的namenode集群的名字，虽然上边说具体名字可以自定义，但是这里配置的需要和上边的一致。</p>
+<p>第二项即指定zookeeper集群节点，第三项是之前完全分布式模式就有的。</p>
+<h3 id="hadoop-env-sh"><a href="#hadoop-env-sh" class="headerlink" title="hadoop-env.sh"></a>hadoop-env.sh</h3><p>网上很多地方似乎没有提这个文件，但是实际操作发现如果这个文件不配置，启动的时候会失败。</p>
+<p>在完全分布式模式下，这个文件中除了配置了JAVA_HOME外，还配了如下一些内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">export HDFS_NAMENODE_USER&#x3D;root</span><br><span class="line"></span><br><span class="line">export HDFS_DATANODE_USER&#x3D;root</span><br><span class="line"></span><br><span class="line">export HDFS_SECONDARYNAMENODE&#x3D;root</span><br></pre></td></tr></table></figure>
+
+<p>现在新加了journalnode和zkfc，也需要类似的增加如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">HDFS_JOURNALNODE_USER&#x3D;root</span><br><span class="line"></span><br><span class="line">HDFS_ZKFC_USER&#x3D;root</span><br></pre></td></tr></table></figure>
+
+<p>到这里，HA模式HDFS本身的配置就算完了，但是可以看到上边需要使用zookeeper，而完全分布式没有这个，所以还需要先再规划的节点中安装zookeeper。</p>
+<h2 id="zookeeper搭建和启动"><a href="#zookeeper搭建和启动" class="headerlink" title="zookeeper搭建和启动"></a>zookeeper搭建和启动</h2><p>首先要获取安装包，可以从官网获取到最新的，地址如下：</p>
+<p><a href="https://downloads.apache.org/zookeeper/current/" target="_blank" rel="noopener">https://downloads.apache.org/zookeeper/current/</a></p>
+<p>之后使用tar解压，具体步骤就不在赘述。解压完成之后，需要把安装目录的conf目录下的zoo_sample.cfg文件重命名为zoo.cfg，之后修改这个文件。</p>
+<h3 id="zoo-cfg修改"><a href="#zoo-cfg修改" class="headerlink" title="zoo.cfg修改"></a>zoo.cfg修改</h3><p>首先，这个文件中有一个默认的<code>dataDir</code>，和hadoop一开始一样配置的是linux系统的临时目录，这个目录需要修改为一个非临时目录，例如我这里修改为<code>/root/soft/bigdata/zookeeper/data</code>。</p>
+<p>然后，需要配置zookeeper集群各个节点，例如我这里的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">server.1&#x3D;node01:2888:3888</span><br><span class="line"></span><br><span class="line">server.2&#x3D;node02:2888:3888</span><br><span class="line"></span><br><span class="line">server.3&#x3D;node03:2888:3888</span><br></pre></td></tr></table></figure>
+
+<p>上边server后边的数字并不一定要和这里一样，可以理解为就是一个权重大小，为的就是zookeeper本身的选举。</p>
+<p>后边跟了两个端口号，一个是有主，或者说有leader的情况下相互通信使用的端口，一个是无主状态下通信使用的端口号。</p>
+<h3 id="myid"><a href="#myid" class="headerlink" title="myid"></a>myid</h3><p>有了上边的配置后，还需要在zookeeper数据目录中新增一个权重文件，把上边配置的权重值写入这个文件，提供给zookeeper读取。</p>
+<p>例如我这里再node01的<code>/root/soft/bigdata/zookeeper/data</code>执行如下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 1 &gt; myid</span><br></pre></td></tr></table></figure>
+
+<p>在node02的<code>/root/soft/bigdata/zookeeper/data</code>执行如下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 2 &gt; myid</span><br></pre></td></tr></table></figure>
+
+<p>同样的，在node03的<code>/root/soft/bigdata/zookeeper/data</code>执行如下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 3 &gt; myid</span><br></pre></td></tr></table></figure>
+
+<h3 id="zookeeper环境变量"><a href="#zookeeper环境变量" class="headerlink" title="zookeeper环境变量"></a>zookeeper环境变量</h3><p>之前不论是安装jdk、redis，还是hadoop，都配置了各自的环境变量，目的都是为了能在任意目录方便的执行相应的命令，进行相应的操作，zookeepere也是一样，最好是配置一下环境变量。</p>
+<h3 id="启动和验证"><a href="#启动和验证" class="headerlink" title="启动和验证"></a>启动和验证</h3><p>除了环境变量以外，hadoop本身安装包以及配置都可以只在一台机操作，然后需要分发，或者说复制到其他两台机，然后依次配置好环境变量后，就可以启动zookeeper集群，并验证运行状态。</p>
+<p><code>zkServer.sh start</code>可以启动zookeeper服务，<code>zkServer.sh status</code>可以查看zookeeper运行状态。</p>
+<p>当我们现在一台机执行start后，立即用status会看到显示<code>not running</code>，而使用<code>ps</code>又能看到zookeeper进程，原因是只有一个zookeeper的情况下，无法选举，所以有进程却无法提供服务。</p>
+<p>当再启动一个之后，就会看到权重值较大的会变成<code>leader</code>，而权重值小的会变成<code>follower</code>，三台都启动以后，就会一个leader，两个follower。</p>
+<h2 id="HA模式HDFS初始化及启动"><a href="#HA模式HDFS初始化及启动" class="headerlink" title="HA模式HDFS初始化及启动"></a>HA模式HDFS初始化及启动</h2><p>之前说了，namenode实际是管理datanode，而zookeeper和journalnode的作用又是提高namenode可用性，可以简单看成是对namenode的一种管理。</p>
+<p>所以正常情况是namenode在datanode之前运行，而zookeeper和journalnode又需要在namenode之前运行。所以，zookeeper集群正常运行之后，需要再启动journalnode：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hadoop-daemon.sh start journalnode</span><br></pre></td></tr></table></figure>
+
+<p>因为是重新搭建，和完全分布式一样需要先初始化，之前也说过，这个初始化的作用是清空原有数据，然后会新建一些文件，正常来说这二个操作只应该在环境搭建的时候执行一次，其实时候甚至应该禁用，格式化操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+
+<p>name主从集群通信，需要依据同一个集群id，上边的初始化操作就会生成一个集群id，所以另一个namenode节点也需要存储这个一样的id信息，要从上边同步过来，通过之前需要上边的namenode先运行起来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hadoop-daemon.sh start namenode</span><br></pre></td></tr></table></figure>
+
+<p>然后便是同步，上述操作我再master节点操作，即规划的其中一个namenode节点，所以下边的操作就需要再另一个namenode节点，例如node03中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hdfs namenode -bootstrapStandby</span><br></pre></td></tr></table></figure>
+
+<p>namenode配置同步之后，就需要再初始化<code>ZKFC</code>，使namenode和zookeeper连接起来，这个操作一样是在开始的namenode节点上，例如我这里的master机器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hdfs zkfc -formatZK</span><br></pre></td></tr></table></figure>
+
+<p>上述操作之后，基本的搭建就算完成了，然后在活跃的namenode节点执行hdfs启动命令启动即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
+
+<p>不出意外的话，启动完成之后，使用hdfs相关命令就可以进行文件的增删改查操作了。</p>
+<p>这时候如果要停止，可以一个个的停止，也可以直接使用<code>stop-all.sh</code>命令一次停止namenode、journalnode等，zookeeper是单独的，就还是需要单独操作。</p>
+<p>后边如果再需要启动HA模式的HDFS集群，也可以直接使用<code>start-all.sh</code>进行启动。</p>
+<h2 id="HA验证"><a href="#HA验证" class="headerlink" title="HA验证"></a>HA验证</h2><p>一开始说了HA的目的其实就是为了解决namenode单点故障问题，所以需要进行自动选主验证，即，在确定某个namenode是active的情况下是他不可用，然后看另一个是否能正常自动成为activi。</p>
+<p>看哪个namenode是active的，有两种方法，一是访问web界面，即hdfs-site.xml中的<code>dfs.namenode.http-address</code>配置，例如我上边配了<code>master:9870</code>和<code>node03:9870</code>，浏览器访问的时候，就能看到具体哪个是active状态。</p>
+<p>另一个是在zookeeper中，可以使用<code>zkCli.sh</code>进入到zookeeper自带的客户端操作界面，然后使用get获取到当前哪个节点持有锁，例如我配置的namenode集群名叫<code>mycluster</code>，则我查询锁状态的命令为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">get &#x2F;hadoop-ha&#x2F;mycluster&#x2F;ActiveStandbyElectorLock</span><br></pre></td></tr></table></figure>
+
+<p>上述命令也可以看到具体是哪个节点持有锁，在知道当前active节点的情况下，就可以使用<code>hadoop-daemon.sh stop namenode</code>来停止这个namenode，然后观察另一个是否会自动变成active，如果变了，并且整个hdfs服务使用正常，则可证明这个HA模式基本搭建成功。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/09/01/hadoop7/" data-id="ckg7khyfm001gv8vh3lyd5u8e" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/09/03/docker1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          centos7安装docker及docker基础操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/13/hadoop6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">寻道，思考人生的价值（观小米十周年演讲有感）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机器规划"><span class="toc-number">2.</span> <span class="toc-text">机器规划</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#完全分布式"><span class="toc-number">2.1.</span> <span class="toc-text">完全分布式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HA模式"><span class="toc-number">2.2.</span> <span class="toc-text">HA模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HDFS-HA的理解"><span class="toc-number">3.</span> <span class="toc-text">HDFS-HA的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基础环境准备"><span class="toc-number">4.</span> <span class="toc-text">基础环境准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-number">5.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hdfs-site-xml"><span class="toc-number">5.1.</span> <span class="toc-text">hdfs-site.xml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#core-site-xml"><span class="toc-number">5.2.</span> <span class="toc-text">core-site.xml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hadoop-env-sh"><span class="toc-number">5.3.</span> <span class="toc-text">hadoop-env.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zookeeper搭建和启动"><span class="toc-number">6.</span> <span class="toc-text">zookeeper搭建和启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zoo-cfg修改"><span class="toc-number">6.1.</span> <span class="toc-text">zoo.cfg修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#myid"><span class="toc-number">6.2.</span> <span class="toc-text">myid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zookeeper环境变量"><span class="toc-number">6.3.</span> <span class="toc-text">zookeeper环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动和验证"><span class="toc-number">6.4.</span> <span class="toc-text">启动和验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HA模式HDFS初始化及启动"><span class="toc-number">7.</span> <span class="toc-text">HA模式HDFS初始化及启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HA验证"><span class="toc-number">8.</span> <span class="toc-text">HA验证</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

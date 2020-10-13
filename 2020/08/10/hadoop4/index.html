@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>hadoop和hbase的关系及hbase安装与验证 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="从hadoop官网首页就可以看到，hadoop项目本身自带的模块现在有五个，即：  hadoop commonhdfsyarnmapReducehadoop Ozone  第一项从名称就可以看出来是基础功能模块，hdfs是文件存储系统，yarn是调度和集群管理，mapReduce是数据计算处理，这几个都是学习使用hadoop一开始就必然会接触的。最后一个hadoop Ozone是分布式对象存储系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop和hbase的关系及hbase安装与验证">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/08/10/hadoop4/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="从hadoop官网首页就可以看到，hadoop项目本身自带的模块现在有五个，即：  hadoop commonhdfsyarnmapReducehadoop Ozone  第一项从名称就可以看出来是基础功能模块，hdfs是文件存储系统，yarn是调度和集群管理，mapReduce是数据计算处理，这几个都是学习使用hadoop一开始就必然会接触的。最后一个hadoop Ozone是分布式对象存储系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-10T11:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T03:53:52.660Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="hadoop">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hadoop4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/10/hadoop4/" class="article-date">
+  <time datetime="2020-08-10T11:59:42.000Z" itemprop="datePublished">2020-08-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      hadoop和hbase的关系及hbase安装与验证
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>从hadoop官网首页就可以看到，hadoop项目本身自带的模块现在有五个，即：</p>
+<blockquote>
+<p>hadoop common<br>hdfs<br>yarn<br>mapReduce<br>hadoop Ozone</p>
+</blockquote>
+<p>第一项从名称就可以看出来是基础功能模块，hdfs是文件存储系统，yarn是调度和集群管理，mapReduce是数据计算处理，这几个都是学习使用hadoop一开始就必然会接触的。<br>最后一个hadoop Ozone是分布式对象存储系统，这个是对hdfs的一种补充，是一个相对较新的内容，在人们口中出现的频率相对较低，可能很多人一开始都不知道，包括我。</p>
+<a id="more"></a>
+<p>从这里也可以看出来，听说大数据的人一般都会听到的hbase、hive、spark等，其实并不属于hadoop项目本身，而是可以基于hadoop使用的的其他关联项目。<br>对于hadoop本身的模块来说，只要hadoop相应版本支持，那么只要安装了hadoop就可以使用这些模块功能，而关联项目，就必须独立安装和部署，然后在配置中关联起来。</p>
+<p>hadoop可以做很多事，但是提到他，肯定第一时间是想到大数据，而提到大数据，就一定会想到数据处理计算和数据存储。<br>如果先抛开hadoop Ozone不谈，目前我了解的大数据系统中数据存储一般都离不开hdfs和hbase，个人理解，hbase从某种意义上来说，也算是hdfs的一种补充，因为从前边了解的就可以知道，hdfs是不支持文件内容修改的，有利也必然就有弊。<br>我们知道数据库最终也是以文件形式持久化存储的，不论是mysql、mongodb还是hbase，hbase现在的底层文件系统就是通过hdfs来支持的，这个我验证过没有问题，但网上说换成其他文件系统也没问题，这个需要后续进一步验证。<br>基于以上思路，在初步学习了hdfs后，就应该是再对hbase进行一个基础扫盲，安装、配置和基础操作。</p>
+<h2 id="hbase下载"><a href="#hbase下载" class="headerlink" title="hbase下载"></a>hbase下载</h2><p>hbase可以从官网找到安装包下载页面<a href="http://hbase.apache.org/downloads.html，这个页面罗列了很多版本，通过查看release" target="_blank" rel="noopener">http://hbase.apache.org/downloads.html，这个页面罗列了很多版本，通过查看release</a> notes信息，我看到2.2.5版本已经支持3.2.x版本的hadoop，而我的hadoop是3.1.3，所以就选择了这个版本。<br>安装包获取方式多种多样，在redis安装和hadoop安装文章中都有讲过，想了解的可以移步<br><a href="https://blog.csdn.net/tuzongxun/article/details/107811747" target="_blank" rel="noopener">hadoop安装环境准备和关联知识解析</a><br><a href="https://blog.csdn.net/tuzongxun/article/details/107170447" target="_blank" rel="noopener">Linux中redis安装及软件安装相关Linux知识要点</a><br>我这里就直接使用最快捷的方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;downloads.apache.org&#x2F;hbase&#x2F;2.2.5&#x2F;hbase-2.2.5-bin.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf hbase-2.2.5-bin.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="hbase-env-sh配置"><a href="#hbase-env-sh配置" class="headerlink" title="hbase-env.sh配置"></a>hbase-env.sh配置</h2><p>解压完之后及时配置，首先要配置的是hbase-env.sh这个文件，这个文件在安装目录的conf目录下，例如我的hbase安装目录是<code>/root/soft/bigdata/hbase/hbase-2.2.5</code>，则这个文件路径是<code>/root/soft/bigdata/hbase/hbase-2.2.5/conf/hbase-env.sh</code>，这个文件中需要配置如下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;root&#x2F;soft&#x2F;jdk1.8.0_261</span><br><span class="line">export HBASE_CLASSPATH&#x3D;&#x2F;root&#x2F;soft&#x2F;bigdata&#x2F;hbase&#x2F;hbase-2.2.5&#x2F;conf</span><br><span class="line">export HBASE_MANAGES_ZK&#x3D;true</span><br></pre></td></tr></table></figure>
+<p>要注意的是实际操作是换成自己的jdk和hbase的安装路径。</p>
+<h2 id="hbase-sit-xml配置"><a href="#hbase-sit-xml配置" class="headerlink" title="hbase-sit.xml配置"></a>hbase-sit.xml配置</h2><p>然后要配置的就是hbase-sit.xml，这里需要指定hdfs系统中存储hbase数据的目录，由于我的hadoop是分布式模式，所以配置中还需要开启分布式模式，这些配置都需要放在<code>&lt;configuration&gt;</code>和<code>&lt;/configuration&gt;</code>中间：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">      &lt;name&gt;hbase.rootdir&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;hdfs:&#x2F;&#x2F;192.168.139.9:9000&#x2F;hbase&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">      &lt;name&gt;hbase.cluster.distributed&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;true&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;!--</span><br><span class="line">&lt;property&gt;</span><br><span class="line">      &lt;name&gt;hbase.tmp.dir&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;.&#x2F;tmp&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">--&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">      &lt;name&gt;hbase.unsafe.stream.capability.enforce&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;false&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+<p>以上几项配置，第一项就是指向了我搭建的hdfs文件系统，其中hbase还是一个不存在的目录，后续使用过程中会自动创建。<br>第二项配置就是针对我的hadoop分布式模式的配置，hbase默认这个配置是false，也就是单机模式。<br>第三项看起来是一个临时目录，hbase这个配置文件中原本自带的，暂时不确定用处，我就先注释了。<br>第四项，也是hbase配置文件自带的，看网上解释，是避免出现启动错误，我就先保持不变。</p>
+<h2 id="hbase环境变量配置"><a href="#hbase环境变量配置" class="headerlink" title="hbase环境变量配置"></a>hbase环境变量配置</h2><p>这是一个习惯性的操作，可以使操作更加方便，能够任意目录执行hbase相关命令，不想配的也可以不配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HBASE_HOME&#x3D;&#x2F;root&#x2F;soft&#x2F;bigdata&#x2F;hbase&#x2F;hbase-2.2.5</span><br><span class="line">export PATH&#x3D;$PATH:$HBASE_HOME&#x2F;bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="ServerNotRunningYetException"><a href="#ServerNotRunningYetException" class="headerlink" title="ServerNotRunningYetException"></a>ServerNotRunningYetException</h2><p>按网上教程，有了上边配置应该就可以启动了，前提是先保证hadoop已经启动完成。<br>我在启动了hadoop之后，执行hbase启动命令<code>start-hbase.sh</code>发现结果报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: org.apache.hadoop.hbase.ipc.ServerNotRunningYetException: Server is not running yet</span><br></pre></td></tr></table></figure>
+<p>网上搜了下，说是因为hdfs开启了安全模式，但我使用<code>hdfs dfsadmin -safemode get</code>查看hdfs安全模式状态后，发现我这里本身就是关闭的，证明这个错误的原因必然不止这一个。(注：<code>hdfs dfsadmin -safemode enter</code>可以手动开启，<code>hdfs dfsadmin -safemode leave</code>可以手动关闭)<br>于是查了下hbase的启动日志，最终看到原来是自己粗心，在配置hdfs的ip时，<code>192.168.139.9</code>错误的打成了<code>12.168.139.9</code>，把ip改成正确的之后便成功启动。</p>
+<h2 id="multiple-SLF4J-bindings"><a href="#multiple-SLF4J-bindings" class="headerlink" title="multiple SLF4J bindings"></a>multiple SLF4J bindings</h2><p>虽然hbase启动成功了，但是启动时却出现了告警提醒：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:&#x2F;root&#x2F;soft&#x2F;bigdata&#x2F;hadoop&#x2F;hadoop-3.1.3&#x2F;share&#x2F;hadoop&#x2F;common&#x2F;lib&#x2F;slf4j-log4j12-1.7.25.jar!&#x2F;org&#x2F;slf4j&#x2F;impl&#x2F;StaticLoggerBinder.class]</span><br></pre></td></tr></table></figure>
+<p>这个提醒还是很明确的，就是hbase和hadoop相关的日志依赖有冲突，于是给hbase中的日志jar改了名，然后就好了。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><h3 id="shell连接"><a href="#shell连接" class="headerlink" title="shell连接"></a>shell连接</h3><p>hbase启动成功后，像mysql、mongodb、redis一样，hbase也有自带的shell客户端工具，可以连接进行操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+<p>执行上述命令后，就能进入到hbase的命令行操作界面，或许是我机器原因，进入时间有点久。</p>
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><p>hbase中创建一个表结构的简单操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create &#39;user&#39;,&#39;name&#39;,&#39;age&#39;,&#39;addr&#39;,&#39;phone&#39;,&#39;email&#39;</span><br></pre></td></tr></table></figure>
+<p>上述命令的意思是，创建一个名称为user的表，包含name、age、addr、phone、email等属性。</p>
+<h3 id="Master-is-initializing"><a href="#Master-is-initializing" class="headerlink" title="Master is initializing"></a>Master is initializing</h3><p>在上边创建表的时候，发生了一个小插曲，第一次创建时抛出了如下异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR: org.apache.hadoop.hbase.PleaseHoldException: Master is initializing</span><br><span class="line">        at org.apache.hadoop.hbase.master.HMaster.checkInitialized(HMaster.java:2811)</span><br><span class="line">        at org.apache.hadoop.hbase.master.HMaster.createTable(HMaster.java:2018)</span><br><span class="line">        at</span><br></pre></td></tr></table></figure>
+<p>从字面意思看，就是master正在启动中，于是我稍等了一会儿重新执行了下，就成功创建了。</p>
+<h3 id="查看表结构"><a href="#查看表结构" class="headerlink" title="查看表结构"></a>查看表结构</h3><p>创建了hbase表之后，可以使用describe命令查看表结构，例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">describe &#39;user&#39;</span><br></pre></td></tr></table></figure>
+<p>我这里上边的命令输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Table user is ENABLED                                                       </span><br><span class="line">user                                                                        </span><br><span class="line">COLUMN FAMILIES DESCRIPTION                                                 </span><br><span class="line">&#123;NAME &#x3D;&gt; &#39;addr&#39;, VERSIONS &#x3D;&gt; &#39;1&#39;, EVICT_BLOCKS_ON_CLOSE &#x3D;&gt; &#39;false&#39;, NEW_VERS</span><br><span class="line">ION_BEHAVIOR &#x3D;&gt; &#39;false&#39;, KEEP_DELETED_CELLS &#x3D;&gt; &#39;FALSE&#39;, CACHE_DATA_ON_WRITE </span><br><span class="line">&#x3D;&gt; &#39;false&#39;, DATA_BLOCK_ENCODING &#x3D;&gt; &#39;NONE&#39;, TTL &#x3D;&gt; &#39;FOREVER&#39;, MIN_VERSIONS &#x3D;&gt;</span><br><span class="line"> &#39;0&#39;, REPLICATION_SCOPE &#x3D;&gt; &#39;0&#39;, BLOOMFILTER &#x3D;&gt; &#39;ROW&#39;, CACHE_INDEX_ON_WRITE &#x3D;</span><br><span class="line">&gt; &#39;false&#39;, IN_MEMORY &#x3D;&gt; &#39;false&#39;, CACHE_BLOOMS_ON_WRITE &#x3D;&gt; &#39;false&#39;, PREFETCH_</span><br><span class="line">BLOCKS_ON_OPEN &#x3D;&gt; &#39;false&#39;, COMPRESSION &#x3D;&gt; &#39;NONE&#39;, BLOCKCACHE &#x3D;&gt; &#39;true&#39;, BLOC</span><br><span class="line">KSIZE &#x3D;&gt; &#39;65536&#39;&#125;                                                           </span><br><span class="line">&#123;NAME &#x3D;&gt; &#39;age&#39;, VERSIONS &#x3D;&gt; &#39;1&#39;, EVICT_BLOCKS_ON_CLOSE &#x3D;&gt; &#39;false&#39;, NEW_VERSI</span><br><span class="line">ON_BEHAVIOR &#x3D;&gt; &#39;false&#39;, KEEP_DELETED_CELLS &#x3D;&gt; &#39;FALSE&#39;, CACHE_DATA_ON_WRITE &#x3D;</span><br><span class="line">&gt; &#39;false&#39;, DATA_BLOCK_ENCODING &#x3D;&gt; &#39;NONE&#39;, TTL &#x3D;&gt; &#39;FOREVER&#39;, MIN_VERSIONS &#x3D;&gt; </span><br><span class="line">&#39;0&#39;, REPLICATION_SCOPE &#x3D;&gt; &#39;0&#39;, BLOOMFILTER &#x3D;&gt; &#39;ROW&#39;, CACHE_INDEX_ON_WRITE &#x3D;&gt;</span><br><span class="line"> &#39;false&#39;, IN_MEMORY &#x3D;&gt; &#39;false&#39;, CACHE_BLOOMS_ON_WRITE &#x3D;&gt; &#39;false&#39;, PREFETCH_B</span><br><span class="line">LOCKS_ON_OPEN &#x3D;&gt; &#39;false&#39;, COMPRESSION &#x3D;&gt; &#39;NONE&#39;, BLOCKCACHE &#x3D;&gt; &#39;true&#39;, BLOCK</span><br><span class="line">SIZE &#x3D;&gt; &#39;65536&#39;&#125;                                                            </span><br><span class="line">&#123;NAME &#x3D;&gt; &#39;email&#39;, VERSIONS &#x3D;&gt; &#39;1&#39;, EVICT_BLOCKS_ON_CLOSE &#x3D;&gt; &#39;false&#39;, NEW_VER</span><br><span class="line">SION_BEHAVIOR &#x3D;&gt; &#39;false&#39;, KEEP_DELETED_CELLS &#x3D;&gt; &#39;FALSE&#39;, CACHE_DATA_ON_WRITE</span><br><span class="line"> &#x3D;&gt; &#39;false&#39;, DATA_BLOCK_ENCODING &#x3D;&gt; &#39;NONE&#39;, TTL &#x3D;&gt; &#39;FOREVER&#39;, MIN_VERSIONS &#x3D;</span><br><span class="line">&gt; &#39;0&#39;, REPLICATION_SCOPE &#x3D;&gt; &#39;0&#39;, BLOOMFILTER &#x3D;&gt; &#39;ROW&#39;, CACHE_INDEX_ON_WRITE </span><br><span class="line">&#x3D;&gt; &#39;false&#39;, IN_MEMORY &#x3D;&gt; &#39;false&#39;, CACHE_BLOOMS_ON_WRITE &#x3D;&gt; &#39;false&#39;, PREFETCH</span><br><span class="line">_BLOCKS_ON_OPEN &#x3D;&gt; &#39;false&#39;, COMPRESSION &#x3D;&gt; &#39;NONE&#39;, BLOCKCACHE &#x3D;&gt; &#39;true&#39;, BLO</span><br><span class="line">CKSIZE &#x3D;&gt; &#39;65536&#39;&#125;                                                          </span><br><span class="line">&#123;NAME &#x3D;&gt; &#39;name&#39;, VERSIONS &#x3D;&gt; &#39;1&#39;, EVICT_BLOCKS_ON_CLOSE &#x3D;&gt; &#39;false&#39;, NEW_VERS</span><br><span class="line">ION_BEHAVIOR &#x3D;&gt; &#39;false&#39;, KEEP_DELETED_CELLS &#x3D;&gt; &#39;FALSE&#39;, CACHE_DATA_ON_WRITE </span><br><span class="line">&#x3D;&gt; &#39;false&#39;, DATA_BLOCK_ENCODING &#x3D;&gt; &#39;NONE&#39;, TTL &#x3D;&gt; &#39;FOREVER&#39;, MIN_VERSIONS &#x3D;&gt;</span><br><span class="line"> &#39;0&#39;, REPLICATION_SCOPE &#x3D;&gt; &#39;0&#39;, BLOOMFILTER &#x3D;&gt; &#39;ROW&#39;, CACHE_INDEX_ON_WRITE &#x3D;</span><br><span class="line">&gt; &#39;false&#39;, IN_MEMORY &#x3D;&gt; &#39;false&#39;, CACHE_BLOOMS_ON_WRITE &#x3D;&gt; &#39;false&#39;, PREFETCH_</span><br><span class="line">BLOCKS_ON_OPEN &#x3D;&gt; &#39;false&#39;, COMPRESSION &#x3D;&gt; &#39;NONE&#39;, BLOCKCACHE &#x3D;&gt; &#39;true&#39;, BLOC</span><br><span class="line">KSIZE &#x3D;&gt; &#39;65536&#39;&#125;                                                           </span><br><span class="line">&#123;NAME &#x3D;&gt; &#39;phone&#39;, VERSIONS &#x3D;&gt; &#39;1&#39;, EVICT_BLOCKS_ON_CLOSE &#x3D;&gt; &#39;false&#39;, NEW_VER</span><br><span class="line">SION_BEHAVIOR &#x3D;&gt; &#39;false&#39;, KEEP_DELETED_CELLS &#x3D;&gt; &#39;FALSE&#39;, CACHE_DATA_ON_WRITE</span><br><span class="line"> &#x3D;&gt; &#39;false&#39;, DATA_BLOCK_ENCODING &#x3D;&gt; &#39;NONE&#39;, TTL &#x3D;&gt; &#39;FOREVER&#39;, MIN_VERSIONS &#x3D;</span><br><span class="line">&gt; &#39;0&#39;, REPLICATION_SCOPE &#x3D;&gt; &#39;0&#39;, BLOOMFILTER &#x3D;&gt; &#39;ROW&#39;, CACHE_INDEX_ON_WRITE </span><br><span class="line">&#x3D;&gt; &#39;false&#39;, IN_MEMORY &#x3D;&gt; &#39;false&#39;, CACHE_BLOOMS_ON_WRITE &#x3D;&gt; &#39;false&#39;, PREFETCH</span><br><span class="line">_BLOCKS_ON_OPEN &#x3D;&gt; &#39;false&#39;, COMPRESSION &#x3D;&gt; &#39;NONE&#39;, BLOCKCACHE &#x3D;&gt; &#39;true&#39;, BLO</span><br><span class="line">CKSIZE &#x3D;&gt; &#39;65536&#39;&#125;                                                          </span><br><span class="line">5 row(s)</span><br><span class="line">QUOTAS                                                                      </span><br><span class="line">0 row(s)</span><br><span class="line">Took 4.6373 seconds</span><br></pre></td></tr></table></figure>
+<p>至此，证明hbase安装配置也确实是可用的。</p>
+<h2 id="停止hbase"><a href="#停止hbase" class="headerlink" title="停止hbase"></a>停止hbase</h2><p>hbase停止原本很简单，启动是<code>start-hbase.sh</code>，那么正常里说停止就是<code>stop-hbase.sh</code>，实际上也确实是的。<br>但是我在停止的时候却遇到一个小问题，第一次停止的时候，一直在stopping状态。<br>网上说需要先执行<code>hbase-daemons.sh stop regionserver</code>，我试了下，确实很有效，然后再执行<code>stop-hbase.sh</code>就立即停止了，只不过，这个现象也仅出现了一次，后边每次直接<code>stop-hbase.sh</code>都能很快停止。</p>
+<p>以上部分内容参考如下文章：<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/" target="_blank" rel="noopener">http://dblab.xmu.edu.cn/blog/2442-2/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/08/10/hadoop4/" data-id="ckg7khyfh0019v8vh0pnudvt7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2020/08/11/hadoop5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          redis、hadoop和hbase等安装相关拓展知识补充
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/10/hadoop3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">hdfs基础操作（命令行和java代码）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hbase下载"><span class="toc-number">1.</span> <span class="toc-text">hbase下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解压"><span class="toc-number">2.</span> <span class="toc-text">解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hbase-env-sh配置"><span class="toc-number">3.</span> <span class="toc-text">hbase-env.sh配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hbase-sit-xml配置"><span class="toc-number">4.</span> <span class="toc-text">hbase-sit.xml配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hbase环境变量配置"><span class="toc-number">5.</span> <span class="toc-text">hbase环境变量配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ServerNotRunningYetException"><span class="toc-number">6.</span> <span class="toc-text">ServerNotRunningYetException</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#multiple-SLF4J-bindings"><span class="toc-number">7.</span> <span class="toc-text">multiple SLF4J bindings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#验证"><span class="toc-number">8.</span> <span class="toc-text">验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#shell连接"><span class="toc-number">8.1.</span> <span class="toc-text">shell连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">8.2.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Master-is-initializing"><span class="toc-number">8.3.</span> <span class="toc-text">Master is initializing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表结构"><span class="toc-number">8.4.</span> <span class="toc-text">查看表结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#停止hbase"><span class="toc-number">9.</span> <span class="toc-text">停止hbase</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
