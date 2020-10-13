@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>flink初识及集群搭建和简单验证 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="批计算和批计算在软件系统中，尤其是企业级软件，基本离不开数据统计和分析等数据计算。最初，多数常见的统计分析都是基于数据库的数据进行处理，例如某一段时间的活跃用户数统计，这种计算方式称作离线计算，也称作批量计算（个人理解）。 而现实世界中的数据产生方式有很多都是持续不断的，也就是说实际很多场景的数据是就是数据流，这些数据随着时间的流逝，价值会不断的降低，因此就需要尽可能实时的进行处理。 而批计算是一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flink初识及集群搭建和简单验证">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/10/13/flink1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="批计算和批计算在软件系统中，尤其是企业级软件，基本离不开数据统计和分析等数据计算。最初，多数常见的统计分析都是基于数据库的数据进行处理，例如某一段时间的活跃用户数统计，这种计算方式称作离线计算，也称作批量计算（个人理解）。 而现实世界中的数据产生方式有很多都是持续不断的，也就是说实际很多场景的数据是就是数据流，这些数据随着时间的流逝，价值会不断的降低，因此就需要尽可能实时的进行处理。 而批计算是一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-13T14:59:42.000Z">
+<meta property="article:modified_time" content="2020-10-13T02:38:53.528Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="flink">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-flink1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/13/flink1/" class="article-date">
+  <time datetime="2020-10-13T14:59:42.000Z" itemprop="datePublished">2020-10-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/flink/">flink</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      flink初识及集群搭建和简单验证
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="批计算和批计算"><a href="#批计算和批计算" class="headerlink" title="批计算和批计算"></a>批计算和批计算</h2><p>在软件系统中，尤其是企业级软件，基本离不开数据统计和分析等数据计算。最初，多数常见的统计分析都是基于数据库的数据进行处理，例如某一段时间的活跃用户数统计，这种计算方式称作离线计算，也称作批量计算（个人理解）。</p>
+<p>而现实世界中的数据产生方式有很多都是持续不断的，也就是说实际很多场景的数据是就是数据流，这些数据随着时间的流逝，价值会不断的降低，因此就需要尽可能实时的进行处理。</p>
+<p>而批计算是一批数据一起处理，尤其是最初数据先入数据库，再拿出来处理，这种方式在数据量日渐爆发的场景下，对于实时分析的业务就会有很多瓶颈，于是渐渐的出现了流计算。</p>
+<p>相对于传统的批计算而言，流计算更加的实时，基本是在数据产生并接收到的同时就进行处理，更加符合当前很多要求实时计算的场景。</p>
+<a id="more"></a>
+
+<h2 id="flink发展"><a href="#flink发展" class="headerlink" title="flink发展"></a>flink发展</h2><p>流计算，或者说实时计算，最初代表性的技术是storm，除此之外还有spark。目前对这两个技术还没有深入了解，据说storm是真正的实时计算，而spark所谓的实时计算，实际只是缩小了批计算的范围，严格来说依然还是批计算。</p>
+<p>因此实际上spark的实时计算没有storm快，但是spark支持实时计算的同时还支持批计算以及机器学习，并且也有它丰富的生态圈，因此spark应用场景也很广。</p>
+<p>spark是2013年贡献给apache基金会，在2014年左右正式流行起来，而flink实际上也是差不多的时间贡献给apache基金会，但是当时却没有spark流行。由于乍一听起来和spark功能很重合，都是同时支持批计算、流计算和机器学习，所以之前甚至有人说它生不逢时。</p>
+<p>直到2015年之后，阿里巴巴开始注意到这个框架并大量使用和改进，在经过了若干次双11的洗礼之后，这个框架的能力越来越被大众接收，使用的公司也越来越多，于是flink似乎翻身了。</p>
+<p>上边说spark的实时计算实际上只是缩小了批计算的范围，而flink的实时计算则是真正的实时计算，所以flink实时计算的性能也要强于spark。</p>
+<p>在flink的思想中，数据处理都是基于数据流，实时计算的数据流称作无界流，批计算的数据流称作有界流。</p>
+<h2 id="无界流"><a href="#无界流" class="headerlink" title="无界流"></a>无界流</h2><p>所谓的无界流，就是一段数据有开始时间，没有结束时间，其实就是数据持续在产生，需要持续的分析处理。</p>
+<h2 id="有界流"><a href="#有界流" class="headerlink" title="有界流"></a>有界流</h2><p>同理，有界流就是一段数据有开始时间，也有结束时间，所以其实也很容易发现有界流其实就是无界流的一个特例，在无界流中定义一个结束时间的话，这一段数据就是有界流。</p>
+<p>flink的概念还有很多，例如jobManager、taskManager、solt等，对于flink集群来说，还有master和worker，这些概念均关联很多其他技术点，后续再进一步深入。</p>
+<p>抱着先知其然再知其所以然的心态，这里先搭建一个简单的flink集群用起来。</p>
+<h2 id="flink简单集群搭建（centos）"><a href="#flink简单集群搭建（centos）" class="headerlink" title="flink简单集群搭建（centos）"></a>flink简单集群搭建（centos）</h2><p>flink集群搭建相对简单，首先需要下载安装包，我下载的目前官网最新版<code>1.11.2</code>，可在官网<a href="https://flink.apache.org/downloads.html" target="_blank" rel="noopener">https://flink.apache.org/downloads.html</a>处查看最新版本并下载，下载方式多种，我这里使用wget直接下载到虚拟机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;downloads.apache.org&#x2F;flink&#x2F;flink-1.11.2&#x2F;flink-1.11.2-bin-scala_2.11.tgz</span><br></pre></td></tr></table></figure>
+
+<p>下载好了之后是解压：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf flink-1.11.2-bin-scala_2.11.tgz</span><br></pre></td></tr></table></figure>
+
+<p>然后是简单的配置，分为两步，一个是配置jobManager，一个是配置taskManager，其他配置暂时默认。</p>
+<p>jobManager只需要修改解压后目录的<code>conf</code>目录的<code>flink-conf.yaml</code>文件，找到<code>jobmanager.rpc.address</code>这一行，把后边的<code>localhost</code>改为实际的<code>jobManager</code>节点的主机名，我这里就是<code>node001</code>，因此配置修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jobmanager.rpc.address: node001</span><br></pre></td></tr></table></figure>
+
+<p>然后同样是<code>conf</code>目录下，修改<code>workers</code>文件，早期版本的可能不叫<code>workers</code>，而是<code>slaves</code>，这个和hbase新旧版本中文件命名有点像。在<code>workers</code>文件中加入规划的taskManager节点主机名，例如我修改后如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node002</span><br><span class="line">node003</span><br><span class="line">node004</span><br></pre></td></tr></table></figure>
+
+<p>上述配置需要各个节点保持一致，所以需要把修改好的文件包括整个flink分发到其他机器上，也就是把解压后的这个flink的目录传到另外几个节点上，例如我是在node001上操作的，然后就可以使用类似如下的命令分发到其他机器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r flink-1.11.2 node002:&#96;pwd&#96;&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>分发完成之后，各个机器需要配置一下环境变量，修改/etc/profile文件，加入flink内容，然后就可以在规划的jobManager节点执行启动命令启动flink集群：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-cluster.sh</span><br></pre></td></tr></table></figure>
+
+<p>上述命令实际是flink解压后目录下的bin目录下的脚本，执行上述脚本后会看到日志依次打印出各个节点的启动情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Starting cluster.</span><br><span class="line">Starting standalonesession daemon on host node001.</span><br><span class="line">Starting taskexecutor daemon on host node002.</span><br><span class="line">Starting taskexecutor daemon on host node003.</span><br><span class="line">Starting taskexecutor daemon on host node004.</span><br></pre></td></tr></table></figure>
+
+<p>启动完成就要可以进行验证，最直接的验证就是访问自带的web界面，默认就是开启的，使用<code>8081</code>端口，例如我这里就可以使用<code>http://node001:8081</code>进行访问。</p>
+<p>除此之外，为了更进一步的验证，参考官网示例，可以写一个简单的java代码验证。</p>
+<h2 id="java程序验证flink"><a href="#java程序验证flink" class="headerlink" title="java程序验证flink"></a>java程序验证flink</h2><p>编写一个简单的flink程序，需要引入flink相应的依赖包，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.flink&lt;&#x2F;groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;flink-scala_2.11&lt;&#x2F;artifactId&gt;</span><br><span class="line">	&lt;version&gt;1.11.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.flink&lt;&#x2F;groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;flink-streaming-scala_2.11&lt;&#x2F;artifactId&gt;</span><br><span class="line">	&lt;version&gt;1.11.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.flink&lt;&#x2F;groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;flink-clients_2.11&lt;&#x2F;artifactId&gt;</span><br><span class="line">	&lt;version&gt;1.11.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后根据官网<a href="https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/datastream_api.html" target="_blank" rel="noopener">https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/datastream_api.html</a>的示例编写如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">package com.tzx.study.demo.flink;</span><br><span class="line"></span><br><span class="line">import org.apache.flink.api.common.functions.FlatMapFunction;</span><br><span class="line">import org.apache.flink.api.java.tuple.Tuple2;</span><br><span class="line">import org.apache.flink.streaming.api.datastream.DataStream;</span><br><span class="line">import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;</span><br><span class="line">import org.apache.flink.streaming.api.windowing.time.Time;</span><br><span class="line">import org.apache.flink.util.Collector;</span><br><span class="line"></span><br><span class="line">public class FlinkTest &#123;</span><br><span class="line">    public static void main(String [] args)throws Exception&#123;</span><br><span class="line">        StreamExecutionEnvironment env&#x3D; StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; dataStream &#x3D; env</span><br><span class="line">            .socketTextStream(&quot;localhost&quot;, 8888)</span><br><span class="line">            .flatMap(new Splitter())</span><br><span class="line">            .keyBy(value -&gt; value.f0)</span><br><span class="line">            .sum(1);</span><br><span class="line">        dataStream.print();</span><br><span class="line">        env.execute(&quot;Window WordCount&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static class Splitter implements FlatMapFunction&lt;String, Tuple2&lt;String, Integer&gt;&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void flatMap(String sentence, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out) throws Exception &#123;</span><br><span class="line">            for (String word: sentence.split(&quot; &quot;)) &#123;</span><br><span class="line">                out.collect(new Tuple2&lt;String, Integer&gt;(word, 1));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码的意思是，创建一个执行环境，如果是idea等开发工具运行，就创建本地运行环境，如果是把程序生成可执行jar放到flink集群运行，就是集群环境。</p>
+<p>然后建立一个本地的端口是8888的socket文件数据流连接，读到每行数据以空格分隔，然后计算数量。</p>
+<p>上述代码在<code>main</code>方法中，因此是可以直接运行的，需要注意的是，运行之前需要先开启<code>8888</code>的<code>socket</code>端口监听，否则会启动失败，如果是本地idea测试，需要windows上启动这个端口，我是直接执行<code>nc -lp 8888</code>命令，后来把这个程序生成jar放到集群环境中运行，就需要在运行的linux节点中监听这个端口，例如<code>nc -lk 8888</code>，windows和linux中稍有区别。<br>当然了，如果要更方便的验证，也完全可以直接把<code>localhost</code>换成实际的主机名，这样就不需要分别在不同环境启动这个端口。</p>
+<p>运行之后，在nc监听的界面输入相应信息，便可以看到实时输出的统计数据，代表简单的flink集群和程序验证成功，也标志着第一步成功迈出，接下来就是基于此的进一步应用和理解。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/10/13/flink1/" data-id="ckg7cwp6v000g2wvha8hkcvy4" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/08/06/hadoop2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">hadoop分布式安装及配置初步解析（坑坑不息）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#批计算和批计算"><span class="toc-number">1.</span> <span class="toc-text">批计算和批计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flink发展"><span class="toc-number">2.</span> <span class="toc-text">flink发展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#无界流"><span class="toc-number">3.</span> <span class="toc-text">无界流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有界流"><span class="toc-number">4.</span> <span class="toc-text">有界流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flink简单集群搭建（centos）"><span class="toc-number">5.</span> <span class="toc-text">flink简单集群搭建（centos）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java程序验证flink"><span class="toc-number">6.</span> <span class="toc-text">java程序验证flink</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
