@@ -31,15 +31,15 @@ var _hmt = _hmt || [];
   <title>flink-HA集群搭建和问题记录 | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个jobManager节点，三个taskManager节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用: flink初识及集群搭建和简单验证 虽然这个集群搭建是成功的，但是这种方式的集群却存在问题。 flink集群中jobManager和taskManager这种，是典型的master&#x2F;slave主从模式的设">
+  <meta name="description" content="上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个jobManager节点，三个taskManager节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用: flink初识及集群搭建和简单验证">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flink-HA集群搭建和问题记录">
 <meta property="og:url" content="https://blog.tzxcode.cn/2020/10/14/flink2/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个jobManager节点，三个taskManager节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用: flink初识及集群搭建和简单验证 虽然这个集群搭建是成功的，但是这种方式的集群却存在问题。 flink集群中jobManager和taskManager这种，是典型的master&#x2F;slave主从模式的设">
+<meta property="og:description" content="上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个jobManager节点，三个taskManager节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用: flink初识及集群搭建和简单验证">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-14T14:59:42.000Z">
-<meta property="article:modified_time" content="2020-10-14T12:01:07.184Z">
+<meta property="article:modified_time" content="2020-10-14T12:03:08.211Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="flink">
 <meta name="twitter:card" content="summary">
@@ -138,6 +138,8 @@ var _hmt = _hmt || [];
         
         <p>上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个<code>jobManager</code>节点，三个<code>taskManager</code>节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用:</p>
 <p><a href="https://blog.csdn.net/tuzongxun/article/details/109039580" target="_blank" rel="noopener">flink初识及集群搭建和简单验证</a></p>
+<a id="more"></a>
+
 <p>虽然这个集群搭建是成功的，但是这种方式的集群却存在问题。</p>
 <p>flink集群中jobManager和taskManager这种，是典型的<code>master/slave</code>主从模式的设计，jobManager具有<code>资源管理</code>和<code>任务调度</code>的功能，管理taskManager的资源和调度，也就是启动以及外部的交互实际都是先经过jobManager。</p>
 <p>这种情况下，虽然有三个实际的taskManager处理任务，但是jobManager是单机的，一旦jobManger故障，则整个集群依然不可用。</p>
@@ -278,7 +280,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/10/14/flink2/" data-id="ckg9ch08s000hjcvh9thkfux5" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/10/14/flink2/" data-id="ckg9ciqpa000n5kvh7t9575x9" class="article-share-link">分享</a>
       
       
       
