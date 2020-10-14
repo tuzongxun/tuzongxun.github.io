@@ -104,6 +104,190 @@ var _hmt = _hmt || [];
       <div class="outer">
         <section id="main">
   
+    <article id="post-flink2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/14/flink2/" class="article-date">
+  <time datetime="2020-10-14T14:59:42.000Z" itemprop="datePublished">2020-10-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/flink/">flink</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/14/flink2/">flink-HA集群搭建和问题记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个<code>jobManager</code>节点，三个<code>taskManager</code>节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用:</p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/109039580" target="_blank" rel="noopener">flink初识及集群搭建和简单验证</a></p>
+<p>虽然这个集群搭建是成功的，但是这种方式的集群却存在问题。</p>
+<p>flink集群中jobManager和taskManager这种，是典型的<code>master/slave</code>主从模式的设计，jobManager具有<code>资源管理</code>和<code>任务调度</code>的功能，管理taskManager的资源和调度，也就是启动以及外部的交互实际都是先经过jobManager。</p>
+<p>这种情况下，虽然有三个实际的taskManager处理任务，但是jobManager是单机的，一旦jobManger故障，则整个集群依然不可用。</p>
+<p>这个其实和hdfs中<code>nameNode</code>与<code>dataNode</code>的关系很像，可能就是一样的（带后续都深入之后再比较）。</p>
+<p><strong>hdfs的ha中，实际就是增加了nameNode的节点，交给zookeeper管理，而flink的ha也类似，即增加jobManager的节点数，也要依赖zookeeper来管理jobManager。</strong></p>
+<p>之前的简单flink集群，我使用的节点情况如下：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>node001</th>
+<th>node002</th>
+<th>node003</th>
+<th>node004</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>jobManager</td>
+<td>●</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>taskManager</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td>●</td>
+</tr>
+</tbody></table>
+<h2 id="flink-HA机器规划"><a href="#flink-HA机器规划" class="headerlink" title="flink-HA机器规划"></a>flink-HA机器规划</h2><p>虽说简单的flink集群升级为HA，本质上是增加jobManager节点，但是实际并不是单纯的加一个jobManager节点就够了。</p>
+<p>上边提到了需要zookeeper管理jobManager的集群，所以还需要zookeeper。</p>
+<p>同时，由于jobManager的任务较重，相应的源数据也很多，因此官方建议使用可被各个节点访问的持久化文件系统存储源数据，鉴于之前搭建了hdfs，自然就直接选用了。</p>
+<p>zookeeper和hdfs之前都已经搭建好了，就可以直接使用，需要参考的可以查看之前这篇：</p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/108347899" target="_blank" rel="noopener">HDFS-HA模式搭建（基于完全分布式模式升级）</a></p>
+<p>因此，最终的flink-HA集群机器规划如下：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>node001</th>
+<th>node002</th>
+<th>node003</th>
+<th>node004</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nameNode(HDFS)</td>
+<td>●</td>
+<td></td>
+<td></td>
+<td>●</td>
+</tr>
+<tr>
+<td>dataNode(HDFS)</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+</tr>
+<tr>
+<td>journalnode(HDFS)</td>
+<td>●</td>
+<td>●</td>
+<td>●</td>
+<td></td>
+</tr>
+<tr>
+<td>zkfc(HDFS)</td>
+<td>●</td>
+<td></td>
+<td></td>
+<td>●</td>
+</tr>
+<tr>
+<td>nodeManager(HDFS)</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td></td>
+</tr>
+<tr>
+<td>zookeeper</td>
+<td></td>
+<td>●</td>
+<td>●</td>
+<td>●</td>
+</tr>
+<tr>
+<td>jobManager(FLINK)</td>
+<td>●</td>
+<td>●</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>taskManager(FLINK)</td>
+<td></td>
+<td></td>
+<td>●</td>
+<td>●</td>
+</tr>
+</tbody></table>
+<h2 id="flink-conf-yaml修改"><a href="#flink-conf-yaml修改" class="headerlink" title="flink-conf.yaml修改"></a>flink-conf.yaml修改</h2><p>规划好了机器，然后就是修改配置，实际也很简单，首先还是修改flink安装目录的conf目录下flink-conf.yaml文件，找到如下的三个配置，把原本的注释放开，然后配置自己的hdfs地址和zookeeper地址。</p>
+<p>需要注意的是，我这里的hdfs是之前的ha集群，<code>mycluster</code>是我的hdfs的集群名，至于后边的内容会在hdfs中创建路径，可以自定义，不需要提前创建。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">high-availability: zookeeper</span><br><span class="line">high-availability.storageDir: hdfs:&#x2F;&#x2F;mycluster&#x2F;flink&#x2F;ha&#x2F;</span><br><span class="line">high-availability.zookeeper.quorum: node002:2181,node003:2181,node004:2181</span><br></pre></td></tr></table></figure>
+
+<h2 id="workers修改"><a href="#workers修改" class="headerlink" title="workers修改"></a>workers修改</h2><p>上一篇有提到过，旧版本的flink中有个文件叫<code>slaves</code>，新版的就叫这个<code>workers</code>，代表的是taskManger节点，之前我配置了三个，现在其中一个换成jobManager，所以删掉一个之后内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node003</span><br><span class="line">node004</span><br></pre></td></tr></table></figure>
+
+<h2 id="masters修改"><a href="#masters修改" class="headerlink" title="masters修改"></a>masters修改</h2><p>之前的监看flink集群搭建时，是没有管这个文件的，因为jobManager就只有一个，现在有了两个jobManager，就需要修改这个文件制定jobManager集群的节点。</p>
+<p>实际上从这里，尤其是之前的<code>masters</code>和<code>slaves</code>这两个文件的命令，也很容易看出来他们的主从关系。</p>
+<p>修改后的masters文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node001:8081</span><br><span class="line">node002:8081</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置文件同步分发"><a href="#配置文件同步分发" class="headerlink" title="配置文件同步分发"></a>配置文件同步分发</h2><p>和hdfs一样，和flink简单集群一样，这些修改的配置文件也都需要同步分发到所有的节点中，<code>scp</code>就不多说了。</p>
+<h2 id="hadoop依赖jar下载"><a href="#hadoop依赖jar下载" class="headerlink" title="hadoop依赖jar下载"></a>hadoop依赖jar下载</h2><p>上边操作完成后，我就使用<code>start-cluster.sh</code>启动的集群，然后看到打印出了如下的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Starting HA cluster with 2 masters.</span><br><span class="line">Starting standalonesession daemon on host node001.</span><br><span class="line">Starting standalonesession daemon on host node002.</span><br><span class="line">Starting taskexecutor daemon on host node003.</span><br><span class="line">Starting taskexecutor daemon on host node004.</span><br></pre></td></tr></table></figure>
+
+<p>也没有报错，我以为就成功了，但是当我访问web页面时，无论是<code>http://node001:8081</code>还是<code>http://node002:8081</code>都无法访问，于是查看了flink的日志文件，结果发现日志中打印了如下的异常信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Caused by: org.apache.flink.core.fs.UnsupportedFileSystemSchemeException: Could not find a file system implementation for scheme &#39;hdfs&#39;. The scheme is not directly supported by Flink and no Hadoop file system to support this scheme could be loaded. For a full list of supported file systems, please see https:&#x2F;&#x2F;ci.apache.org&#x2F;projects&#x2F;flink&#x2F;flink-docs-stable&#x2F;ops&#x2F;filesystems&#x2F;.</span><br><span class="line">	at org.apache.flink.core.fs.FileSystem.getUnguardedFileSystem(FileSystem.java:491) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.core.fs.FileSystem.get(FileSystem.java:389) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br></pre></td></tr></table></figure>
+
+<p>看起来就是无法识别和连接hdfs，实际上是因为没有相关的依赖，因此需要下载flink依赖的hadoop的jar到flink安装目录下的<code>lib</code>目录下。</p>
+<p>这个插件在flink官网可以找到，<code>https://flink.apache.org/downloads.html</code>，这个连接中<code>Additional Components</code>下就是flink依赖的hadoop插件。</p>
+<p>按网上说的，需要根据相应的hadoop版本下载对应的插件版本，但是我的hadoop是<code>3.1.3</code>，而这个页面中最高才是<code>2.8.3</code>，因此最终就下载了这个版本。</p>
+<p>之后重新执行<code>start-cluster.sh</code>后日志没有再打印上边的异常，同时web页面也都可以成功打开了，并能看到两个taskManger。</p>
+<p><strong>在web页面提交上一次做好的flink程序的jar之后，也能看到<code>running</code>状态，似乎ha模式搭建成功了，但是实际上并不是。</strong></p>
+<h2 id="classpath配置"><a href="#classpath配置" class="headerlink" title="classpath配置"></a>classpath配置</h2><p>当在上述jar生成的task运行的机器节点使用<code>nc -lk 8888</code>启动监听并发送数据后，web页面的<code>Stdout</code>上并没有如愿输出单词的统计次数，反而是在对应机器节点的日志中出现了异常。</p>
+<p>通过查看，我的这个task运行在<code>node003</code>节点，找到日志使用<code>tail -500 flink-root-taskexecutor-1-node003.log</code>后发现了如下的异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">2020-10-14 16:00:56,527 ERROR org.apache.flink.runtime.taskexecutor.TaskManagerRunner      [] - TaskManager initialization failed.</span><br><span class="line">java.io.IOException: Could not create FileSystem for highly available storage path (hdfs:&#x2F;&#x2F;mycluster&#x2F;flink&#x2F;ha&#x2F;default)</span><br><span class="line">	at org.apache.flink.runtime.blob.BlobUtils.createFileSystemBlobStore(BlobUtils.java:103) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.blob.BlobUtils.createBlobStoreFromConfig(BlobUtils.java:89) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.highavailability.HighAvailabilityServicesUtils.createHighAvailabilityServices(HighAvailabilityServicesUtils.java:117) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.taskexecutor.TaskManagerRunner.&lt;init&gt;(TaskManagerRunner.java:133) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.taskexecutor.TaskManagerRunner.runTaskManager(TaskManagerRunner.java:306) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.taskexecutor.TaskManagerRunner.lambda$runTaskManagerSecurely$2(TaskManagerRunner.java:330) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.security.contexts.NoOpSecurityContext.runSecured(NoOpSecurityContext.java:30) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.taskexecutor.TaskManagerRunner.runTaskManagerSecurely(TaskManagerRunner.java:329) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.taskexecutor.TaskManagerRunner.runTaskManagerSecurely(TaskManagerRunner.java:314) [flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.taskexecutor.TaskManagerRunner.main(TaskManagerRunner.java:298) [flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">Caused by: org.apache.flink.core.fs.UnsupportedFileSystemSchemeException: Could not find a file system implementation for scheme &#39;hdfs&#39;. The scheme is not directly supported by Flink and no Hadoop file system to support this scheme could be loaded. For a full list of supported file systems, please see https:&#x2F;&#x2F;ci.apache.org&#x2F;projects&#x2F;flink&#x2F;flink-docs-stable&#x2F;ops&#x2F;filesystems&#x2F;.</span><br><span class="line">	at org.apache.flink.core.fs.FileSystem.getUnguardedFileSystem(FileSystem.java:491) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.core.fs.FileSystem.get(FileSystem.java:389) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.core.fs.Path.getFileSystem(Path.java:292) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	at org.apache.flink.runtime.blob.BlobUtils.createFileSystemBlobStore(BlobUtils.java:100) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br><span class="line">	... 9 more</span><br><span class="line">Caused by: org.apache.flink.core.fs.UnsupportedFileSystemSchemeException: Hadoop is not in the classpath&#x2F;dependencies.</span><br><span class="line">	at org.apache.flink.core.fs.UnsupportedSchemeFactory.create(UnsupportedSchemeFactory.java:58) ~[flink-dist_2.11-1.11.2.jar:1.11.2]</span><br></pre></td></tr></table></figure>
+
+<p>经过一番查询和尝试后找到了解决办法，即配置两个环境变量，环境变量的配置方式较多，可以配系统变量，可以配用户变量，我就直接配置的系统变量，执行<code>vi /etc/profile</code>，然后加入如下两行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_CONF_DIR&#x3D;$HADOOP_HOME&#x2F;etc&#x2F;hadoop</span><br><span class="line">export HADOOP_CLASSPATH&#x3D;&#96;hadoop classpath&#96;</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后使用<code>source /etc/profile</code>重新加载刚修改的内容，然后重新提交flink程序jar后日志不在报错，同时再次在<code>nc</code>中输入单词后，在web界面的<code>Stdout</code>中便能成功的刷新出预想的结果，至此，flink的ha模式搭建成功，搭建过程也算是对flink的设计思想和架构有了更进一步的认识。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/10/14/flink2/" data-id="ckg9ch08s000hjcvh9thkfux5" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-flink1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/10/13/flink1/" class="article-date">
@@ -143,7 +327,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/10/13/flink1/" data-id="ckg8oxkpy0003hovh0ga16r6d" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/10/13/flink1/" data-id="ckg9ch094000pjcvh6l745o1w" class="article-share-link">分享</a>
       
       
       
@@ -192,7 +376,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/09/23/hadoop8/" data-id="ckg8oxktd002hhovhab7v7ogq" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/23/hadoop8/" data-id="ckg9ch0a10025jcvhatks1qnq" class="article-share-link">分享</a>
       
       
       
@@ -241,7 +425,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/09/08/linux3/" data-id="ckg8oxkth002ohovhaxtjhc59" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/08/linux3/" data-id="ckg9ch0a9002mjcvhgpdjhc4h" class="article-share-link">分享</a>
       
       
       
@@ -290,7 +474,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/09/04/docker2/" data-id="ckg8oxkpu0002hovhh2yq9lqt" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/04/docker2/" data-id="ckg9ch08l0009jcvh9b3s0fyj" class="article-share-link">分享</a>
       
       
       
@@ -339,7 +523,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/09/03/docker1/" data-id="ckg8oxkq30007hovh1leqg82v" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/03/docker1/" data-id="ckg9ch08q000fjcvhc9jcfnl7" class="article-share-link">分享</a>
       
       
       
@@ -390,7 +574,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/09/01/hadoop7/" data-id="ckg8oxkta002fhovh0gmy2b57" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/09/01/hadoop7/" data-id="ckg9ch09n001ijcvh2ski4v3z" class="article-share-link">分享</a>
       
       
       
@@ -440,7 +624,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/08/13/hadoop6/" data-id="ckg8oxksl0020hovhf52ob3f2" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/08/13/hadoop6/" data-id="ckg9ch09p001njcvh6zvw61li" class="article-share-link">分享</a>
       
       
       
@@ -489,60 +673,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/08/11/hadoop5/" data-id="ckg8oxkql001ehovh7drnh2ah" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hadoop4" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/08/10/hadoop4/" class="article-date">
-  <time datetime="2020-08-10T11:59:42.000Z" itemprop="datePublished">2020-08-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/10/hadoop4/">hadoop和hbase的关系及hbase安装与验证</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从hadoop官网首页就可以看到，hadoop项目本身自带的模块现在有五个，即：</p>
-<blockquote>
-<p>hadoop common<br>hdfs<br>yarn<br>mapReduce<br>hadoop Ozone</p>
-</blockquote>
-<p>第一项从名称就可以看出来是基础功能模块，hdfs是文件存储系统，yarn是调度和集群管理，mapReduce是数据计算处理，这几个都是学习使用hadoop一开始就必然会接触的。<br>最后一个hadoop Ozone是分布式对象存储系统，这个是对hdfs的一种补充，是一个相对较新的内容，在人们口中出现的频率相对较低，可能很多人一开始都不知道，包括我。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/08/10/hadoop4/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2020/08/10/hadoop4/" data-id="ckg8oxkqm001fhovhefh25ebg" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/08/11/hadoop5/" data-id="ckg9ch09e001ajcvhgbxihsg2" class="article-share-link">分享</a>
       
       
       
@@ -619,7 +750,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <h3 class="widget-title categories">分类</h3>
     <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flink/">flink</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/springcloud/">springcloud</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/">修心•修性•修行</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A3%85%E4%BF%AE/">装修</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/">读后感</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flink/">flink</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/springcloud/">springcloud</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/">修心•修性•修行</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A3%85%E4%BF%AE/">装修</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/">读后感</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -629,7 +760,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/activiti/" style="font-size: 14px;">activiti</a> <a href="/tags/cookie/" style="font-size: 14px;">cookie</a> <a href="/tags/docker/" style="font-size: 15.22px;">docker</a> <a href="/tags/dubbo/" style="font-size: 14px;">dubbo</a> <a href="/tags/flink/" style="font-size: 14px;">flink</a> <a href="/tags/git/" style="font-size: 14px;">git</a> <a href="/tags/hadoop/" style="font-size: 20.11px;">hadoop</a> <a href="/tags/hexo/" style="font-size: 15.22px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jwt/" style="font-size: 14px;">jwt</a> <a href="/tags/keycloak/" style="font-size: 14px;">keycloak</a> <a href="/tags/linux/" style="font-size: 16.44px;">linux</a> <a href="/tags/maven/" style="font-size: 20.11px;">maven</a> <a href="/tags/mongodb/" style="font-size: 15.22px;">mongodb</a> <a href="/tags/mysql/" style="font-size: 16.44px;">mysql</a> <a href="/tags/oauth2/" style="font-size: 14px;">oauth2</a> <a href="/tags/redis/" style="font-size: 17.67px;">redis</a> <a href="/tags/session/" style="font-size: 14px;">session</a> <a href="/tags/sonar/" style="font-size: 14px;">sonar</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/springcloud/" style="font-size: 20.11px;">springcloud</a> <a href="/tags/tzxblog/" style="font-size: 18.89px;">tzxblog</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" style="font-size: 21.33px;">业余项目</a> <a href="/tags/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/" style="font-size: 21.33px;">修心•修性•修行</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 14px;">前端</a> <a href="/tags/%E5%AE%B6%E8%AE%AD/" style="font-size: 14px;">家训</a> <a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 22.56px;">开发工具</a> <a href="/tags/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/" style="font-size: 16.44px;">思考总结</a> <a href="/tags/%E6%94%AF%E4%BB%98/" style="font-size: 15.22px;">支付</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 18.89px;">数据库</a> <a href="/tags/%E8%A3%85%E4%BF%AE/" style="font-size: 14px;">装修</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 23.78px;">设计模式</a> <a href="/tags/%E8%AF%BB%E5%90%8E%E6%84%9F/" style="font-size: 14px;">读后感</a> <a href="/tags/%E8%BF%87%E6%BB%A4%E5%99%A8/" style="font-size: 14px;">过滤器</a> <a href="/tags/%E9%82%AE%E4%BB%B6/" style="font-size: 15.22px;">邮件</a> <a href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" style="font-size: 16.44px;">问题整理</a>
+      <a href="/tags/activiti/" style="font-size: 14px;">activiti</a> <a href="/tags/cookie/" style="font-size: 14px;">cookie</a> <a href="/tags/docker/" style="font-size: 15.22px;">docker</a> <a href="/tags/dubbo/" style="font-size: 14px;">dubbo</a> <a href="/tags/flink/" style="font-size: 15.22px;">flink</a> <a href="/tags/git/" style="font-size: 14px;">git</a> <a href="/tags/hadoop/" style="font-size: 20.11px;">hadoop</a> <a href="/tags/hexo/" style="font-size: 15.22px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jwt/" style="font-size: 14px;">jwt</a> <a href="/tags/keycloak/" style="font-size: 14px;">keycloak</a> <a href="/tags/linux/" style="font-size: 16.44px;">linux</a> <a href="/tags/maven/" style="font-size: 20.11px;">maven</a> <a href="/tags/mongodb/" style="font-size: 15.22px;">mongodb</a> <a href="/tags/mysql/" style="font-size: 16.44px;">mysql</a> <a href="/tags/oauth2/" style="font-size: 14px;">oauth2</a> <a href="/tags/redis/" style="font-size: 17.67px;">redis</a> <a href="/tags/session/" style="font-size: 14px;">session</a> <a href="/tags/sonar/" style="font-size: 14px;">sonar</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/springcloud/" style="font-size: 20.11px;">springcloud</a> <a href="/tags/tzxblog/" style="font-size: 18.89px;">tzxblog</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" style="font-size: 21.33px;">业余项目</a> <a href="/tags/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/" style="font-size: 21.33px;">修心•修性•修行</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 14px;">前端</a> <a href="/tags/%E5%AE%B6%E8%AE%AD/" style="font-size: 14px;">家训</a> <a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 22.56px;">开发工具</a> <a href="/tags/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/" style="font-size: 16.44px;">思考总结</a> <a href="/tags/%E6%94%AF%E4%BB%98/" style="font-size: 15.22px;">支付</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 18.89px;">数据库</a> <a href="/tags/%E8%A3%85%E4%BF%AE/" style="font-size: 14px;">装修</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 23.78px;">设计模式</a> <a href="/tags/%E8%AF%BB%E5%90%8E%E6%84%9F/" style="font-size: 14px;">读后感</a> <a href="/tags/%E8%BF%87%E6%BB%A4%E5%99%A8/" style="font-size: 14px;">过滤器</a> <a href="/tags/%E9%82%AE%E4%BB%B6/" style="font-size: 15.22px;">邮件</a> <a href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" style="font-size: 16.44px;">问题整理</a>
     </div>
   </div>
 
@@ -639,6 +770,10 @@ var _hmt = _hmt || [];
     <h3 class="widget-title recent-posts">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/10/14/flink2/">flink-HA集群搭建和问题记录</a>
+          </li>
         
           <li>
             <a href="/2020/10/13/flink1/">flink初识及集群搭建和简单验证</a>
@@ -656,10 +791,6 @@ var _hmt = _hmt || [];
             <a href="/2020/09/04/docker2/">使用docker部署springboot服务</a>
           </li>
         
-          <li>
-            <a href="/2020/09/03/docker1/">centos7安装docker及docker基础操作</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -669,7 +800,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
