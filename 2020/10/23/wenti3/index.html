@@ -28,17 +28,20 @@ var _hmt = _hmt || [];
 </script>
 
   
-  <title>All categories | 涂宗勋的博客</title>
+  <title>近期生产问题和解决方案记录 | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="All categories">
-<meta property="og:url" content="https://blog.tzxcode.cn/categories/index.html">
+  <meta name="description" content="前几天生产环境上线，过程不算顺利，总结下原因大概有这么几点：  前期准备工作不足，依赖的中间件软件安装后未经过充分验证，例如mongodb； 临时改配置，sit和预生产的中间件单机，生产使用集群，集群环境的使用未得到充分验证； 不可抗因素，踩到了springboot版本的bug。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="近期生产问题和解决方案记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/10/23/wenti3/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前几天生产环境上线，过程不算顺利，总结下原因大概有这么几点：  前期准备工作不足，依赖的中间件软件安装后未经过充分验证，例如mongodb； 临时改配置，sit和预生产的中间件单机，生产使用集群，集群环境的使用未得到充分验证； 不可抗因素，踩到了springboot版本的bug。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-10-09T07:01:48.000Z">
-<meta property="article:modified_time" content="2017-10-09T07:02:58.284Z">
+<meta property="article:published_time" content="2020-10-23T07:43:58.000Z">
+<meta property="article:modified_time" content="2020-10-23T03:44:10.594Z">
 <meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="问题整理">
 <meta name="twitter:card" content="summary">
   
   
@@ -104,12 +107,16 @@ var _hmt = _hmt || [];
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-wenti3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/categories/index.html" class="article-date">
-  <time datetime="2017-10-09T07:01:48.000Z" itemprop="datePublished">2017-10-09</time>
+    <a href="/2020/10/23/wenti3/" class="article-date">
+  <time datetime="2020-10-23T07:43:58.000Z" itemprop="datePublished">2020-10-23</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
+  </div>
+
 </span>
   </div>
   <div class="article-inner">
@@ -119,7 +126,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      All categories
+      近期生产问题和解决方案记录
     </h1>
   
 
@@ -129,14 +136,50 @@ var _hmt = _hmt || [];
       
         <!-- Table of Contents -->
         
-        
+        <p>前几天生产环境上线，过程不算顺利，总结下原因大概有这么几点：</p>
+<ol>
+<li>前期准备工作不足，依赖的中间件软件安装后未经过充分验证，例如mongodb；</li>
+<li>临时改配置，sit和预生产的中间件单机，生产使用集群，集群环境的使用未得到充分验证；</li>
+<li>不可抗因素，踩到了springboot版本的bug。</li>
+</ol>
+<a id="more"></a>
+
+<p>以下是部分可记录供后续参考的问题和解决方案：</p>
+<h2 id="mysql-sqlmode问题"><a href="#mysql-sqlmode问题" class="headerlink" title="mysql-sqlmode问题"></a>mysql-sqlmode问题</h2><p>这个问题实际不是生产的问题，是之前预生产出现的，之前没有记录，这里一并记了。</p>
+<p>部署预生产后，数据库分页操作报错，这个问题遇到很多次了，只是运维同事搭建数据库时没有提前处理。</p>
+<p>错误如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ORDER BY clause is not in GROUP BY clause and contains nonaggregated column &#39;information_schema.PROFILING.SEQ&#39; which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode&#x3D;only_full_group_by</span><br></pre></td></tr></table></figure>
+
+<p>解决方式不算复杂，修改sql_mode即可，可参考如下博客：</p>
+<p><a href="https://www.cnblogs.com/kenshinobiy/p/9580701.html" target="_blank" rel="noopener">https://www.cnblogs.com/kenshinobiy/p/9580701.html</a></p>
+<h2 id="redis-value-must-not-be-null问题"><a href="#redis-value-must-not-be-null问题" class="headerlink" title="redis value must not be null问题"></a>redis value must not be null问题</h2><p>生产环境部署时，使用redis的服务一直在重启，而日志却没有任何异常。</p>
+<p>开始怀疑是健康检查有问题，使用<code>http://ip:port/actuator/health</code>发现确实结果是<code>down</code>，而不是<code>up</code>，但是由于日志没有异常，难以查看更多信息。</p>
+<p>为了进一步查找问题，springboot增加如下配置，使得健康检查返回信息更多一些：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">management:</span><br><span class="line">  endpoint:</span><br><span class="line">    health:</span><br><span class="line">      show-details: always</span><br></pre></td></tr></table></figure>
+
+<p>有了上述配置之后，果然找到了问题，访问健康检查url后，发现是redis连接的健康经检查失败了。</p>
+<p>诡异是，程序启动时成功的，对redis的操作都正常，只是启动成功过不了多久就持续重启。</p>
+<p>再考虑到dev、sit、preprod环境都是正常的，问题点倒是缩小了，这三个环境都是单机的redis，而生产用了redis集群。</p>
+<p>但是项目是支持集群模式的，代码和配置本身应该也没问题，否则也不可能正常操作redis。</p>
+<p>最终，发现是<code>springboot2.3.1</code>版本有bug，这里边对redis集群的健康检查有问题，会导致redis集群模式下的健康检查失败。</p>
+<p><a href="https://github.com/spring-projects/spring-boot/issues/21514" target="_blank" rel="noopener">https://github.com/spring-projects/spring-boot/issues/21514</a></p>
+<p>找到了原因，解决方案就相对简单，而且不止一种选择，可以直接关闭健康检查，显然这不符合生产环境的要求。</p>
+<p>也可以只关闭redis的健康检查，看起来好一点，但是如果redis真出了问题却也会导致健康检查检查不出来。</p>
+<p>于是我们选择了第三种，即升级springboot的版本到解决了上述bug的版本，目前升级到了<code>2.3.4</code>。</p>
+<p>第三种应该是目前较优方案，只看后续的全面回归测试是否有影响。</p>
+<h2 id="gitlab的坑"><a href="#gitlab的坑" class="headerlink" title="gitlab的坑"></a>gitlab的坑</h2><p>这是一个说严重很严重，说不严重好像也不严重的问题，gitlab的web界面进行合并操作时，默认会勾选删除源分支选项。</p>
+<p>在生产代码发布时，突然发现合并后原来的分支不见了，于是仔细检查了下之前的操作，便发现了上边的坑。</p>
+<p>虽然重新<code>push</code>一下就没事了，但是删除本身就是个很敏感的操作，再次提醒做事需仔细，上线当小心。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/categories/index.html" data-id="ckgls0g620037w8vhf6dkhqkx" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/10/23/wenti3/" data-id="ckgls0g8k0089w8vh8kjibn49" class="article-share-link">分享</a>
       
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
+
     </footer>
   </div>
   
@@ -212,6 +255,16 @@ head.appendChild(script);
   </div>
 
 	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/16/flink3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">flink on yarn集群搭建及验证要点记录</div>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -229,49 +282,24 @@ head.appendChild(script);
     
   
     
-  
+    <div class="widget-wrap">
     
-  <div class="widget-wrap">
-    <h3 class="widget-title categories">分类</h3>
-    <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flink/">flink</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hadoop/">hadoop</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/springcloud/">springcloud</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BF%AE%E5%BF%83%E2%80%A2%E4%BF%AE%E6%80%A7%E2%80%A2%E4%BF%AE%E8%A1%8C/">修心•修性•修行</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A3%85%E4%BF%AE/">装修</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/">读后感</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a><span class="category-list-count">4</span></li></ul>
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql-sqlmode问题"><span class="toc-number">1.</span> <span class="toc-text">mysql-sqlmode问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-value-must-not-be-null问题"><span class="toc-number">2.</span> <span class="toc-text">redis value must not be null问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gitlab的坑"><span class="toc-number">3.</span> <span class="toc-text">gitlab的坑</span></a></li></ol>
+          </div>
+      </div>
     </div>
-  </div>
 
+  
+    
 
   
     
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/23/wenti3/">近期生产问题和解决方案记录</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/16/flink3/">flink on yarn集群搭建及验证要点记录</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/14/flink2/">flink-HA集群搭建和问题记录</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/13/flink1/">flink初识及集群搭建和简单验证</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/23/hadoop8/">hbase-ha模式搭建要点和问题记录</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
   
     
 
