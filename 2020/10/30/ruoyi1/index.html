@@ -28,21 +28,20 @@ var _hmt = _hmt || [];
 </script>
 
   
-  <title>mysql常用操作语法（十五）~~触发器 | 涂宗勋的博客</title>
+  <title>若依管理系统RuoYi-Cloud版搭建记录 | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="理解mysql触发器的概念，从某种程度来说，比较像java中的aop。也就是根据一定的规则，拦截某一类情况，然后在适当的时机（before&#x2F;after）执行一些其他的逻辑。个人觉得，这是个比较好理解的概念和场景。同时，在存储过程之后再来看这个功能，那么它的使用也同样很简单。">
+  <meta name="description" content="现在快速构建web应用程序的系统有很多，若依RuoYi是其中一个，根据官网说明，使用最流行的技术SpringBoot、Shiro、Thymeleaf、Vue、Bootstrap，这个系统分为一体化版本和前后端分离版本。不管是学习某些技术，学习整体架构设计思想，还是拿来进一步二次开发，都是不错的选择。 最近抽空搭了下这个环境，基本按照官网说明，但也有一些细节略有差异，以下为踩坑记录：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql常用操作语法（十五）~~触发器">
-<meta property="og:url" content="https://blog.tzxcode.cn/2018/04/25/mysql-jichu15/index.html">
+<meta property="og:title" content="若依管理系统RuoYi-Cloud版搭建记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/10/30/ruoyi1/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="理解mysql触发器的概念，从某种程度来说，比较像java中的aop。也就是根据一定的规则，拦截某一类情况，然后在适当的时机（before&#x2F;after）执行一些其他的逻辑。个人觉得，这是个比较好理解的概念和场景。同时，在存储过程之后再来看这个功能，那么它的使用也同样很简单。">
+<meta property="og:description" content="现在快速构建web应用程序的系统有很多，若依RuoYi是其中一个，根据官网说明，使用最流行的技术SpringBoot、Shiro、Thymeleaf、Vue、Bootstrap，这个系统分为一体化版本和前后端分离版本。不管是学习某些技术，学习整体架构设计思想，还是拿来进一步二次开发，都是不错的选择。 最近抽空搭了下这个环境，基本按照官网说明，但也有一些细节略有差异，以下为踩坑记录：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-04-25T15:42:11.000Z">
-<meta property="article:modified_time" content="2019-08-13T07:31:27.734Z">
+<meta property="article:published_time" content="2020-10-30T07:43:58.000Z">
+<meta property="article:modified_time" content="2020-10-30T06:10:32.619Z">
 <meta property="article:author" content="涂宗勋">
-<meta property="article:tag" content="数据库">
-<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="问题整理">
 <meta name="twitter:card" content="summary">
   
   
@@ -108,14 +107,14 @@ var _hmt = _hmt || [];
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-mysql-jichu15" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-ruoyi1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/04/25/mysql-jichu15/" class="article-date">
-  <time datetime="2018-04-25T15:42:11.000Z" itemprop="datePublished">2018-04-25</time>
+    <a href="/2020/10/30/ruoyi1/" class="article-date">
+  <time datetime="2020-10-30T07:43:58.000Z" itemprop="datePublished">2020-10-30</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
   </div>
 
 </span>
@@ -127,7 +126,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      mysql常用操作语法（十五）~~触发器
+      若依管理系统RuoYi-Cloud版搭建记录
     </h1>
   
 
@@ -137,64 +136,48 @@ var _hmt = _hmt || [];
       
         <!-- Table of Contents -->
         
-        <h1 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h1><p>mysql触发器的概念，从某种程度来说，比较像java中的aop。也就是根据一定的规则，拦截某一类情况，然后在适当的时机（before/after）执行一些其他的逻辑。<br>个人觉得，这是个比较好理解的概念和场景。同时，在存储过程之后再来看这个功能，那么它的使用也同样很简单。</p>
+        <p>现在快速构建web应用程序的系统有很多，若依RuoYi是其中一个，根据官网说明，<code>使用最流行的技术SpringBoot、Shiro、Thymeleaf、Vue、Bootstrap</code>，这个系统分为一体化版本和前后端分离版本。不管是学习某些技术，学习整体架构设计思想，还是拿来进一步二次开发，都是不错的选择。</p>
+<p>最近抽空搭了下这个环境，基本按照官网说明，但也有一些细节略有差异，以下为踩坑记录：</p>
 <a id="more"></a>
 
-<h1 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h1><p>触发器大概的语法如下所示：</p>
-<pre>
-CREATE TRIGGER 自定义名称
-触发时机  触发事件 ON 触发事件所在的表名
-FOR EACH ROW
-触发需要执行的逻辑;
-</pre>
+<h2 id="RuoYi-Cloud代码下载"><a href="#RuoYi-Cloud代码下载" class="headerlink" title="RuoYi-Cloud代码下载"></a>RuoYi-Cloud代码下载</h2><p>若依系统官网是<a href="http://ruoyi.vip/" target="_blank" rel="noopener">http://ruoyi.vip/</a>，springcloud微服务版本的代码下载地址是<a href="https://gitee.com/y_project/RuoYi-Cloud" target="_blank" rel="noopener">https://gitee.com/y_project/RuoYi-Cloud</a>，可以直接使用<code>git clone</code>把代码下载到本地，下载好之后会看到出现<code>RuoYi-Cloud</code>目录，并且在里边有很多内容，例如<code>ruoyi-auth</code>、<code>ruoyi-gateway</code>、<code>ruoyi-modules</code>、<code>ruoyi-ui</code>、<code>sql</code>等目录。</p>
+<h2 id="Mysql准备"><a href="#Mysql准备" class="headerlink" title="Mysql准备"></a>Mysql准备</h2><p>根据若依官网说明，mysql是本系统依赖的基础设施之一，而且必须是<code>5.5</code>版本以上，我本机是<code>5.6</code>，也就不用重新安装，只需要按照官网说明执行上边下载下来的sql脚本即可，脚本在<code>sql</code>目录下，不同版本的命令可能和官网说明略有差异，我这里的是<code>quartz.sql</code>、<code>ry_20200924.sql</code>、<code>ry_config_20200924.sql</code>。</p>
+<p>官网相应说明如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2、创建数据库ry-cloud并导入数据脚本ry_2020520.sql（必须），quartz.sql（可选）</span><br><span class="line">3、创建数据库ry-config并导入数据脚本ry_config.sql（必须）</span><br></pre></td></tr></table></figure>
 
-<p>那么在理解语法之前，先举个例子，假如有这样一个场景，我有table1和table2两张表，需要每当table2中插入一条数据之后，修改table1中的count字段，在原来count的基础上加1，那么这个触发器就应该是这样：</p>
-<pre>
-CREATE TRIGGER trigger_t1
-AFTER INSERT ON table2
-FOR EACH ROW
-UPDATE table1 SET table1.count=table1.count+1;
-</pre>
 
-<p>上边示例中每一行的解释是： </p>
-<blockquote>
-<p>创建一个触发器，自定义名称是trigger_t1;<br>触发器生效的场景是，向table2表insert数据之后触发；<br>触发器对每一行生效，这一行基本是固定写法；<br>触发器触发后做的事，是修改table1的count字段，使其在原有的基础上加一。</p>
-</blockquote>
-<p>这里需要理解的就是，AFTER不是固定的，但是却只能从特定的一些关键词中选择，比如AFTER代表之后，BEFORE代表之前；而INSERT代表了数据操作的动作，同样的可以是其他操作，例如UPDATE;然后就是具体执行的业务逻辑，可以根据需要自定义。</p>
-<h1 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h1><p>上边的触发器应该算是最简单的触发器，但是和存储过程一样，触发器的执行逻辑中可能并不都只存在一个简单的逻辑。<br>当需要在触发器里进行稍复杂的逻辑处理时，就需要和写存储过程一样，结合分隔符以及begin、end等关键词一起实现。<br>就如上边的例子中其实有一个小小的问题，那就是当table1没有数据的时候，那么无论table2中insert多少数据，table1都不会有变化。所以上边的写法可以变成下边这样：</p>
-<pre>
-DELIMITER $
-CREATE TRIGGER trigger_t0
-AFTER INSERT ON table2
-FOR EACH ROW
-BEGIN
-DECLARE cn INTEGER;
-SELECT COUNT(id) INTO cn FROM table1;
-IF cn != 0 THEN
-UPDATE table1 SET table1.count = table1.count + 1 ;
-ELSE
-INSERT INTO table1 VALUES(1,1);
-END IF;
-END
-$
-DELIMITER ;
-</pre>
 
-<p>上边内容解释如下： </p>
-<blockquote>
-<p>使用符号分割，标示位于符号分割，标示位于中间的内容为一个整体，而不是单单用分号分割；<br>创建一个名称是trigger_t0的触发器；<br>触发器触发事件是，向table2插入数据只好触发；<br>对每一行都生效；<br>开始具体逻辑；<br>声明一个变量cn，类型是INTEGER;<br>查询table1的数据数量，并赋值给变量cn；<br>判断变量cn的值是否不等于0；<br>符合上边的条件，则更新数据库中count的值，在原基础加一；<br>否则；<br>向table1中插入一条数据；<br>具体逻辑结束<br>分隔符结尾；<br>分割符声明结尾。</p>
-</blockquote>
-<h1 id="触发器查询"><a href="#触发器查询" class="headerlink" title="触发器查询"></a>触发器查询</h1><p>触发器的名称是自定义的，但是不能和已有的触发器重名，所以有的时候可能需要查询当前已经存在哪些触发器，可以使用如下语法查询：<br><code>SHOW TRIGGERS FROM 数据库名</code><br>例如，如果要查询test库中已有的触发器，就可以这样写：<br><code>SHOW TRIGGERS FROM test</code><br>尤其注意，是库名，不是表名。<br>上边的查询会查询出该库所有的触发器，如果只要查询某个触发器的详细情况，可以用类似下边的查询语句：<br><code>SHOW CREATE TRIGGER trigger_t1</code></p>
-<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><p>如果触发器失效了，为了减少资源消耗，可能需要进行删除。同时，在某些初始化的场景下，也会经常在创建该触发器之前先执行删除操作，所以删除的语法也是必要的，基本语法如下：<br><code>DROP TRIGGER 触发器名称</code><br>而一般用的比较多的，是在删除前先进行一个判断，判断是否存在，那么就成了下边这样：<br><code>DROP TRIGGER IF EXISTS 触发器名称</code></p>
+<h2 id="Nacos和Redis准备"><a href="#Nacos和Redis准备" class="headerlink" title="Nacos和Redis准备"></a>Nacos和Redis准备</h2><p>根据说明，这个系统整体架构是采用的<code>Spring Cloud &amp; Alibaba</code>，而微服务注册中心和配置中心是<code>Nacos</code>，权限认证使用的是Redis，因此这两个应该算是这个系统的基础设施之二。</p>
+<p>Redis我之前已经安装，windows中安装也很简单，<code>Nacos</code>是第一次使用，还需要去下载，下载地址是<a href="https://github.com/alibaba/nacos/releases" target="_blank" rel="noopener">https://github.com/alibaba/nacos/releases</a>。</p>
+<p>我选择的是<code>nacos-server-1.4.0-BETA.zip</code>，然后解压为<code>nacos-server-1.4.0-BETA</code>目录。</p>
+<p>根据若依官网文档<a href="https://doc.ruoyi.vip/ruoyi-cloud/document/hjbs.html#%E8%BF%90%E8%A1%8C%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">https://doc.ruoyi.vip/ruoyi-cloud/document/hjbs.html#%E8%BF%90%E8%A1%8C%E7%B3%BB%E7%BB%9F</a>的说明，需要再Nacos的<code>application.properties</code>文件中加入如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># db mysql</span><br><span class="line">spring.datasource.platform&#x3D;mysql</span><br><span class="line">db.num&#x3D;1</span><br><span class="line">db.url.0&#x3D;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;ry-config?characterEncoding&#x3D;utf8&amp;connectTimeout&#x3D;1000&amp;socketTimeout&#x3D;3000&amp;autoReconnect&#x3D;true</span><br><span class="line">db.user&#x3D;root</span><br><span class="line">db.password&#x3D;password</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的是，其他都不用改动，<code>user</code>和<code>password</code>需要根据自己数据库实际用户名和密码修改一下，例如我本地的<code>password</code>实际是<code>123456</code>。</p>
+<p>修改好上边内容后，在<code>nacos</code>的<code>bin</code>目录执行启动命令即可，例如我在windows系统中执行命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startup.cmd -m standalone</span><br></pre></td></tr></table></figure>
+
+<p>执行后会看到nacos启动成功并开启了<code>8848</code>端口。</p>
+<h2 id="idea导入服务"><a href="#idea导入服务" class="headerlink" title="idea导入服务"></a>idea导入服务</h2><p>官网中示例是用<code>eclipse</code>，直接导入<code>project</code>，<code>idea</code>中我是一个个模块选择性导入，根据官网启动说明，后台只需要启动<code>RuoYiGatewayApplication</code>、<code>RuoYiAuthApplication</code>、<code>RuoYiSystemApplication</code>，因此我也就先只导入了这三个模块，前两个对应的是<code>ruoyi-auth</code>、<code>ruoyi-gateway</code>，后一个则是在<code>ruoyi-modules</code>下的<code>ruoyi-system</code>。</p>
+<p>导入三个模块，会发现提示有依赖包引入不了，是因为本地maven库中没有这些jar，同时也没有直接把相应源码导入进来，这就需要先把相应的依赖安装到本地maven仓库中。</p>
+<p>这些依赖都是本项目中其他模块，因此最简单的方式就是，在<code>ruoyi-system</code>目录下执行<code>mvn clean install</code>，执行完毕后，在idea中重新加载几个模块就好了。</p>
+<h2 id="sql脚本修改"><a href="#sql脚本修改" class="headerlink" title="sql脚本修改"></a>sql脚本修改</h2><p>通过上边步骤，编译没有问题，但是启动却会发现提示mysql和redis都连不上，是因为redis没有启动，windows中使用<code>redis-server.exe redis.windows.conf</code>启动<code>redis</code>就好了。</p>
+<p>而mysql连接不上，是因为sql脚本中的<code>password</code>全是<code>password</code>，而我的实际是<code>123456</code>，因此需要修改密码为实际的mysql密码，然后再启动几个服务，便可以成功启动并正常运行。</p>
+<h2 id="RuoYi-ui运行"><a href="#RuoYi-ui运行" class="headerlink" title="RuoYi-ui运行"></a>RuoYi-ui运行</h2><p>这里的前台项目是<code>ruoyi-ui</code>，使用的是<code>vue2.6</code>，<code>vue</code>项目运行前需要安装相应的依赖，在若依官网也有说明。</p>
+<p><code>cmd</code>进入到<code>ruoyi-ui</code>目录下执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<p>上边操作需要一点时间，完成之后即可启动前台服务，启动命令<code>npm run dev</code>，然后会自动在浏览器打开页面，例如<code>http://localhost/index</code>，会看到一个登录界面，默认已经填好了用户名和密码，只需要输入验证码即可登录。</p>
+<p>至此，<code>RuoYi-Cloud</code>基础服务环境搭建完毕。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2018/04/25/mysql-jichu15/" data-id="ckgvv478o004oh8vh3vhuhbh5" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/10/30/ruoyi1/" data-id="ckgvv47ai006zh8vhb8ww1lyi" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
 
     </footer>
   </div>
@@ -273,19 +256,10 @@ head.appendChild(script);
 	
 <nav id="article-nav">
   
-    <a href="/2018/09/03/springcloud5/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          springcloud微服务五：客户端负载均衡ribbon
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/04/19/wenti/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/10/23/wenti3/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">记一次数据库or和and优先级引发的连环生产故障</div>
+      <div class="article-nav-title">近期生产问题和解决方案记录</div>
     </a>
   
 </nav>
@@ -313,7 +287,7 @@ head.appendChild(script);
       
         <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#理解"><span class="toc-number">1.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建触发器"><span class="toc-number">2.</span> <span class="toc-text">创建触发器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#进阶"><span class="toc-number">3.</span> <span class="toc-text">进阶</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#触发器查询"><span class="toc-number">4.</span> <span class="toc-text">触发器查询</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#删除"><span class="toc-number">5.</span> <span class="toc-text">删除</span></a></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RuoYi-Cloud代码下载"><span class="toc-number">1.</span> <span class="toc-text">RuoYi-Cloud代码下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mysql准备"><span class="toc-number">2.</span> <span class="toc-text">Mysql准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos和Redis准备"><span class="toc-number">3.</span> <span class="toc-text">Nacos和Redis准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#idea导入服务"><span class="toc-number">4.</span> <span class="toc-text">idea导入服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql脚本修改"><span class="toc-number">5.</span> <span class="toc-text">sql脚本修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RuoYi-ui运行"><span class="toc-number">6.</span> <span class="toc-text">RuoYi-ui运行</span></a></li></ol>
           </div>
       </div>
     </div>
