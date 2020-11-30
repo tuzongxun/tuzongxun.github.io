@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>使用python和java一键替换word文件内容 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="需求一键替换word文档内容，是个比较常见的需求，office和wps也都有全部替换功能。 但是这个功能只能针对当前打开的文档，如果有多个文档，就需要一个一个的来。同时，如果要替换的内容也是多个，同样需要一个一个的来。 在文件少的情况下可能也没什么，但是如果文件有几十个，那么可能就很需要耐心了，因此一键替换所有符合要求的文档中内容的需求就有了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用python和java一键替换word文件内容">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/11/30/python1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="需求一键替换word文档内容，是个比较常见的需求，office和wps也都有全部替换功能。 但是这个功能只能针对当前打开的文档，如果有多个文档，就需要一个一个的来。同时，如果要替换的内容也是多个，同样需要一个一个的来。 在文件少的情况下可能也没什么，但是如果文件有几十个，那么可能就很需要耐心了，因此一键替换所有符合要求的文档中内容的需求就有了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-30T07:43:58.000Z">
+<meta property="article:modified_time" content="2020-11-30T05:46:15.580Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="问题整理">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java程序员，现居武汉，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/30/python1/" class="article-date">
+  <time datetime="2020-11-30T07:43:58.000Z" itemprop="datePublished">2020-11-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用python和java一键替换word文件内容
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>一键替换word文档内容，是个比较常见的需求，office和wps也都有全部替换功能。</p>
+<p>但是这个功能只能针对当前打开的文档，如果有多个文档，就需要一个一个的来。同时，如果要替换的内容也是多个，同样需要一个一个的来。</p>
+<p>在文件少的情况下可能也没什么，但是如果文件有几十个，那么可能就很需要耐心了，因此一键替换所有符合要求的文档中内容的需求就有了。</p>
+<a id="more"></a>
+
+
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><h3 id="poi"><a href="#poi" class="headerlink" title="poi"></a>poi</h3><p>java中操作word，比较熟知或者说比较官方的api是poi，对于word普通的操作其实也可以了。</p>
+<p>但是对于文档内容替换，实际使用时却发现有很多的坑，并不能让人满意。</p>
+<p>首先，poi中处理docx文件使用的是<code>XWPFDocument</code>，出来doc文件使用的是<code>HWPFDocument</code>，实际使用发现在替换doc文件时，文档中自动生成的标题序号无法读取，只能读到级别，而不能读到具体的数值。</p>
+<p>因此，从某种程度而言，这就破坏了原本的文档结构，所以也就不是那么靠谱。</p>
+<p>同时，不知何种原因，不论是docx还是doc，总会有一些内容就是替换不掉，这就更加不靠谱了。</p>
+<p>基于两种原因，在文档内容替换的技术选型上，便不得不放弃poi，而相关的替换代码也就没有贴出来的必要。</p>
+<h3 id="spire-doc"><a href="#spire-doc" class="headerlink" title="spire.doc"></a>spire.doc</h3><p>这个技术其实是最近了解到的，相对poi其实简单很多，但是这个并不是开源的，免费版功能有限，并且经过他处理的文件，都会在文档第一页增加一段类似版权说明之类的内容。</p>
+<p>很显然，这种直接加文档无关内容的做法，也是当前需求不允许的。</p>
+<p>同时，和poi一样，也总会有些内容怎么都替换不掉。</p>
+<p>于是乎，只能另求他解。</p>
+<h3 id="python-docx"><a href="#python-docx" class="headerlink" title="python-docx"></a>python-docx</h3><p>解决业务问题是不应该局限于技术本身的，在找了众多java资料，结果验证都有这样那样的问题之后，也了解到了python也可以处理这种word文档内容替换的业务，依赖的模块是python-docx。</p>
+<p>经过验证，python确实能够完全替换掉相应文档中的所有内容了。但是，新的问题是，这个python-docx只能处理docx的文档，而不能处理doc文档。</p>
+<p>看网上资料，处理doc文档还需要依赖<code>win32com</code>，但是可能是网络问题，想了很多办法都下载不了这个依赖后，只好换了另一种思路，即把doc文件先转成docx文件，然后再用python-docx一键替换。</p>
+<h2 id="可用方案"><a href="#可用方案" class="headerlink" title="可用方案"></a>可用方案</h2><p>经过一番折腾，确定了一个可用方案，经过验证也确实是可用的，一定程度上的确减轻了这种文档替换的工作量。</p>
+<p>只不过操作还是略显得复杂，并不能算是最终方案，仅供参考。</p>
+<p>方案结果是：</p>
+<ol>
+<li>使用<code>spire.doc</code>把某个目录下的doc文档一键转换成docx文档；</li>
+<li>使用<code>python</code>把docx文档中<code>spire.doc</code>额外增加的内容以及其他需要替换的内容一键替换。</li>
+</ol>
+<h3 id="doc转换为docx的代码如下"><a href="#doc转换为docx的代码如下" class="headerlink" title="doc转换为docx的代码如下"></a>doc转换为docx的代码如下</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String [] args)&#123;</span><br><span class="line">		File file &#x3D; new File(args[0]);</span><br><span class="line">		if (file.isDirectory()) &#123;</span><br><span class="line">			System.out.println(file.getName() + &quot; is a directory&quot;);</span><br><span class="line">			&#x2F;&#x2F; 如果是一个目录，则列出目录中的子目录或者文件</span><br><span class="line">			File[] files &#x3D; file.listFiles();</span><br><span class="line">			for (int i &#x3D; 0; i &lt; files.length; i++) &#123;</span><br><span class="line">				File file1 &#x3D; files[i];</span><br><span class="line">				String fileName &#x3D; file1.getName();</span><br><span class="line">				if (file1.isDirectory()) &#123;</span><br><span class="line">					System.out.println(fileName + &quot; is a directory&quot;);</span><br><span class="line">				&#125;</span><br><span class="line">				else &#123;</span><br><span class="line">					System.out.println(fileName + &quot; is a file&quot;);</span><br><span class="line">					String fileExtension &#x3D; fileName.substring(fileName.lastIndexOf(&quot;.&quot;), fileName.length());</span><br><span class="line">					if (&quot;.doc&quot;.equals(fileExtension)) &#123;</span><br><span class="line">						Document document &#x3D; new Document(file1.getAbsolutePath());</span><br><span class="line">						document.saveToFile(args[1]+&quot;\\&quot;+fileName+&quot;x&quot;, FileFormat.Docx);</span><br><span class="line">						document.close();</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码的maven依赖如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;e-iceblue&lt;&#x2F;groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spire.doc&lt;&#x2F;artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.11.0&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="python-docx一键替换文档内容"><a href="#python-docx一键替换文档内容" class="headerlink" title="python-docx一键替换文档内容"></a>python-docx一键替换文档内容</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import os</span><br><span class="line">import docx</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">#需替换文档目录</span><br><span class="line">path &#x3D; u&#39;E:\\test&#39;</span><br><span class="line">#自动创建</span><br><span class="line">tlog &#x3D;  path + u&#39;\替换文档列表.txt&#39;</span><br><span class="line">err_log &#x3D; path + u&#39;\替换出错列表.txt&#39;</span><br><span class="line"></span><br><span class="line">if sys.getdefaultencoding() !&#x3D; &#39;utf-8&#39;:</span><br><span class="line">    reload(sys)</span><br><span class="line">    sys.setdefaultencoding(&#39;utf-8&#39;)</span><br><span class="line">#两个日志</span><br><span class="line">def log(text):</span><br><span class="line">    with open( err_log,&quot;a+&quot; ) as f:</span><br><span class="line">        f.write(text)</span><br><span class="line">        f.write(&#39;\n&#39;)</span><br><span class="line">def log2(text):</span><br><span class="line">    with open( tlog,&quot;a+&quot; ) as f:</span><br><span class="line">        f.write(text)</span><br><span class="line">        f.write(&#39;\n&#39;)</span><br><span class="line"></span><br><span class="line">#替换内容（文档名称，旧的内容，新的内容）</span><br><span class="line">def info_update(doc,old_info,new_info):</span><br><span class="line">    #替换文档中所有文字内容</span><br><span class="line">    for para in doc.paragraphs:</span><br><span class="line">        for run in para.runs:</span><br><span class="line">            run.text &#x3D; run.text.replace(old_info,new_info)</span><br><span class="line">    #替换文档中表格中的内容</span><br><span class="line">    for table in doc.tables:</span><br><span class="line">        for row in table.rows:</span><br><span class="line">            for cell in row.cells:</span><br><span class="line">                cell.text &#x3D; cell.text.replace(old_info,new_info)</span><br><span class="line"></span><br><span class="line">def pageHeader_update(doc,old_info,new_info):</span><br><span class="line">    for se in doc.sections:</span><br><span class="line">        for pa in se.header.paragraphs:</span><br><span class="line">            pa.text &#x3D; pa.text.replace(old_info,new_info)</span><br><span class="line">        for ta in se.header.tables:</span><br><span class="line">            for row in ta.rows:</span><br><span class="line">                for ce in row.cells:</span><br><span class="line">                    ce.text &#x3D; ce.text.replace(old_info,new_info)</span><br><span class="line">                </span><br><span class="line">def thr(old_info,new_info):</span><br><span class="line">    #遍历目录中的docx文档</span><br><span class="line">    print(&#39;开始替换&#39;)</span><br><span class="line">    for parent, dirnames, filenames in os.walk(path):</span><br><span class="line">        for fn in filenames:</span><br><span class="line">            filedir &#x3D; os.path.join(parent, fn)</span><br><span class="line">            if fn.endswith(&#39;.docx&#39;):</span><br><span class="line">                try:</span><br><span class="line">                    #定义文档路径</span><br><span class="line">                    doc &#x3D; docx.Document(filedir)</span><br><span class="line">                    #调用函数修改文档内容</span><br><span class="line">                    info_update(doc,old_info,new_info)</span><br><span class="line">                    pageHeader_update(doc,old_info,new_info)</span><br><span class="line">                    #保存文档</span><br><span class="line">                    doc.save(filedir)</span><br><span class="line">                    #写入修改日志</span><br><span class="line">                    log2(filedir + &#39; 修改完成&#39;)</span><br><span class="line">                    print(filedir + &#39; 修改完成&#39;)</span><br><span class="line">                except Exception as e:</span><br><span class="line">                    #写入修改失败日志</span><br><span class="line">                    log(filedir)</span><br><span class="line">                    </span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    thr(&#39;Evaluation Warning: The document was created with Spire.Doc for JAVA.&#39;,&#39;&#39;)</span><br><span class="line">    thr(&#39;数据&#39;,&#39;tuzongxun&#39;)</span><br><span class="line">    print(&#39;----全部替换完成----&#39;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="python-docx安装（win10-python39）"><a href="#python-docx安装（win10-python39）" class="headerlink" title="python-docx安装（win10-python39）"></a>python-docx安装（win10-python39）</h2><p>之所以一块额外拿出来说，是因为各种网络问题会导致很多简单的操作莫名其妙的失败，单纯的<code>pip install python-docx</code>并不能达到想要的效果。</p>
+<p>经过最终验证成功后的总结，整体步骤如下：</p>
+<p>1、pip list查看setuptools是否存在，如果存在，安装wheel：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install wheel</span><br></pre></td></tr></table></figure>
+
+<p>如果不存在，先安装setuptools，似乎一般都会有：</p>
+<p>2、安装好wheel之后安装lxml，这个文件在线一直安装失败，最终离线安装，先下载文件lxml-4.6.2-cp39-cp39-win_amd64.whl（注意下载对应的版本，不一定要这个），下载地址<a href="https://pypi.org/project/lxml/#files" target="_blank" rel="noopener">https://pypi.org/project/lxml/#files</a><br>文件下载之后在提供的文件所在目录执行如下命令（直接这里执行pip的前提是python和pip的环境变量配好了）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install lxml-4.6.2-cp39-cp39-win_amd64.whl</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3、然后安装python-docx：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install python-docx</span><br></pre></td></tr></table></figure>
+
+<p>如果在线安装不了，尝试离线安装（这个安装包找不到下载地址的，若有需要可联系我，也可以在csdn下载<a href="https://download.csdn.net/download/weixin_45174975/12152734），在下载的安装包所在目录执行：" target="_blank" rel="noopener">https://download.csdn.net/download/weixin_45174975/12152734），在下载的安装包所在目录执行：</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install python-docx-0.8.10.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>都安装完之后即可执行python脚本。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.tzxcode.cn/2020/11/30/python1/" data-id="cki44sboe00568svh4ieldykk" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+            <div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyuD50Pqv'; 
+var conf = 'prod_4668108628adf4b398aa4219d3653b94'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/30/ruoyi1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">若依管理系统RuoYi-Cloud版搭建记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求"><span class="toc-number">1.</span> <span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#技术选型"><span class="toc-number">2.</span> <span class="toc-text">技术选型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#poi"><span class="toc-number">2.1.</span> <span class="toc-text">poi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spire-doc"><span class="toc-number">2.2.</span> <span class="toc-text">spire.doc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-docx"><span class="toc-number">2.3.</span> <span class="toc-text">python-docx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可用方案"><span class="toc-number">3.</span> <span class="toc-text">可用方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#doc转换为docx的代码如下"><span class="toc-number">3.1.</span> <span class="toc-text">doc转换为docx的代码如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-docx一键替换文档内容"><span class="toc-number">3.2.</span> <span class="toc-text">python-docx一键替换文档内容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python-docx安装（win10-python39）"><span class="toc-number">4.</span> <span class="toc-text">python-docx安装（win10-python39）</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2020 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">本站有效访客数<span id="busuanzi_value_site_uv"></span>人</span>
+	  <span id="busuanzi_container_site_pv" >| 总访问量 <span id="busuanzi_value_site_pv"></span> 次 </span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+
+
+<script type="text/javascript ">
+    (function () {
+        var appid = 'cytYCbn4s';
+        var conf = 'e18ab73896248d40bda4389d7380020f';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+        } else {
+            var loadJs = function (d, a) {
+                var c = document.getElementsByTagName("head")[0] || document.head || document.documentElement;
+                var b = document.createElement("script");
+                b.setAttribute("type", "text/javascript");
+                b.setAttribute("charset", "UTF-8");
+                b.setAttribute("src", d);
+                if (typeof a === "function") {
+                    if (window.attachEvent) {
+                        b.onreadystatechange = function () {
+                            var e = b.readyState;
+                            if (e === "loaded" || e === "complete") {
+                                b.onreadystatechange = null;
+                                a()
+                            }
+                        }
+                    } else {
+                        b.onload = a
+                    }
+                }
+                c.appendChild(b)
+            };
+            loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
+                window.changyan.api.config({
+                    appid: appid,
+                    conf: conf
+                })
+            });
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
