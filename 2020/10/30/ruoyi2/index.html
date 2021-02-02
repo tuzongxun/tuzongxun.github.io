@@ -28,21 +28,20 @@ var _hmt = _hmt || [];
 </script>
 
   
-  <title>《maven实战》学习笔记7——maven项目版本管理和灵活构建 | 涂宗勋的博客</title>
+  <title>若依管理系统RuoYi-Cloud版搭建记录 | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="说明《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。">
+  <meta name="description" content="1、redis安装 Linux中redis安装及软件安装相关Linux知识要点https:&#x2F;&#x2F;tuzongxun.blog.csdn.net&#x2F;article&#x2F;details&#x2F;107170447 2、nginx安装 wget https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.9.9.tar.gz 解压tar -zxvf nginx-1.9.9.tar.gz .&#x2F;configure">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《maven实战》学习笔记7——maven项目版本管理和灵活构建">
-<meta property="og:url" content="https://blog.tzxcode.cn/2017/11/15/maven7/index.html">
+<meta property="og:title" content="若依管理系统RuoYi-Cloud版搭建记录">
+<meta property="og:url" content="https://blog.tzxcode.cn/2020/10/30/ruoyi2/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="说明《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。">
+<meta property="og:description" content="1、redis安装 Linux中redis安装及软件安装相关Linux知识要点https:&#x2F;&#x2F;tuzongxun.blog.csdn.net&#x2F;article&#x2F;details&#x2F;107170447 2、nginx安装 wget https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.9.9.tar.gz 解压tar -zxvf nginx-1.9.9.tar.gz .&#x2F;configure">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-11-15T01:09:42.000Z">
-<meta property="article:modified_time" content="2019-08-13T07:29:15.252Z">
+<meta property="article:published_time" content="2020-10-30T07:43:58.000Z">
+<meta property="article:modified_time" content="2021-01-13T10:36:28.665Z">
 <meta property="article:author" content="涂宗勋">
-<meta property="article:tag" content="开发工具">
-<meta property="article:tag" content="maven">
+<meta property="article:tag" content="问题整理">
 <meta name="twitter:card" content="summary">
   
   
@@ -108,14 +107,14 @@ var _hmt = _hmt || [];
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-maven7" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-ruoyi2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/15/maven7/" class="article-date">
-  <time datetime="2017-11-15T01:09:42.000Z" itemprop="datePublished">2017-11-15</time>
+    <a href="/2020/10/30/ruoyi2/" class="article-date">
+  <time datetime="2020-10-30T07:43:58.000Z" itemprop="datePublished">2020-10-30</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
   </div>
 
 </span>
@@ -127,7 +126,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      《maven实战》学习笔记7——maven项目版本管理和灵活构建
+      若依管理系统RuoYi-Cloud版搭建记录
     </h1>
   
 
@@ -137,98 +136,26 @@ var _hmt = _hmt || [];
       
         <!-- Table of Contents -->
         
-        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>《maven实战》一书内容很多，整个maven要学的东西也很多，不过，结合个人实际情况，我打算把这一篇作为这次对maven学习的一个阶段性收尾，待其他更急需补充的知识有一定眉目了，再回过头来继续深入。</p>
-<a id="more"></a>
-<h3 id="maven版本管理"><a href="#maven版本管理" class="headerlink" title="maven版本管理"></a>maven版本管理</h3><p>对于maven版本管理，最重要的是需要区分出快照版本SNAPSHOT和发布版本release，据目前的了解，快照版本格式是固定的，而发布版本有几种，例如带release单词的和不带release单词的。<br>快照版本由于每次发布都带时间戳，所以适用于开发阶段团队协作，但同时也是不稳定的。<br>发布版本就需要是比较稳定的版本，定了就不能变，如果要变就要发布新的发布版本。<br>不过，要更好的了解maven版本管理，必须先比较熟悉版本控制，结合实际情况，就是需要先比较熟悉svn版本控制。<br>由于目前我虽然天天在用svn，却还没有系统的学一下，所以对svn也还不是太熟，再加上目前实际工作对maven版本管理似乎也没有什么需求，因此maven版本管理这一块就先只做了解。</p>
-<h3 id="灵活构建"><a href="#灵活构建" class="headerlink" title="灵活构建"></a>灵活构建</h3><p>根据我的理解，maven灵活构建指的是经过一定的配置后，可以使maven在不同的场景很容易的改变一些构建细节，例如某些属性实际值的使用。<br>maven提供了属性properties、profiles、资源过滤三个特性来实现。</p>
-<h4 id="属性properties"><a href="#属性properties" class="headerlink" title="属性properties"></a>属性properties</h4><p>这个说白了就相当于配置的一个变量，里边的标签名就是变量名，只不过有一些标签是maven默认的，或者说约定了的，同时也能自定义并使用，例如我在某个项目的pom.xml中这样配置：</p>
-<pre>
-&lt;properties>
-    &lt;project.build.sourceEncoding>UTF-8&lt;/project.build.sourceEncoding>
-    &lt;project.reporting.outputEncoding>UTF-8&lt;/project.reporting.outputEncoding>
-    &lt;java.version>1.8&lt;/java.version>
-    &lt;spring.version>4.0.9&lt;/spring.version>
-    &lt;auth.name>tzx&lt;/auth.name>
-&lt;/properties>
-</pre>
-<p>在上边的例子中，前三个是maven默认的一些属性名，而spring.version、auth.name是我自己加的，有了这些配置，在这个pom.xml文件中就能用<code>${auth.name}</code>、<code>${spring.version}</code>这样的方式获取到里边配置的值，这样大大增加可维护性以及减少重复配置。<br>就比如这里的spring.version，如果这个项目导入了很多个spring的jar包，那么每个依赖配置都要配置version，如果有了spring.version，那么在依赖配置的version那里就可以使用<code>${spring.version}</code>，以后如果要升级spring版本，就可以只改动properties中的spring.version的值就可以了。<br>需要注意的是，我的这个配置是在项目的pom.xml中，但是实际上不只是能配置在这里，还能配置在maven的settings.xml中，例如我之前学习代码管理工具sonar的时候就在setting.xml中配置过mysql数据库相关的属性：</p>
-<pre>
-&lt;properties>
-       &lt;sonar.jdbc.url>
-        jdbc:mysql://localhost:3306/sonar
-       &lt;/sonar.jdbc.url>
-       &lt;sonar.jdbc.driver>com.mysql.jdbc.Driver&lt;/sonar.jdbc.driver>
-       &lt;sonar.jdbc.username>sonar&lt;/sonar.jdbc.username>
-       &lt;sonar.jdbc.password>sonar&lt;/sonar.jdbc.password>
-       &lt;sonar.host.url>http://localhost:9000&lt;/sonar.host.url>
-&lt;/properties>
-</pre>
-<p>除开上边两个之外，maven还能用maven内置属性、环境变量、系统变量等等，可以用<code>mvn help:system</code>命令来查看有哪些环境变量和系统变量，至于具体的内置属性有哪些，可以需要时网上查询一下。</p>
-<h4 id="maven的profiles"><a href="#maven的profiles" class="headerlink" title="maven的profiles"></a>maven的profiles</h4><p>在说这个之前，先来看一个在前几篇记录中，讲maven仓库时有在settings.xml中出现过的一个配置：</p>
-<pre>
-&lt;profiles>
-   &lt;profile>
-     &lt;id>nexus&lt;/id>
-     &lt;repositories>
-      &lt;repository>
-         &lt;id>repo1&lt;/id>
-         &lt;url>http://192.168.0.224:8081/nexus/content/groups/public&lt;/url>
-         &lt;releases>
-                &lt;enabled>true&lt;/enabled>
-                &lt;updatePolicy>daily&lt;/updatePolicy>
-                &lt;checksumPolicy>ignore&lt;/checksumPolicy>
-         &lt;/releases>
-      &lt;/repository>
-      &lt;repository>
-         &lt;id>repo2&lt;/id>
-         &lt;url>http://192.168.0.224:8081/nexus/content/groups/public-snapshots&lt;/url>         
-         &lt;snapshots>
-                &lt;enabled>true&lt;/enabled>
-         &lt;/snapshots>
-      &lt;/repository>
-     &lt;/repositories>
-     &lt;pluginRepositories>
-      &lt;pluginRepository>
-         &lt;id>repo3&lt;/id>
-         &lt;url>http://192.168.0.65:8082/nexus/content/groups/public&lt;/url>
-         &lt;releases>
-                &lt;enabled>true&lt;/enabled>
-         &lt;/releases>
-      &lt;/pluginRepository>
-      &lt;pluginRepository>
-         &lt;id>repo4&lt;/id>
-         &lt;url>http://192.168.0.65:8082/nexus/content/groups/public-snapshots&lt;/url>
-         &lt;snapshots>
-                &lt;enabled>true&lt;/enabled>
-         &lt;/snapshots>
-      &lt;/pluginRepository>
-     &lt;/pluginRepositories>
-   &lt;/profile>
-&lt;/profiles>
-</pre>
-<p>很显然，这就是一个这里要说的profiles的配置，这种配置的基本形式是，在一个<code>profiles</code>中可以配置多个<code>profile</code>，<code>profile</code>里就是具体的配置信息，据我理解，几乎所有能在profile之外配置的信息都可以放到这里边配置。<br>在这个配置中，最重要的是<code>id</code>属性，这是每个<code>profile</code>的唯一标示。<br>之后可以使用很多种方法来激活这个配置，例如可以在settings.xml文件的<code>profiles</code>标签之外增加这样的配置：</p>
-<pre>
-&lt;activeProfiles>
-    &lt;activeProfile>nexus&lt;/activeProfile>
-&lt;/activeProfiles>
-</pre>
-<p>然后，上边所配置的profile就被激活，可以被使用了。<br>除了上边这种激活方式，还可以通过‘命令行激活’、‘环境变量激活’、‘文件是否存在激活’等各种激活方式，不过目前我还完全没有用过这些方式，就暂时认为不常用，稍作了解就好。<br>那么除开上述的所有激活方式外，还有一种就是在profile内部配置激活：</p>
-<pre>
-&lt;activation>
-      &lt;activeByDefault>true&lt;/activeByDefault>
-&lt;/activation>
-</pre>
-<p>这种配置的意思，从字面意思其实就可以理解，那就是默认激活。不过需要注意的是，假如有用上述任何一种方式激活过某个profile，那么所有这种默认激活的方式都会失效。</p>
-<h4 id="web资源过滤"><a href="#web资源过滤" class="headerlink" title="web资源过滤"></a>web资源过滤</h4><p>这个目前感觉也似乎不怎么常用，因此暂时只需要知道有这么回事就好。</p>
+        <p>1、redis安装</p>
+<p>Linux中redis安装及软件安装相关Linux知识要点<a href="https://tuzongxun.blog.csdn.net/article/details/107170447" target="_blank" rel="noopener">https://tuzongxun.blog.csdn.net/article/details/107170447</a></p>
+<p>2、nginx安装</p>
+<p>wget <a href="https://nginx.org/download/nginx-1.9.9.tar.gz" target="_blank" rel="noopener">https://nginx.org/download/nginx-1.9.9.tar.gz</a></p>
+<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><p>tar -zxvf nginx-1.9.9.tar.gz</p>
+<p>./configure –prefix=/usr/local/nginx</p>
+<p>src/core/ngx_murmurhash.c:37:11: error: this statement may fall through [-Werror=implicit-fallthrough=]<br>h ^= data[2] &lt;&lt; 16;<br>是编译器将警告当成了错误处理<br>打开 nginx的安装目录/objs/Makefile，去掉CFLAGS中的-Werror，再重新make</p>
+<p>-Wall 表示打开gcc的所有警告<br>-Werror，它要求gcc将所有的警告当成错误进行处理</p>
+<p>make<br>make install</p>
+<p>3、natapp</p>
+<p>5、内存问题</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tzxcode.cn/2017/11/15/maven7/" data-id="ckkngqcbz0053covhg8f2cums" class="article-share-link">分享</a>
+      <a data-url="https://blog.tzxcode.cn/2020/10/30/ruoyi2/" data-id="ckkngqceb009xcovh1xhzcqtg" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">开发工具</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
 
     </footer>
   </div>
@@ -307,19 +234,19 @@ head.appendChild(script);
 	
 <nav id="article-nav">
   
-    <a href="/2017/11/15/yuanze-shuoming/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/10/30/ruoyi1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          《设计模式》学习笔记0——说明
+          若依管理系统RuoYi-Cloud版搭建记录
         
       </div>
     </a>
   
   
-    <a href="/2017/11/14/maven6/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/10/23/wenti3/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">《maven实战》学习笔记6——maven聚合和继承</div>
+      <div class="article-nav-title">近期生产问题和解决方案记录</div>
     </a>
   
 </nav>
@@ -347,7 +274,7 @@ head.appendChild(script);
       
         <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maven版本管理"><span class="toc-number">2.</span> <span class="toc-text">maven版本管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#灵活构建"><span class="toc-number">3.</span> <span class="toc-text">灵活构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#属性properties"><span class="toc-number">3.1.</span> <span class="toc-text">属性properties</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#maven的profiles"><span class="toc-number">3.2.</span> <span class="toc-text">maven的profiles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#web资源过滤"><span class="toc-number">3.3.</span> <span class="toc-text">web资源过滤</span></a></li></ol></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#解压"><span class="toc-number">1.</span> <span class="toc-text">解压</span></a></li></ol>
           </div>
       </div>
     </div>
