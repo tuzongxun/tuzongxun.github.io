@@ -34,22 +34,22 @@ var _hmt = _hmt || [];
   <meta name="description" content="理解当初步的学习了spring boot，了解了spring boot的基本实现过程后，我就正式开始学习spring cloud，首先就从Eureka服务治理开始。 服务治理包含三个核心的角色：服务注册中心、服务提供者和服务消费者，他们相对独立，新的服务要向服务注册中心注册，新的消费者会向服务注册中心索引服务列表。 一番了解之后，让我想到了人才招聘。在我看来，现在普遍存在的招聘形式也是分为了三个部">
 <meta property="og:type" content="article">
 <meta property="og:title" content="springcloud微服务二：Eureka服务治理之服务注册中心">
-<meta property="og:url" content="https://tuzongxun.gitee.io/2017/05/23/springcloud2/index.html">
+<meta property="og:url" content="http://blog.tzxcode.cn/2017/05/23/springcloud2/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
 <meta property="og:description" content="理解当初步的学习了spring boot，了解了spring boot的基本实现过程后，我就正式开始学习spring cloud，首先就从Eureka服务治理开始。 服务治理包含三个核心的角色：服务注册中心、服务提供者和服务消费者，他们相对独立，新的服务要向服务注册中心注册，新的消费者会向服务注册中心索引服务列表。 一番了解之后，让我想到了人才招聘。在我看来，现在普遍存在的招聘形式也是分为了三个部">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://tuzongxun.gitee.io/images/springcloud/s21.png">
-<meta property="og:image" content="https://tuzongxun.gitee.io/images/springcloud/s22.png">
-<meta property="og:image" content="https://tuzongxun.gitee.io/images/springcloud/s23.png">
-<meta property="og:image" content="https://tuzongxun.gitee.io/images/springcloud/s24.png">
-<meta property="og:image" content="https://tuzongxun.gitee.io/images/springcloud/s25.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/springcloud/s21.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/springcloud/s22.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/springcloud/s23.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/springcloud/s24.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/springcloud/s25.png">
 <meta property="article:published_time" content="2017-05-23T07:09:42.000Z">
 <meta property="article:modified_time" content="2019-10-17T03:29:05.133Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springcloud">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tuzongxun.gitee.io/images/springcloud/s21.png">
+<meta name="twitter:image" content="http://blog.tzxcode.cn/images/springcloud/s21.png">
   
   
     <link rel="icon" href="/images/touxiang.png">
@@ -79,7 +79,7 @@ var _hmt = _hmt || [];
         <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://tuzongxun.gitee.io"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
       </div>
       <nav id="main-nav">
         <a id="main-nav-toggle" class="nav-icon"></a>
@@ -233,7 +233,7 @@ eureka.client.serviceUrl.defaultZone=http://server1:1000/eureka/,http://server2:
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tuzongxun.gitee.io/2017/05/23/springcloud2/" data-id="ckxn8mrth005htkvh1rvzgwkx" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2017/05/23/springcloud2/" data-id="ckxn8sgdm005g3svhd6ue2qff" class="article-share-link">分享</a>
       
       
       
