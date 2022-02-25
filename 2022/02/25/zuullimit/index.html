@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>使用spring-cloud-zuul-rate-limit在zuul中为服务限流 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言几个月前做过一个springCloud服务限流的任务，当时选定的技术是spring-cloud-zuul-rate-limit。之所以选这个而不是别的，是因为项目本身使用了zuul，而且业务需求上spring-cloud-zuul-rate-limit的功能刚好都可以满足，在这种情况下就可以在符合要求的同时尽可能快的完成。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用spring-cloud-zuul-rate-limit在zuul中为服务限流">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/25/zuullimit/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言几个月前做过一个springCloud服务限流的任务，当时选定的技术是spring-cloud-zuul-rate-limit。之所以选这个而不是别的，是因为项目本身使用了zuul，而且业务需求上spring-cloud-zuul-rate-limit的功能刚好都可以满足，在这种情况下就可以在符合要求的同时尽可能快的完成。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-25T06:43:58.000Z">
+<meta property="article:modified_time" content="2022-02-25T08:40:22.469Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="服务限流">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">简历</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-zuullimit" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/25/zuullimit/" class="article-date">
+  <time datetime="2022-02-25T06:43:58.000Z" itemprop="datePublished">2022-02-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81/">服务限流</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用spring-cloud-zuul-rate-limit在zuul中为服务限流
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>几个月前做过一个springCloud服务限流的任务，当时选定的技术是spring-cloud-zuul-rate-limit。<br>之所以选这个而不是别的，是因为项目本身使用了zuul，而且业务需求上spring-cloud-zuul-rate-limit的功能刚好都可以满足，在这种情况下就可以在符合要求的同时尽可能快的完成。</p>
+<a id="more"></a>
+
+<p>这个任务实际上只相当于一个技术调研，只要在现有技术框架的基础上能够集成和实现需求，并且成功测试就可以了。<br>和当时在公司略有不同的是，公司是直接使用内部maven仓库，springcloud依赖的版本号基本都是原始的。<br>而在我自己电脑上重新写的时候，是使用的aliyun的maven仓库，springcloud版本经过了一定的加工处理。<br>两个电脑不互通，也不能互传数据，所以在自己电脑上就要手动重来一遍。<br>于是，因为这个版本问题，再加上自己的不小心，在自己电脑上一开始无法触发限流。<br>我一度以为就是版本不同导致的，结果绞尽脑汁后才发现是因为自己敲错了一个符号。</p>
+<p>言归正传，这里的集成分为了三个简单的服务，一个模拟业务服务的server，一个注册中心eureka，还有一个springcloud zuul。以下是代码示例：</p>
+<h2 id="spring-cloud-eureka-server注册中心"><a href="#spring-cloud-eureka-server注册中心" class="headerlink" title="spring cloud eureka server注册中心"></a>spring cloud eureka server注册中心</h2><h3 id="pom文件"><a href="#pom文件" class="headerlink" title="pom文件"></a>pom文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.1.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">    &lt;relativePath&#x2F;&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">&lt;&#x2F;parent&gt;</span><br><span class="line">......</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-web&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动类"><a href="#启动类" class="headerlink" title="启动类"></a>启动类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@EnableEurekaServer</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class CloudEurekaApplication &#123;</span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">      SpringApplication.run(CloudEurekaApplication.class, args);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spring.application.name&#x3D;eureka-server</span><br><span class="line">server.port&#x3D;1000</span><br><span class="line">eureka.client.register-with-eureka&#x3D;false</span><br><span class="line">eureka.client.fetch-registry&#x3D;false</span><br><span class="line">eureka.client.serviceUrl.defaultZone&#x3D;http:&#x2F;&#x2F;127.0.0.1:1000&#x2F;eureka&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这里其实就是一个极简的eureka的微服务注册中心，所以其实没有太多需要额外解释的内容。</p>
+<h2 id="srping-cloud-eureka-client业务服务"><a href="#srping-cloud-eureka-client业务服务" class="headerlink" title="srping cloud eureka client业务服务"></a>srping cloud eureka client业务服务</h2><h3 id="pom文件-1"><a href="#pom文件-1" class="headerlink" title="pom文件"></a>pom文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.1.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">    &lt;relativePath&#x2F;&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">&lt;&#x2F;parent&gt;</span><br><span class="line">......</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-web&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动类-1"><a href="#启动类-1" class="headerlink" title="启动类"></a>启动类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@EnableDiscoveryClient</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class CloudServer1Application &#123;</span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">      SpringApplication.run(CloudServer1Application.class, args);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class TestController &#123;</span><br><span class="line">   @GetMapping(&quot;&#x2F;hello&quot;)</span><br><span class="line">   public String hello()&#123;</span><br><span class="line">      return &quot;hello&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">   @GetMapping(&quot;&#x2F;hello1&quot;)</span><br><span class="line">   public String hello1()&#123;</span><br><span class="line">      return &quot;hello1&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">   @GetMapping(&quot;&#x2F;hello2&quot;)</span><br><span class="line">   public String hello2()&#123;</span><br><span class="line">      return &quot;hello2&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置文件-1"><a href="#配置文件-1" class="headerlink" title="配置文件"></a>配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server.port&#x3D;1001</span><br><span class="line">spring.application.name&#x3D;hello-service</span><br><span class="line">#name</span><br><span class="line">eureka.client.service-url.defaultZone&#x3D;http:&#x2F;&#x2F;127.0.0.1:1000&#x2F;eureka</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，上边也就是一个极简的springcloud eureka的客户端服务，加上了一些非常简单的api接口。</p>
+<h2 id="springcloud-zuul"><a href="#springcloud-zuul" class="headerlink" title="springcloud zuul"></a>springcloud zuul</h2><p>springcloud zuul ratelimit实际支持很多种数据存储方式，比如redis、jpa、jcache等，由于项目中没有使用redis，也没有使用jpa，然后当时的电脑又不能随便安装软件，所以就只能选用jcache存储，结合bucket4j一起使用。</p>
+<h3 id="pom文件-2"><a href="#pom文件-2" class="headerlink" title="pom文件"></a>pom文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.1.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">    &lt;relativePath&#x2F;&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">&lt;&#x2F;parent&gt;</span><br><span class="line">......</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-web&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-netflix-zuul&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.1.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.1.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.netflix.servo&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;servo-core&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.9.4-rc.1&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.marcosbarbero.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-zuul-ratelimit&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.2.5.RELEASE&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.github.vladimir-bukhtoyarov&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;bucket4j-core&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;6.2.0&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.github.vladimir-bukhtoyarov&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;bucket4j-jcache&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;6.2.0&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;javax.cache&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;cache-api&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.1.1&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.github.vladimir-bukhtoyarov&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;bucket4j-hazelcast&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;6.2.0&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.hazelcast&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;hazelcast&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动类-2"><a href="#启动类-2" class="headerlink" title="启动类"></a>启动类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@EnableZuulProxy</span><br><span class="line">@SpringCloudApplication</span><br><span class="line">public class CloudZuulApplication &#123;</span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">      SpringApplication.run(CloudZuulApplication.class, args);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置文件-2"><a href="#配置文件-2" class="headerlink" title="配置文件"></a>配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server.port&#x3D;5001</span><br><span class="line">spring.application.name&#x3D;zuul-service</span><br><span class="line">zuul.routes.hello-service.path&#x3D;&#x2F;hello-service&#x2F;**</span><br><span class="line">zuul.routes.hello-service.service-id&#x3D;hello-service</span><br><span class="line">eureka.client.service-url.defaultZone&#x3D;http:&#x2F;&#x2F;127.0.0.1:1000&#x2F;eureka&#x2F;</span><br><span class="line"></span><br><span class="line">zuul.ratelimit.key-prefix&#x3D;springcloud-book</span><br><span class="line">zuul.ratelimit.enabled&#x3D;true</span><br><span class="line">zuul.ratelimit.repository&#x3D;BUCKET4J_JCACHE</span><br><span class="line"></span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].limit&#x3D;2</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].quota&#x3D;1</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].refresh-interval&#x3D;20</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].type[0]&#x3D;url</span><br></pre></td></tr></table></figure>
+
+<p><strong>这里配置含义如下：</strong><br><strong>zuul.ratelimit.key-prefix=springcloud-book</strong>；缓存存储的自定义键前缀<br><strong>zuul.ratelimit.enabled=true</strong>；启用速率限制，即启用ratelimit限流<br><strong>zuul.ratelimit.repository=BUCKET4J_JCACHE</strong>；指定数据存储方式</p>
+<p>下面的就是具体服务的限流规则配置，hello-service是服务id，尽量与eureka-client的服务名保持一致。<br><strong>zuul.ratelimit.policy-list.hello-service[0].limit=2</strong>；每个刷新时间窗口对应的请求数限制；<br><strong>zuul.ratelimit.policy-list.hello-service[0].quota=1</strong>；每单位时间允许访问的总时间（这个解释来自网上，需要进一步验证。目前多次测试的结果好像和网上解释的含义不太一样）<br><strong>zuul.ratelimit.policy-list.hello-service[0].refresh-interval=20</strong>；刷新时间窗口的时间，单位是秒，默认60秒；<br><strong>zuul.ratelimit.policy-list.hello-service[0].type[0]=url</strong>；支持的限流类型，如ORIGIN、USER、URL、URL_PATTERN等。</p>
+<h3 id="cache配置类"><a href="#cache配置类" class="headerlink" title="cache配置类"></a>cache配置类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class HazelcastConfiguration &#123;</span><br><span class="line">   @Bean(&quot;RateLimit&quot;)</span><br><span class="line">   Cache&lt;String, GridBucketState&gt; cache()&#123;</span><br><span class="line">      Config config&#x3D;new Config();</span><br><span class="line">      config.setLiteMember(false);</span><br><span class="line">      CacheSimpleConfig cacheSimpleConfig&#x3D;new CacheSimpleConfig();</span><br><span class="line">      cacheSimpleConfig.setName(&quot;springcloud-book&quot;);</span><br><span class="line">      config.addCacheConfig(cacheSimpleConfig);</span><br><span class="line">      HazelcastInstance hazelcastInstance&#x3D; Hazelcast.newHazelcastInstance(config);</span><br><span class="line">      ICacheManager cacheManager&#x3D;hazelcastInstance.getCacheManager();</span><br><span class="line">      Cache&lt;String,GridBucketState&gt; cache&#x3D;cacheManager.getCache(&quot;springcloud-book&quot;);</span><br><span class="line">      return cache;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class ErrorFilter extends ZuulFilter &#123;</span><br><span class="line">   @Override</span><br><span class="line">   public String filterType() &#123;</span><br><span class="line">      return FilterConstants.ERROR_TYPE;</span><br><span class="line">   &#125;</span><br><span class="line">   @Override</span><br><span class="line">   public int filterOrder() &#123;</span><br><span class="line">      return 10;</span><br><span class="line">   &#125;</span><br><span class="line">   @Override</span><br><span class="line">   public boolean shouldFilter() &#123;</span><br><span class="line">      return true;</span><br><span class="line">   &#125;</span><br><span class="line">   @Override</span><br><span class="line">   public Object run()</span><br><span class="line">      throws ZuulException</span><br><span class="line">   &#123;</span><br><span class="line">      RequestContext context&#x3D;RequestContext.getCurrentContext();</span><br><span class="line">      Throwable throwable&#x3D;context.getThrowable();</span><br><span class="line">      if(throwable.getCause().getMessage().contains(&quot;ZuulException: 429 TOO_MANY_REQUESTS&quot;))&#123;</span><br><span class="line">         System.out.println(&quot;429 TOO MANY REQUESTS&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      return null;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="功能验证"><a href="#功能验证" class="headerlink" title="功能验证"></a>功能验证</h2><p>上边的服务中，定义了三个api，分别是/hello、/hello1和/hello2。主要验证limit、quota、refresh-interval、type的配置。<br>根据上边zuul的配置，目前规则是20秒的刷新时间窗口，20秒内只允许2次请求，否则会触发限流。由于上边配置的类型是url，所以这里更准确的说，是20秒内同一个url只允许2次请求，否则触发限流。<br>这里涉及limit、refresh-interval、type三个配置，由于多次验证quota都没效果，所以后续还需要进一步验证。</p>
+<h3 id="验证limit"><a href="#验证limit" class="headerlink" title="验证limit"></a>验证limit</h3><p>首先，浏览器访问<a href="http://localhost::5001/hello-service/hello，20秒内发起多个请求，会发现前两个请求正常返回，后边的会出现429">http://localhost::5001/hello-service/hello，20秒内发起多个请求，会发现前两个请求正常返回，后边的会出现429</a> TOO_MANY_REQUESTS。<br>然后，修改limit的值为4，重启zuul，然后浏览器再访问上边的url，20秒内发起多个请求，会看到前4次请求正常返回，后边的会出现429 TOO_MANY_REQUESTS。</p>
+<p><strong>以上证明这个参数对限流是生效的。</strong></p>
+<h3 id="验证refresh-interval"><a href="#验证refresh-interval" class="headerlink" title="验证refresh-interval"></a>验证refresh-interval</h3><p>接着上边的测试，修改refresh-interval为10，然后重启zuul。浏览器还是访问上边的url，保证20秒内超过4个请求，但是每10秒内都不超过4个，会看到都会正常返回结果。<br>然后，在10秒内发起超过4个的请求，会看到前4个正常返回，后边的就出现429 TOO_MANY_REQUESTS。</p>
+<p><strong>以上证明refresh-interval也是生效的。</strong></p>
+<h3 id="验证type"><a href="#验证type" class="headerlink" title="验证type"></a>验证type</h3><p>为了提高效率，把上边limit改回2，refresh-interval改回20，然后重启zuul。<br>浏览器访问同一个url，保证20秒内超过2次，会看到不论是<a href="http://localhost::5001/hello-service/hello、http://localhost::5001/hello-service/hello1，还是http://localhost::5001/hello-service/hello2，前两次都正常返回，后边的就出现429">http://localhost::5001/hello-service/hello、http://localhost::5001/hello-service/hello1，还是http://localhost::5001/hello-service/hello2，前两次都正常返回，后边的就出现429</a> TOO_MANY_REQUESTS。</p>
+<p>然后还是保证20秒内访问超过2次，但是三个url交叉访问，保证每个20秒内不会有同一个url超过两次，会看到全部都是正常返回。</p>
+<p><strong>以上证明当type是url时，针对的就是同一个url。</strong></p>
+<p>修改type为origin并重启zuul，然后20秒内同一个浏览器访问url超过2次，会看到不论是同一个url超过2次，还是不同的url超过2次，都是前两次正常返回，后边就出现429 TOO_MANY_REQUESTS。</p>
+<h3 id="url-pattern"><a href="#url-pattern" class="headerlink" title="url_pattern"></a>url_pattern</h3><p>type是url其实已经基本能够满足大部分需求了，但是有时候可能就是需要对某一类url进行限流，而不是单纯的针对某一个url，那就可以用到url_pattern。<br>url_pattern的配置相对于url的稍微复杂一点，为了方便验证，我先增加一些api接口，使他们有一些有相同的部分，修改后如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;&#x2F;hello&quot;)</span><br><span class="line">public String hello()&#123;</span><br><span class="line">   return &quot;hello&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@GetMapping(&quot;&#x2F;hello1&quot;)</span><br><span class="line">public String hello1()&#123;</span><br><span class="line">   return &quot;hello1&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@GetMapping(&quot;&#x2F;hello2&quot;)</span><br><span class="line">public String hello2()&#123;</span><br><span class="line">   return &quot;hello2&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@GetMapping(&quot;&#x2F;test&#x2F;hello3&quot;)</span><br><span class="line">public String hello3()&#123;</span><br><span class="line">   return &quot;hello3&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@GetMapping(&quot;&#x2F;test&#x2F;hello4&quot;)</span><br><span class="line">public String hello4()&#123;</span><br><span class="line">   return &quot;hello4&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@GetMapping(&quot;&#x2F;test1&#x2F;hello5&quot;)</span><br><span class="line">public String hello5()&#123;</span><br><span class="line">   return &quot;hello5&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@GetMapping(&quot;&#x2F;test1&#x2F;hello6&quot;)</span><br><span class="line">public String hello6()&#123;</span><br><span class="line">   return &quot;hello6&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后再修改配置，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">zuul.ratelimit.policy-list.hello-service[0].limit&#x3D;2</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].quota&#x3D;1</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].refresh-interval&#x3D;20</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].type[0]&#x3D;url_pattern&#x3D;&#x2F;hello-service&#x2F;test&#x2F;*</span><br><span class="line"></span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].limit&#x3D;2</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].quota&#x3D;1</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].refresh-interval&#x3D;20</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].type[0]&#x3D;url_pattern&#x3D;&#x2F;hello-service&#x2F;test1&#x2F;*</span><br><span class="line"></span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].limit&#x3D;2</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].quota&#x3D;1</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].refresh-interval&#x3D;20</span><br><span class="line">zuul.ratelimit.policy-list.hello-service[0].type[0]&#x3D;url_pattern&#x3D;&#x2F;hello-service&#x2F;hello</span><br></pre></td></tr></table></figure>
+
+<p>重启zuul和client服务后，再次测试会看到，没有/test或者/test1开头的url以及/hello这个，无论访问多少次，都会是正常返回，而对于/test开头的，无论是同一个还是不同的url，只要达到限制条件，都会是429，/test1开头的也是一样。<br>和type为url时候一样，如果是在/test开头和/test1开头的url之间切换，保证相同前缀的url不触发限制，那么即使不同前缀的看起来超过了次数，最终也不会触发限流。<br>以上证明，type为url_pattern时，可以进一步把限流细化到某一个或者某一类url，可以对不同url进行不同的限制，不会一竿子打死，也能保证互不影响。</p>
+<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>文章开头提到，由于粗心大意，我一度认为是版本问题导致本机无法触发限流，实际只是因为一个符号敲错，那就是其他所有都是对的，但是zuul.ratelimit.enabled=true在最开始被我敲成了zuul-ratelimit.enabled=true。<br>这个地方实际我检查了不下5遍，但不知为何始终没有发现问题，直到放了差不多一个月重新再看时，才终于看到了问题所在。<br>这是个多么低级的错误，就如同以前遇到的数据库密码多一个末尾空格一样，很有吐血的冲动。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/25/zuullimit/" data-id="cl02616rl00bkc0vh5qwv685n" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81/" rel="tag">服务限流</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2021/08/22/zongjie8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">时隔九月再起航</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-cloud-eureka-server注册中心"><span class="toc-number">2.</span> <span class="toc-text">spring cloud eureka server注册中心</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pom文件"><span class="toc-number">2.1.</span> <span class="toc-text">pom文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动类"><span class="toc-number">2.2.</span> <span class="toc-text">启动类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件"><span class="toc-number">2.3.</span> <span class="toc-text">配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#srping-cloud-eureka-client业务服务"><span class="toc-number">3.</span> <span class="toc-text">srping cloud eureka client业务服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pom文件-1"><span class="toc-number">3.1.</span> <span class="toc-text">pom文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动类-1"><span class="toc-number">3.2.</span> <span class="toc-text">启动类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#controller"><span class="toc-number">3.3.</span> <span class="toc-text">controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件-1"><span class="toc-number">3.4.</span> <span class="toc-text">配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#springcloud-zuul"><span class="toc-number">4.</span> <span class="toc-text">springcloud zuul</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pom文件-2"><span class="toc-number">4.1.</span> <span class="toc-text">pom文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动类-2"><span class="toc-number">4.2.</span> <span class="toc-text">启动类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件-2"><span class="toc-number">4.3.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cache配置类"><span class="toc-number">4.4.</span> <span class="toc-text">cache配置类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤器"><span class="toc-number">4.5.</span> <span class="toc-text">过滤器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#功能验证"><span class="toc-number">5.</span> <span class="toc-text">功能验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#验证limit"><span class="toc-number">5.1.</span> <span class="toc-text">验证limit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证refresh-interval"><span class="toc-number">5.2.</span> <span class="toc-text">验证refresh-interval</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证type"><span class="toc-number">5.3.</span> <span class="toc-text">验证type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#url-pattern"><span class="toc-number">5.4.</span> <span class="toc-text">url_pattern</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充说明"><span class="toc-number">6.</span> <span class="toc-text">补充说明</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/wp-content/uploads/2020/01/备案图标.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">简历</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
