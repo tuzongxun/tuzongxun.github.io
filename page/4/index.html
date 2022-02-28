@@ -110,6 +110,266 @@ var _hmt = _hmt || [];
 			
 			
   
+    <article id="post-redis5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/04/redis5/" class="article-date">
+  <time datetime="2020-08-04T03:59:42.000Z" itemprop="datePublished">2020-08-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/04/redis5/">springboot集成和使用redis常用功能</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>纯粹的redis命令行操作，可能就跟纯粹的mysql命令行操作一样，会有一种就是为了用而用的感觉。所以一般来说redis作为一个缓存中间件，都会辅以其他的客户端语言进行操作，比如java。<br>redis是开源的，java也是开源的，这就注定了java中连接redis的客户端不止一种，常见的有jedis、redisson、lettuce。<br>在如今一切都在高速运行的社会环境下，java软件开发也是极其追求代码产出效率，所以随处可见的都是springcloud、springboot。<br>springboot约定优于配置的思想，一定程度上也确实大大简化了开发工作，所以在学习java中的redis集成和使用时，我也一样选择了使用springboot。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/08/04/redis5/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2020/08/04/redis5/" data-id="cl06oj0pb005hg0vh17idcizj" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-redis4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/30/redis4/" class="article-date">
+  <time datetime="2020-07-30T03:59:42.000Z" itemprop="datePublished">2020-07-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/30/redis4/">redis常用高级功能小记（下篇)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上一篇说了redis的管道功能，并延伸了里边的一些linux基本操作，这一篇就把上一篇开篇讲的几个高级功能补全，上一篇说准备记录的高级功能有：</p>
+<blockquote>
+<p>管道<br>事务<br>发布/订阅<br>过期<br>布隆过滤器</p>
+</blockquote>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>除了管道，redis还有事务，可以一定程度上保证一组操作的原子性。主要用到<code>multi</code>、<code>exec</code>、<code>watch</code>以及<code>unwatch</code>这些关键词。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/07/30/redis4/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2020/07/30/redis4/" data-id="cl06oj0pe005jg0vhfis0baic" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-redis3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/29/redis3/" class="article-date">
+  <time datetime="2020-07-29T13:59:42.000Z" itemprop="datePublished">2020-07-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/29/redis3/">redis常用高级功能小记（上篇）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>redis拥有五种数据类型，不同类型的数据有不同的特性，恰当的使用可以实现很多特别的功能，除此之外，redis自身也封装了或者支持一些特殊的操作，可以称为redis的高级功能。</p>
+<p>redis基本数据结构和应用场景介绍可以参考之前的博客</p>
+<p><a href="https://blog.csdn.net/tuzongxun/article/details/107371302" target="_blank" rel="noopener">redis数据类型要点知识及应用场景</a></p>
+<p>redis高级功能很多，这里只准备记录如下几种：</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/07/29/redis3/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2020/07/29/redis3/" data-id="cl06oj0p8005eg0vh13877j81" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-zhuangxiu" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/24/zhuangxiu/" class="article-date">
+  <time datetime="2020-07-24T03:43:58.000Z" itemprop="datePublished">2020-07-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%A3%85%E4%BF%AE/">装修</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/24/zhuangxiu/">装修纪~~从装修中体味人生</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>看着眼前这一面面洁白的墙，</p>
+<p>心情便和房间一样变得敞亮，</p>
+<p>望着头顶这一盏盏闪亮的灯，</p>
+<p>笑容就不知不觉的来到脸上。</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/07/24/zhuangxiu/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2020/07/24/zhuangxiu/" data-id="cl06oj0qt0083g0vh8ofrev9f" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%A3%85%E4%BF%AE/" rel="tag">装修</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-jiaxun1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/22/jiaxun1/" class="article-date">
+  <time datetime="2020-07-22T15:09:42.000Z" itemprop="datePublished">2020-07-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/22/jiaxun1/">诫子书（诸葛亮）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>原文</strong>：</p>
+<p>夫君子之行，静以修身，俭以养德。</p>
+<p>非淡泊无以明志，非宁静无以致远。</p>
+<p>夫学须静也，才须学也，非学无以广才，非志无以成学。</p>
+<p>淫慢则不能励精，险躁则不能治性。</p>
+<p>年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！</p>
+        
+          <p class="article-more-link">
+            <a href="/2020/07/22/jiaxun1/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2020/07/22/jiaxun1/" data-id="cl06oj0ni002og0vh3n0d3d82" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AE%B6%E8%AE%AD/" rel="tag">家训</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-redis2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/07/15/redis2/" class="article-date">
@@ -153,7 +413,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/07/15/redis2/" data-id="cl06jdji8004swsvh58sear7u" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/07/15/redis2/" data-id="cl06oj0p6005cg0vh5tqu9bk4" class="article-share-link">分享</a>
       
       
       
@@ -202,7 +462,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/07/06/linux2/" data-id="cl06jdjgk002gwsvhcznx1fjk" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/07/06/linux2/" data-id="cl06oj0nu0035g0vhg4oq7mjy" class="article-share-link">分享</a>
       
       
       
@@ -251,7 +511,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/06/29/linux1/" data-id="cl06jdjgs002lwsvhgsnx0n8j" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/06/29/linux1/" data-id="cl06oj0nt0032g0vhcjwa73yn" class="article-share-link">分享</a>
       
       
       
@@ -300,258 +560,11 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/06/20/redis1/" data-id="cl06jdji6004qwsvh7f6e9ht1" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/06/20/redis1/" data-id="cl06oj0p40059g0vh742k7boy" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hexo2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/19/hexo2/" class="article-date">
-  <time datetime="2020-06-19T00:55:29.000Z" itemprop="datePublished">2020-06-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/hexo/">hexo</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/19/hexo2/">hexo博客迁移记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>电脑出故障重装了系统，导致相应的一些软件都要重装。<br>重装git、node.js和hexo后，发现原本的hexo功能无法全部正常使用，一番处理后便有了如下的操作记录。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/06/19/hexo2/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/06/19/hexo2/" data-id="cl06jdjg6001uwsvhchmn1lqz" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-tzxblog7" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/13/tzxblog7/" class="article-date">
-  <time datetime="2020-03-13T10:09:42.000Z" itemprop="datePublished">2020-03-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/13/tzxblog7/">前后台打通之vue和vant前端要点及设计问题记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>接着上一次的后台要点记录，这次再总结一下前台的要点，同时对于整体搭建过程中的一些感想也一并记录。<br>相对于后台来说，前台是弱项，也不是目前的本职，所以前台的记录可能就更基础。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/03/13/tzxblog7/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/03/13/tzxblog7/" data-id="cl06jdjjc006owsvhf7rp9wg2" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-tzxblog6" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/05/tzxblog6/" class="article-date">
-  <time datetime="2020-03-05T10:09:42.000Z" itemprop="datePublished">2020-03-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/05/tzxblog6/">前后台打通之springboot后台要点记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>接着之前的vue前端项目搭建成功，在实现了一些基本的页面功能之后，现在再搭建一下基础的后台，从而实现前后台打通，以下是整个打通过程中的一些关键点及感悟记录：</p>
-<p>springboot的后台项目搭建比较简单，如果单纯的实现接口的话，实际上没什么好说的，但是为了看起来不那么单调，就先暂时集成了一些非常基础的组件，例如logback、mybatis、lombok等。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/03/05/tzxblog6/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/03/05/tzxblog6/" data-id="cl06jdjja006mwsvhepar4yx0" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-tzxblog5" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/01/tzxblog5/" class="article-date">
-  <time datetime="2020-03-01T06:09:42.000Z" itemprop="datePublished">2020-03-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/tzxblog5/">vue前端项目搭建和要点记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vue-cli2和vue-cli3（vue-cli4）的一些区别</p>
-<p>据我目前的了解，创建vue项目，vue-cli不是必须的，但是在实际开发时，几乎就是必须的。vue-cli既可以看做是一种创建vue项目的快捷工具，也可能理解成是vue的一种规范。<br>由于本机的vue-cli安装较早，还是vue-cli2的版本，而如今早已经是vue-cli4，所以也是时候进行一定的升级了，升级过程以及升级之后的部分区别记录如下：</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/03/01/tzxblog5/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/03/01/tzxblog5/" data-id="cl06jdjj9006hwsvha484hxya" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-tzxblog4" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/02/02/tzxblog4/" class="article-date">
-  <time datetime="2020-02-02T06:09:42.000Z" itemprop="datePublished">2020-02-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/">业余项目</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/02/tzxblog4/">tzxblog博客系统-接口文档</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="V1-0"><a href="#V1-0" class="headerlink" title="V1.0"></a>V1.0</h1><h1 id="接口安全说明"><a href="#接口安全说明" class="headerlink" title="接口安全说明"></a>接口安全说明</h1><p>所有接口需要实现签名，前台向后台发起请求前需要在header中添加签名参数和签名，以减少后台服务器的被攻击可能性。<br>签名参数至少包含url、时间戳，有token的接口也需要对token签名，以参数名首字母排序后使用&amp;符号拼接后，进行rsa256算法签名。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/02/02/tzxblog4/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/02/02/tzxblog4/" data-id="cl06jdjj8006ewsvh7vmg4stb" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tzxblog/" rel="tag">tzxblog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E4%BD%99%E9%A1%B9%E7%9B%AE/" rel="tag">业余项目</a></li></ul>
 
     </footer>
   </div>
@@ -593,23 +606,23 @@ var _hmt = _hmt || [];
       <ul>
         
           <li>
-            <a href="/2022/02/28/stream/">java stream api熟悉和理解</a>
+            <a href="/2022/02/28/junit/">我以为我会junit，原来我还不会</a>
           </li>
         
           <li>
-            <a href="/2022/02/28/lambda/">lambda表达式基础</a>
+            <a href="/2022/02/28/jenkins1/">jenkins pipeline部署实践及重点问题分析</a>
           </li>
         
           <li>
-            <a href="/2022/02/25/zuullimit/">使用spring-cloud-zuul-rate-limit在zuul中为服务限流</a>
+            <a href="/2022/02/28/jenkins3/">jenkins初步理解及参数化构建</a>
           </li>
         
           <li>
-            <a href="/2021/08/22/zongjie8/">时隔九月再起航</a>
+            <a href="/2022/02/28/jenkins2/">centos7中jenkins安装和验证</a>
           </li>
         
           <li>
-            <a href="/2020/11/30/python1/">使用python和java一键替换word文件内容</a>
+            <a href="/2022/02/28/idea/">idea常用功能笔记</a>
           </li>
         
       </ul>

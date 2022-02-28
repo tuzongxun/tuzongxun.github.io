@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>centos7中jenkins安装和验证 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言以前了解过jenkins，也大概知道做什么的，但是由于有专门的运维，因此并没有太多实际使用。但是作为DevOps中比较重要的一个工具，还是有必要加强这方面的能力，因此就在本地虚拟机安装了一个进行相关的学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos7中jenkins安装和验证">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/28/jenkins2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言以前了解过jenkins，也大概知道做什么的，但是由于有专门的运维，因此并没有太多实际使用。但是作为DevOps中比较重要的一个工具，还是有必要加强这方面的能力，因此就在本地虚拟机安装了一个进行相关的学习。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-28T09:43:58.000Z">
+<meta property="article:modified_time" content="2022-02-28T11:44:21.983Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-jenkins2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/28/jenkins2/" class="article-date">
+  <time datetime="2022-02-28T09:43:58.000Z" itemprop="datePublished">2022-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      centos7中jenkins安装和验证
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>以前了解过<code>jenkins</code>，也大概知道做什么的，但是由于有专门的运维，因此并没有太多实际使用。<br>但是作为<code>DevOps</code>中比较重要的一个工具，还是有必要加强这方面的能力，因此就在本地虚拟机安装了一个进行相关的学习。</p>
+<a id="more"></a>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>虚拟机系统是<code>centos7.5</code>，安装的jdk是<code>java1.8.0_261</code>，虚拟机ip是<code>192.168.19.199</code>。</p>
+<h2 id="安装包下载"><a href="#安装包下载" class="headerlink" title="安装包下载"></a>安装包下载</h2><p>jenkins安装包有很多种，这里选中比较简单的war包。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;get.jenkins.io&#x2F;war-stable&#x2F;2.303.1&#x2F;jenkins.war</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar jenkins.war</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，第一次启动时有一串密码，在稍后登陆的时候需要用到。</p>
+<h2 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h2><p>第一次访问时，需要输入启动时的那串密码，同时要设置用户名密码，还会提示安装初始推荐的插件，可选择不安装，我这里就没有安装。访问地址<code>http://192.168.19.199:8080/</code></p>
+<h2 id="插件安装源更换"><a href="#插件安装源更换" class="headerlink" title="插件安装源更换"></a>插件安装源更换</h2><p>插件安装可以在线安装，也可以离线安装，为了简单，我这里就选择在线安装。<br>同时，为了加快安装速度，我修改了插件源，修改成了<code>https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</code></p>
+<h2 id="服务器安装maven和git"><a href="#服务器安装maven和git" class="headerlink" title="服务器安装maven和git"></a>服务器安装maven和git</h2><p>据我目前的了解，jenkins在DevOps中的一个重要作用就是自动化部署，涉及到的基础依赖就是git和maven，所以我打算先安装maven和git插件，如果实际用的时候不需要git也不需要maven，那么也就不需要安装。<br>再由于插件实际只是一个软件功能的集成，而不是软件本身的功能，所以还需要在jenkins服务器上安装maven和git。</p>
+<h3 id="maven安装"><a href="#maven安装" class="headerlink" title="maven安装"></a>maven安装</h3><h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;maven&#x2F;maven-3&#x2F;3.6.1&#x2F;binaries&#x2F;apache-maven-3.6.1-bin.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h4 id="解压并配置settings-xml"><a href="#解压并配置settings-xml" class="headerlink" title="解压并配置settings.xml"></a>解压并配置settings.xml</h4><p>这里我直接复制了windows中之前使用的maven的<code>settings.xml</code></p>
+<h4 id="配置MAVEN-HOME"><a href="#配置MAVEN-HOME" class="headerlink" title="配置MAVEN_HOME"></a>配置MAVEN_HOME</h4><p>修改<code>/etc/profile</code>文件，加入<code>MAVEN_HOME</code>的环境变量，并执行<code>source /etc/profile</code>加载环境变量。</p>
+<h3 id="git安装"><a href="#git安装" class="headerlink" title="git安装"></a>git安装</h3><p>git安装使用了更简单的方式，直接使用yum安装，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y git</span><br></pre></td></tr></table></figure>
+
+<h2 id="jenkins安装git和maven插件"><a href="#jenkins安装git和maven插件" class="headerlink" title="jenkins安装git和maven插件"></a>jenkins安装git和maven插件</h2><p>有了上述基础后，就可以在jenkins的界面上在线安装maven和git的插件了，搜索git和maven就可以，会把相关依赖的其他插件都一起安装，安装完后重启jenkins。</p>
+<h1 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h1><p>为了验证jenkins和git插件都确实安装成功，创建一个简单的item进行测试。</p>
+<h2 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h2><p>我没有装中文版插件，英文版就是<code>New Item</code>，然后输入一个名称，选择自由项目，英文版<code>Freestyle project</code>。</p>
+<h2 id="配置github地址"><a href="#配置github地址" class="headerlink" title="配置github地址"></a>配置github地址</h2><p>我在github上有一个简单的springboot项目，只有一个helloworld的接口，这里就指向这个project。在<code>Source Code Management</code>这里配置git的<code>Repository URL</code>为<code>git@github.com:tuzongxun/base-springboot.git</code>。<br>需要注意的是，这里似乎只能使用git协议的，如果使用https的，即使用户名密码正确，后边从github拉代码时也会失败。</p>
+<h2 id="配置ssh-key"><a href="#配置ssh-key" class="headerlink" title="配置ssh key"></a>配置ssh key</h2><p>使用git协议的时候，需要配置ssh key。在jenkins服务器执行<code>ssh-keygen</code>就会生成公私钥对，例如<code>id_rsa</code> 和<code>id_rsa.pub</code>。<br>pub结尾的是公钥，需要配置到github中。<br>没有pub的是私钥，需要在上边jenkins中配置github的url那里配置，要注意类型选择<code>SSH Username with private key</code>，然后复制id_rsa中的内容粘贴进去。</p>
+<h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><p>配置好之后点击<code>Build Now</code>进行构建，稍等一会儿后执行成功，在console中看到如下日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Console Output</span><br><span class="line">Started by user 涂宗勋</span><br><span class="line">Running as SYSTEM</span><br><span class="line">Building in workspace &#x2F;root&#x2F;.jenkins&#x2F;workspace&#x2F;base-springboot</span><br><span class="line">The recommended git tool is: NONE</span><br><span class="line">using credential 3bdb20f7-1c4f-4a34-98c0-ef1b9202cbe2</span><br><span class="line"> &gt; git rev-parse --resolve-git-dir &#x2F;root&#x2F;.jenkins&#x2F;workspace&#x2F;base-springboot&#x2F;.git # timeout&#x3D;10</span><br><span class="line">Fetching changes from the remote Git repository</span><br><span class="line"> &gt; git config remote.origin.url git@github.com:tuzongxun&#x2F;base-springboot.git # timeout&#x3D;10</span><br><span class="line">Fetching upstream changes from git@github.com:tuzongxun&#x2F;base-springboot.git</span><br><span class="line"> &gt; git --version # timeout&#x3D;10</span><br><span class="line"> &gt; git --version # &#39;git version 1.8.3.1&#39;</span><br><span class="line">using GIT_SSH to set credentials </span><br><span class="line">[INFO] Currently running in a labeled security context</span><br><span class="line">[INFO] Currently SELinux is &#39;enforcing&#39; on the host</span><br><span class="line"> &gt; &#x2F;usr&#x2F;bin&#x2F;chcon --type&#x3D;ssh_home_t &#x2F;root&#x2F;.jenkins&#x2F;workspace&#x2F;base-springboot@tmp&#x2F;jenkins-gitclient-ssh8748129526411728188.key</span><br><span class="line"> &gt; git fetch --tags --progress git@github.com:tuzongxun&#x2F;base-springboot.git +refs&#x2F;heads&#x2F;*:refs&#x2F;remotes&#x2F;origin&#x2F;* # timeout&#x3D;10</span><br><span class="line"> &gt; git rev-parse refs&#x2F;remotes&#x2F;origin&#x2F;master^&#123;commit&#125; # timeout&#x3D;10</span><br><span class="line">Checking out Revision 19065451d6cd9890de4b751c0e7af06de6628ec5 (refs&#x2F;remotes&#x2F;origin&#x2F;master)</span><br><span class="line"> &gt; git config core.sparsecheckout # timeout&#x3D;10</span><br><span class="line"> &gt; git checkout -f 19065451d6cd9890de4b751c0e7af06de6628ec5 # timeout&#x3D;10</span><br><span class="line">Commit message: &quot;init&quot;</span><br><span class="line">First time build. Skipping changelog.</span><br><span class="line">Finished: SUCCESS</span><br></pre></td></tr></table></figure>
+
+<p>可以看到成功从git中拉取到了代码，证明jenkins和git插件安装没有问题，至于其他功能，待后续再进一步学习和验证。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/28/jenkins2/" data-id="cl06oj0nb002bg0vhegrih7fm" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/02/28/jenkins3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          jenkins初步理解及参数化构建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/02/28/idea/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">idea常用功能笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境"><span class="toc-number">2.1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装包下载"><span class="toc-number">2.2.</span> <span class="toc-text">安装包下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动"><span class="toc-number">2.3.</span> <span class="toc-text">启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问"><span class="toc-number">2.4.</span> <span class="toc-text">访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插件安装源更换"><span class="toc-number">2.5.</span> <span class="toc-text">插件安装源更换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#服务器安装maven和git"><span class="toc-number">2.6.</span> <span class="toc-text">服务器安装maven和git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#maven安装"><span class="toc-number">2.6.1.</span> <span class="toc-text">maven安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#下载"><span class="toc-number">2.6.1.1.</span> <span class="toc-text">下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解压并配置settings-xml"><span class="toc-number">2.6.1.2.</span> <span class="toc-text">解压并配置settings.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置MAVEN-HOME"><span class="toc-number">2.6.1.3.</span> <span class="toc-text">配置MAVEN_HOME</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git安装"><span class="toc-number">2.6.2.</span> <span class="toc-text">git安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jenkins安装git和maven插件"><span class="toc-number">2.7.</span> <span class="toc-text">jenkins安装git和maven插件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#验证"><span class="toc-number">3.</span> <span class="toc-text">验证</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#新建项目"><span class="toc-number">3.1.</span> <span class="toc-text">新建项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置github地址"><span class="toc-number">3.2.</span> <span class="toc-text">配置github地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置ssh-key"><span class="toc-number">3.3.</span> <span class="toc-text">配置ssh key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#build"><span class="toc-number">3.4.</span> <span class="toc-text">build</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_uv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>jenkins初步理解及参数化构建 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="jenkins构建和插件的初步理解就我目前了解到的，一个jenkins自动化部署，至少包含拉代码、编译和打包及运行单元测试、部署这几个步骤。拉代码指的是从代码托管服务器下载代码，编译和打包及运行单元测试，实际上是项目构建工具的功能，例如maven、gradle。根据个人理解，jenkins不安装插件，也能够完成基本的自动化部署，因为它本身就支持运行shell脚本，支持参数化构建，支持多种触发器等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenkins初步理解及参数化构建">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/28/jenkins3/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="jenkins构建和插件的初步理解就我目前了解到的，一个jenkins自动化部署，至少包含拉代码、编译和打包及运行单元测试、部署这几个步骤。拉代码指的是从代码托管服务器下载代码，编译和打包及运行单元测试，实际上是项目构建工具的功能，例如maven、gradle。根据个人理解，jenkins不安装插件，也能够完成基本的自动化部署，因为它本身就支持运行shell脚本，支持参数化构建，支持多种触发器等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e4792b1eb4f3436fb8ec438ac9be3ea3.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/49d1f9fcc7bd4402960b4d10df0bc92c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b2fd03031ee245eba01e6c1164cdd5ee.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f0f8cb3bf9054c77880b0fe6c5e658ef.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/82b68aa877e94dfe8ea3ad902764d77d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/bc346c5320b845938b253397b6eded77.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f8a1d40ca8f8416790f9c1f1ed2fb627.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="article:published_time" content="2022-02-28T10:33:58.000Z">
+<meta property="article:modified_time" content="2022-02-28T11:49:32.871Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/e4792b1eb4f3436fb8ec438ac9be3ea3.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-jenkins3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/28/jenkins3/" class="article-date">
+  <time datetime="2022-02-28T10:33:58.000Z" itemprop="datePublished">2022-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      jenkins初步理解及参数化构建
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="jenkins构建和插件的初步理解"><a href="#jenkins构建和插件的初步理解" class="headerlink" title="jenkins构建和插件的初步理解"></a>jenkins构建和插件的初步理解</h2><p>就我目前了解到的，一个jenkins自动化部署，至少包含拉代码、编译和打包及运行单元测试、部署这几个步骤。<br>拉代码指的是从代码托管服务器下载代码，编译和打包及运行单元测试，实际上是项目构建工具的功能，例如maven、gradle。<br>根据个人理解，jenkins不安装插件，也能够完成基本的自动化部署，因为它本身就支持运行shell脚本，支持参数化构建，支持多种触发器等。只要能运行shell脚本，那么不论是拉代码，还是构建和部署，都是可以通过linux的命令完成的。（这一段没有经过验证，也基本不会这样使用）<br>但是，jenkins本身就是为了自动化，为了简化我们的工作，所以如果有能够进一步提升效率、简化操作的插件，当然是能用就用了，例如常见的git插件、maven插件等。<br>git基础插件，在系统管理的插件管理中搜索<code>git plugin</code>。<br>maven基础插件，插件名称是<code>Maven Integration plugin</code>。<br>当然了，刚安装的jenkins一般都是英文版，可能大部分人都还会安装汉化插件，也就是<code>Localization: Chinese (Simplified)</code>。</p>
+<a id="more"></a>
+<h2 id="参数化构建和git增强参数化构建"><a href="#参数化构建和git增强参数化构建" class="headerlink" title="参数化构建和git增强参数化构建"></a>参数化构建和git增强参数化构建</h2><p>jenkins一开始就带有<code>构建自由风格项目</code>这个功能，当安装了maven插件后，还能构建<code>maven风格项目</code>。<br>不论是构建自由风格的项目，还是构建maven风格的项目，在配置那里都能使用基础的参数化构建功能，如图：<br><img src="https://img-blog.csdnimg.cn/e4792b1eb4f3436fb8ec438ac9be3ea3.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>不使用参数化构建功能时，只有<code>立即构建</code>的选项，当使用了参数化构建之后，原本的<code>立即构建</code>就会变<code>Build with Parameters</code>。<br>例如我使用参数化构建，创建两个参数，一个字符参数，一个文本参数，使用<code>Build with Parameters</code>之后就不会像之前一样直接就开始运行，而是跳转到填写参数的界面，如图：<br><img src="https://img-blog.csdnimg.cn/49d1f9fcc7bd4402960b4d10df0bc92c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>填写参数后，点击<code>开始构建</code>才会正式构建。<br>但是基础的参数化构建基本都是要手动填写或者设置，例如常见的git的branch选择，可能需要手动设置branch的名称，为了进一步简化，就有git参数化构建的增强插件，例如<code>Git Parameter</code>，装了这个插件后，会自动拉取 git的branch，然后选择对应的就好，少了填写和手动修改的动作，安装了<code>git parameter</code>后，我把上边的branch改为git参数，如图：<br><img src="https://img-blog.csdnimg.cn/b2fd03031ee245eba01e6c1164cdd5ee.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>然后<code>Build with Parameters</code>后，界面如下：<br><img src="https://img-blog.csdnimg.cn/f0f8cb3bf9054c77880b0fe6c5e658ef.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>会看到提示git残酷配置错误，原因是没有指定git的路径，那么增加git仓库和用户凭证配置：<br><img src="https://img-blog.csdnimg.cn/82b68aa877e94dfe8ea3ad902764d77d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>注意这里的分支使用了变量<code>${branch}</code>这样的写法，<code>branch</code>就是在上边参数化构建那里指定的参数名。<br>有这个配置后，再<code>Build with Parameters</code>就可以看到自动刷新了git分支供选择：<br><img src="https://img-blog.csdnimg.cn/bc346c5320b845938b253397b6eded77.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>选择对应的分之后点击立即构建，也会正确识别到branch然后执行任务：<br><img src="https://img-blog.csdnimg.cn/f8a1d40ca8f8416790f9c1f1ed2fb627.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16" alt="请添加图片描述"><br>git和maven等插件，让我们的jenkins构建变的更加简单方便，而参数化构建能让构建变得更加灵活。<br>这些常用插件和基础功能远不止这些，甚至有的功能还会有多个插件可选，但是基本网上都能搜到，可以再实际需要的时候一一了解。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/28/jenkins3/" data-id="cl06oj0nd002gg0vhefemhgjw" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/02/28/jenkins1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          jenkins pipeline部署实践及重点问题分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/02/28/jenkins2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">centos7中jenkins安装和验证</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#jenkins构建和插件的初步理解"><span class="toc-number">1.</span> <span class="toc-text">jenkins构建和插件的初步理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数化构建和git增强参数化构建"><span class="toc-number">2.</span> <span class="toc-text">参数化构建和git增强参数化构建</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_uv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

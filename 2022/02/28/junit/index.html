@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>我以为我会junit，原来我还不会 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="junit从某种程度上来说应该是很简单的一项技术，但是正所谓会者不难，难者不会，如果没有好好地用过，总会有些你以为是对的地方，其实他是错的。对于有7年java开发经验的我来说，不完全会写junit，实在是汗颜。以前的项目基本都没怎么要求写junit，所以我一直误以为junit简单到就是在Test中调一下相关方法，只要跑出绿色结果就好了，直到这一次需要相对正式的junit时，才发现这样是不对的，以下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我以为我会junit，原来我还不会">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/28/junit/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="junit从某种程度上来说应该是很简单的一项技术，但是正所谓会者不难，难者不会，如果没有好好地用过，总会有些你以为是对的地方，其实他是错的。对于有7年java开发经验的我来说，不完全会写junit，实在是汗颜。以前的项目基本都没怎么要求写junit，所以我一直误以为junit简单到就是在Test中调一下相关方法，只要跑出绿色结果就好了，直到这一次需要相对正式的junit时，才发现这样是不对的，以下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/903f8b0068e443f8be0e3c5e81f02b5f.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5d4af9ac0a5945b19419f88118c2dee5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ebc9ba42a0db4f79934ed8a08536de29.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4ac36cb601b846a59ff2869108d448e5.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1797b56bd35e4f7aa1653c40e1025bd8.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/428d765ddd3347d5ad160b1745ea6de1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="article:published_time" content="2022-02-28T11:43:58.000Z">
+<meta property="article:modified_time" content="2022-02-28T11:47:34.838Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="junit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/903f8b0068e443f8be0e3c5e81f02b5f.png#pic_center">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-junit" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/28/junit/" class="article-date">
+  <time datetime="2022-02-28T11:43:58.000Z" itemprop="datePublished">2022-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      我以为我会junit，原来我还不会
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p><code>junit</code>从某种程度上来说应该是很简单的一项技术，但是正所谓会者不难，难者不会，如果没有好好地用过，总会有些你以为是对的地方，其实他是错的。<br>对于有7年java开发经验的我来说，不完全会写junit，实在是汗颜。<br>以前的项目基本都没怎么要求写junit，所以我一直误以为junit简单到就是在Test中调一下相关方法，只要跑出绿色结果就好了，直到这一次需要相对正式的junit时，才发现这样是不对的，以下是从错到对的一个记录。</p>
+<a id="more"></a>
+<h2 id="业务功能代码"><a href="#业务功能代码" class="headerlink" title="业务功能代码"></a>业务功能代码</h2><p>例如我这里有一个很简单的<code>Service</code>，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2021&#x2F;9&#x2F;1</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Service</span><br><span class="line">public class TestService &#123;</span><br><span class="line"></span><br><span class="line">   public String hello(String name)&#123;</span><br><span class="line">      if(&quot;张三&quot;.equals(name))&#123;</span><br><span class="line">         System.out.println(&quot;名字：&quot;+name);</span><br><span class="line">         return &quot;你好，张三&quot;;</span><br><span class="line">      &#125;</span><br><span class="line">      System.out.println(&quot;name:&quot;+name);</span><br><span class="line">      return &quot;hello,welcome:&quot;+name;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误的junit"><a href="#错误的junit" class="headerlink" title="错误的junit"></a>错误的junit</h2><p>按照以往的认知，我写的junit是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2021&#x2F;9&#x2F;7</span><br><span class="line"> *&#x2F;</span><br><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class ServiceTest &#123;</span><br><span class="line"></span><br><span class="line">   @Autowired</span><br><span class="line">   private TestService testService;</span><br><span class="line"></span><br><span class="line">   @Test</span><br><span class="line">   public void helloZhangsanTest() &#123;</span><br><span class="line">      String res &#x3D; testService.hello(&quot;张三&quot;);</span><br><span class="line">      System.out.println(res);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误的认知"><a href="#错误的认知" class="headerlink" title="错误的认知"></a>错误的认知</h2><p>上边的junit是可以运行的，运行之后的结果状态是绿色，显示<code>Tests passed</code>，如图：<br><img src="https://img-blog.csdnimg.cn/903f8b0068e443f8be0e3c5e81f02b5f.png#pic_center" alt="在这里插入图片描述"></p>
+<p>因为没有报错，输出也是passed，所以我理所当然的以为这就是正确的junit了，这样就可以完美的上线了。<br>然而，并不是。</p>
+<h2 id="错在哪儿，怎么解决"><a href="#错在哪儿，怎么解决" class="headerlink" title="错在哪儿，怎么解决"></a>错在哪儿，怎么解决</h2><p>上边的junit错在哪儿呢？起码有这样两个：</p>
+<ol>
+<li>只是调用了相关代码，而没有预期的结果；</li>
+<li>功能代码覆盖不足；</li>
+</ol>
+<h3 id="断言assert"><a href="#断言assert" class="headerlink" title="断言assert"></a>断言assert</h3><p>怎么理解呢，首先第一个，我这里调用了hello方法并打印了返回值，我心里相信返回的结果肯定是我要的。<br>但是这里有一个误区，那就是junit的作用是做什么的。junit在我理解，某种程度上就是不相信你相信的，你心里的相信无效，所以才要代码进行验证。<br>因此这个问题的解决方式实际就是加入断言<code>assert</code>，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void helloZhangsanTest() &#123;</span><br><span class="line">   String res &#x3D; testService.hello(&quot;张三&quot;);</span><br><span class="line">   System.out.println(res);</span><br><span class="line">   Assert.assertEquals(&quot;预期结果不一样&quot;,&quot;你好，张三&quot;,res);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么当我们再执行test时，其实会发现结果和开始是一样的。<br>但是，如果稍微改一下代码，假如在service中我手误把<code>return &quot;你好，张三&quot;;</code>打成了<code>return &quot;你好，张三三&quot;;</code>，那么当再执行上边的test方法时就会报错，像这样：<br><img src="https://img-blog.csdnimg.cn/5d4af9ac0a5945b19419f88118c2dee5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>那么，当我去掉断言那行代码，重新执行test方法，会发现这时候执行结果还是<code>Tests passed</code>，但是很显然那个service中的代码是有问题的，而我的junit根本没能测试出来，也就更加证明没有加断言预期结果的junit其实是无效的junit。</p>
+<h3 id="功能覆盖率"><a href="#功能覆盖率" class="headerlink" title="功能覆盖率"></a>功能覆盖率</h3><p>对于功能覆盖率问题，可以看到在hello方法中，有效代码是6行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if(&quot;张三&quot;.equals(name))&#123;</span><br><span class="line">   System.out.println(&quot;名字：&quot;+name);</span><br><span class="line">   return &quot;你好，张三三&quot;;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(&quot;name:&quot;+name);</span><br><span class="line">return &quot;hello,welcome:&quot;+name;</span><br></pre></td></tr></table></figure>
+
+<p>而我的junit中因为还如的参数是<code>张三</code>,所以实际上只会走前边的几行，也就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if(&quot;张三&quot;.equals(name))&#123;</span><br><span class="line">   System.out.println(&quot;名字：&quot;+name);</span><br><span class="line">   return &quot;你好，张三三&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么还有剩下的两行是不会走的，也就是说这个junit中并没有覆盖到足够的代码，没有覆盖到，就不能保证没有问题，就跟上边没有加断言一样。<br>所以这里解决办法呢，就是要在junit中加入另一种情况，很显然，在我这里需要加入<code>不是张三</code>的，例如我再加一个方法，然后整个<code>ServiceTest</code>类就成了这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class ServiceTest &#123;</span><br><span class="line"></span><br><span class="line">   @Autowired</span><br><span class="line">   private TestService testService;</span><br><span class="line"></span><br><span class="line">   @Test</span><br><span class="line">   public void helloZhangsanTest() &#123;</span><br><span class="line">      String res &#x3D; testService.hello(&quot;张三&quot;);</span><br><span class="line">      System.out.println(res);</span><br><span class="line">      Assert.assertEquals(&quot;预期结果不一样&quot;,&quot;你好，张三&quot;,res);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @Test</span><br><span class="line">   public void helloNotZhangsanTest() &#123;</span><br><span class="line">      String res &#x3D; testService.hello(&quot;lisi&quot;);</span><br><span class="line">      System.out.println(res);</span><br><span class="line">      Assert.assertEquals(&quot;预期结果不一样&quot;,&quot;hello,welcome:lisi&quot;,res);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="junit常用注解"><a href="#junit常用注解" class="headerlink" title="junit常用注解"></a>junit常用注解</h2><p>之所以说junit从某种程度来说很简单，就是因为基本都是借助一些注解和方法，都还是比较好理解的，除了上边出现的<code>@Test</code>外，还有例如<code>@Before</code>、<code>@After</code>、<code>@BeforeClass</code>、<code>@AfterClass</code>以及<code>@Ignore</code>、<code>@Parameters</code>等等，以下是其中一些示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@BeforeClass</span><br><span class="line">public void beforeClass()&#123;</span><br><span class="line">   System.out.println(&quot;执行这个类的test前会执行一次&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Before</span><br><span class="line">public void before()&#123;</span><br><span class="line">   System.out.println(&quot;每个test执行前都要执行我&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@After</span><br><span class="line">public void after()&#123;</span><br><span class="line">   System.out.println(&quot;每个test执行完都要执行我&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AfterClass</span><br><span class="line">public void afterClass()&#123;</span><br><span class="line">   System.out.println(&quot;执行这个类的所有需要执行的test之后会执行一次&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="idea-junit代码覆盖率工具"><a href="#idea-junit代码覆盖率工具" class="headerlink" title="idea junit代码覆盖率工具"></a>idea junit代码覆盖率工具</h2><p>上边说了junit代码覆盖率问题，如果是用idea的话，实际上有工具可以帮助我们分析识别。<br>在相应的测试类上右键点击，例如我这里的TestService，会出现<code>Run “ServiceTest” with Coverage</code>这样一个选项，左键点击执行，运行完以后就会出现这样一个界面：<br><img src="https://img-blog.csdnimg.cn/ebc9ba42a0db4f79934ed8a08536de29.png#pic_center" alt="在这里插入图片描述"></p>
+<p>很显然，这里是我整个项目的内容，可以从<code>Element</code>下边点击进到需要看的类，例如我点击<code>Service</code>后就会出现下边这样的界面：<br><img src="https://img-blog.csdnimg.cn/4ac36cb601b846a59ff2869108d448e5.png#pic_center" alt="在这里插入图片描述"></p>
+<p>上边的结果是Class覆盖率100%，Method的覆盖率100%，代码行的覆盖率也是100%。<br>那么如果像最开始一样，只有一个参数是<code>张三</code>的测试方法，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class ServiceTest &#123;</span><br><span class="line"></span><br><span class="line">   @Autowired</span><br><span class="line">   private TestService testService;</span><br><span class="line"></span><br><span class="line">   @Test</span><br><span class="line">   public void helloZhangsanTest() &#123;</span><br><span class="line">      String res &#x3D; testService.hello(&quot;张三&quot;);</span><br><span class="line">      System.out.println(res);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再运行<code>Run “ServiceTest” with Coverage</code>，就会看到结果成了这样：<br><img src="https://img-blog.csdnimg.cn/1797b56bd35e4f7aa1653c40e1025bd8.png#pic_center" alt="在这里插入图片描述"></p>
+<p>因为我这里就是一个类，一个方法，所以Class和Method都还是100%，但是Line，也就是代码行的覆盖率就只有66%了，而且后边也明确的说了，6行只覆盖了四行。<br>那么这里有人可能就有疑问，到底是哪四行覆盖了，那两行没覆盖呢？<br>像这里代码比较简单，其实上边也说了是拿四行覆盖了，哪两行没覆盖。但是这里只是人工分析的，如果代码很多，就没有那么容易分析了。<br>那么实际上是可以直接看的，运行了上边的<code>Run “ServiceTest” with Coverage</code>之后，可以进入到实际业务功能代码中，例如我这里就是<code>TestService</code>的<code>hello</code>方法，进去之后会看到类似这样：<br><img src="https://img-blog.csdnimg.cn/428d765ddd3347d5ad160b1745ea6de1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>这里可以看到，13-15行后边有一条绿色的矩形，而17、18行则是红色的矩形，实际上这里的绿色就代表被覆盖了，而红色的代表没有被覆盖。<br>那么还有点小问题就是，这里绿色的3行，红色的2行，一共才5行，而实际代码有6行。<br>这是因为16行的括号和if方法是一体的，所以跑了if的内容后这个括号就也会被算作覆盖了。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>junit只是一个工具，那些注解以及各种辅助方法在需要的时候试一下，大概就会知道怎么用了。<br>再借助覆盖率分析工具，也能更好的进行junit的编写，可能很多公司不严格要求这个，但是一般有sonar扫描的公司多半都是需要这个的。<br>作为一个7年经验的开发，不会正确的写junit，确实是有点说不过去。<br>但是话说回来，对于一个7年经验还不会正确的写junit的人，团队领导和队友们都还能包容，不得不说我确实是很幸运的。<br>有团队如此，夫复何求。<br>感谢我的领导，感谢我的队友！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/28/junit/" data-id="cl06oj0nf002jg0vhgvqfdqic" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/junit/" rel="tag">junit</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/02/28/jenkins1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">jenkins pipeline部署实践及重点问题分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#业务功能代码"><span class="toc-number">1.</span> <span class="toc-text">业务功能代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#错误的junit"><span class="toc-number">2.</span> <span class="toc-text">错误的junit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#错误的认知"><span class="toc-number">3.</span> <span class="toc-text">错误的认知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#错在哪儿，怎么解决"><span class="toc-number">4.</span> <span class="toc-text">错在哪儿，怎么解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#断言assert"><span class="toc-number">4.1.</span> <span class="toc-text">断言assert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能覆盖率"><span class="toc-number">4.2.</span> <span class="toc-text">功能覆盖率</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#junit常用注解"><span class="toc-number">5.</span> <span class="toc-text">junit常用注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#idea-junit代码覆盖率工具"><span class="toc-number">6.</span> <span class="toc-text">idea junit代码覆盖率工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">7.</span> <span class="toc-text">后记</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_uv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
