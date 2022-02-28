@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>java stream api熟悉和理解 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言stream api和lambda表达式都是java8出来的，都可以简化代码，也经常会配合着使用。对于上边的说法，网上是这么说的，但是我自己写的时候，总觉得好像有的时候确实简洁很多，但也有时候似乎反而更麻烦。所以，根据我目前的理解，我觉得可能它有它的适用场景，但并不能说用它就一定好，但是以后会不会改变这种看法也很难说。就我目前的了解，stream api主要用在对list集合及数组的操作，最大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java stream api熟悉和理解">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/28/stream/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言stream api和lambda表达式都是java8出来的，都可以简化代码，也经常会配合着使用。对于上边的说法，网上是这么说的，但是我自己写的时候，总觉得好像有的时候确实简洁很多，但也有时候似乎反而更麻烦。所以，根据我目前的理解，我觉得可能它有它的适用场景，但并不能说用它就一定好，但是以后会不会改变这种看法也很难说。就我目前的了解，stream api主要用在对list集合及数组的操作，最大">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-28T06:43:59.000Z">
+<meta property="article:modified_time" content="2022-02-28T09:37:45.207Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="stream">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:120px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-stream" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/28/stream/" class="article-date">
+  <time datetime="2022-02-28T06:43:59.000Z" itemprop="datePublished">2022-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      java stream api熟悉和理解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>stream api和lambda表达式都是java8出来的，都可以简化代码，也经常会配合着使用。<br>对于上边的说法，网上是这么说的，但是我自己写的时候，总觉得好像有的时候确实简洁很多，但也有时候似乎反而更麻烦。<br>所以，根据我目前的理解，我觉得可能它有它的适用场景，但并不能说用它就一定好，但是以后会不会改变这种看法也很难说。<br>就我目前的了解，stream api主要用在对list集合及数组的操作，最大的优势在于各种中间操作。<br>stream api是把集合等数据转化成stream，然后提供了一系列的api，尤其是很多返回stram的中间操作api。<br>单纯的描述可能不好理解，下边是一些基础的示例和对比。</p>
+<a id="more"></a>
+
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>例如有这样一个实体类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class User &#123;</span><br><span class="line">   private String name;</span><br><span class="line">   private int age;</span><br><span class="line">   private String addr;</span><br><span class="line">   private double money;</span><br><span class="line">   &#x2F;&#x2F;get&#x2F;set等方法省略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后有这样一个list集合，元素是User。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">list.add(new User(&quot;tuzongxun&quot;, 31,&quot;hubei&quot;, 1000));</span><br><span class="line">list.add(new User(&quot;zhangsan&quot;, 22,&quot;hunan&quot;, 2000));</span><br><span class="line">list.add(new User(&quot;lisi&quot;, 12,&quot;guangdong&quot;, 300));</span><br><span class="line">list.add(new User(&quot;wangwu&quot;, 15,&quot;hubei&quot;, 10000));</span><br><span class="line">list.add(new User(&quot;zhaoliu&quot;, 52,&quot;hubei&quot;, 20000));</span><br><span class="line">list.add(new User(&quot;qianqi&quot;, 66,&quot;jiangxi&quot;, 1500));</span><br><span class="line">list.add(new User(&quot;huba&quot;, 73,&quot;sichuan&quot;, 200));</span><br><span class="line">list.add(new User(&quot;zhoujiu&quot;, 9,&quot;hubei&quot;, 20));</span><br></pre></td></tr></table></figure>
+
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>遍历是list集合常见的操作，用之前的增强for循环可能写成下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (User user : list) &#123;</span><br><span class="line">   System.out.println(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么，如果使用stream api就可以写成下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.stream().forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<p>这里首先把list转换成stream流，然后调用forEach进行遍历打印，在打印的时候，实际用到了lambda的方法调用，直接使用lambda表达式则应该是下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.stream().forEach(e-&gt;System.out.println(e));</span><br></pre></td></tr></table></figure>
+<p>关于lambda的方法调用，我也还在理解中。</p>
+<h3 id="过滤求和"><a href="#过滤求和" class="headerlink" title="过滤求和"></a>过滤求和</h3><p>除了遍历，过滤也是list比较常用的操作。那么就再来一个稍微复杂点的，先过滤，再求和，比如这里求addr是hubei的人的money的和，不用stream api的话，可能写成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">double money&#x3D;0;</span><br><span class="line">for (User user : list) &#123;</span><br><span class="line">   if (&quot;hubei&quot;.equals(user.getAddr())) &#123;</span><br><span class="line">      money+&#x3D;user.getMoney();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(money);</span><br></pre></td></tr></table></figure>
+
+<p>那么如果使用stream api，则可以写成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">double money1&#x3D;list.stream().filter(e -&gt; &quot;hubei&quot;.equals(e.getAddr())).mapToDouble(e-&gt;e.getMoney()).sum();</span><br><span class="line">System.out.println(money1);</span><br></pre></td></tr></table></figure>
+<p>这里可能例子举得不是太好，因为感觉用stream反而麻烦了一些，先要把list转成stream，然后过滤，之后再把money进行求和计算。只是，很多都是stream自带的api，调用起来很方便。</p>
+<h3 id="过滤求最小值"><a href="#过滤求最小值" class="headerlink" title="过滤求最小值"></a>过滤求最小值</h3><p>那么除了上边的，stream里还比较常用的api可能有max、min、count等，例如求hubei的年纪最小的人的年纪，不用stream api时写成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; hList&#x3D;new ArrayList&lt;&gt;();</span><br><span class="line">for(User user:list)&#123;</span><br><span class="line">   if (&quot;hubei&quot;.equals(user.getAddr())) &#123;</span><br><span class="line">      hList.add(user);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">list.sort(new Comparator&lt;User&gt;() &#123;</span><br><span class="line">   @Override</span><br><span class="line">   public int compare(User o1, User o2) &#123;</span><br><span class="line">      return o1.getAge()-o2.getAge();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;);</span><br><span class="line">System.out.println(list.get(0).getAge());</span><br></pre></td></tr></table></figure>
+
+<p>上边sort部分实际还可以改成lambda表达式，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">list.sort((o1,o2)-&gt;o1.getAge()-o2.getAge());</span><br><span class="line">list.sort(Comparator.comparingInt(User::getAge));</span><br></pre></td></tr></table></figure>
+
+<p>那么这里如果用stream api，就会看到会简洁很多：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int asInt &#x3D; list.stream().filter(e -&gt; &quot;hubei&quot;.equals(e.getAddr())).mapToInt(e -&gt; e.getAge()).min().getAsInt();</span><br><span class="line">System.out.println(asInt);</span><br></pre></td></tr></table></figure>
+
+<p>再比如，我要求hubei的人数，不用stream时可以写成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">long count&#x3D;0;</span><br><span class="line">for(User user:list)&#123;</span><br><span class="line">   if(&quot;hubei&quot;.equals(user.getAddr()))&#123;</span><br><span class="line">      count++;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(count);</span><br></pre></td></tr></table></figure>
+
+<p>那么使用stream api就可以写成这样，看起来也要简洁一些：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">long count1 &#x3D; list.stream().filter(e -&gt; &quot;hubei&quot;.equals(e.getAddr())).count();</span><br><span class="line">System.out.println(count1);</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>stream api实际没有那么难以理解，只要不抵触，稍加练习其实也就知道怎么用了。<br>不同的api有不同的作用，远不止上边列出来的这些，需要的时候，看一看，练一练，也就会了。<br>我其实是因为现在项目中有大量的这种代码，所以才要熟悉和理解，也是为了风格上一致。<br>只是有时候确实会让代码看起来更简洁，也是一种代码趋势。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/28/stream/" data-id="cl06idkqn0066a8vhbot5cid6" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/stream/" rel="tag">stream</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/02/28/lambda/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">lambda表达式基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">2.</span> <span class="toc-text">示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历"><span class="toc-number">2.1.</span> <span class="toc-text">遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤求和"><span class="toc-number">2.2.</span> <span class="toc-text">过滤求和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤求最小值"><span class="toc-number">2.3.</span> <span class="toc-text">过滤求最小值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_uv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_uv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+ <script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
