@@ -157,7 +157,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi2/" data-id="cl07ge56x005hrwvh2rpfbks3" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi2/" data-id="cl07i1hb2005qi0vh6amh7o22" class="article-share-link">分享</a>
       
       
       
@@ -224,19 +224,19 @@ var _hmt = _hmt || [];
 	
 <nav id="article-nav">
   
-    <a href="/2020/11/30/python1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/10/30/ruoyi1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          使用python和java一键替换word文件内容
+          若依管理系统RuoYi-Cloud版搭建记录
         
       </div>
     </a>
   
   
-    <a href="/2020/10/30/ruoyi1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/10/23/wenti3/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">若依管理系统RuoYi-Cloud版搭建记录</div>
+      <div class="article-nav-title">近期生产问题和解决方案记录</div>
     </a>
   
 </nav>
@@ -301,28 +301,23 @@ var _hmt = _hmt || [];
 	
   </div>
 </footer>
- 
+
 <script src="/jquery/jquery.min.js"></script>
 
- <script>
+<script>
 $(document).ready(function() {
-
-    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
-    var countOffset = 20000;  // 初始化首次数据
-
-    function fixCount() {            
-       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
-        {
-            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
-            clearInterval(int);
-        }                  
-        if ($("#busuanzi_container_site_pv").css("display") != "none")
-        {
-            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
-            clearInterval(int); // 停止检测
-        }  
-    }
-       	
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
 });
 </script> 
     </div>

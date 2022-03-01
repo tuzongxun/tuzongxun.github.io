@@ -233,7 +233,7 @@ public class ConsumerController {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2017/05/26/springcloud4/" data-id="cl07ge57a005zrwvh956953xs" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2017/05/26/springcloud4/" data-id="cl07i1hbg0067i0vhhgmc6ul5" class="article-share-link">分享</a>
       
       
       
@@ -377,28 +377,23 @@ public class ConsumerController {
 	
   </div>
 </footer>
- 
+
 <script src="/jquery/jquery.min.js"></script>
 
- <script>
+<script>
 $(document).ready(function() {
-
-    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
-    var countOffset = 20000;  // 初始化首次数据
-
-    function fixCount() {            
-       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
-        {
-            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
-            clearInterval(int);
-        }                  
-        if ($("#busuanzi_container_site_pv").css("display") != "none")
-        {
-            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
-            clearInterval(int); // 停止检测
-        }  
-    }
-       	
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
 });
 </script> 
     </div>

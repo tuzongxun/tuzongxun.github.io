@@ -146,7 +146,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/06/19/hexo2/" data-id="cl07ge548001lrwvhgcrc45f1" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/06/19/hexo2/" data-id="cl07i1h69001xi0vhhvfrgiam" class="article-share-link">分享</a>
       
       
       
@@ -195,7 +195,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/03/13/tzxblog7/" data-id="cl07ge57u0074rwvh79da8meg" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/03/13/tzxblog7/" data-id="cl07i1hc00078i0vh4k6i50bk" class="article-share-link">分享</a>
       
       
       
@@ -245,7 +245,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/03/05/tzxblog6/" data-id="cl07ge57r006xrwvhh55h94dr" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/03/05/tzxblog6/" data-id="cl07i1hby0075i0vhawj98q85" class="article-share-link">分享</a>
       
       
       
@@ -295,7 +295,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/03/01/tzxblog5/" data-id="cl07ge57o006vrwvh7f33dqyo" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/03/01/tzxblog5/" data-id="cl07i1hbw0071i0vh08h151td" class="article-share-link">分享</a>
       
       
       
@@ -344,7 +344,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/02/02/tzxblog4/" data-id="cl07ge589007zrwvhh45319gz" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/02/02/tzxblog4/" data-id="cl07i1hbu006yi0vh4cjd1di4" class="article-share-link">分享</a>
       
       
       
@@ -393,7 +393,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/02/01/tzxblog3/" data-id="cl07ge57n006srwvhhctk7k9b" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/02/01/tzxblog3/" data-id="cl07i1hbs006vi0vhd7s497f3" class="article-share-link">分享</a>
       
       
       
@@ -442,7 +442,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/01/30/tzxblog2/" data-id="cl07ge57m006orwvh5pqj1txp" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/01/30/tzxblog2/" data-id="cl07i1hbp006si0vh0336admi" class="article-share-link">分享</a>
       
       
       
@@ -491,7 +491,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/01/28/vue1/" data-id="cl07ge57z007frwvh79rt9sr1" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/01/28/vue1/" data-id="cl07i1hc6007hi0vhfa6kcoky" class="article-share-link">分享</a>
       
       
       
@@ -542,7 +542,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/01/16/zongjie7/" data-id="cl07ge58e008crwvh5wxnheds" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/01/16/zongjie7/" data-id="cl07i1hcz008vi0vh0vmsgzb2" class="article-share-link">分享</a>
       
       
       
@@ -635,28 +635,23 @@ var _hmt = _hmt || [];
 	
   </div>
 </footer>
- 
+
 <script src="/jquery/jquery.min.js"></script>
 
- <script>
+<script>
 $(document).ready(function() {
-
-    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
-    var countOffset = 20000;  // 初始化首次数据
-
-    function fixCount() {            
-       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
-        {
-            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
-            clearInterval(int);
-        }                  
-        if ($("#busuanzi_container_site_pv").css("display") != "none")
-        {
-            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
-            clearInterval(int); // 停止检测
-        }  
-    }
-       	
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
 });
 </script> 
     </div>
