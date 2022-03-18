@@ -34,12 +34,12 @@ var _hmt = _hmt || [];
   <meta name="description" content="前言根据网上的说法，以及暂时使用过程中的感受，使用自由风格或者maven风格来创建jenkins item，虽然也能实现自动化部署，但是面对相对复杂的构建需求时可能就不太好实现。一般正式的项目，除了基本的拉取代码、编译代码、运行junit、打包、启动或者重启外，可能还会涉及到sonar代码检查、集成测试、关联例如jira或者conflunce等系统。因此，我目前所知道的很多正式项目在使用jenki">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jenkins pipeline部署实践及重点问题分析">
-<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/28/jenkins1/index.html">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/03/18/jenkins3/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
 <meta property="og:description" content="前言根据网上的说法，以及暂时使用过程中的感受，使用自由风格或者maven风格来创建jenkins item，虽然也能实现自动化部署，但是面对相对复杂的构建需求时可能就不太好实现。一般正式的项目，除了基本的拉取代码、编译代码、运行junit、打包、启动或者重启外，可能还会涉及到sonar代码检查、集成测试、关联例如jira或者conflunce等系统。因此，我目前所知道的很多正式项目在使用jenki">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-02-28T10:43:58.000Z">
-<meta property="article:modified_time" content="2022-02-28T11:45:39.085Z">
+<meta property="article:published_time" content="2022-03-18T10:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-18T07:12:34.071Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="运维">
 <meta property="article:tag" content="jenkins">
@@ -114,10 +114,10 @@ var _hmt = _hmt || [];
 		</a>
         <section id="main">
 			
-			<article id="post-jenkins1" class="article article-type-post" itemscope itemprop="blogPost">
+			<article id="post-jenkins3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2022/02/28/jenkins1/" class="article-date">
-  <time datetime="2022-02-28T10:43:58.000Z" itemprop="datePublished">2022-02-28</time>
+    <a href="/2022/03/18/jenkins3/" class="article-date">
+  <time datetime="2022-03-18T10:43:58.000Z" itemprop="datePublished">2022-03-18</time>
 </a>
     
   <div class="article-category">
@@ -175,7 +175,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/02/28/jenkins1/" data-id="cl07i1h6t0029i0vh2hsd3lrm" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/03/18/jenkins3/" data-id="cl0w366hd00285gvh5xuo0zgc" class="article-share-link">分享</a>
       
       
       
@@ -242,17 +242,8 @@ var _hmt = _hmt || [];
 	
 <nav id="article-nav">
   
-    <a href="/2022/02/28/junit/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          我以为我会junit，原来我还不会
-        
-      </div>
-    </a>
   
-  
-    <a href="/2022/02/28/jenkins3/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/03/18/jenkins2/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">jenkins初步理解及参数化构建</div>
     </a>

@@ -34,7 +34,7 @@ var _hmt = _hmt || [];
   <meta name="description" content="jenkins构建和插件的初步理解就我目前了解到的，一个jenkins自动化部署，至少包含拉代码、编译和打包及运行单元测试、部署这几个步骤。拉代码指的是从代码托管服务器下载代码，编译和打包及运行单元测试，实际上是项目构建工具的功能，例如maven、gradle。根据个人理解，jenkins不安装插件，也能够完成基本的自动化部署，因为它本身就支持运行shell脚本，支持参数化构建，支持多种触发器等。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jenkins初步理解及参数化构建">
-<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/28/jenkins3/index.html">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/03/18/jenkins2/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
 <meta property="og:description" content="jenkins构建和插件的初步理解就我目前了解到的，一个jenkins自动化部署，至少包含拉代码、编译和打包及运行单元测试、部署这几个步骤。拉代码指的是从代码托管服务器下载代码，编译和打包及运行单元测试，实际上是项目构建工具的功能，例如maven、gradle。根据个人理解，jenkins不安装插件，也能够完成基本的自动化部署，因为它本身就支持运行shell脚本，支持参数化构建，支持多种触发器等。">
 <meta property="og:locale" content="zh_CN">
@@ -45,8 +45,8 @@ var _hmt = _hmt || [];
 <meta property="og:image" content="https://img-blog.csdnimg.cn/82b68aa877e94dfe8ea3ad902764d77d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/bc346c5320b845938b253397b6eded77.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/f8a1d40ca8f8416790f9c1f1ed2fb627.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16">
-<meta property="article:published_time" content="2022-02-28T10:33:58.000Z">
-<meta property="article:modified_time" content="2022-02-28T11:49:32.871Z">
+<meta property="article:published_time" content="2022-03-18T02:33:58.000Z">
+<meta property="article:modified_time" content="2022-03-18T07:11:58.568Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="运维">
 <meta property="article:tag" content="jenkins">
@@ -122,10 +122,10 @@ var _hmt = _hmt || [];
 		</a>
         <section id="main">
 			
-			<article id="post-jenkins3" class="article article-type-post" itemscope itemprop="blogPost">
+			<article id="post-jenkins2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2022/02/28/jenkins3/" class="article-date">
-  <time datetime="2022-02-28T10:33:58.000Z" itemprop="datePublished">2022-02-28</time>
+    <a href="/2022/03/18/jenkins2/" class="article-date">
+  <time datetime="2022-03-18T02:33:58.000Z" itemprop="datePublished">2022-03-18</time>
 </a>
     
   <div class="article-category">
@@ -158,7 +158,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/02/28/jenkins3/" data-id="cl07i1h72002hi0vh5c3p1n67" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/03/18/jenkins2/" data-id="cl0w366h900205gvh94dk2ga4" class="article-share-link">分享</a>
       
       
       
@@ -225,7 +225,7 @@ var _hmt = _hmt || [];
 	
 <nav id="article-nav">
   
-    <a href="/2022/02/28/jenkins1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2022/03/18/jenkins3/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
@@ -235,7 +235,7 @@ var _hmt = _hmt || [];
     </a>
   
   
-    <a href="/2022/02/28/jenkins2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/03/18/jenkins1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">centos7中jenkins安装和验证</div>
     </a>
