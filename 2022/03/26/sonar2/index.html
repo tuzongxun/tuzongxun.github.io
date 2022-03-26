@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>阿里云centos安装sonar问题记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言最近在阿里云服务器上重新安装了jenkins，同时打算集成更多的常用的插件，例如sonar。很多年前，我在自己的windows电脑上安装过sonar，不过那个电脑我已经没再用了，这次在阿里云上准备按之前的笔记重新安装sonar，但是依旧是不太顺利。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云centos安装sonar问题记录">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/03/26/sonar2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言最近在阿里云服务器上重新安装了jenkins，同时打算集成更多的常用的插件，例如sonar。很多年前，我在自己的windows电脑上安装过sonar，不过那个电脑我已经没再用了，这次在阿里云上准备按之前的笔记重新安装sonar，但是依旧是不太顺利。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-26T05:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-26T05:20:21.079Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="sonar">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-sonar2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/03/26/sonar2/" class="article-date">
+  <time datetime="2022-03-26T05:43:58.000Z" itemprop="datePublished">2022-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      阿里云centos安装sonar问题记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在阿里云服务器上重新安装了jenkins，同时打算集成更多的常用的插件，例如sonar。<br>很多年前，我在自己的windows电脑上安装过sonar，不过那个电脑我已经没再用了，这次在阿里云上准备按之前的笔记重新安装sonar，但是依旧是不太顺利。</p>
+<a id="more"></a>
+<h2 id="github下载问题"><a href="#github下载问题" class="headerlink" title="github下载问题"></a>github下载问题</h2><p>首先就是参考之前的博客<a href="https://blog.csdn.net/tuzongxun/article/details/78280322?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164826399216780366534601%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=164826399216780366534601&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-1-78280322.nonecase&utm_term=sonar&spm=1018.2226.3001.4450" target="_blank" rel="noopener">使用sonar进行java代码质量管理</a>去github下载的时候就卡住了，我先执行如下操作克隆代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;SonarSource&#x2F;sonar.git</span><br></pre></td></tr></table></figure>
+
+<p>上边操作并没有成功，而是抛出了如下的error:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fatal: remote error:</span><br><span class="line">  The unauthenticated git protocol on port 9418 is no longer supported.</span><br><span class="line">Please see https:&#x2F;&#x2F;github.blog&#x2F;2021-09-01-improving-git-protocol-security-github&#x2F; for more information.</span><br></pre></td></tr></table></figure>
+
+<p>上边的问题，按网上的说法是由于github的安全设置，导致git协议的问题，需要执行如下操作进行一定的配置转换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global url.&quot;https:&#x2F;&#x2F;&quot;.insteadOf git:&#x2F;&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>做了上边的操作之后，我再次执行clone操作，但是依旧是失败，但是出现了新的提示，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;SonarSource&#x2F;sonar.git&#x2F;&#39;: OpenSSL SSL_read: Connection was reset, errno 10054</span><br></pre></td></tr></table></figure>
+
+<p>这个问题就相对比较常见了，我知道是因为ssl验证的问题，之前也操作过，就是再进行一个配置，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.sslVerify &quot;false&quot;</span><br></pre></td></tr></table></figure>
+
+<p>配置了ssl验证的问题后，再次执行clone操作，结果还是失败，新的提示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;SonarSource&#x2F;sonar.git&#x2F;&#39;: Failed to connect to github.com port 443 after 21058 ms: Timed out</span><br></pre></td></tr></table></figure>
+
+<p>根据网上的说法，这是因为git代理的问题，需要取消代码，于是我又做了如下操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br></pre></td></tr></table></figure>
+
+<p>之后再执行clone操作，终于松了一口气，下载的进度条开始了。<br>然而，有些郁闷的是，这个操作在我windows机上成功了，然后我直接去阿里云的centos机上操作时，一模一样的步骤，最终依旧还是失败，始终都是这样一个错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cloning into &#39;sonar&#39;...</span><br><span class="line">fatal: unable to access &#39;https:&#x2F;&#x2F;github.com&#x2F;SonarSource&#x2F;sonar.git&#x2F;&#39;: Encountered end of file</span><br></pre></td></tr></table></figure>
+
+<p>正常来说，只要进度条在走，最终应该是可以下载成功的，但是由于下载的太慢，最终我终止了git的clone操作，选择直接去sonar官网下载：<br><a href="https://www.sonarqube.org/" target="_blank" rel="noopener">https://www.sonarqube.org/</a></p>
+<h2 id="启动问题"><a href="#启动问题" class="headerlink" title="启动问题"></a>启动问题</h2><p>一开始我下载的是官网最新版sonarqube-9.3.0，但是在启动的时候却没有成功，查看日志发现提示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Running SonarQube...</span><br><span class="line">wrapper  | --&gt; Wrapper Started as Console</span><br><span class="line">wrapper  | Launching a JVM...</span><br><span class="line">wrapper  | JVM exited while loading the application.</span><br><span class="line">jvm 1    | Unrecognized option: --add-exports&#x3D;java.base&#x2F;jdk.internal.ref&#x3D;ALL-UNNAMED</span><br><span class="line">jvm 1    | Error: Could not create the Java Virtual Machine.</span><br><span class="line">jvm 1    | Error: A fatal exception has occurred. Program will exit.</span><br><span class="line">wrapper  | JVM Restarts disabled.  Shutting down.</span><br><span class="line">wrapper  | &lt;-- Wrapper Stopped</span><br></pre></td></tr></table></figure>
+
+<p>初步猜测可能是jdk版本问题，于是就是官网查了下，然后果然看到了这样一句”You must be able to install Java (Oracle JRE 11 or OpenJDK 11) on the machine where you plan to run SonarQube.”。<br>由于我现在服务器上还是安装的jdk8，暂时也不想升jdk11，所以就去找了下可以用jdk8的版本，最终下载了sonarqube-6.6。<br>不过在启动后又出现了新的问题，信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">--&gt; Wrapper Started as Daemon</span><br><span class="line">Launching a JVM...</span><br><span class="line">Wrapper (Version 3.2.3) http:&#x2F;&#x2F;wrapper.tanukisoftware.org</span><br><span class="line">  Copyright 1999-2006 Tanuki Software, Inc.  All Rights Reserved.</span><br><span class="line"></span><br><span class="line">2022.03.26 12:25:13 INFO  app[][o.s.a.AppFileSystem] Cleaning or creating temp directory &#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;temp</span><br><span class="line">2022.03.26 12:25:13 INFO  app[][o.s.a.es.EsSettings] Elasticsearch listening on &#x2F;127.0.0.1:9001</span><br><span class="line">2022.03.26 12:25:13 INFO  app[][o.s.a.p.ProcessLauncherImpl] Launch process[[key&#x3D;&#39;es&#39;, ipcIndex&#x3D;1, logFilenamePrefix&#x3D;es]] from [&#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;e&#x2F;elasticsearch&#x2F;bin&#x2F;elasticsearch -Epath.conf&#x3D;&#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;temp&#x2F;conf&#x2F;es</span><br><span class="line">2022.03.26 12:25:13 INFO  app[][o.s.a.SchedulerImpl] Waiting for Elasticsearch to be up and running</span><br><span class="line">2022.03.26 12:25:14 INFO  app[][o.e.p.PluginsService] no modules loaded</span><br><span class="line">2022.03.26 12:25:14 INFO  app[][o.e.p.PluginsService] loaded plugin [org.elasticsearch.transport.Netty4Plugin]</span><br><span class="line">2022.03.26 12:25:17 WARN  app[][o.s.a.p.AbstractProcessMonitor] Process exited with exit value [es]: 1</span><br><span class="line">2022.03.26 12:25:17 INFO  app[][o.s.a.SchedulerImpl] Process [es] is stopped</span><br><span class="line">2022.03.26 12:25:17 INFO  app[][o.s.a.SchedulerImpl] SonarQube is stopped</span><br><span class="line">&lt;-- Wrapper Stopped</span><br></pre></td></tr></table></figure>
+
+<p>通过日志，大概知道是es启动有问题，但是不知道为啥，然后百度得知是因为es不能用root用户启动，于是做了用户相关的一些操作，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user add sonar</span><br><span class="line">chown -R sonar:sonar sonarqube-6.6</span><br></pre></td></tr></table></figure>
+
+<p>之后切换到sonar用户重新启动，依旧是没有成功，错误信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">]: &#x2F;opt&#x2F;soft&#x2F;jdk1.8.0_261&#x2F;jre&#x2F;bin&#x2F;java -Djava.awt.headless&#x3D;true -Dfile.encoding&#x3D;UTF-8 -Djava.io.tmpdir&#x3D;&#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;temp -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -cp .&#x2F;lib&#x2F;common&#x2F;*:.&#x2F;lib&#x2F;server&#x2F;*:&#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;lib&#x2F;jdbc&#x2F;h2&#x2F;h2-1.3.176.jar org.sonar.server.app.WebServer &#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;temp&#x2F;sq-process8738477899699194234properties</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM warning: INFO: os::commit_memory(0x00000000e0000000, 44695552, 0) failed; error&#x3D;&#39;Cannot allocate memory&#39; (errno&#x3D;12)</span><br><span class="line">#</span><br><span class="line"># There is insufficient memory for the Java Runtime Environment to continue.</span><br><span class="line"># Native memory allocation (mmap) failed to map 44695552 bytes for committing reserved memory.</span><br><span class="line"># An error report file with more information is saved as:</span><br><span class="line"># &#x2F;opt&#x2F;soft&#x2F;sonarqube-6.6&#x2F;hs_err_pid19910.log</span><br><span class="line">2022.03.26 12:36:31 WARN  app[][o.s.a.p.AbstractProcessMonitor] Process exited with exit value [web]: 1</span><br><span class="line">2022.03.26 12:36:31 INFO  app[][o.s.a.SchedulerImpl] Process [web] is stopped</span><br></pre></td></tr></table></figure>
+
+<p>这个错误是比较容易看出来的，就是内存不够，不过还是不太清楚具体是什么内存不够，于是查百度得到了解决方案，参考文档如下：<br><a href="https://www.cnblogs.com/brady-wang/p/11307877.html" target="_blank" rel="noopener">https://www.cnblogs.com/brady-wang/p/11307877.html</a><br>按照上边文档设置了m.max_map_count=262144后，再次启动sonar，终于启动成功，并且也成功通过阿里云外网<a href="http://139.224.23.230:9000/进行访问。" target="_blank" rel="noopener">http://139.224.23.230:9000/进行访问。</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/03/26/sonar2/" data-id="cl17emljn007kvcvh9ybxcset" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sonar/" rel="tag">sonar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/03/18/jenkins3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">jenkins pipeline部署实践及重点问题分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#github下载问题"><span class="toc-number">2.</span> <span class="toc-text">github下载问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动问题"><span class="toc-number">3.</span> <span class="toc-text">启动问题</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
