@@ -28,20 +28,21 @@ var _hmt = _hmt || [];
 </script>
 
   
-  <title>诫子书（诸葛亮） | 涂宗勋的博客</title>
+  <title>jenkins pipeline部署补充记录 | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="原文： 夫君子之行，静以修身，俭以养德。 非淡泊无以明志，非宁静无以致远。 夫学须静也，才须学也，非学无以广才，非志无以成学。 淫慢则不能励精，险躁则不能治性。 年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！">
+  <meta name="description" content="前言最近在阿里云服务器上重新安装了jenkins，参照我之前的笔记，同时打算集成更多的常用的插件。除了新插件的使用记录外，还遇到了一些其他的问题，觉得有必要也补充记录。之前笔记参考：centos7中jenkins安装和验证jenkins初步理解及参数化构建jenkins pipeline部署实践及重点问题分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="诫子书（诸葛亮）">
-<meta property="og:url" content="http://blog.tzxcode.cn/2020/07/22/jiaxun1/index.html">
+<meta property="og:title" content="jenkins pipeline部署补充记录">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/03/26/jenkins4/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="原文： 夫君子之行，静以修身，俭以养德。 非淡泊无以明志，非宁静无以致远。 夫学须静也，才须学也，非学无以广才，非志无以成学。 淫慢则不能励精，险躁则不能治性。 年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！">
+<meta property="og:description" content="前言最近在阿里云服务器上重新安装了jenkins，参照我之前的笔记，同时打算集成更多的常用的插件。除了新插件的使用记录外，还遇到了一些其他的问题，觉得有必要也补充记录。之前笔记参考：centos7中jenkins安装和验证jenkins初步理解及参数化构建jenkins pipeline部署实践及重点问题分析">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-07-22T15:09:42.000Z">
-<meta property="article:modified_time" content="2020-07-22T12:48:13.969Z">
+<meta property="article:published_time" content="2022-03-26T04:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-27T08:43:52.787Z">
 <meta property="article:author" content="涂宗勋">
-<meta property="article:tag" content="家训">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="jenkins">
 <meta name="twitter:card" content="summary">
   
   
@@ -113,14 +114,14 @@ var _hmt = _hmt || [];
 		</a>
         <section id="main">
 			
-			<article id="post-jiaxun1" class="article article-type-post" itemscope itemprop="blogPost">
+			<article id="post-jenkins4" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/07/22/jiaxun1/" class="article-date">
-  <time datetime="2020-07-22T15:09:42.000Z" itemprop="datePublished">2020-07-22</time>
+    <a href="/2022/03/26/jenkins4/" class="article-date">
+  <time datetime="2022-03-26T04:43:58.000Z" itemprop="datePublished">2022-03-26</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E5%AE%B6%E8%AE%AD/">家训</a>
+    <a class="article-category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
   </div>
 
 </span>
@@ -132,7 +133,7 @@ var _hmt = _hmt || [];
         
   
     <h1 class="article-title" itemprop="name">
-      诫子书（诸葛亮）
+      jenkins pipeline部署补充记录
     </h1>
   
 
@@ -142,27 +143,23 @@ var _hmt = _hmt || [];
       
         <!-- Table of Contents -->
         
-        <p><strong>原文</strong>：</p>
-<p>夫君子之行，静以修身，俭以养德。</p>
-<p>非淡泊无以明志，非宁静无以致远。</p>
-<p>夫学须静也，才须学也，非学无以广才，非志无以成学。</p>
-<p>淫慢则不能励精，险躁则不能治性。</p>
-<p>年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在阿里云服务器上重新安装了jenkins，参照我之前的笔记，同时打算集成更多的常用的插件。<br>除了新插件的使用记录外，还遇到了一些其他的问题，觉得有必要也补充记录。<br>之前笔记参考：<br><a href="https://blog.csdn.net/tuzongxun/article/details/120048956?spm=1001.2014.3001.5501" target="_blank" rel="noopener">centos7中jenkins安装和验证</a><br><a href="https://blog.csdn.net/tuzongxun/article/details/120097550?spm=1001.2014.3001.5501" target="_blank" rel="noopener">jenkins初步理解及参数化构建</a><br><a href="https://blog.csdn.net/tuzongxun/article/details/120107854?spm=1001.2014.3001.5501" target="_blank" rel="noopener">jenkins pipeline部署实践及重点问题分析</a></p>
 <a id="more"></a>
-
-<p><strong>原文翻译</strong>：</p>
-<p>有道德修养的人，依靠内心安静来修养身心，以俭朴节约财物来培养自己高尚的品德。不恬静寡欲无法明确志向，不排除外来干扰无法达到远大目标。学习必须静心专一，而才干来自勤奋学习。如果不学习就无法增长自己的才干，不明确志向就不能在学习上获得成就。纵欲放荡、消极怠慢就不能勉励心志使精神振作，冒险草率、急燥不安就不能陶冶性情。年华随时光而飞驰，意志随岁月逐渐消逝。最终枯败零落，大多不接触世事、不为社会所用，只能悲哀地困守在自己穷困的破舍里，到时悔恨又怎么来得及?（穷庐，亦可解为空虚的心灵。）</p>
-<p><strong>白话译文</strong>：</p>
-<p>君子的行为操守，从宁静来提高自身的修养，以节俭来培养自己的品德。不恬静寡欲无法明确志向，不排除外来干扰无法达到远大目标。学习必须静心专一，而才干来自学习。所以不学习就无法增长才干，没有志向就无法使学习有所成就。放纵懒散就无法振奋精神，急躁冒险就不能陶冶性情。年华随时光而飞驰，意志随岁月而流逝。最终枯败零落，大多不接触世事、不为社会所用，只能悲哀地坐守着那穷困的居舍，其时悔恨又怎么来得及？</p>
+<h2 id="pipeline中git拉取代码问题"><a href="#pipeline中git拉取代码问题" class="headerlink" title="pipeline中git拉取代码问题"></a>pipeline中git拉取代码问题</h2><p>根据之前的笔记装好jenkins和maven及git插件，并配置好pipeline后，发现并没有想象中的那么顺利，因为一些未记录的细节，导致首先在git拉取代码的时候就出现了问题。<br>代码拉取失败，提示’CredentialId “3bdb20f7-1c4f-4a34-98c0-ef1b9202cbe2” could not be found’。<br>经过一番分析后，发现这个CredentialId出现在jenkinsFile的配置中，是在我之前创建的springboot项目中，这段配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">stage(&#39;git pull code&#39;) &#123;</span><br><span class="line">	steps &#123;</span><br><span class="line">		echo &quot;【git pull】&quot;</span><br><span class="line">		git branch: &#39;jenkin-test&#39;, credentialsId: &#39;3bdb20f7-1c4f-4a34-98c0-ef1b9202cbe2&#39;, url: &#39;git@github.com:tuzongxun&#x2F;base-springboot.git&#39;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之所以现在这里不行了，是因为我重新安装了jenkins，里边的credentialsId实际是改变了的，所以解决办法也就是去jenkins上创建一个credentialsId是’3bdb20f7-1c4f-4a34-98c0-ef1b9202cbe2’的credentials或者修改jenkinsFile，把上边的id指向现有的。</p>
+<h2 id="maven构建问题"><a href="#maven构建问题" class="headerlink" title="maven构建问题"></a>maven构建问题</h2><p>解决了git问题之后，代码是成功的从github上拉取下来了，但是在接下来的maven构建中又运行失败，从日志中可以看到有这样的信息’package org.springframework.stereotype does not exist’。<br>一开始我以为是新的阿里云服务器上安装的maven有问题，导致jenkins执行的时候无法下载对应的依赖包，但是通过手动到服务器执行’mvn clean package’命令发现并没有问题。<br>于是又猜测是不是jenkins中maven运行路径指定有问题或者settings.xml文件路径指定有问题，但是经过查看，发现也没有问题。<br>最终，通过百度到的一些信息解决了这个问题，原因是，为了图方便，我是直接把windows中的settings.xml上传到了现在的服务器上。<br>这个文件里边的本地仓库我指向了F盘，配置是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;localRepository&gt;F:\repo_new1&lt;&#x2F;localRepository&gt;</span><br></pre></td></tr></table></figure>
+<p>而这种路径不是linux标准格式，于是改成了’/opt/repo_new1’之后就成功解决了这个问题。（问题暂时解决了，不过为什么直接服务器上执行mvn命令没有问题，jenkins执行就有问题，这个还没有完全明白）<br>参考博客：<a href="https://blog.csdn.net/deniro_li/article/details/73550881" target="_blank" rel="noopener">在 Jenkins 中，使用 maven 打包报 package xxx does not exist 问题的解决方法</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/07/22/jiaxun1/" data-id="cl191e98e002kv0vh3gxb9he3" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/03/26/jenkins4/" data-id="cl191e98a002dv0vhfam5fptn" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AE%B6%E8%AE%AD/" rel="tag">家训</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jenkins/" rel="tag">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
 
     </footer>
   </div>
@@ -225,19 +222,19 @@ var _hmt = _hmt || [];
 	
 <nav id="article-nav">
   
-    <a href="/2020/07/24/zhuangxiu/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2022/03/26/sonar2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          装修纪~~从装修中体味人生
+          阿里云centos安装sonar问题记录
         
       </div>
     </a>
   
   
-    <a href="/2020/07/15/redis2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/03/18/jenkins3/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">redis数据类型要点知识及应用场景</div>
+      <div class="article-nav-title">jenkins pipeline部署实践及重点问题分析</div>
     </a>
   
 </nav>
@@ -260,42 +257,24 @@ var _hmt = _hmt || [];
     
   
     
-  
+    <div class="widget-wrap">
     
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2022/03/26/sonar2/">阿里云centos安装sonar问题记录</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/26/jenkins4/">jenkins pipeline部署补充记录</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/18/jenkins3/">jenkins pipeline部署实践及重点问题分析</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/18/jenkins2/">jenkins初步理解及参数化构建</a>
-          </li>
-        
-          <li>
-            <a href="/2022/03/18/jenkins1/">centos7中jenkins安装和验证</a>
-          </li>
-        
-      </ul>
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pipeline中git拉取代码问题"><span class="toc-number">2.</span> <span class="toc-text">pipeline中git拉取代码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maven构建问题"><span class="toc-number">3.</span> <span class="toc-text">maven构建问题</span></a></li></ol>
+          </div>
+      </div>
     </div>
-  </div>
 
+  
+    
+
+  
+    
+  
+    
   
     
 
