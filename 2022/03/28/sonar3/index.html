@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>jenkins集成sonar问题记录 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言jenkins集成sonar，今天终于跑通了，回头去看似乎很简单，但是实际的过程依然是充满了曲折，尤其是有些细节问题，时间久了多半还是很容易忘记的，因此决定还是做个记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenkins集成sonar问题记录">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/03/28/sonar3/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言jenkins集成sonar，今天终于跑通了，回头去看似乎很简单，但是实际的过程依然是充满了曲折，尤其是有些细节问题，时间久了多半还是很容易忘记的，因此决定还是做个记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/39ebb52d93954e1580cfc37b676a153d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/0bb4a5941ac249b39278ffcfa3c76d2b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/76785a98b7ac4063b69d8849bb0acc6a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9e2c00eacc6f451fac515cb88b6ae9e3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4544ea7d152542f8ad9a10188bf8f54a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/74de1c8f7d234cc8a1d334de050df959.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="article:published_time" content="2022-03-28T13:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-28T13:35:24.342Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="sonar">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/39ebb52d93954e1580cfc37b676a153d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-sonar3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/03/28/sonar3/" class="article-date">
+  <time datetime="2022-03-28T13:43:58.000Z" itemprop="datePublished">2022-03-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      jenkins集成sonar问题记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>jenkins集成sonar，今天终于跑通了，回头去看似乎很简单，但是实际的过程依然是充满了曲折，尤其是有些细节问题，时间久了多半还是很容易忘记的，因此决定还是做个记录。</p>
+<a id="more"></a>
+
+<h2 id="sonar-scanner安装问题"><a href="#sonar-scanner安装问题" class="headerlink" title="sonar-scanner安装问题"></a>sonar-scanner安装问题</h2><p>首先，jenkins集成sonar需要安装”SonarQube Scanner for Jenkins”这个插件，插件安装完了之后，需要进行工具的配置,这个配置路径是”系统管理-》全局工具配置-》SonarQube Scanner”。<br><img src="https://img-blog.csdnimg.cn/39ebb52d93954e1580cfc37b676a153d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>在这个配置中，需要制定一个sonar的客户端程序，可以直接在jenkins的页面上选择安装，但是我这样操作的时候始终下载不成功，尽管下载源修改了，依旧是没能成功。<br>于是就只好换了一个方法，去官网下载，即下边这个url：<br><a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/" target="_blank" rel="noopener">https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/</a><br>上边url里提供了一些sonar-scanner-cli的下载，但是即便我下载了里边最老的版本，最终发现使用的也是jdk11。<br>暂时不确定是否能在这种情况下强行使用jdk8，所以我就又去其他网站找到了3.X的版本。</p>
+<h2 id="几个关键的配置"><a href="#几个关键的配置" class="headerlink" title="几个关键的配置"></a>几个关键的配置</h2><p>上边已经提到了一个配置，即sonarQube-scanner-cli的配置，也就是客户端。<br>除了客户端之外，还需要配置sonar服务端，配置路径是”系统管理-》系统配置-》SonarQube servers”。<br><img src="https://img-blog.csdnimg.cn/0bb4a5941ac249b39278ffcfa3c76d2b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>在这个配置里，需要指定sonar服务端的url和请求服务端是的用户凭证，所以还需要一个配置就是token，配置路径是”系统管理-》manage credentials-》添加凭据”。<br><img src="https://img-blog.csdnimg.cn/76785a98b7ac4063b69d8849bb0acc6a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>这里需要注意的是凭据类型要选择secret text，secret就是sonar中的auth token，在sonar页面第一次登陆的时候会提示进行设置。<br><img src="https://img-blog.csdnimg.cn/9e2c00eacc6f451fac515cb88b6ae9e3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>实际上，这里还有一些细节是需要注意的，否则很可能就会和我一样导致后边的那些问题，这些细节待下边具体问题说到的时候再说。</p>
+<h2 id="基本参数"><a href="#基本参数" class="headerlink" title="基本参数"></a>基本参数</h2><p>sonar扫描的时候是需要一个基础参数的，可以直接在jenkins中配置，也可以放在项目的配置文件中，我选择的是放在项目的配置文件中，即在项目根目录（pom.xml同级目录）创建sonar-project.properties，里边类容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sonar.projectKey&#x3D;my:project</span><br><span class="line">sonar.projectVersion&#x3D;1.0</span><br><span class="line">sonar.projectName&#x3D;Springboot base</span><br><span class="line">sonar.language&#x3D;java</span><br><span class="line">sonar.sourceEncoding&#x3D;UTF-8</span><br><span class="line"></span><br><span class="line">sonar.sources&#x3D;.</span><br><span class="line">sonar.java.binaries&#x3D;.</span><br></pre></td></tr></table></figure>
+<p>这些配置实际是从网上找来的，目前来说，直接影响运行的是最后两个配置，如果配的不对，将会导致找不到文件。</p>
+<h2 id="jenkins-pipeline问题"><a href="#jenkins-pipeline问题" class="headerlink" title="jenkins pipeline问题"></a>jenkins pipeline问题</h2><p>做了sonar的基本配置后，还需要添加触发sonar扫描的步骤，也可以直接在jenkins页面上操作，不过想着这种可能多半不会在正式项目中使用，所以最终我选择了直接在jenkinsFile中增加相应的步骤，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">stage(&#39;Code Analysis&#39;)&#123;</span><br><span class="line">	steps&#123;</span><br><span class="line">		echo &quot;【Code Analysis】&quot;</span><br><span class="line">		script&#123;</span><br><span class="line">			def sonarHome &#x3D; tool name: &#39;sonarqube3.3.0&#39;,type: &#39;hudson.plugins.sonar.SonarRunnerInstallation&#39;</span><br><span class="line">			echo &quot;$&#123;sonarHome&#125;&quot;</span><br><span class="line">			withSonarQubeEnv(&#39;sonarqube3.3.0&#39;)&#123;</span><br><span class="line">				sh &quot;$&#123;sonarHome&#125;&#x2F;bin&#x2F;sonar-scanner -Dsonar.host.url&#x3D;$&#123;SONAR_HOST_URL&#125; -Dsonar.login&#x3D;$&#123;SONAR_AUTH_TOKEN&#125;&quot;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里就有一个细节需要注意，这里的”tool name: ‘sonarqube3.3.0’”,从整体代码可以看到最终是获取了一个”sonar-scanner”命令的路径，很显然，这是客户端相关的，所以这里的”sonarqube3.3.0”其实是对应的sonarQube-scanner-cli中配置的那个名字。<br>而”withSonarQubeEnv(‘sonarqube3.3.0’)”这个实际是sonar服务端配置相关的，主要是和”${SONAR_HOST_URL}”、”${SONAR_AUTH_TOKEN}”这两个变量有关系。<br>这两个变量也是在系统配置那里配置，然后配置SonarQube servers的时候需要勾选上”Environment variables”。<br>起初我没有明白这种关系，所以一开始以为都只是随便定义的，于是直接复制的代码没有修改，配置的是”withSonarQubeEnv(‘sonar’)”，结果运行的时候就抛出了如下异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: SonarQube installation defined in this job (sonar) does not match any</span><br></pre></td></tr></table></figure>
+
+<h2 id="server-url问题"><a href="#server-url问题" class="headerlink" title="server url问题"></a>server url问题</h2><p>在解决了上边的问题后，我依旧运行失败，日志中出现了如下异常:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ERROR: SonarQube server [192.168.19.200:9000] can not be reached</span><br><span class="line">INFO: ------------------------------------------------------------------------</span><br><span class="line">INFO: EXECUTION FAILURE</span><br><span class="line">INFO: ------------------------------------------------------------------------</span><br><span class="line">INFO: Total time: 0.651s</span><br><span class="line">INFO: Final Memory: 3M&#x2F;57M</span><br><span class="line">INFO: ------------------------------------------------------------------------</span><br><span class="line">ERROR: Error during SonarQube Scanner execution</span><br><span class="line">ERROR: Unable to execute SonarQube</span><br><span class="line">ERROR: Caused by: Fail to get bootstrap index from server</span><br><span class="line">ERROR: Caused by: Expected URL scheme &#39;http&#39; or &#39;https&#39; but no colon was found</span><br><span class="line">ERROR: </span><br><span class="line">ERROR: Re-run SonarQube Scanner using the -X switch to enable full debug logging.</span><br></pre></td></tr></table></figure>
+<p>这个提示相对还是比较清晰的，明确的说了预期url应该是带有”http”或者”https”的，我一开始在”SonarQube servers”中配置的是”192.168.19.200:9000”。<br>所以这个问题解决起来也很简单，就是在配置的环境变量”SONAR_HOST_URL”里加上协议。</p>
+<h2 id="JSONException问题"><a href="#JSONException问题" class="headerlink" title="JSONException问题"></a>JSONException问题</h2><p>在解决了上边协议配置问题再运行的时候，还是失败，日志中出现了如下的提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Pipeline] End of Pipeline</span><br><span class="line">hudson.remoting.ProxyException: net.sf.json.JSONException: Invalid JSON String</span><br><span class="line">	at net.sf.json.JSONSerializer.toJSON(JSONSerializer.java:143)</span><br><span class="line">	at net.sf.json.JSONSerializer.toJSON(JSONSerializer.java:103)</span><br><span class="line">	at net.sf.json.JSONSerializer.toJSON(JSONSerializer.java:84)</span><br><span class="line">server——</span><br></pre></td></tr></table></figure>
+<p>这个问题，实际是解决上边问题时留下的坑。<br>我一开始没有看明白为什么，百度后才知道是因为我在加”http”协议的时候加的有问题，我直接复制了sonar页面上的url，修改”SONAR_HOST_URL”的同时，也修改了”Server URL”，复制的时候多了端口后的斜杠。<br>最终解决办法就是把”<a href="http://192.168.19.200:9000/&quot;改成&quot;http://192.168.19.200:9000&quot;。" target="_blank" rel="noopener">http://192.168.19.200:9000/&quot;改成&quot;http://192.168.19.200:9000&quot;。</a></p>
+<h2 id="成功的结果"><a href="#成功的结果" class="headerlink" title="成功的结果"></a>成功的结果</h2><p>经过这些问题的处理后，终于用跑成功了一个集成了sonar的基础pipeline，jenkins运行结果如下：<br><img src="https://img-blog.csdnimg.cn/4544ea7d152542f8ad9a10188bf8f54a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>sonar页面结果如下：<br><img src="https://img-blog.csdnimg.cn/74de1c8f7d234cc8a1d334de050df959.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/03/28/sonar3/" data-id="cl1arhs0e006lc4vhdjbkhsij" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sonar/" rel="tag">sonar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/03/27/jenkins4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">jenkins pipeline部署补充记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sonar-scanner安装问题"><span class="toc-number">2.</span> <span class="toc-text">sonar-scanner安装问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个关键的配置"><span class="toc-number">3.</span> <span class="toc-text">几个关键的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本参数"><span class="toc-number">4.</span> <span class="toc-text">基本参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jenkins-pipeline问题"><span class="toc-number">5.</span> <span class="toc-text">jenkins pipeline问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#server-url问题"><span class="toc-number">6.</span> <span class="toc-text">server url问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSONException问题"><span class="toc-number">7.</span> <span class="toc-text">JSONException问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#成功的结果"><span class="toc-number">8.</span> <span class="toc-text">成功的结果</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
