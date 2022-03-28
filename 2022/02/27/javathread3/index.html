@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>java基础之多线程总结三（AQS、ThreadLocal和线程池） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="AQS多线程里很多新型锁实现的关键是AQS，AQS指的是AbstractQueuedSynchronizer这个类，整个锁实现过程的关键是CAS操作加volatile。拿ReentrantLock非公平锁的lock和unlock举例，首先lock的源码中调用过程如下： 1ReentrantLock.lock()--&gt;ReentrantLock.Sync.lock()--&gt;Reentra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础之多线程总结三（AQS、ThreadLocal和线程池）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/27/javathread3/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="AQS多线程里很多新型锁实现的关键是AQS，AQS指的是AbstractQueuedSynchronizer这个类，整个锁实现过程的关键是CAS操作加volatile。拿ReentrantLock非公平锁的lock和unlock举例，首先lock的源码中调用过程如下： 1ReentrantLock.lock()--&gt;ReentrantLock.Sync.lock()--&gt;Reentra">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-27T10:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-28T02:44:28.482Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="多线程">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-javathread3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/27/javathread3/" class="article-date">
+  <time datetime="2022-02-27T10:43:58.000Z" itemprop="datePublished">2022-02-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      java基础之多线程总结三（AQS、ThreadLocal和线程池）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>多线程里很多新型锁实现的关键是AQS，AQS指的是AbstractQueuedSynchronizer这个类，整个锁实现过程的关键是CAS操作加volatile。<br>拿ReentrantLock非公平锁的lock和unlock举例，首先lock的源码中调用过程如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock.lock()--&gt;ReentrantLock.Sync.lock()--&gt;ReentrantLock.NonfairSync.lock()</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>最后这个方法的实现逻辑是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">final void lock() &#123;</span><br><span class="line">    if (compareAndSetState(0, 1))</span><br><span class="line">        setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">    else</span><br><span class="line">        acquire(1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很显然，这里首先使用CAS操作尝试直接加锁，如果没有成功就调用acquire方法获取锁，这里不论是CAS方法还是acquire方法都在AbstractQueuedSynchronizer类中实现，acquire方法内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public final void acquire(int arg) &#123;</span><br><span class="line">        if (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">            selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里边首先尝试获取锁，这个方法实际调用的是NonfairSync.tryAcquire()，而这个方法的调用最终实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">final boolean nonfairTryAcquire(int acquires) &#123;</span><br><span class="line">            final Thread current &#x3D; Thread.currentThread();</span><br><span class="line">            int c &#x3D; getState();</span><br><span class="line">            if (c &#x3D;&#x3D; 0) &#123;</span><br><span class="line">                if (compareAndSetState(0, acquires)) &#123;</span><br><span class="line">                    setExclusiveOwnerThread(current);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (current &#x3D;&#x3D; getExclusiveOwnerThread()) &#123;</span><br><span class="line">                int nextc &#x3D; c + acquires;</span><br><span class="line">                if (nextc &lt; 0) &#x2F;&#x2F; overflow</span><br><span class="line">                    throw new Error(&quot;Maximum lock count exceeded&quot;);</span><br><span class="line">                setState(nextc);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            return false;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边代码中也有CAS操作，同时有两个重要的点，即getState()和setState(nextc)，这里边很多操作实际都是围绕着这个进行。<br>如果点进去两个方法中，会发现实际都是操作了AbstractQueuedSynchronizer中的state属性，定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private volatile int state;</span><br></pre></td></tr></table></figure>
+<p>到这里，应该就比较容易理解为什么说AQS的底层是CAS加上volatile了。</p>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p>多个线程之间使用某一个对象数据，每个线程都会保留一份数据副本，一个线程修改之后会刷新回那个对象（不加volatile的情况下刷新回去的时机不确定），例如下边这样的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;27</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ThreadLocalDemo &#123;</span><br><span class="line">	private static User user;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				Thread.sleep(2000);</span><br><span class="line">			&#125;</span><br><span class="line">			catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(user.name);</span><br><span class="line">		&#125;).start();</span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				Thread.sleep(1000);</span><br><span class="line">			&#125;</span><br><span class="line">			catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			user&#x3D;new User();</span><br><span class="line">			user.name&#x3D;&quot;tzx&quot;;</span><br><span class="line">		&#125;).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class User&#123;</span><br><span class="line">	String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个代码执行之后，第一个线程会输出第二个线程中的数据，但是有的时候可能需要线程之前的某些数据就是独立的，这时候就可以使用ThreadLocal，那么上边的代码可以改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;27</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ThreadLocalDemo2 &#123;</span><br><span class="line">	private static ThreadLocal&lt;User2&gt; threadLocal&#x3D;new ThreadLocal&lt;&gt;();</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				Thread.sleep(2000);</span><br><span class="line">			&#125;</span><br><span class="line">			catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(threadLocal.get());</span><br><span class="line">		&#125;).start();</span><br><span class="line"></span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				Thread.sleep(1000);</span><br><span class="line">			&#125;</span><br><span class="line">			catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			User2 user&#x3D;new User2();</span><br><span class="line">			user.name&#x3D;&quot;tzx&quot;;</span><br><span class="line">			threadLocal.set(user);</span><br><span class="line">		&#125;).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class User2&#123;</span><br><span class="line">	String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个代码在执行之后，第一个线程输出结果就是null，而不会拿到第二个线程设置的值。<br>ThreadLocal的set方法源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public void set(T value) &#123;</span><br><span class="line">	Thread t &#x3D; Thread.currentThread();</span><br><span class="line">	ThreadLocalMap map &#x3D; getMap(t);</span><br><span class="line">	if (map !&#x3D; null)</span><br><span class="line">		map.set(this, value);</span><br><span class="line">	else</span><br><span class="line">		createMap(t, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ThreadLocalMap getMap(Thread t) &#123;</span><br><span class="line">	return t.threadLocals;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这里set的数据实际是保存在一个map中，而这个map是当前线程对象里边的map，也就是说，首先从map容器来说，不同线程就已经进行了线程隔离。<br>ThreadLocal不用的时候需要remove，这部分涉及到jvm垃圾回收弱引用问题。</p>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><p>起初，创建和运行线程就是用Thread和Runnable，是在业务代码中直接创建和使用，这种方式在并发高的时候就需要频繁的创建和销毁线程，由于线程的创建和销毁都需要消耗较多的资源，因此就出现了线程池技术，实际简单点理解，线程池就是为了线程的复用，从而减少刚并发情况下的资源消耗。<br>线程池最上层接口是Executor，最基础的创建线程池的方式是使用Executors工具类，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executorService&#x3D; Executors.newFixedThreadPool(2);</span><br><span class="line">executorService.execute(()-&gt;&#123;</span><br><span class="line">	int num&#x3D;0;</span><br><span class="line">	for (int i &#x3D; 0; i &lt; 10000; i++) &#123;</span><br><span class="line">		num++;</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println(num);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这种使用线程池的方式是可以运行的，但是一般却不建议这样使用，原因是这种默认的方式，里边默认等待队列的最大长度太大了，容易造成内存问题，例如上边的这个创建固定线程池的方法源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public static ExecutorService newFixedThreadPool(int nThreads) &#123;</span><br><span class="line">	return new ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">								  0L, TimeUnit.MILLISECONDS,</span><br><span class="line">								  new LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public LinkedBlockingQueue() &#123;</span><br><span class="line">	this(Integer.MAX_VALUE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里默认的LinkedBlockingQueue长度就是Integer.MAX_VALUE。<br>因此，正确的使用线程池应该是使用Threadpoolexecutor，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;27</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ThreadPoolDemo2 &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		ThreadPoolExecutor pool&#x3D;new ThreadPoolExecutor(2, 4, 60, TimeUnit.SECONDS, new LinkedBlockingDeque&lt;Runnable&gt;());</span><br><span class="line">		pool.execute(()-&gt;&#123;</span><br><span class="line">			System.out.println(&quot;hello&quot;);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边的代码创建线程的时候只给了5个参数，但是点进去这个ThreadPoolExecutor构造方法会看到里边的代码是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public ThreadPoolExecutor(int corePoolSize,</span><br><span class="line">						  int maximumPoolSize,</span><br><span class="line">						  long keepAliveTime,</span><br><span class="line">						  TimeUnit unit,</span><br><span class="line">						  BlockingQueue&lt;Runnable&gt; workQueue) &#123;</span><br><span class="line">	this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">		 Executors.defaultThreadFactory(), defaultHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，上边调用的5个参数的方法内部实际调用了一个7个参数的方法，只是后两个使用了默认值。<br>ThreadPoolExecutor实际上也是继承自ExecutorService，只不过是直接继承自AbstractExecutorService，而AbstractExecutorService实现了ExecutorService。<br>上边说到了创建线程池的7个参数比较重要，代表的意思如下：<br><strong>int corePoolSize</strong>：核心线程数，可以理解为默认创建之后就不会被回收的线程数。<br><strong>int maximumPoolSize</strong>：最大执行线程数，理解为线程池中能够存在的最大线程数，除了核心线程数之外的线程空闲时间到达最大空闲等待时间后会被销毁掉。<br><strong>long keepAliveTime</strong>：空闲等待时间，决定非核心线程空闲存活时间。<br><strong>TimeUnit unit</strong>：空闲等待时间单位，上一个参数的单位。<br><strong>BlockingQueue<Runnable> workQueue</strong>：等待任务队列数，可以理解为到达最大线程数之后再进来等待的任务的最大数量。<br><strong>ThreadFactory threadFactory</strong>：线程工厂，也就是怎么创建及管理线程生命周期的相关逻辑。<br><strong>RejectedExecutionHandler handler</strong>：拒绝策略，即达到最大等待任务队列之后，再有新任务进来时候的处理逻辑。<br>为了理解上边几个参数，对上边main方法里的逻辑进行修改，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;27</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ThreadPoolDemo2 &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		ThreadPoolExecutor pool &#x3D;</span><br><span class="line">			new ThreadPoolExecutor(2, 4, 60, TimeUnit.SECONDS, new LinkedBlockingDeque&lt;Runnable&gt;(5));</span><br><span class="line">		for (int i &#x3D; 0; i &lt;8; i++) &#123;</span><br><span class="line">			pool.execute(() -&gt; &#123;</span><br><span class="line">				try &#123;</span><br><span class="line">					Thread.sleep(3000);</span><br><span class="line">				&#125;</span><br><span class="line">				catch (InterruptedException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(&quot;hello&quot;);</span><br><span class="line">			&#125;);</span><br><span class="line">			System.out.println(</span><br><span class="line">				&quot;corePoolSize:&quot; + pool.getCorePoolSize() + &quot;,maxPoolSize:&quot; + pool.getMaximumPoolSize() + &quot;,poolSize:&quot; + pool</span><br><span class="line">					.getPoolSize() + &quot;,queueSize:&quot; + pool.getQueue().size());</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		pool.shutdown();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里创建线程池的时候，为任务等待队列指定了长度5，然后在后边使用for循环模拟8个任务请求，同时，任务在执行的时候均阻塞3秒，然后打印线程池的一些数据，运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:1,queueSize:0</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:0</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:1</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:2</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:3</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:4</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:5</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:3,queueSize:5</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+
+<p>从输出结果可以看到最终8个任务都输出了，同时可以看到，核心线程是不管任务等待队列是否有任务的，只有核心线程数够了之后才会把任务往等待队列放，而非核心线程则是当任务等待队列满了之后才会开始创建。<br>因此从结果来看，虽然最大线程数是设置的4，但是实际上只创建了3个线程。<br>按上边解释的意思来看，我这个代码中应该最多只允许同时有9个任务，即4个运行中的加上5个等待队列里的，那么如果把上边程序再做一点改动，就可以验证这个问题，可以把for循环的次数改为10，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;27</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ThreadPoolDemo2 &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		ThreadPoolExecutor pool &#x3D;</span><br><span class="line">			new ThreadPoolExecutor(2, 4, 60, TimeUnit.SECONDS, new LinkedBlockingDeque&lt;Runnable&gt;(5));</span><br><span class="line">		for (int i &#x3D; 0; i &lt;10; i++) &#123;</span><br><span class="line">			pool.execute(() -&gt; &#123;</span><br><span class="line">				try &#123;</span><br><span class="line">					Thread.sleep(3000);</span><br><span class="line">				&#125;</span><br><span class="line">				catch (InterruptedException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(&quot;hello&quot;);</span><br><span class="line">			&#125;);</span><br><span class="line">			System.out.println(</span><br><span class="line">				&quot;corePoolSize:&quot; + pool.getCorePoolSize() + &quot;,maxPoolSize:&quot; + pool.getMaximumPoolSize() + &quot;,poolSize:&quot; + pool</span><br><span class="line">					.getPoolSize() + &quot;,queueSize:&quot; + pool.getQueue().size());</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		pool.shutdown();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:1,queueSize:0</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:0</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:1</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:2</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:3</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:4</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:2,queueSize:5</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:3,queueSize:5</span><br><span class="line">corePoolSize:2,maxPoolSize:4,poolSize:4,queueSize:5</span><br><span class="line">Exception in thread &quot;main&quot; java.util.concurrent.RejectedExecutionException: Task cn.tzxcode.demo.java.d03_thread.ThreadPoolDemo2$$Lambda$1&#x2F;2046562095@6e2c634b rejected from java.util.concurrent.ThreadPoolExecutor@37a71e93[Running, pool size &#x3D; 4, active threads &#x3D; 4, queued tasks &#x3D; 5, completed tasks &#x3D; 0]</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:2047)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor.reject(ThreadPoolExecutor.java:823)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1369)</span><br><span class="line">	at cn.tzxcode.demo.java.d03_thread.ThreadPoolDemo2.main(ThreadPoolDemo2.java:17)</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这里虽然模拟了10个任务，但是实际上只有9个成功执行了，第10个直接抛出了异常，被拒绝执行。<br>由于这里的异常没有进行处理，所以最终的shutdown方法也没有成功调用，因此这个程序运行后会一直阻塞，无法结束。<br>线程池的核心实际上就是这7个参数，使用不同的数值，不同的队列，以及不同的线程工厂和拒绝策略，就可以应对各种不同的需求场景。<br>在这7个参数的基础上，根据一些常用的应用场景，jdk中也内置了其他一些常用的线程池，例如singlethreadpool、newcachedthreadpool、fixedthreadpool、scheduledpool，实际上就是上边几个参数的一些特定情况。<br>在线程池使用过程中还有一个经常相关的内容就是Callable接口，这个和Runnable很相似，增加了返回值，返回值类型的Future以及相关的FutureTask、CompletableFuture这些，能够使得程序更加灵活。<br>除此之外，还有一个ForkJoinPool，不太常用，但是有些大任务的应用场景下效率特别高，主要在于他的实现是把大任务切分成很多小任务，最后还可以进行结果的汇总。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/27/javathread3/" data-id="cl1a3y7vy002p1cvh1224733v" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/02/28/lambda/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          lambda表达式基础
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/02/25/javathread2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">java基础之多线程总结二（CAS和各种常用锁）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AQS"><span class="toc-number">1.</span> <span class="toc-text">AQS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal"><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程池"><span class="toc-number">3.</span> <span class="toc-text">线程池</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

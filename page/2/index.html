@@ -146,11 +146,111 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/02/28/lambda/" data-id="cl191e98h002sv0vhet40c5jq" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/02/28/lambda/" data-id="cl1a3y7wd003i1cvheqhqemuo" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lambda/" rel="tag">lambda</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-javathread3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/27/javathread3/" class="article-date">
+  <time datetime="2022-02-27T10:43:58.000Z" itemprop="datePublished">2022-02-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/27/javathread3/">java基础之多线程总结三（AQS、ThreadLocal和线程池）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>多线程里很多新型锁实现的关键是AQS，AQS指的是AbstractQueuedSynchronizer这个类，整个锁实现过程的关键是CAS操作加volatile。<br>拿ReentrantLock非公平锁的lock和unlock举例，首先lock的源码中调用过程如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock.lock()--&gt;ReentrantLock.Sync.lock()--&gt;ReentrantLock.NonfairSync.lock()</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2022/02/27/javathread3/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/27/javathread3/" data-id="cl1a3y7vy002p1cvh1224733v" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-javathread2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/25/javathread2/" class="article-date">
+  <time datetime="2022-02-25T10:43:58.000Z" itemprop="datePublished">2022-02-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/25/javathread2/">java基础之多线程总结二（CAS和各种常用锁）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>在java中，对很多常见的需要加锁的操作进行了封装，例如Atomic开头的一些类，这些类是线程安全的，但是内部却不是用synchronized加锁实现，而是CAS。<br>例如AtomicInteger的’incrementAndGet()’方法最终调用的实际是下边这个方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@HotSpotIntrinsicCandidate</span><br><span class="line">    public final native boolean compareAndSetInt(Object o, long offset,</span><br><span class="line">                                                 int expected,</span><br><span class="line">                                                 int x);</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2022/02/25/javathread2/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/25/javathread2/" data-id="cl1a3y7vu002k1cvh6d5s211b" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -195,11 +295,109 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/02/25/zuullimit/" data-id="cl191e9b2008sv0vh9vhwd26u" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/02/25/zuullimit/" data-id="cl1a3y7z5009u1cvhe8w9452g" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E9%99%90%E6%B5%81/" rel="tag">服务限流</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-javathread1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/23/javathread1/" class="article-date">
+  <time datetime="2022-02-23T10:43:58.000Z" itemprop="datePublished">2022-02-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/23/javathread1/">java基础之多线程总结一（创建、状态、synchronized和volatile）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="线程基本创建和启动方式"><a href="#线程基本创建和启动方式" class="headerlink" title="线程基本创建和启动方式"></a>线程基本创建和启动方式</h2><p>不考虑线程池的情况下，创建和启动线程的基本方式有如下几种<br>1.直接new Thread类或者子类,<br>2.实现runnable接口然后传递给Thread，这种方式更加灵活<br>3.使用lambda表达式，实际上是实现runnable另一种写法</p>
+        
+          <p class="article-more-link">
+            <a href="/2022/02/23/javathread1/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/23/javathread1/" data-id="cl1a3y7vs002h1cvh82d6gppw" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-javacollection1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/08/javacollection1/" class="article-date">
+  <time datetime="2022-01-08T10:43:58.000Z" itemprop="datePublished">2022-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/08/javacollection1/">java基础之结合源码理解集合（非concurrent）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="集合常用接口和类"><a href="#集合常用接口和类" class="headerlink" title="集合常用接口和类"></a>集合常用接口和类</h2><p>java中的集合非常重要，是一种容器，也是一种引用数据类型，集合相关的接口和类非常多，不考虑concurrent中的情况下，最常见的有如下这些：<br><img src="https://img-blog.csdnimg.cn/3a44d042ba814faeaeff6b420fd94d79.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+        
+          <p class="article-more-link">
+            <a href="/2022/01/08/javacollection1/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/01/08/javacollection1/" data-id="cl1a3y7vp00291cvhdtit7hw7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a></li></ul>
 
     </footer>
   </div>
@@ -244,7 +442,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2021/08/22/zongjie8/" data-id="cl191e9b8009cv0vh5lq11xo0" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2021/08/22/zongjie8/" data-id="cl1a3y7z3009q1cvh2g4pad82" class="article-share-link">分享</a>
       
       
       
@@ -295,7 +493,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/11/30/python1/" data-id="cl191e9an007tv0vhfv971kwf" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/11/30/python1/" data-id="cl1a3y7xd005s1cvhdigtgymp" class="article-share-link">分享</a>
       
       
       
@@ -345,224 +543,11 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi1/" data-id="cl191e99p005qv0vh6up8adxm" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi1/" data-id="cl1a3y7xs00691cvh0uvo81xa" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ruoyi2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/30/ruoyi2/" class="article-date">
-  <time datetime="2020-10-30T07:43:58.000Z" itemprop="datePublished">2020-10-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/30/ruoyi2/">若依管理系统RuoYi-Cloud版搭建记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>1、redis安装</p>
-<p>Linux中redis安装及软件安装相关Linux知识要点<a href="https://tuzongxun.blog.csdn.net/article/details/107170447" target="_blank" rel="noopener">https://tuzongxun.blog.csdn.net/article/details/107170447</a></p>
-<p>2、nginx安装</p>
-<p>wget <a href="https://nginx.org/download/nginx-1.9.9.tar.gz" target="_blank" rel="noopener">https://nginx.org/download/nginx-1.9.9.tar.gz</a></p>
-<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><p>tar -zxvf nginx-1.9.9.tar.gz</p>
-<p>./configure –prefix=/usr/local/nginx</p>
-<p>src/core/ngx_murmurhash.c:37:11: error: this statement may fall through [-Werror=implicit-fallthrough=]<br>h ^= data[2] &lt;&lt; 16;<br>是编译器将警告当成了错误处理<br>打开 nginx的安装目录/objs/Makefile，去掉CFLAGS中的-Werror，再重新make</p>
-<p>-Wall 表示打开gcc的所有警告<br>-Werror，它要求gcc将所有的警告当成错误进行处理</p>
-<p>make<br>make install</p>
-<p>3、natapp</p>
-<p>5、内存问题</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi2/" data-id="cl191e9a3006jv0vh31i4fn8s" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-wenti3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/23/wenti3/" class="article-date">
-  <time datetime="2020-10-23T07:43:58.000Z" itemprop="datePublished">2020-10-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/23/wenti3/">近期生产问题和解决方案记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前几天生产环境上线，过程不算顺利，总结下原因大概有这么几点：</p>
-<ol>
-<li>前期准备工作不足，依赖的中间件软件安装后未经过充分验证，例如mongodb；</li>
-<li>临时改配置，sit和预生产的中间件单机，生产使用集群，集群环境的使用未得到充分验证；</li>
-<li>不可抗因素，踩到了springboot版本的bug。</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2020/10/23/wenti3/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/23/wenti3/" data-id="cl191e9as0083v0vh3i0s4c87" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-flink3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/16/flink3/" class="article-date">
-  <time datetime="2020-10-16T04:59:42.000Z" itemprop="datePublished">2020-10-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/flink/">flink</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/16/flink3/">flink on yarn集群搭建及验证要点记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="standalone模式的弊端"><a href="#standalone模式的弊端" class="headerlink" title="standalone模式的弊端"></a>standalone模式的弊端</h2><p>前面搭建了flink简单集群，并在此基础上又搭建了HA集群，记录地址如下：</p>
-<p><a href="https://tuzongxun.blog.csdn.net/article/details/109039580" target="_blank" rel="noopener">flink初识及集群搭建和简单验证</a></p>
-<p><a href="https://tuzongxun.blog.csdn.net/article/details/109081839" target="_blank" rel="noopener">flink-HA集群搭建和问题记录</a></p>
-<p>虽然上述两种都能使用，在学习flink-api阶段应该是够用了，但是如果真要上生产使用，就还是有一定的弊端。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/10/16/flink3/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/16/flink3/" data-id="cl191e97f0015v0vhh7m08zdc" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-flink2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/14/flink2/" class="article-date">
-  <time datetime="2020-10-14T14:59:42.000Z" itemprop="datePublished">2020-10-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/flink/">flink</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/14/flink2/">flink-HA集群搭建和问题记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>上一篇中，搭建了一个简单的flink集群，在这个集群中，我使用了一个<code>jobManager</code>节点，三个<code>taskManager</code>节点，之后根据官网和其他资料写了一个简单的java验证程序验证集群的可用:</p>
-<p><a href="https://blog.csdn.net/tuzongxun/article/details/109039580" target="_blank" rel="noopener">flink初识及集群搭建和简单验证</a></p>
-        
-          <p class="article-more-link">
-            <a href="/2020/10/14/flink2/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/14/flink2/" data-id="cl191e97i001av0vh6qfn5zpq" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
 
     </footer>
   </div>
@@ -604,11 +589,11 @@ var _hmt = _hmt || [];
       <ul>
         
           <li>
-            <a href="/2022/03/26/sonar2/">阿里云centos安装sonar问题记录</a>
+            <a href="/2022/03/27/jenkins4/">jenkins pipeline部署补充记录</a>
           </li>
         
           <li>
-            <a href="/2022/03/26/jenkins4/">jenkins pipeline部署补充记录</a>
+            <a href="/2022/03/26/sonar2/">阿里云centos安装sonar问题记录</a>
           </li>
         
           <li>

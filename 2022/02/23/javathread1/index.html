@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>java基础之多线程总结一（创建、状态、synchronized和volatile） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="线程基本创建和启动方式不考虑线程池的情况下，创建和启动线程的基本方式有如下几种1.直接new Thread类或者子类,2.实现runnable接口然后传递给Thread，这种方式更加灵活3.使用lambda表达式，实际上是实现runnable另一种写法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础之多线程总结一（创建、状态、synchronized和volatile）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/02/23/javathread1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="线程基本创建和启动方式不考虑线程池的情况下，创建和启动线程的基本方式有如下几种1.直接new Thread类或者子类,2.实现runnable接口然后传递给Thread，这种方式更加灵活3.使用lambda表达式，实际上是实现runnable另一种写法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/512eafc0f5804e328d9b0f69bb42cbea.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="article:published_time" content="2022-02-23T10:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-28T02:37:47.303Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="多线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/512eafc0f5804e328d9b0f69bb42cbea.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-javathread1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/23/javathread1/" class="article-date">
+  <time datetime="2022-02-23T10:43:58.000Z" itemprop="datePublished">2022-02-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      java基础之多线程总结一（创建、状态、synchronized和volatile）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="线程基本创建和启动方式"><a href="#线程基本创建和启动方式" class="headerlink" title="线程基本创建和启动方式"></a>线程基本创建和启动方式</h2><p>不考虑线程池的情况下，创建和启动线程的基本方式有如下几种<br>1.直接new Thread类或者子类,<br>2.实现runnable接口然后传递给Thread，这种方式更加灵活<br>3.使用lambda表达式，实际上是实现runnable另一种写法</p>
+<a id="more"></a>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class CreateThread &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Thread t1&#x3D;new Thread();</span><br><span class="line">		t1.start();</span><br><span class="line"></span><br><span class="line">		Thread t2&#x3D;new MyThread();</span><br><span class="line">		t2.start();</span><br><span class="line"></span><br><span class="line">		Thread t3&#x3D;new Thread(new MyRunnable());</span><br><span class="line">		t3.start();</span><br><span class="line"></span><br><span class="line">		Thread t4&#x3D;new Thread(()-&gt; System.out.println(&quot;lambda runnable start&quot;));</span><br><span class="line">		t4.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class MyThread extends Thread&#123;</span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		super.run();</span><br><span class="line">		System.out.println(&quot;MyThread start&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyRunnable implements Runnable&#123;</span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		System.out.println(&quot;MyRunnable start&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><p>一个线程从创建到运行再到结束，中间有很多种状态，这些状态之间经过不同的操作可以相互转换，总的来说可能会有如下这几种：<br><img src="https://img-blog.csdnimg.cn/512eafc0f5804e328d9b0f69bb42cbea.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>sleep会睡眠、暂停，把执行权让给其他线程，当时间结束后重新回到等待队列。<br>yield进入等待队列，有可能马上再次被执行，返回到就绪状态。<br>join等待另一个线程结束再执行当前线程，或者说把另一个线程加入到当前线程中，相当于变成了同步操作。<br>wait放出执行权等待唤醒，同时释放锁，notify和notifyAll唤醒其他等待的线程，但是不释放锁。</p>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>synchronized同步锁，锁一个对象，同时保证原子性和可见性。<br>这个锁是可重入的，可重入指的是同一个线程再次调用的时候可以直接拿到锁，比较典型的例子是父类和子类具有继承关系的方法都加了同步锁，然后子类中使用super调用父类的方法，如果不可重入则会发生死锁。<br>jdk1.5之前，synchronized锁是重要级的实现，每次加锁都需要找操作系统申请系统锁，因此性能相对较低。jdk1.5之后这个锁进行了升级，会先从无锁状态升级为偏向锁，如果有线程争用则升级为自旋锁，如果自旋结束还是没有拿到锁，则会升级为重量级系统锁。<br>偏向锁实际是无锁的，会记录线程id信息。<br>需要注意的是，目前jvm的实现是锁升级只能升不能降，同时，如果出现异常，默认锁被释放。<br>自旋锁相对系统锁更快，但是也更消耗cpu性能，所以如果是自己的代码加锁，则加锁代码执行时间短、线程数少的时候才用自旋锁，否则用系统锁。<br>另一个需要注意的是，锁的对象尽量不用String（常量）、Integer、Double等类型，因为它们的底层实现会导致可能预期不同的对象实际却是同一个对象，从而出现原本应该无关的线程结果会锁上同一个锁对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">synchronized经常用来锁方法或者代码块，如下边这样：</span><br><span class="line">public static synchronized void addNum()&#123;</span><br><span class="line">	num++;</span><br><span class="line">&#125;</span><br><span class="line">public static void addNum1()&#123;</span><br><span class="line">	Object o&#x3D;new Object();</span><br><span class="line">	synchronized (o)&#123;</span><br><span class="line">		num++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边两个方法效果其实是一样的，只不过第一个锁的对象是.class对象，而后一个是自定义的锁对象，第二种写法相对来说可能更灵活，当一个方法里只是一部分逻辑需要上锁的时候就很适用。</p>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>volatile有两个重要作用，一个是保证线程可见性，另一个是禁止指令重排序。<br>保证线程可见性借助的是cpu的缓存一致性协议。<br>对于保证线程可见性，有如下这样一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;22</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class VolatileDemo &#123;</span><br><span class="line">	private int num&#x3D;0;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		VolatileDemo volatileDemo&#x3D;new VolatileDemo();</span><br><span class="line"></span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			while(true)&#123;</span><br><span class="line">				if(volatileDemo.num&#x3D;&#x3D;20000)&#123;</span><br><span class="line">					System.out.println(volatileDemo.num);</span><br><span class="line">					break;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;).start();</span><br><span class="line"></span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			volatileDemo.num&#x3D;20000;</span><br><span class="line">		&#125;).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码很简单，期望的情况就是运行后输出一个结果，然后整个程序会停止。<br>但是实际运行时并不总是会停止，多次运行就会发现有的时候会一直运行着不会停止，实际上就是第一个线程一直读不到期望的结果。<br>导致这样问题的原因就是线程可见性问题，两个不同的线程在运行时实际是各自保留了一份数据的副本，彼此是不可见的，修改数据后会刷新到源数据里，但是什么时候刷新是不一定的，因此也就使得修改后有的时候可以被另一个线程读到，有时候不能被另一个线程读到。<br>但是当我们给这个变量加上volatile之后，不管运行多少次，这个程序都可以正确停止。即如下这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private volatile int num&#x3D;0;</span><br></pre></td></tr></table></figure>
+
+<p>之所以这样，就是因为volatile修饰后，会使得线程之间的数据可见。<br>但是需要注意的是，volatile能保证线程可见性，却不能保证原子性，例如上述代码如果改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;22</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class VolatileDemo &#123;</span><br><span class="line">	private volatile int num&#x3D;0;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		VolatileDemo volatileDemo&#x3D;new VolatileDemo();</span><br><span class="line">		CountDownLatch cd&#x3D;new CountDownLatch(2);</span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			for(int i&#x3D;0;i&lt;100000;i++)&#123;</span><br><span class="line">				volatileDemo.num++;</span><br><span class="line">			&#125;</span><br><span class="line">			cd.countDown();</span><br><span class="line">		&#125;).start();</span><br><span class="line"></span><br><span class="line">		new Thread(()-&gt;&#123;</span><br><span class="line">			for(int i&#x3D;0;i&lt;100000;i++)&#123;</span><br><span class="line">				volatileDemo.num++;</span><br><span class="line">			&#125;</span><br><span class="line">			cd.countDown();</span><br><span class="line">		&#125;).start();</span><br><span class="line"></span><br><span class="line">		try &#123;</span><br><span class="line">			cd.await();</span><br><span class="line">			System.out.println(volatileDemo.num);</span><br><span class="line">		&#125;</span><br><span class="line">		catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码运行后，如果能保证原子性，则应该每次都输出200000，但实际上每次结果都可能不一样。<br>禁止指令重排序，比较典型的应用是单例模式双重检查，代码示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @Author tuzongxun</span><br><span class="line"> * @Date 2022&#x2F;2&#x2F;22</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class VolatileDemo2 &#123;</span><br><span class="line">	private static volatile VolatileDemo2 volatileDemo2;</span><br><span class="line">	private VolatileDemo2()&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	public static VolatileDemo2 getInstance()&#123;</span><br><span class="line">		if(volatileDemo2&#x3D;&#x3D;null)&#123;</span><br><span class="line">			synchronized (VolatileDemo2.class)&#123;</span><br><span class="line">				if(volatileDemo2 &#x3D;&#x3D;null) &#123;</span><br><span class="line">					volatileDemo2 &#x3D; new VolatileDemo2();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return volatileDemo2;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里volatile的主要作用其实就是防止指令重排序，这里指令重排序指的是，new对象的过程实际会有申请内存、初始化、赋值等若干个操作，在多线程的情况下，如果不加volatile，则可能使这几个操作被打断，从而导致指令重排序，例如上边这个代码使用idea插件查看指令结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">0 getstatic #2 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2.volatileDemo2 : Lcn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2;&gt;</span><br><span class="line">3 ifnonnull 37 (+34)</span><br><span class="line">6 ldc #3 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2&gt;</span><br><span class="line">8 dup</span><br><span class="line">9 astore_0</span><br><span class="line">10 monitorenter</span><br><span class="line">11 getstatic #2 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2.volatileDemo2 : Lcn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2;&gt;</span><br><span class="line">14 ifnonnull 27 (+13)</span><br><span class="line">17 new #3 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2&gt;</span><br><span class="line">20 dup</span><br><span class="line">21 invokespecial #4 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2.&lt;init&gt; : ()V&gt;</span><br><span class="line">24 putstatic #2 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2.volatileDemo2 : Lcn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2;&gt;</span><br><span class="line">27 aload_0</span><br><span class="line">28 monitorexit</span><br><span class="line">29 goto 37 (+8)</span><br><span class="line">32 astore_1</span><br><span class="line">33 aload_0</span><br><span class="line">34 monitorexit</span><br><span class="line">35 aload_1</span><br><span class="line">36 athrow</span><br><span class="line">37 getstatic #2 &lt;cn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2.volatileDemo2 : Lcn&#x2F;tzxcode&#x2F;demo&#x2F;java&#x2F;d03_thread&#x2F;VolatileDemo2;&gt;</span><br><span class="line">40 areturn</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/23/javathread1/" data-id="cl1a3y7vs002h1cvh82d6gppw" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/02/25/zuullimit/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          使用spring-cloud-zuul-rate-limit在zuul中为服务限流
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/01/08/javacollection1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">java基础之结合源码理解集合（非concurrent）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程基本创建和启动方式"><span class="toc-number">1.</span> <span class="toc-text">线程基本创建和启动方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程状态"><span class="toc-number">2.</span> <span class="toc-text">线程状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">3.</span> <span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-number">4.</span> <span class="toc-text">volatile</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

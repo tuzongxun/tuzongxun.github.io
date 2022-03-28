@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>java基础之结合源码理解集合（非concurrent） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="集合常用接口和类java中的集合非常重要，是一种容器，也是一种引用数据类型，集合相关的接口和类非常多，不考虑concurrent中的情况下，最常见的有如下这些：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础之结合源码理解集合（非concurrent）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/01/08/javacollection1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="集合常用接口和类java中的集合非常重要，是一种容器，也是一种引用数据类型，集合相关的接口和类非常多，不考虑concurrent中的情况下，最常见的有如下这些：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/3a44d042ba814faeaeff6b420fd94d79.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="article:published_time" content="2022-01-08T10:43:58.000Z">
+<meta property="article:modified_time" content="2022-03-28T02:35:21.519Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="集合">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/3a44d042ba814faeaeff6b420fd94d79.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-javacollection1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/08/javacollection1/" class="article-date">
+  <time datetime="2022-01-08T10:43:58.000Z" itemprop="datePublished">2022-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      java基础之结合源码理解集合（非concurrent）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="集合常用接口和类"><a href="#集合常用接口和类" class="headerlink" title="集合常用接口和类"></a>集合常用接口和类</h2><p>java中的集合非常重要，是一种容器，也是一种引用数据类型，集合相关的接口和类非常多，不考虑concurrent中的情况下，最常见的有如下这些：<br><img src="https://img-blog.csdnimg.cn/3a44d042ba814faeaeff6b420fd94d79.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5raC5a6X5YuL,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<a id="more"></a>
+<p>从上图也可以看到主要分为两大阵营，一个是Collection，另一个是Map，在Collection中又分为List和Set。<br>List是有序的，这个有序实际上指的是元素放入和取出顺序是有序的，而不是指元素的大小。<br>Set是无序的，这个指的是元素放入和取出顺序不能保证。但是从上边可以看到Set下列出了HashSet和TreeSet，实际上TreeSet由于底层存储是树结构，这种存储必须比较大小，所以TreeSet里边虽然元素存入和取出也是无序，但是元素本身大小是有顺序的。<br>除此之外，HashSet有一个子类LinkedHashSet，在原本的存储结构上加了一层链表来记录存入顺序，所以可以说也是有序的。<br>Map是键值对，HashMap和HashSet相似，TreeMap和TreeSet相似，不过针对的都是Key，实际上HashSet底层就是HashMap，TreeSet底层就是TreeMap。<br>除了上边说的这些，还有两个其实工作中不常用，但是可能面试经常出现的，一个是Vector，另一个是HashTable。之所以面试常问，主要是因为Vector拿来和ArrayList做比较，Vector是线程安全的，因为方法都加了synchronized修饰。HashTable常拿来和HashMap比较，也是因为HashTable是线程安全的，方法都加了synchronized修饰。<br>除此之外，他们的很多实现都相似，甚至于在jdk1.8之前基本就是一样的。另外就是，从jdk源码的注释来看，HashTable和Vector都是jdk1.0就有的，而ArrayList和HashMap则是1.2才有。<br>尽管Vector和HashTable是线程安全的，但是实际现在并不常用，当需要使用线程安全的集合时，更好的选择是使用jdk1.5增加的concurrent包中的相关类，例如ConcurrentHashMap、CopyOnWriteArrayList、CopyOnWriteArraySet这些。<br>除了上边这些概述之外，这些具体的集合类中都还有很多比较重要的技术点，如：</p>
+<h2 id="ArrayList扩容原理"><a href="#ArrayList扩容原理" class="headerlink" title="ArrayList扩容原理"></a>ArrayList扩容原理</h2><p>ArrayList底层是数组，定义为Object[]，在jdk1.8的源码中，还有一个默认的长度10，一个默认的空数组以及一个记录数组使用长度的变量size，相关的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">transient Object[] elementData;</span><br><span class="line">private static final int DEFAULT_CAPACITY &#x3D; 10;</span><br><span class="line">private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA &#x3D; &#123;&#125;;</span><br><span class="line">private int size;</span><br></pre></td></tr></table></figure>
+<p>当使用”new ArrayList&lt;&gt;()”来创建一个ArrayList对象的时候，会先把这个默认的空数组赋值给elementData，当调用add方法时，会再判断elementData是否和默认的空数组对象相同，如果不同，则进行数组的扩容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">public ArrayList() &#123;</span><br><span class="line">	this.elementData &#x3D; DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean add(E e) &#123;</span><br><span class="line">	ensureCapacityInternal(size + 1);  &#x2F;&#x2F; Increments modCount!!</span><br><span class="line">	elementData[size++] &#x3D; e;</span><br><span class="line">	return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void ensureCapacityInternal(int minCapacity) &#123;</span><br><span class="line">	if (elementData &#x3D;&#x3D; DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</span><br><span class="line">		minCapacity &#x3D; Math.max(DEFAULT_CAPACITY, minCapacity);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ensureExplicitCapacity(minCapacity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void ensureExplicitCapacity(int minCapacity) &#123;</span><br><span class="line">	modCount++;</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F; overflow-conscious code</span><br><span class="line">	if (minCapacity - elementData.length &gt; 0)</span><br><span class="line">		grow(minCapacity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void grow(int minCapacity) &#123;</span><br><span class="line">	&#x2F;&#x2F; overflow-conscious code</span><br><span class="line">	int oldCapacity &#x3D; elementData.length;</span><br><span class="line">	int newCapacity &#x3D; oldCapacity + (oldCapacity &gt;&gt; 1);</span><br><span class="line">	if (newCapacity - minCapacity &lt; 0)</span><br><span class="line">		newCapacity &#x3D; minCapacity;</span><br><span class="line">	if (newCapacity - MAX_ARRAY_SIZE &gt; 0)</span><br><span class="line">		newCapacity &#x3D; hugeCapacity(minCapacity);</span><br><span class="line">	&#x2F;&#x2F; minCapacity is usually close to size, so this is a win:</span><br><span class="line">	elementData &#x3D; Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static int hugeCapacity(int minCapacity) &#123;</span><br><span class="line">	if (minCapacity &lt; 0) &#x2F;&#x2F; overflow</span><br><span class="line">		throw new OutOfMemoryError();</span><br><span class="line">	return (minCapacity &gt; MAX_ARRAY_SIZE) ?</span><br><span class="line">		Integer.MAX_VALUE :</span><br><span class="line">		MAX_ARRAY_SIZE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上边的源码中可以看到，第一次往AarrayList中添加数据的时候，最终实际扩容后的数组长度就是10.<br>当数组长度超过10之后再扩容，新的数组长度是”oldCapacity + (oldCapacity &gt;&gt; 1)”，这里重要的是”oldCapacity &gt;&gt; 1”这一段，在位运算中，右移以为代表除以2，左移一位代表乘以2，这里这里很明显就是扩容为原数组的1.5倍。<br>当时需要注意的是后边还有判断，就是当这个1.5倍的数值超过MAX_ARRAY_SIZE时，则最大值是Integer.MAX_VALUE。</p>
+<h2 id="LinkedList结构和特点分析"><a href="#LinkedList结构和特点分析" class="headerlink" title="LinkedList结构和特点分析"></a>LinkedList结构和特点分析</h2><p>ArrayList底层的数组结构决定了它随机访问速度很快，但是如果要插入和删除，则需要移动该位置之后的所有元素，就会显得低效，因此针对插入和删除多的操作，就需要使用LinkedList来提高效率。<br>LinkedList底层是链表结构，所谓的链表，实际就是每个节点除了存储数据本身之外，还会记录相邻节点的信息，只有通过相邻节点才能找到另一个节点，从逻辑上看，节点之间就像是一个链子连了起来。<br>在jdk1.8源码中，LinkedList有几个重要属性，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">transient int size &#x3D; 0;</span><br><span class="line">transient Node&lt;E&gt; first;</span><br><span class="line">transient Node&lt;E&gt; last;</span><br></pre></td></tr></table></figure>
+<p>这三个属性实际就是List的使用长度，首节点和尾结点，而节点Node，是LinkedList的一个内部类，定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private static class Node&lt;E&gt; &#123;</span><br><span class="line">	E item;</span><br><span class="line">	Node&lt;E&gt; next;</span><br><span class="line">	Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">	Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">		this.item &#x3D; element;</span><br><span class="line">		this.next &#x3D; next;</span><br><span class="line">		this.prev &#x3D; prev;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到这个Node你除了记录数据本身外，还会记录上一个节点和下一个节点信息，这种结构实际上可以称为双向链表。还有一种是单向链表，也就是只记录下一个节点而不记录上一个节点信息。<br>这里边还有一个特殊的链表，叫做循环链表，也就是说最后一个节点的下一个节点会指向首节点，从而形成一个环状。<br>当然了，这里的LinkedList中的链表不是循环链表，这个可以从向里边添加元素的源码看出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public boolean add(E e) &#123;</span><br><span class="line">	linkLast(e);</span><br><span class="line">	return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void linkLast(E e) &#123;</span><br><span class="line">	final Node&lt;E&gt; l &#x3D; last;</span><br><span class="line">	final Node&lt;E&gt; newNode &#x3D; new Node&lt;&gt;(l, e, null);</span><br><span class="line">	last &#x3D; newNode;</span><br><span class="line">	if (l &#x3D;&#x3D; null)</span><br><span class="line">		first &#x3D; newNode;</span><br><span class="line">	else</span><br><span class="line">		l.next &#x3D; newNode;</span><br><span class="line">	size++;</span><br><span class="line">	modCount++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这里采用的是所谓的尾插法，也就是说新的元素会往最后一个节点的后边放，把新几点的上一个节点设置成之前的最后一个几点，然后把之前的最后一个节点的下一个几点设置成新节点。<br>之前说了，ArrayList中的底层结构是数组，因此当随机访问元素，也就是用下标来去元素的时候，实际可以直接用数组下标去除数组中的元素，但是LinkedList中的链表结构就不能这样取，只能通过遍历，直到找到需要找的那个元素。<br>很显然，这个查找如果是从前往后遍历，如果刚好是第一个节点的，那么只需要循环一次，但是如果刚好是最后一个，则需要遍历集合长度的次数。<br>因此在LinkedList中再随机访问元素的时候进行了一个优化，里边用到了二分查找算法，也就是把集合元素一分为二，当访问元素的索引位于集合前半部分时就从前往后遍历，如果访问的元素索引位于集合后半部分，则从后往前遍历，相关源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public E get(int index) &#123;</span><br><span class="line">	checkElementIndex(index);</span><br><span class="line">	return node(index).item;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Node&lt;E&gt; node(int index) &#123;</span><br><span class="line">	&#x2F;&#x2F; assert isElementIndex(index);</span><br><span class="line"></span><br><span class="line">	if (index &lt; (size &gt;&gt; 1)) &#123;</span><br><span class="line">		Node&lt;E&gt; x &#x3D; first;</span><br><span class="line">		for (int i &#x3D; 0; i &lt; index; i++)</span><br><span class="line">			x &#x3D; x.next;</span><br><span class="line">		return x;</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		Node&lt;E&gt; x &#x3D; last;</span><br><span class="line">		for (int i &#x3D; size - 1; i &gt; index; i--)</span><br><span class="line">			x &#x3D; x.prev;</span><br><span class="line">		return x;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><p>HashSet底层实际就是HashMap，创建HashSet对象时，底层实际就会创建HashMap对象，这个key就是要往HashSet中放的数据，Value则是一个固定的对象。往HashSet里放数据实际也是往底层的HashMap中放数据，这些从源码都可以看出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public HashSet() &#123;</span><br><span class="line">	map &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean add(E e) &#123;</span><br><span class="line">	return map.put(e, PRESENT)&#x3D;&#x3D;null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对于HashSet这种特点，一些原理性的内容实际是需要结合HashMap来说。</p>
+<h2 id="LinkedHashSet"><a href="#LinkedHashSet" class="headerlink" title="LinkedHashSet"></a>LinkedHashSet</h2><p>LinkedHashSet的底层是LinkedHashMap，所以原理性的内容实际也需要结合LinkedHashMap来说。</p>
+<h2 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h2><p>TreeSet的底层是TreeMap。</p>
+<h2 id="结合源码看HashMap"><a href="#结合源码看HashMap" class="headerlink" title="结合源码看HashMap"></a>结合源码看HashMap</h2><p>Map里的数据都是键值对形式存储的，在jdk1.8中，HashMap的底层是采用的数组+链表+红黑树这样的结构存储数据。<br>首先，HashMap所谓的键值对，在JDK1.8中实际上是一个Node内部类，这个类继承自另一个内部类Entry（jdk1.8以前直接就是这个），大概定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; &#123;</span><br><span class="line">        final int hash;</span><br><span class="line">        final K key;</span><br><span class="line">        V value;</span><br><span class="line">        Node&lt;K,V&gt; next;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当往HashMap中存数据的时候，实际就是生成这个Node对象，然后存入Node数组。<br>在存的过程中，首先就涉及到一个数组长度问题，从源码中可以看到，在创建HashMap时候并不会创建底层的数组，只是对加载因子这些变量进行了赋值，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public HashMap() &#123;</span><br><span class="line">	this.loadFactor &#x3D; DEFAULT_LOAD_FACTOR; &#x2F;&#x2F; all other fields defaulted</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public HashMap(int initialCapacity) &#123;</span><br><span class="line">	this(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public HashMap(int initialCapacity, float loadFactor) &#123;</span><br><span class="line">	if (initialCapacity &lt; 0)</span><br><span class="line">		throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot; +</span><br><span class="line">										   initialCapacity);</span><br><span class="line">	if (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">		initialCapacity &#x3D; MAXIMUM_CAPACITY;</span><br><span class="line">	if (loadFactor &lt;&#x3D; 0 || Float.isNaN(loadFactor))</span><br><span class="line">		throw new IllegalArgumentException(&quot;Illegal load factor: &quot; +</span><br><span class="line">										   loadFactor);</span><br><span class="line">	this.loadFactor &#x3D; loadFactor;</span><br><span class="line">	this.threshold &#x3D; tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>底层数组的创建实际是在put数据的时候，put方法部分源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">final V putVal(int hash, K key, V value, boolean onlyIfAbsent,</span><br><span class="line">			   boolean evict) &#123;</span><br><span class="line">	Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;</span><br><span class="line">	if ((tab &#x3D; table) &#x3D;&#x3D; null || (n &#x3D; tab.length) &#x3D;&#x3D; 0)</span><br><span class="line">		n &#x3D; (tab &#x3D; resize()).length;</span><br><span class="line">	if ((p &#x3D; tab[i &#x3D; (n - 1) &amp; hash]) &#x3D;&#x3D; null)</span><br><span class="line">		tab[i] &#x3D; newNode(hash, key, value, null);</span><br><span class="line">	else &#123;</span><br><span class="line">		Node&lt;K,V&gt; e; K k;</span><br><span class="line">		if (p.hash &#x3D;&#x3D; hash &amp;&amp;</span><br><span class="line">			((k &#x3D; p.key) &#x3D;&#x3D; key || (key !&#x3D; null &amp;&amp; key.equals(k))))</span><br><span class="line">			e &#x3D; p;</span><br><span class="line">		else if (p instanceof TreeNode)</span><br><span class="line">			e &#x3D; ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);</span><br><span class="line">		else &#123;</span><br><span class="line">			for (int binCount &#x3D; 0; ; ++binCount) &#123;</span><br><span class="line">				if ((e &#x3D; p.next) &#x3D;&#x3D; null) &#123;</span><br><span class="line">					p.next &#x3D; newNode(hash, key, value, null);</span><br><span class="line">					if (binCount &gt;&#x3D; TREEIFY_THRESHOLD - 1) &#x2F;&#x2F; -1 for 1st</span><br><span class="line">						treeifyBin(tab, hash);</span><br><span class="line">					break;</span><br><span class="line">				&#125;</span><br><span class="line">				if (e.hash &#x3D;&#x3D; hash &amp;&amp;</span><br><span class="line">					((k &#x3D; e.key) &#x3D;&#x3D; key || (key !&#x3D; null &amp;&amp; key.equals(k))))</span><br><span class="line">					break;</span><br><span class="line">				p &#x3D; e;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if (e !&#x3D; null) &#123; &#x2F;&#x2F; existing mapping for key</span><br><span class="line">			V oldValue &#x3D; e.value;</span><br><span class="line">			if (!onlyIfAbsent || oldValue &#x3D;&#x3D; null)</span><br><span class="line">				e.value &#x3D; value;</span><br><span class="line">			afterNodeAccess(e);</span><br><span class="line">			return oldValue;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	++modCount;</span><br><span class="line">	if (++size &gt; threshold)</span><br><span class="line">		resize();</span><br><span class="line">	afterNodeInsertion(evict);</span><br><span class="line">	return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法看起来比较复杂，也是这个方法涉及了HashMap中的大部分关键知识点。<br>首先，在这里对底层数组table变量进行判断，是null，则会创建一个。<br>其次，在创建数组的时候，不仅是第一次需要创建，既然是数组，长度就固定，当装满的时候就需要进行数组扩容，而数组的扩容也就意味着要生成新的数组。<br>当然了，在HashMap中并不是等装满了才会扩容。<br>那么这个数组，不论是第一次创建，还是扩容的时候，都需要指定数组的长度，这个长度的计算就涉及到很多技术点。<br>在HashMap使用规范里，其实是建议指定一个初始长度的，这样后边就不用去计算，尤其是确定集合大小的时候，创建的时候指定长度就可以减少扩容的操作。<br>在创建底层数组的时候，有两个重要的属性，一个是默认长度，另一个是默认加载因子。默认长度在源码中的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static final int DEFAULT_INITIAL_CAPACITY &#x3D; 1 &lt;&lt; 4;</span><br></pre></td></tr></table></figure>
+<p>之前说过，右移一位指的是乘以2，那么右移4位，实际就是四次乘以2，即1<em>2</em>2<em>2</em>2=16，所以这个默认的长度就是16.<br>默认加载因子在源码中定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static final float DEFAULT_LOAD_FACTOR &#x3D; 0.75f;</span><br></pre></td></tr></table></figure>
+<p>这个加载因子的作用就是用来判断底层数组扩容的，例如这里是0.75，意思就是当实际数据量超过数组容量的0.75倍时就对底层数组进行扩容，扩容为原来的2倍。<br>在创建初始数组以及进行数组扩容的时候，有一个细节，就是数组的长度最终一定会是2的n次幂，即使创建HashMap的时候指定了不是2的n次幂，结果也会是一个比指定的数大一点的2的n次幂的数，对于这个数组长度计算的方法实际就是下边这段源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">static final int tableSizeFor(int cap) &#123;</span><br><span class="line">	int n &#x3D; cap - 1;</span><br><span class="line">	n |&#x3D; n &gt;&gt;&gt; 1;</span><br><span class="line">	n |&#x3D; n &gt;&gt;&gt; 2;</span><br><span class="line">	n |&#x3D; n &gt;&gt;&gt; 4;</span><br><span class="line">	n |&#x3D; n &gt;&gt;&gt; 8;</span><br><span class="line">	n |&#x3D; n &gt;&gt;&gt; 16;</span><br><span class="line">	return (n &lt; 0) ? 1 : (n &gt;&#x3D; MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上边的代码用了一堆的位运算，先不管具体是什么，如果自己调用一下这个方法就会验证上边的2的n次幂这个说法。另外就是，上边方法第一行的减一，其实就是为了在传入的数刚好是2的n次幂的时候不会生成一个比它大的2的n次幂的数。<br>为什么这个长度一定要是2的n次幂呢，结论是为了减少哈希碰撞，因为在上边putVal这个方法中可以看到，底层数组索引的取值实际是这样的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if ((p &#x3D; tab[i &#x3D; (n - 1) &amp; hash]) &#x3D;&#x3D; null)</span><br></pre></td></tr></table></figure>
+<p>也就是说索引是通过”(n - 1) &amp; hash”这样一个表达式来计算的，这个表达式等价于”hash % n”。<br>说简单点，就是HashMap底层数组的索引确定，是通过key的hash值和数组长度的取余操作来实现的，而这个操作中的n就是数组长度，当n的值是2的次幂的时候就可以降低相同的概率（需要注意这里的n是HashMap中的变量，不能和2的n次幂这个n混淆了）。<br>HashMap中所谓的哈希碰撞，其实就是指这个数组索引的取值相等。<br>当这个取值真的相等的时候，也就是说要往数组的同一个位置存数据，这时候就轮到链表发挥作用了，这部分的代码就在上边putVal中。<br>先判断两个key的hash值是否一样以及key的值是否一样，如果这两个都一样，则认定是同一个，如果不一样则判断是不是红黑树结构，如果是，就创建新的树节点，如果不是，则走链表的逻辑。<br>这里获取hash值和判断值是否一样，就涉及到对象的hashCode方法和equals方法，所以对于需要作为HashMap的key的对象，需要重写hashCode和equals方法。<br>在链表的逻辑中则又有关于链表转为红黑树结构的逻辑，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">if (binCount &gt;&#x3D; TREEIFY_THRESHOLD - 1) &#x2F;&#x2F; -1 for 1st</span><br><span class="line">                            treeifyBin(tab, hash);</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">final void treeifyBin(Node&lt;K,V&gt;[] tab, int hash) &#123;</span><br><span class="line">	int n, index; Node&lt;K,V&gt; e;</span><br><span class="line">	if (tab &#x3D;&#x3D; null || (n &#x3D; tab.length) &lt; MIN_TREEIFY_CAPACITY)</span><br><span class="line">		resize();</span><br><span class="line">	else if ((e &#x3D; tab[index &#x3D; (n - 1) &amp; hash]) !&#x3D; null) &#123;</span><br><span class="line">		TreeNode&lt;K,V&gt; hd &#x3D; null, tl &#x3D; null;</span><br><span class="line">		do &#123;</span><br><span class="line">			TreeNode&lt;K,V&gt; p &#x3D; replacementTreeNode(e, null);</span><br><span class="line">			if (tl &#x3D;&#x3D; null)</span><br><span class="line">				hd &#x3D; p;</span><br><span class="line">			else &#123;</span><br><span class="line">				p.prev &#x3D; tl;</span><br><span class="line">				tl.next &#x3D; p;</span><br><span class="line">			&#125;</span><br><span class="line">			tl &#x3D; p;</span><br><span class="line">		&#125; while ((e &#x3D; e.next) !&#x3D; null);</span><br><span class="line">		if ((tab[index] &#x3D; hd) !&#x3D; null)</span><br><span class="line">			hd.treeify(tab);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>梳理上边的逻辑可以看到有这样有个关键判断，即”binCount &gt;= TREEIFY_THRESHOLD - 1”和”(n = tab.length) &lt; MIN_TREEIFY_CAPACITY”，这里TREEIFY_THRESHOLD是8，MIN_TREEIFY_CAPACITY是64，分析这部分代码可以知道也就是当链表长度大于8并且数组的长度大于64的时候才会把链表转换为红黑树结构，为什么是这两个值，据说是jdk研发团队经过测试发现在这样的情况下转换之后性能才更好。<br>红黑树具体的内容比较复杂，在这里需要记住的是它是相对均衡的二分查找树，实际也是为了提高查询性能。</p>
+<h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><p>由于HashMap的是根据hash值散列算法确定数组下标的，所以里边存入的元素就无法保证存入顺序，而HashMap有一个子类LinkedHashMap就在此基础上增加了一个链表来存储元素的存入顺序，其他内容和HashMap基本类似。</p>
+<h2 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h2><p>TreeMap是直接基于红黑树存储键值对的，存数据的时候需要比较key的大小，这个比较借助于对象的比较器，可以是外部比较器，也可以是内部比较器，在创建TreeMap对象的时候可以选择传入外部比较器。<br>红黑树在存数据的过程中根节点是会变的，以尽量保持一个所谓的平衡，为什么要平衡，就是为了查找的时候更快，因为查找的时候会基于比较器和跟节点的key进行比较，如果小，则往根节点左边查找，如果大，则往根节点右边查找，尽量两边平衡的话，就可能使查询的次数变少，从而效率变高。相关源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">final Entry&lt;K,V&gt; getEntry(Object key) &#123;</span><br><span class="line">	&#x2F;&#x2F; Offload comparator-based version for sake of performance</span><br><span class="line">	if (comparator !&#x3D; null)</span><br><span class="line">		return getEntryUsingComparator(key);</span><br><span class="line">	if (key &#x3D;&#x3D; null)</span><br><span class="line">		throw new NullPointerException();</span><br><span class="line">	@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">		Comparable&lt;? super K&gt; k &#x3D; (Comparable&lt;? super K&gt;) key;</span><br><span class="line">	Entry&lt;K,V&gt; p &#x3D; root;</span><br><span class="line">	while (p !&#x3D; null) &#123;</span><br><span class="line">		int cmp &#x3D; k.compareTo(p.key);</span><br><span class="line">		if (cmp &lt; 0)</span><br><span class="line">			p &#x3D; p.left;</span><br><span class="line">		else if (cmp &gt; 0)</span><br><span class="line">			p &#x3D; p.right;</span><br><span class="line">		else</span><br><span class="line">			return p;</span><br><span class="line">	&#125;</span><br><span class="line">	return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上，在存数据的时候也是这样判断key大小从而判断是往前左还是往右放，只不过不是单纯的只和根节点判断，并且最终还要做一个红黑树的平衡性和颜色的调整，相关源代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">public V put(K key, V value) &#123;</span><br><span class="line">	Entry&lt;K,V&gt; t &#x3D; root;</span><br><span class="line">	if (t &#x3D;&#x3D; null) &#123;</span><br><span class="line">		compare(key, key); &#x2F;&#x2F; type (and possibly null) check</span><br><span class="line"></span><br><span class="line">		root &#x3D; new Entry&lt;&gt;(key, value, null);</span><br><span class="line">		size &#x3D; 1;</span><br><span class="line">		modCount++;</span><br><span class="line">		return null;</span><br><span class="line">	&#125;</span><br><span class="line">	int cmp;</span><br><span class="line">	Entry&lt;K,V&gt; parent;</span><br><span class="line">	&#x2F;&#x2F; split comparator and comparable paths</span><br><span class="line">	Comparator&lt;? super K&gt; cpr &#x3D; comparator;</span><br><span class="line">	if (cpr !&#x3D; null) &#123;</span><br><span class="line">		do &#123;</span><br><span class="line">			parent &#x3D; t;</span><br><span class="line">			cmp &#x3D; cpr.compare(key, t.key);</span><br><span class="line">			if (cmp &lt; 0)</span><br><span class="line">				t &#x3D; t.left;</span><br><span class="line">			else if (cmp &gt; 0)</span><br><span class="line">				t &#x3D; t.right;</span><br><span class="line">			else</span><br><span class="line">				return t.setValue(value);</span><br><span class="line">		&#125; while (t !&#x3D; null);</span><br><span class="line">	&#125;</span><br><span class="line">	else &#123;</span><br><span class="line">		if (key &#x3D;&#x3D; null)</span><br><span class="line">			throw new NullPointerException();</span><br><span class="line">		@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">			Comparable&lt;? super K&gt; k &#x3D; (Comparable&lt;? super K&gt;) key;</span><br><span class="line">		do &#123;</span><br><span class="line">			parent &#x3D; t;</span><br><span class="line">			cmp &#x3D; k.compareTo(t.key);</span><br><span class="line">			if (cmp &lt; 0)</span><br><span class="line">				t &#x3D; t.left;</span><br><span class="line">			else if (cmp &gt; 0)</span><br><span class="line">				t &#x3D; t.right;</span><br><span class="line">			else</span><br><span class="line">				return t.setValue(value);</span><br><span class="line">		&#125; while (t !&#x3D; null);</span><br><span class="line">	&#125;</span><br><span class="line">	Entry&lt;K,V&gt; e &#x3D; new Entry&lt;&gt;(key, value, parent);</span><br><span class="line">	if (cmp &lt; 0)</span><br><span class="line">		parent.left &#x3D; e;</span><br><span class="line">	else</span><br><span class="line">		parent.right &#x3D; e;</span><br><span class="line">	fixAfterInsertion(e);</span><br><span class="line">	size++;</span><br><span class="line">	modCount++;</span><br><span class="line">	return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/01/08/javacollection1/" data-id="cl1a3y7vp00291cvhdtit7hw7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/02/23/javathread1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          java基础之多线程总结一（创建、状态、synchronized和volatile）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/08/22/zongjie8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">时隔九月再起航</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#集合常用接口和类"><span class="toc-number">1.</span> <span class="toc-text">集合常用接口和类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ArrayList扩容原理"><span class="toc-number">2.</span> <span class="toc-text">ArrayList扩容原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedList结构和特点分析"><span class="toc-number">3.</span> <span class="toc-text">LinkedList结构和特点分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashSet"><span class="toc-number">4.</span> <span class="toc-text">HashSet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashSet"><span class="toc-number">5.</span> <span class="toc-text">LinkedHashSet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TreeSet"><span class="toc-number">6.</span> <span class="toc-text">TreeSet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结合源码看HashMap"><span class="toc-number">7.</span> <span class="toc-text">结合源码看HashMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashMap"><span class="toc-number">8.</span> <span class="toc-text">LinkedHashMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TreeMap"><span class="toc-number">9.</span> <span class="toc-text">TreeMap</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
