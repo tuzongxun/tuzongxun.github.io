@@ -4,7 +4,7 @@
 
 # Site
 title: 涂宗勋的博客
-subtitle: 5年java工作经验，现居武汉，爱好分享，CSDN博客https://blog.csdn.net/tuzongxun
+subtitle: java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun
 description: 
 author: 涂宗勋
 language: zh-CN
@@ -12,8 +12,8 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://blog.tzxcode.cn
-#url: http://blog.tzxcode.cn/
+#url: https://tuzongxun.gitee.io
+url: http://blog.tzxcode.cn/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -50,7 +50,7 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 5
+  per_page: 9
   order_by: -date
   
 # Category & Tag
@@ -95,6 +95,12 @@ theme: cafe
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
+    #- type: git
+     # repo: git@github.com:tuzongxun/tuzongxun.github.io.git
+      #branch: master
+    #- type: git
+     # repo: git@gitee.com:tuzongxun/tzxBlog.git
+      #branch: master
   type: git
   #repo: git@gitee.com:tuzongxun/tzxBlog.git
   repo:

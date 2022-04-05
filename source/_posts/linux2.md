@@ -1,9 +1,9 @@
 ---
 title: Linux中redis安装及软件安装相关Linux知识要点
 date: 2020-7-6 23:09:42
-tags: [linux,redis]
+tags: linux
 toc: true
-categories: [redis,linux]
+categories: linux
 ---
 
 无论是Linux还是windows安装软件，都要先有一个安装包。这个安装包可以是直接本机下载，也可以是从其他机器传过来。
