@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>React系统学习（入门使用和基础概念） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="由于当前项目的前端中使用的是React，所以其实我应该算是接触它有很长一段时间了。 但是一直以来都是局部小功能的修改，并没有系统性的学习和理解。 鉴于工作技术优先的原则，我觉得有必要从零开始系统的学习一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React系统学习（入门使用和基础概念）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/05/react0/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="由于当前项目的前端中使用的是React，所以其实我应该算是接触它有很长一段时间了。 但是一直以来都是局部小功能的修改，并没有系统性的学习和理解。 鉴于工作技术优先的原则，我觉得有必要从零开始系统的学习一下。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/react/helloworld.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/react/vdom.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/react/adom.png">
+<meta property="article:published_time" content="2022-04-05T11:43:58.000Z">
+<meta property="article:modified_time" content="2022-04-05T11:55:08.169Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.tzxcode.cn/images/react/helloworld.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-react0" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/05/react0/" class="article-date">
+  <time datetime="2022-04-05T11:43:58.000Z" itemprop="datePublished">2022-04-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React系统学习（入门使用和基础概念）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>由于当前项目的前端中使用的是React，所以其实我应该算是接触它有很长一段时间了。</p>
+<p>但是一直以来都是局部小功能的修改，并没有系统性的学习和理解。</p>
+<p>鉴于工作技术优先的原则，我觉得有必要从零开始系统的学习一下。</p>
+<a id="more"></a>
+
+<h2 id="基础集成和使用"><a href="#基础集成和使用" class="headerlink" title="基础集成和使用"></a>基础集成和使用</h2><p>实际上，和Vue一样，React可以使用脚手架创建项目，并且真正的实际项目中可能也都是使用脚手架进行。</p>
+<p>不过我这里暂时不准备一开始就使用脚手架，而是采用最基础的直接在HTML页面中引入的方式，例如一个简单的集成页面如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;title&gt;&lt;&#x2F;title&gt;</span><br><span class="line">        &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">        &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1&quot;&gt;</span><br><span class="line">    &lt;&#x2F;head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;div id&#x3D;&quot;test&quot;&gt;test&lt;&#x2F;div&gt;</span><br><span class="line">        &lt;!--1.核心库--&gt;</span><br><span class="line">        &lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;js&#x2F;react.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">        &lt;!--2.操作dom--&gt;</span><br><span class="line">        &lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;js&#x2F;react-dom.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">        &lt;!--3.用户将jsx转为js--&gt;</span><br><span class="line">        &lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.staticfile.org&#x2F;babel-standalone&#x2F;6.26.0&#x2F;babel.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">        &lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">            &#x2F;&#x2F; 4.创建虚拟DOM</span><br><span class="line">            const VDOM &#x3D; &lt;h1 id&#x3D;&#39;t&#39;&gt;Hello World&lt;&#x2F;h1&gt;</span><br><span class="line">            &#x2F;&#x2F; 5.渲染虚拟DOM</span><br><span class="line">            ReactDOM.render(VDOM,document.getElementById(&#39;test&#39;))</span><br><span class="line">        &lt;&#x2F;script&gt;</span><br><span class="line">    &lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在这个极简的代码中可以看到React使用的一些基本规则，总结如下：</p>
+<ol>
+<li>需要引入react的核心库；</li>
+<li>需要引入react操作Dom的库，这里准确的说，应该是虚拟Dom；</li>
+<li>引入babel库，作用是把jsx语法转换为js语法。这一步其实不是绝对的，也可以直接用js语法，那就不需要引入这个库文件。只不过用了这个会更加方便，所以大家可能都是选择这个。(由于下载的文件有问题，暂时使用cdn)</li>
+<li>创建虚Dom，上边代码中的创建方式就是使用的jsx语法，如果不用jsx语法，则可以写成<code>const VDOM = React.createElement(&#39;h1&#39;,{id:&#39;t&#39;},&#39;Hello js VDOM&#39;);</code>这种。需要注意的是，如果是用babel语法，则应该是<code>&lt;script type=&quot;text/babel&quot;&gt;</code>，而如果是js，则应该是<code>&lt;script type=&quot;text/javascript&quot;&gt;</code>。</li>
+<li>渲染虚拟Dom，可以理解为就是将虚拟Dom渲染解析成真实Dom。</li>
+</ol>
+<p>上述代码使用浏览器访问效果如下：</p>
+<p><img src="/images/react/helloworld.png" alt=""></p>
+<h2 id="JSX语法规则"><a href="#JSX语法规则" class="headerlink" title="JSX语法规则"></a>JSX语法规则</h2><p>jsx语法能被babel解析为js，肯定是有一定规则需要遵循的，目前了解到的部分基本规则如下：</p>
+<p>1.定义虚拟DOM，不要写引号，就如上边例子中一样；<br>2.标签中混入js表达式要用<code>{}</code>，例如下方示例代码中<code>id={myId}</code>这种;<br>3.样式的类名指定不要用class，而是className，例如下方示例代码中<code>className=&quot;title&quot;</code>；<br>4.内联样式，用<code>style={ {key:value} }</code>，例如下方示例代码中<code>style={ {color:&#39;orange&#39;,fontSize:&#39;30px&#39;} }</code>；<br>5.只有一个跟标签，例如下方示例代码中两个h2，在外层就包了一个div；<br>6.标签必须闭合，这个规则的原因是在渲染的时候会是严格模式，严格模式下html标签就必须闭合；<br>7.标签首字母：<br>    1).小写开头，会直接转为html同名元素，例如下方示例代码中的div、h2等都是小写，也都会直接转换成html同名元素；<br>    2).大写开头，react渲染为对应组件，若没有则报错，这个需要了解了react组件之后才能更好的理解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">	const myId&#x3D;&#39;title1&#39;</span><br><span class="line">	const myData&#x3D;&#39;Hello tzx&#39;</span><br><span class="line"></span><br><span class="line">	const VDOM &#x3D; (</span><br><span class="line">		&lt;div&gt;</span><br><span class="line">			&lt;h2 className&#x3D;&quot;title&quot; id&#x3D;&#123;myId&#125;&gt;</span><br><span class="line">				&lt;span style&#x3D;&#123; &#123;color:&#39;orange&#39;,fontSize:&#39;30px&#39;&#125; &#125;&gt;&#123;myData.toUpperCase()&#125;&lt;&#x2F;span&gt;</span><br><span class="line">			&lt;&#x2F;h2&gt;</span><br><span class="line">			&lt;h2 className&#x3D;&quot;title&quot; id&#x3D;&#123;myId.toUpperCase()&#125;&gt;</span><br><span class="line">				&lt;span style&#x3D;&#123; &#123;color:&#39;orange&#39;,fontSize:&#39;30px&#39;&#125; &#125;&gt;&#123;myData.toLocaleLowerCase()&#125;&lt;&#x2F;span&gt;</span><br><span class="line">			&lt;&#x2F;h2&gt;</span><br><span class="line">		&lt;&#x2F;div&gt;</span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line">	ReactDOM.render(VDOM,document.getElementById(&#39;test&#39;))</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="React组件"><a href="#React组件" class="headerlink" title="React组件"></a>React组件</h2><p>上边jsx语法规则中有提到React组件问题，这里就先来说一说。</p>
+<p>根据目前的了解，React组件创建方式分为函数式组件和类式组件。</p>
+<h3 id="函数式组件"><a href="#函数式组件" class="headerlink" title="函数式组件"></a>函数式组件</h3><p>函数式组件写法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function Demo()&#123;</span><br><span class="line">	return &lt;h1&gt;function component&lt;&#x2F;h1&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>这里其实就是创建一个js函数，然后返回需要的组件内容。但是要注意的是，这里的函数名实际就是组件名，鉴于上边说的jsx语法的规则，这里的函数名就必须大写。</p>
+<p>上边还有一段代码<code>ReactDOM.render(&lt;Demo/&gt;,document.getElementById(&#39;test&#39;))</code>，很显然这是使用组件的代码。</p>
+<p>在这行这段代码的时候，React会先找到这个指定的组件，然后发现它是函数定义的，就会调用这个函数，然后把里边返回的虚拟Dom渲染成真实Dom。</p>
+<h3 id="类式组件"><a href="#类式组件" class="headerlink" title="类式组件"></a>类式组件</h3><p>类式组件写法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class ClassComponent extends React.Component&#123;</span><br><span class="line">	render() &#123;</span><br><span class="line">		return &lt;h1&gt;class component&lt;&#x2F;h1&gt;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;ClassComponent&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>相对于函数式组件，类式组件规则就多一些，同时使用场景也会更多一些，根据上边代码示例，也可以总结下基本规则如下：</p>
+<ol>
+<li>类名即组件名，需要大写，需要注意和默认组件的冲突问题；</li>
+<li>必须继承<code>React.Component</code>；</li>
+<li>必须写<code>render</code>方法；</li>
+</ol>
+<p>同样的，在使用这个组件的时候，React会先找到指定的组件，但是不同的是，这里发现是类定义的，然后就会new一个该组件的对象（实例），然后再通过这个对象调用里边的render方法，再把render方法返回的虚拟Dom渲染成真实Dom。</p>
+<h2 id="虚拟Dom"><a href="#虚拟Dom" class="headerlink" title="虚拟Dom"></a>虚拟Dom</h2><p>虚拟Dom这个词听起来似乎很高大上，实际上呢它就是一个普通的js对象，类型就是Object。</p>
+<p>如果借助<code>debugger</code>会看到虚拟Dom的属性会比真实Dom的属性少很多，这也是为什么虚拟Dom比正式Dom轻量的原因。</p>
+<p>例如有如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">	const VDOM &#x3D; &lt;h1 id&#x3D;&#39;t&#39;&gt;Hello World&lt;&#x2F;h1&gt;</span><br><span class="line">	ReactDOM.render(VDOM,document.getElementById(&#39;test&#39;))</span><br><span class="line"></span><br><span class="line">	console.log(&quot;VDOM&quot;,VDOM);</span><br><span class="line">    var ADOM&#x3D;document.getElementById(&#39;test&#39;)</span><br><span class="line">    console.log(&quot;ADOM&quot;,ADOM);</span><br><span class="line">    debugger;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>运行后打开浏览器控制台就会看到如下信息：</p>
+<p><img src="/images/react/vdom.png" alt=""></p>
+<p><img src="/images/react/adom.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/05/react0/" data-id="cl1m34lv1005u0ovh38mfdy18" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/05/vuepress/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">VuePress搭建静态网站记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础集成和使用"><span class="toc-number">1.</span> <span class="toc-text">基础集成和使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSX语法规则"><span class="toc-number">2.</span> <span class="toc-text">JSX语法规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React组件"><span class="toc-number">3.</span> <span class="toc-text">React组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数式组件"><span class="toc-number">3.1.</span> <span class="toc-text">函数式组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类式组件"><span class="toc-number">3.2.</span> <span class="toc-text">类式组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟Dom"><span class="toc-number">4.</span> <span class="toc-text">虚拟Dom</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
