@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>记一次java程序从6H到30min的优化过程 | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景我们有一个java系统，需要从固定的文件目录中读取csv格式的文件，然后将文件内容读取后在进行一系列的转换以及数据库操作，包含文件内容转换为java对象、内容去重、查询oracle、生成目标数据集合、数据存入oracle和mongodb。 起初，文件目录中有四个文件，一个4.3G，另外三个都是几百兆，四个文件一起有5.3G，大约1200万条初始数据。 程序之前使用的文件都比较少，因此之前设置的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次java程序从6H到30min的优化过程">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/07/jvm1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="背景我们有一个java系统，需要从固定的文件目录中读取csv格式的文件，然后将文件内容读取后在进行一系列的转换以及数据库操作，包含文件内容转换为java对象、内容去重、查询oracle、生成目标数据集合、数据存入oracle和mongodb。 起初，文件目录中有四个文件，一个4.3G，另外三个都是几百兆，四个文件一起有5.3G，大约1200万条初始数据。 程序之前使用的文件都比较少，因此之前设置的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun1.png">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun2.png">
+<meta property="article:published_time" content="2022-04-07T14:43:58.000Z">
+<meta property="article:modified_time" content="2022-04-07T14:24:26.575Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="jvm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun1.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-jvm1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/07/jvm1/" class="article-date">
+  <time datetime="2022-04-07T14:43:58.000Z" itemprop="datePublished">2022-04-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      记一次java程序从6H到30min的优化过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我们有一个java系统，需要从固定的文件目录中读取csv格式的文件，然后将文件内容读取后在进行一系列的转换以及数据库操作，包含文件内容转换为java对象、内容去重、查询oracle、生成目标数据集合、数据存入oracle和mongodb。</p>
+<p>起初，文件目录中有四个文件，一个4.3G，另外三个都是几百兆，四个文件一起有5.3G，大约1200万条初始数据。</p>
+<p>程序之前使用的文件都比较少，因此之前设置的主要jvm参数是<code>-Xms64m -Xmx64G -XX:NewRatio=1  -XX:+UseConcMarkSweepGC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/</code>，之前运行时也都很正常，但是这一次却几个小时都不结束。</p>
+<a id="more"></a>
+
+<h2 id="问题排查和优化"><a href="#问题排查和优化" class="headerlink" title="问题排查和优化"></a>问题排查和优化</h2><h3 id="第一次处理（以为发现新大陆，一番折腾还是无）"><a href="#第一次处理（以为发现新大陆，一番折腾还是无）" class="headerlink" title="第一次处理（以为发现新大陆，一番折腾还是无）"></a>第一次处理（以为发现新大陆，一番折腾还是无）</h3><p>出现上边的问题，程序日志中却没有抛出异常，一直处在停顿状态。</p>
+<p>由于缺乏这方面的经验，便只能常规的使用<code>top</code>以及<code>free</code>命令查看机器的内存以及cpu等状态，然后就发现在运行过程中当前进程的cpu占用持续保持400%-600%，很显然是不正常的。</p>
+<p>看到这些数据，似乎就是因为cpu忙不过来，第一感觉可能是stream的问题，这套代码大量的使用了<code>stream</code>以及<code>parallelStream</code>，而<code>parallelStream</code>底层的<code>ForkJoin</code>实际是多线程处理。</p>
+<p>于是使用<code>cat /proc/cpuinfo| grep &quot;cpu cores&quot;| uniq</code>查看了下机器的cpu信息，发现测试机是单核的cpu。</p>
+<p>既然如此，那么是否真的就是因为单核导致的多线程不断切换，从而使cpu卡住呢？于是我把里边的<code>parallelStream</code>全部改成了<code>stream</code>。</p>
+<p>令人失望的是，程序依旧是持续几个小时没有结果。</p>
+<p>但是在这个过程中，却意外的在使用<code>df -hl</code>命令查看磁盘空间的时候，发现/opt/磁盘使用量飙升，一直到100%。</p>
+<p>进一步跟踪后，发现在这个目录下产生了一个java_pid42156.hprof的文件，正是这个达到了几十G的文件耗尽了磁盘空间，而这个文件就是在程序内存溢出的时候记录相关信息的文件。</p>
+<h3 id="第二次处理（虽然结果已得出，但是问题未结束）"><a href="#第二次处理（虽然结果已得出，但是问题未结束）" class="headerlink" title="第二次处理（虽然结果已得出，但是问题未结束）"></a>第二次处理（虽然结果已得出，但是问题未结束）</h3><p>有了上边的新发现后，也就有了新的预测，猜测cpu持续300%-600%的现象很可能是因为内存溢出。</p>
+<p>但是心中却依旧不太理解，仅仅5.3G的文件，Xmx都设置64G了，还能内存溢出？</p>
+<p>疑问留在心中不能马上寻找答案，因为其他人等着测试结果，于是只能先简单粗暴的再jvm参数中增加内存，把Xmx64G改为了Xmx80G。</p>
+<p>同时，考虑到内存不够时扩容问题，也一并把Xms改成了20G。</p>
+<p>网上很多地方建议Xmx和Xms设置成一样的，但是考虑到这个程序每次运行后就会关闭，而每次的文件大小也都不一样，因此就没有设置为一样，避免小文件时也占用太大的内存。</p>
+<p>通过这样的修改后，终于运行成功，最终得到了可以交付的数据。</p>
+<p>但是呢，从开始运行到得到最终结果，这个程序却运行了6H15min，这是在是一个难以让人接受的时间。</p>
+<p>更加诡异的是，在进行另一个目录的测试时，发现2.1G的文件却仅仅只需要不到8分钟。</p>
+<p>5.3G和2.1G，数据量比例不到1:2.5，但是处理时间的比例确是1:46.8。</p>
+<p>因此，尽管程序运行得到了最终结果，但是这个处理时间肯定是有问题的。</p>
+<h3 id="第三次处理（看似改善已很大，其实依旧不可行）"><a href="#第三次处理（看似改善已很大，其实依旧不可行）" class="headerlink" title="第三次处理（看似改善已很大，其实依旧不可行）"></a>第三次处理（看似改善已很大，其实依旧不可行）</h3><p>一时间，没有太好的思路，代码中也没有觉得可以优化的地方，抱着试一试的态度，再次增加内存，把Xmx加到了95G，再次运行的时候发现时间一下子从6H15min降到了1H40min。</p>
+<p>性能一下子提升了四倍，看起来好像还可以吧，然而并不是。</p>
+<p>这机器的总内存也就128G，真的能够就一下子给这个程序95G吗？</p>
+<p>而且，1H40min，这个时间真的可以了吗？</p>
+<p>答案都是，不行！</p>
+<h3 id="第四次处理-万般武艺皆用上，守得云开见月明"><a href="#第四次处理-万般武艺皆用上，守得云开见月明" class="headerlink" title="第四次处理(万般武艺皆用上，守得云开见月明)"></a>第四次处理(万般武艺皆用上，守得云开见月明)</h3><p>既然不行，那就只能进一步分析，于是搬出了更多的工具，像<code>top -Hp</code>、<code>printf</code>、<code>jstack</code>，例如我某次运行的进程id是117325：</p>
+<blockquote>
+<p>使用<code>top -Hp 117325</code>找到了占用cpu资源最高的子进程id，例如117345;</p>
+<p>然后使用<code>printf %x 117345</code>把这个id转换为16进制1ca61；</p>
+<p>然后使用<code>jstat 117325 |grep -A 200 1ca61</code></p>
+</blockquote>
+<p>上边的输出结果中，看到有大量的<code>GC Thread</code>相关内容，于是进一步使用命令<code>jstat -gcutil 117325 1000 30</code>查看gc情况。</p>
+<p>这不看不知道，一看吓一跳，在已经运行的50分钟里，gc时间就占了38分钟。</p>
+<p>再进一步细看，YGC仅仅发生了十几次后就不再发生，也仅仅占用了50秒，而FGC则发生了三百多次，消耗了两千多秒，这怎么看都是不合理的。</p>
+<p>不明白是什么原因导致发生了这么多的FGC，但是通过了解相关技术点，我大概了知道了什么情况下会触发FGC，用一个不太准确的说法，就是jvm中老生代不够用了。（FGC有一些配置会影响FGC的触发，所以不能单纯的说老生代，例如阈值）</p>
+<p>既然如此，能否把老生代加大呢？</p>
+<p>如果有了解jvm参数的，应该会注意到我开头提到的一个设置，即<code>-XX:NewRatio=1</code>，这个参数实际就是设置的老生代和新生代的比例，很显然这里是设置的1:1。</p>
+<p>我不太清楚之前为什么会被设置为1，但是我知道如果我希望增大老生代，那么我可以增大这个值，于是我就改成了<code>-XX:NewRatio=2</code>。</p>
+<p>让人欣慰的是，在Xmx依旧是95G时，程序再次运行，终于从1H40min变成了26min。</p>
+<p>在不考虑内存合不合适的情况下，起码这个时间是可以接受的了。</p>
+<h3 id="第五次处理（果然望山跑死马，以为要到实不达）"><a href="#第五次处理（果然望山跑死马，以为要到实不达）" class="headerlink" title="第五次处理（果然望山跑死马，以为要到实不达）"></a>第五次处理（果然望山跑死马，以为要到实不达）</h3><p>时间可以接受了，但是内存是肯定不能接受的，于是只能进一步优化，先尝试着把<code>Xmx95G</code>改成了<code>Xmx80G</code>，<code>NewRatio</code>依旧是2。</p>
+<p>但是悲哀的是，这次却运行了5H55min。</p>
+<h3 id="第六次处理（山重水复疑无路，柳暗花明又一村）"><a href="#第六次处理（山重水复疑无路，柳暗花明又一村）" class="headerlink" title="第六次处理（山重水复疑无路，柳暗花明又一村）"></a>第六次处理（山重水复疑无路，柳暗花明又一村）</h3><p>上边结果有些悲哀，但是事情却不能就此停止。</p>
+<p>于是我进行了简单的计算，算到在95G内存时、<code>-XX:NewRatio=2</code>的情况下，老生代应该是63G，那么能否让最大80G的时候老生代也达到63G呢？</p>
+<p>既然是可以配的，理论上当然可以，于是想到就做，再次通过简单计算后，我把<code>-XX:NewRatio=2</code>改成了<code>-XX:NewRatio=4</code>，这种情况下老生代最大应该是64G。</p>
+<p>让人有点小兴奋的是，当做了上边的修改后，再次运行程序，一下子从5H55min变成了30min。</p>
+<p>在兴奋的同时，我似乎找到了一点点规律，这样看起来，是否是保证老生代63G左右就可以了呢？</p>
+<p>于是我进一步减少Xmx的配置，同时修改<code>-XX:NewRatio</code>，然后就发现，当<code>Xmx75G</code>、<code>-XX:NewRatio=5</code>时，也只需要29min，这时候算下来的老生代最大是62.5G。</p>
+<h3 id="第七次处理（惶恐滩头叹惶恐，零丁洋里叹零丁）"><a href="#第七次处理（惶恐滩头叹惶恐，零丁洋里叹零丁）" class="headerlink" title="第七次处理（惶恐滩头叹惶恐，零丁洋里叹零丁）"></a>第七次处理（惶恐滩头叹惶恐，零丁洋里叹零丁）</h3><p>我终于松了一口气，也进一步确定了那个想法，只要我让最大老生代能达到63G左右，应该就可以了。</p>
+<p>然而，我又被无情的打脸了，当我把Xmx降到70G，NewRatio也设置成9的时候，得到的却是<code>java.lang.OutOfMemoryError: Java heap space</code>。</p>
+<p>当我把Xmx继续加到72G的时候，依旧是<code>java.lang.OutOfMemoryError: Java heap space</code>。</p>
+<p>我的脸色，瞬间难看到了几点，因为我们的目标，是64G,，甚至更低。</p>
+<h3 id="第八次处理（路漫漫其修远兮，吾将上下而求索）"><a href="#第八次处理（路漫漫其修远兮，吾将上下而求索）" class="headerlink" title="第八次处理（路漫漫其修远兮，吾将上下而求索）"></a>第八次处理（路漫漫其修远兮，吾将上下而求索）</h3><p>似乎，从jvm参数层面已经到了再也无法优化的地步，怎么办？</p>
+<p>好像只能从代码层面下手了。</p>
+<p>可是代码层面，那是最最开始就想要下手的地方，正是因为感觉无法下手，然后才有了之后的一系列jvm参数的优化。</p>
+<p>怎么办？于是我又用上了其他的工具，像<code>jProfiler</code>、<code>jvisualvm</code>。</p>
+<p>为了测试，我在本地把文件缩小到了770m，然后在工具中会看到类似下图的数据：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun1.png" alt=""></p>
+<p>可以明显的看到整个过程中内存使用一直呈现上升趋势，期间时不时的下降，一直到持续占用8G左右的内存。</p>
+<p>经过分析发现，每一次的下降实际就是发生了gc。</p>
+<p>但是尽管一直在发生着gc，程序占用的内存依旧是在不断的上升着。</p>
+<p>到底是为什么呢？</p>
+<p>能想到的情况无非两种，要么是有什么大对象一直存在着不能被销毁，要么就是产生了很多不能被回收的对象。</p>
+<p>到底是什么对象或者说是哪些对象呢？于是我在jvisualvm中打开了heapdump，然后就看到了类似下图的内容：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun2.png" alt=""></p>
+<p>之所以说是类似，是因为公司电脑的截图我没法拿来用，本地并没有模拟一模一样的数据，结构也是相似，所以实际大小也有区别。</p>
+<p>实际<code>char[]</code>是2972483224byte，约等于2.77G；</p>
+<p><code>String</code>是2792366808byte，约等于2.6G；</p>
+<p>等同于<code>CTest</code>的是2391236928byte，约等于2.22G；</p>
+<p>还有<code>Double</code>是398539560byte，约等于0.37G；</p>
+<p><code>Integer</code>的120736400byte,约等于0.11G。</p>
+<p>前边这几个内存多的加起来就已经8G。</p>
+<p>而关键性的代码是这一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;CTest&gt; ll&#x3D;getFiles1().stream().map(FileTest::createObject1)</span><br><span class="line">                .flatMap(List::stream).distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
+<p>实际上一直存活的最终对象就是这个List<CTest>，直接相关的CTest对象一共2.22G。</p>
+<p>但是分析CTest类的定义会发现，里边有12个String属性，有1个Double属性，还有2个Integer属性。</p>
+<p>这样看起来，似乎都对上了，但是这时候我头脑短路，始终想不明白为什么占用最多的是<code>char[]</code>，这个类中没有定义<code>char[]</code>啊，甚至我一度陷入误区的认为是在io流处理的过程中生成了<code>char[]</code>对象，且莫名其妙的没有释放。</p>
+<p>就这样焦头烂额好一阵子后，突然像是顿悟般，才想起来我竟然忽略了String的底层就是<code>char[]</code>，如果这样看，似乎全都说的通的，所有占用大量内存的类都能找到归属了。</p>
+<p>如果按这个比例粗略的计算，770m源文件最终出来的是8G的java对象，那么5.3G就是56G。</p>
+<p>这样看来，似乎目前的程序便只能是<code>Xmx75G</code>、<code>NewRatio=5</code>这样了，是真的只能这样了吗？一时间又没有了头绪。</p>
+<p>同时，脑海中也有了新的疑问：<code>String</code>和<code>String</code>底层的<code>char[]</code>竟然会同时占着各自的内存？难道不是String仅仅指向数组的引用吗？有点颠覆了认知。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/07/jvm1/" data-id="cl1p3cmpe003bwgvhb3qc8mb6" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/" rel="tag">jvm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/05/react0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">React系统学习（入门使用和基础概念）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题排查和优化"><span class="toc-number">2.</span> <span class="toc-text">问题排查和优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一次处理（以为发现新大陆，一番折腾还是无）"><span class="toc-number">2.1.</span> <span class="toc-text">第一次处理（以为发现新大陆，一番折腾还是无）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二次处理（虽然结果已得出，但是问题未结束）"><span class="toc-number">2.2.</span> <span class="toc-text">第二次处理（虽然结果已得出，但是问题未结束）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三次处理（看似改善已很大，其实依旧不可行）"><span class="toc-number">2.3.</span> <span class="toc-text">第三次处理（看似改善已很大，其实依旧不可行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四次处理-万般武艺皆用上，守得云开见月明"><span class="toc-number">2.4.</span> <span class="toc-text">第四次处理(万般武艺皆用上，守得云开见月明)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五次处理（果然望山跑死马，以为要到实不达）"><span class="toc-number">2.5.</span> <span class="toc-text">第五次处理（果然望山跑死马，以为要到实不达）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第六次处理（山重水复疑无路，柳暗花明又一村）"><span class="toc-number">2.6.</span> <span class="toc-text">第六次处理（山重水复疑无路，柳暗花明又一村）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第七次处理（惶恐滩头叹惶恐，零丁洋里叹零丁）"><span class="toc-number">2.7.</span> <span class="toc-text">第七次处理（惶恐滩头叹惶恐，零丁洋里叹零丁）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第八次处理（路漫漫其修远兮，吾将上下而求索）"><span class="toc-number">2.8.</span> <span class="toc-text">第八次处理（路漫漫其修远兮，吾将上下而求索）</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
