@@ -38,16 +38,16 @@ var _hmt = _hmt || [];
 <meta property="og:site_name" content="涂宗勋的博客">
 <meta property="og:description" content="背景我们有一个java系统，需要从固定的文件目录中读取csv格式的文件，然后将文件内容读取后在进行一系列的转换以及数据库操作，包含文件内容转换为java对象、内容去重、查询oracle、生成目标数据集合、数据存入oracle和mongodb。 起初，文件目录中有四个文件，一个4.3G，另外三个都是几百兆，四个文件一起有5.3G，大约1200万条初始数据。 程序之前使用的文件都比较少，因此之前设置的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun1.png">
-<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun2.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/jvm/neicun1.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/jvm/neicun2.png">
 <meta property="article:published_time" content="2022-04-07T14:33:58.000Z">
-<meta property="article:modified_time" content="2022-04-07T14:35:01.927Z">
+<meta property="article:modified_time" content="2022-04-08T02:03:28.629Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="性能优化">
 <meta property="article:tag" content="jvm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun1.png">
+<meta name="twitter:image" content="http://blog.tzxcode.cn/images/jvm/neicun1.png">
   
   
     <link rel="icon" href="/images/touxiang.png">
@@ -207,14 +207,14 @@ var _hmt = _hmt || [];
 <p>可是代码层面，那是最最开始就想要下手的地方，正是因为感觉无法下手，然后才有了之后的一系列jvm参数的优化。</p>
 <p>怎么办？于是我又用上了其他的工具，像<code>jProfiler</code>、<code>jvisualvm</code>。</p>
 <p>为了测试，我在本地把文件缩小到了770m，然后在工具中会看到类似下图的数据：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun1.png" alt=""></p>
+<p><img src="/images/jvm/neicun1.png" alt=""></p>
 <p>可以明显的看到整个过程中内存使用一直呈现上升趋势，期间时不时的下降，一直到持续占用8G左右的内存。</p>
 <p>经过分析发现，每一次的下降实际就是发生了gc。</p>
 <p>但是尽管一直在发生着gc，程序占用的内存依旧是在不断的上升着。</p>
 <p>到底是为什么呢？</p>
 <p>能想到的情况无非两种，要么是有什么大对象一直存在着不能被销毁，要么就是产生了很多不能被回收的对象。</p>
 <p>到底是什么对象或者说是哪些对象呢？于是我在jvisualvm中打开了heapdump，然后就看到了类似下图的内容：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Cjvm%5Cneicun2.png" alt=""></p>
+<p><img src="/images/jvm/neicun2.png" alt=""></p>
 <p>之所以说是类似，是因为公司电脑的截图我没法拿来用，本地并没有模拟一模一样的数据，结构也是相似，所以实际大小也有区别。</p>
 <p>实际<code>char[]</code>是2972483224byte，约等于2.77G；</p>
 <p><code>String</code>是2792366808byte，约等于2.6G；</p>
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/07/jvm1/" data-id="cl1p3q1eb003brwvh6fls9t39" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/07/jvm1/" data-id="cl1psbfse003fo4vh96upby9l" class="article-share-link">分享</a>
       
       
       
