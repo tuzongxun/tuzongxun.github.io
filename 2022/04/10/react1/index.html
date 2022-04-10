@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>React系统学习（从組件三大核心属性之state谈起） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之前简单学习的react中函数式组件和类式组件的基本使用，函数式组件适用于定义简单的组件，类式组件适用于定义复杂的组件。 复杂的组件指的是有状态的组件，所谓的状态，在react中就是三大核心属性之一的state。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React系统学习（从組件三大核心属性之state谈起）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/10/react1/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="之前简单学习的react中函数式组件和类式组件的基本使用，函数式组件适用于定义简单的组件，类式组件适用于定义复杂的组件。 复杂的组件指的是有状态的组件，所谓的状态，在react中就是三大核心属性之一的state。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-10T02:33:58.000Z">
+<meta property="article:modified_time" content="2022-04-10T02:35:55.441Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-react1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/10/react1/" class="article-date">
+  <time datetime="2022-04-10T02:33:58.000Z" itemprop="datePublished">2022-04-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React系统学习（从組件三大核心属性之state谈起）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>之前简单学习的react中函数式组件和类式组件的基本使用，函数式组件适用于定义简单的组件，类式组件适用于定义复杂的组件。</p>
+<p>复杂的组件指的是有状态的组件，所谓的状态，在react中就是三大核心属性之一的state。</p>
+<a id="more"></a>
+
+<h2 id="从一个小例子说起"><a href="#从一个小例子说起" class="headerlink" title="从一个小例子说起"></a>从一个小例子说起</h2><p>假设需要这个一样组件，访问的时候展示一个人的名字和心情，当点击的时候就切换到另一个人，再次点击就再切换回去。</p>
+<p>那么对这个需求进行分析，就会知道首先肯定是需要有地方进行信息展示，然后就是肯定需要有点击事件，再然后就是需要有地方保存数据。</p>
+<p>基于上边的分析，在还不是太会react的情况下，基于之前的js基础，这个组件一开始可能会先做如下这样的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;div id&#x3D;&quot;test&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">	&lt;!--核心库--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;..&#x2F;js&#x2F;react.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">	&lt;!--操作dom--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;..&#x2F;js&#x2F;react-dom.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">	&lt;!--用户将jsx转为js--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.staticfile.org&#x2F;babel-standalone&#x2F;6.26.0&#x2F;babel.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">		 &#x2F;&#x2F; 1.类式组件</span><br><span class="line">		class ClassComponent extends React.Component&#123;</span><br><span class="line">			name&#x3D;&#39;tuzongxun&#39;</span><br><span class="line">			mood&#x3D;&#39;happy&#39;</span><br><span class="line">			render() &#123;</span><br><span class="line">				return &lt;h1 onclick&#x3D;&quot;changeUser()&quot;&gt;I&#39;m &#123;this.name&#125;，today i&#39;m &#123;this.mood&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">			&#125;</span><br><span class="line">			changeUser()&#123;</span><br><span class="line">				if(this.name &#x3D;&#x3D;&#x3D; &#39;tuzongxun&#39;)&#123;</span><br><span class="line">					this.name&#x3D;&#39;tzx&#39;</span><br><span class="line">					this.mood&#x3D;&#39;unhappy&#39;</span><br><span class="line">				&#125;else&#123;</span><br><span class="line">					this.name&#x3D;&#39;tuzongxun&#39;</span><br><span class="line">					this.mood&#x3D;&#39;happy&#39;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		&#x2F;&#x2F; 2.渲染虚拟DOM</span><br><span class="line">		ReactDOM.render(&lt;ClassComponent&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line"></span><br><span class="line">	&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后当在浏览器访问的时候，就会发现点击根本是没有反应的，如果打开浏览器控制台，就会看到有如下的错误提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Warning: Invalid event handler property &#96;onclick&#96;. Did you mean &#96;onClick&#96;?</span><br><span class="line">    in h1 (created by ClassComponent)</span><br><span class="line">    in ClassComponent</span><br></pre></td></tr></table></figure>
+
+<p>很显然，意思是上边的<code>onclick</code>用法不对，在react中应该是<code>onClick</code>，其实就是<code>on</code>后边的<code>c</code>大写。</p>
+<p><strong>类似<code>onclick</code>这种事件，在react中都需要这样写。</strong></p>
+<p>但是，上边代码的问题却不仅仅是这样，当把<code>onclick</code>改为<code>onClick</code>后，会看到控制台会有新的错误信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Warning: Expected &#96;onClick&#96; listener to be a function, instead got a value of &#96;string&#96; type.</span><br><span class="line">    in h1 (created by ClassComponent)</span><br><span class="line">    in ClassComponent</span><br></pre></td></tr></table></figure>
+
+<p>这句也比较好理解，就是说<code>onClick</code>后边应该是一个函数，但是这里却是一个字符串。</p>
+<p>根据之前react的基础知识可以知道，这里应该是要把引号改成大括号，之后代码就成了这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">	return &lt;h1 onClick&#x3D;&#123;changeUser()&#125;&gt;I&#39;m &#123;this.name&#125;，today i&#39;m &#123;this.mood&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然而，这样改了之后会发现继续报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Uncaught ReferenceError: changeUser is not defined</span><br><span class="line">    at ClassComponent.render (&lt;anonymous&gt;:34:28)</span><br></pre></td></tr></table></figure>
+
+<p>实际上，这里正确的写法应该是<code>onClick={this.changeUser}</code>，为什么不能加括号呢，是因为加了括号相当于调用了函数，也就相当于把<code>changeUser</code>函数的返回值赋值给了<code>onClick</code>事件，而不是函数本身。</p>
+<p>上边给出了<code>onClick</code>定义的正确写法，但是实际上这个程序依旧不行，初始访问正常，当点击的时候就会发现又有了新的异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Uncaught TypeError: Cannot read property &#39;name&#39; of undefined</span><br><span class="line">    at changeUser (&lt;anonymous&gt;:44:22)</span><br></pre></td></tr></table></figure>
+
+<p>这又是为什么呢？我的代码里明明是用了this的，难道这个this不是我这个组件的实例对象吗？</p>
+<p>实际上，确实不是。</p>
+<p>如果在<code>changeUser</code>函数中打印一下<code>this</code>，就会看到打印的就是<code>undefined</code>。</p>
+<p>可是，这又是为什么呢？</p>
+<p>其实原因也很简单，是因为在事件这种定义中，虽然看起来是<code>this.changeUser</code>，但是实际是先把<code>changeUser</code>函数给了<code>onClick</code>事件，那么当点击的时候，这就变成了函数直接调用，而不是实例进行的调用。</p>
+<p>直接调用，就相当于是在外边的<code>js</code>中直接写了<code>changeUser()</code>，而这时候，里边的<code>this</code>实际是<code>window</code>对象，但是由于react中会使用严格模式，就有不允许直接使用window对象，因此这个<code>this</code>也就变成了<code>undefined</code>。</p>
+<p>要解决这个问题，就需要在构造函数中使用<code>bind</code>，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">constructor()&#123;</span><br><span class="line">	super()</span><br><span class="line">	this.changeUser&#x3D;this.changeUser.bind(this)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样改完之后，整个js中的代码就成了这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">	class ClassComponent extends React.Component&#123;</span><br><span class="line">		name&#x3D;&#39;tuzongxun&#39;</span><br><span class="line">		mood&#x3D;&#39;happy&#39;</span><br><span class="line"></span><br><span class="line">		constructor()&#123;</span><br><span class="line">			super()</span><br><span class="line">			this.changeUser&#x3D;this.changeUser.bind(this)</span><br><span class="line">		&#125;</span><br><span class="line">		render() &#123;</span><br><span class="line">			return &lt;h1 onClick&#x3D;&#123;this.changeUser&#125;&gt;I&#39;m &#123;this.name&#125;，today i&#39;m &#123;this.mood&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">		&#125;</span><br><span class="line">		changeUser()&#123;</span><br><span class="line">			console.log(this)</span><br><span class="line">			if(this.name &#x3D;&#x3D;&#x3D; &#39;tuzongxun&#39;)&#123;</span><br><span class="line">				this.name&#x3D;&#39;tzx&#39;</span><br><span class="line">				this.mood&#x3D;&#39;unhappy&#39;</span><br><span class="line">			&#125;else&#123;</span><br><span class="line">				this.name&#x3D;&#39;tuzongxun&#39;</span><br><span class="line">				this.mood&#x3D;&#39;happy&#39;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	ReactDOM.render(&lt;ClassComponent&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>浏览器访问不在报错，鼠标点击也不在报错。</p>
+<p>然而，虽然是不报错，却会发现点击的时候根本就没有反应。</p>
+<p>但是打开控制台的输出，却又可以看到输出的<code>this</code>确实已经被修改成功。</p>
+<p>也就是说，我修改的数据，但是react并没有为我重新进行渲染。</p>
+<p>怎么办呢？这就要轮到主角<code>state</code>上场了。</p>
+<h2 id="state基础用法"><a href="#state基础用法" class="headerlink" title="state基础用法"></a>state基础用法</h2><p>要让react在数据改变好自动渲染页面，需要把相应数据放在<code>state</code>中，也就是状态驱动渲染，主要涉及到两个方面，一个是数据的存储，另一个是数据的修改。</p>
+<p>进行修改后的组件定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class ClassComponent extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	constructor()&#123;</span><br><span class="line">		super();</span><br><span class="line">		this.state&#x3D;&#123;name:&#39;tuzongxun&#39;,mood:&#39;happy&#39;&#125;</span><br><span class="line">		this.changeUser&#x3D;this.changeUser.bind(this);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		return &lt;h1 onClick&#x3D;&#123;this.changeUser&#125;&gt;I&#39;m &#123;this.state.name&#125;，today i&#39;m &#123;this.state.mood&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	changeUser()&#123;</span><br><span class="line">		if(this.state.name &#x3D;&#x3D;&#x3D; &#39;tuzongxun&#39;)&#123;</span><br><span class="line">			this.setState(&#123;name:&#39;tzx&#39;,mood:&#39;unhappy&#39;&#125;)</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			this.setState(&#123;name:&#39;tuzongxun&#39;,mood:&#39;happy&#39;&#125;)</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边代码中修改的地方主要有两个，一个是把初始数据的定义放在了构造方法中，同时用上了<code>state</code>，另一个是在<code>changeUser</code>函数中改变了数据修改的方式。</p>
+<h3 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h3><p>上边初始数据的定义，可以理解为就是数据的存储，之前是直接写在类里边，现在是换成了<code>this.state={name:&#39;tuzongxun&#39;,mood:&#39;happy&#39;}</code>.</p>
+<p>需要注意的是，<code>state</code>里边必须是一个对象。</p>
+<h3 id="数据修改"><a href="#数据修改" class="headerlink" title="数据修改"></a>数据修改</h3><p>之前的问题就是虽然看起来数据每次都修改成功了，但是页面并没有变化，原因就是修改数据的方式不符合react的要求。</p>
+<p>如果要让react在数据修改后就渲染页面，就必须用到<code>setState</code>函数进行数据的修改，这个函数定义在<code>React.Component</code>中。</p>
+<p>实际上这个也很好理解，几乎所有自动化的东西，背后必然都是规则，只有遵循相应的规则了，才能被识别并自动化处理。</p>
+<p>那么<code>react</code>自动渲染的数据修改的方式，也就是类似上边代码里的<code>this.setState({name:&#39;tzx&#39;,mood:&#39;unhappy&#39;})</code></p>
+<h2 id="state简化写法"><a href="#state简化写法" class="headerlink" title="state简化写法"></a>state简化写法</h2><p>上边的代码从功能上讲是没有问题的，但是看起来有些繁琐，尤其是里边的构造方法，其实是不得已才写的。</p>
+<p>构造方法中的<code>super()</code>就不说了，这是js中类定义的基本规则。</p>
+<p>而对state的赋值，并不是必须要写在这里边，拿到外边也是可以的。</p>
+<p>所以看来看去似乎就只有一个是必须写的，也就是<code>bind</code>，<code>bind</code>的作用可以理解为就是生成一个新的函数，同时修改函数里的<code>this</code>指向。</p>
+<p>为什么要这个<code>bind</code>呢，原因是如果不写，那么一开始<code>changeUser</code>函数里的<code>this</code>指向的实际是<code>window</code>对象，在严格模式下就成了<code>undefine</code>，所以这里需要使用<code>bind</code>把<code>this</code>指向我们希望指向的对象。</p>
+<p>看起来似乎这一行必不可少，这个构造函数也必不可少，但是实际不是的。</p>
+<p>并且，上边这样写是针对一个函数，那么如果有十几个甚至几十个函数呢，也就会造成构造函数中这种代码非常多，这也是不太好的。</p>
+<p>在js中有一种写法叫箭头函数，其实也就是相当于<code>java</code>中的<code>lambda</code>表达式。</p>
+<p>箭头函数本身是没有<code>this</code>的，里边如果有<code>this</code>，则会指向函数定义的外侧<code>this</code>。</p>
+<p>因此，进一步简写后，上边组件的定义则可以改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class ClassComponent extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	state&#x3D;&#123;name:&#39;tuzongxun&#39;, mood:&#39;happy&#39;&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return &lt;h1 onClick&#x3D;&#123;this.changeUser&#125;&gt;I&#39;m &#123;this.state.name&#125;，today i&#39;m &#123;this.state.mood&#125;&lt;&#x2F;h1&gt;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	changeUser &#x3D; ()&#x3D;&gt;&#123;</span><br><span class="line">		console.log(this)</span><br><span class="line">		if(this.state.name &#x3D;&#x3D;&#x3D; &#39;tuzongxun&#39;)&#123;</span><br><span class="line">			this.setState(&#123;name:&#39;tzx&#39;,mood:&#39;unhappy&#39;&#125;)</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			this.setState(&#123;name:&#39;tuzongxun&#39;,mood:&#39;happy&#39;&#125;)</span><br><span class="line">		&#125;  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="js中绑定事件的三种方式"><a href="#js中绑定事件的三种方式" class="headerlink" title="js中绑定事件的三种方式"></a>js中绑定事件的三种方式</h2><p>在上边的例子中，使用到了点击事件，实际上js中点击事件的写法至少有三种，上边的写法只是其中一个，由于简洁，可能也是最常用的一个。</p>
+<p>既然知道至少有三种方式，那么这里就顺便对这三种做一个简单记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;button id&#x3D;&quot;btn1&quot;&gt;button1&lt;&#x2F;button&gt;</span><br><span class="line">	&lt;button id&#x3D;&quot;btn2&quot;&gt;button2&lt;&#x2F;button&gt;</span><br><span class="line">	&lt;button onclick&#x3D;&quot;click3()&quot;&gt;button3&lt;&#x2F;button&gt;</span><br><span class="line"></span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;</span><br><span class="line">	   var button1&#x3D;document.getElementById(&#39;btn1&#39;)</span><br><span class="line">	   button1.addEventListener(&#39;click&#39;,()&#x3D;&gt;&#123;</span><br><span class="line">		   alert(&quot;click button1&quot;)</span><br><span class="line">	   &#125;);</span><br><span class="line"></span><br><span class="line">	   var button2&#x3D;document.getElementById(&#39;btn2&#39;)</span><br><span class="line">	   button2.onclick&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		   alert(&quot;click button2&quot;)</span><br><span class="line">	   &#125;</span><br><span class="line"></span><br><span class="line">	   function click3()&#123;</span><br><span class="line">		   alert(&quot;click button3&quot;)</span><br><span class="line">	   &#125;</span><br><span class="line">	&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/10/react1/" data-id="cl1sodz0m009h4ovhecn7cqma" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/07/jvm1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">记一次java程序从6H到30min的优化过程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从一个小例子说起"><span class="toc-number">1.</span> <span class="toc-text">从一个小例子说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state基础用法"><span class="toc-number">2.</span> <span class="toc-text">state基础用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据存储"><span class="toc-number">2.1.</span> <span class="toc-text">数据存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据修改"><span class="toc-number">2.2.</span> <span class="toc-text">数据修改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state简化写法"><span class="toc-number">3.</span> <span class="toc-text">state简化写法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#js中绑定事件的三种方式"><span class="toc-number">4.</span> <span class="toc-text">js中绑定事件的三种方式</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
