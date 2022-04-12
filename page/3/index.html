@@ -110,6 +110,56 @@ var _hmt = _hmt || [];
 			
 			
   
+    <article id="post-javathread2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/25/javathread2/" class="article-date">
+  <time datetime="2022-02-25T10:43:58.000Z" itemprop="datePublished">2022-02-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/25/javathread2/">java基础之多线程总结二（CAS和各种常用锁）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>在java中，对很多常见的需要加锁的操作进行了封装，例如Atomic开头的一些类，这些类是线程安全的，但是内部却不是用synchronized加锁实现，而是CAS。<br>例如AtomicInteger的’incrementAndGet()’方法最终调用的实际是下边这个方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@HotSpotIntrinsicCandidate</span><br><span class="line">    public final native boolean compareAndSetInt(Object o, long offset,</span><br><span class="line">                                                 int expected,</span><br><span class="line">                                                 int x);</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2022/02/25/javathread2/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/02/25/javathread2/" data-id="cl1w1shh2005of4vh8oaw66q1" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-zuullimit" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/02/25/zuullimit/" class="article-date">
@@ -146,7 +196,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/02/25/zuullimit/" data-id="cl1sv2spf00agpgvhcbidal1c" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/02/25/zuullimit/" data-id="cl1w1shj900ayf4vhetox2k2n" class="article-share-link">分享</a>
       
       
       
@@ -195,7 +245,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/02/23/javathread1/" data-id="cl1sv2slv002hpgvh3usohydk" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/02/23/javathread1/" data-id="cl1w1shfq002wf4vh9lom5zzp" class="article-share-link">分享</a>
       
       
       
@@ -244,7 +294,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/01/08/javacollection1/" data-id="cl1sv2slt002apgvha6t3hjxv" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/01/08/javacollection1/" data-id="cl1w1shfh002if4vh8gxp3v59" class="article-share-link">分享</a>
       
       
       
@@ -293,7 +343,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2021/08/22/zongjie8/" data-id="cl1sv2spd00a8pgvh2mgk6za4" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2021/08/22/zongjie8/" data-id="cl1w1shld00gaf4vheuem9xy5" class="article-share-link">分享</a>
       
       
       
@@ -344,7 +394,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/11/30/python1/" data-id="cl1sv2snf005ypgvh16piguct" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/11/30/python1/" data-id="cl1w1shhr007ff4vh59cvgtan" class="article-share-link">分享</a>
       
       
       
@@ -394,7 +444,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi1/" data-id="cl1sv2snp006fpgvh1zuhcp8w" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi1/" data-id="cl1w1shho0079f4vhbi09dxr6" class="article-share-link">分享</a>
       
       
       
@@ -451,7 +501,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi2/" data-id="cl1sv2snt006qpgvhf3x58fki" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/10/30/ruoyi2/" data-id="cl1w1shij009ef4vh4ivo88qr" class="article-share-link">分享</a>
       
       
       
@@ -505,63 +555,11 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/23/wenti3/" data-id="cl1sv2sov0099pgvh1t2p2giv" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/10/23/wenti3/" data-id="cl1w1shj600arf4vh0gxsfp9w" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-flink3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/16/flink3/" class="article-date">
-  <time datetime="2020-10-16T04:59:42.000Z" itemprop="datePublished">2020-10-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/flink/">flink</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/16/flink3/">flink on yarn集群搭建及验证要点记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="standalone模式的弊端"><a href="#standalone模式的弊端" class="headerlink" title="standalone模式的弊端"></a>standalone模式的弊端</h2><p>前面搭建了flink简单集群，并在此基础上又搭建了HA集群，记录地址如下：</p>
-<p><a href="https://tuzongxun.blog.csdn.net/article/details/109039580" target="_blank" rel="noopener">flink初识及集群搭建和简单验证</a></p>
-<p><a href="https://tuzongxun.blog.csdn.net/article/details/109081839" target="_blank" rel="noopener">flink-HA集群搭建和问题记录</a></p>
-<p>虽然上述两种都能使用，在学习flink-api阶段应该是够用了，但是如果真要上生产使用，就还是有一定的弊端。</p>
-        
-          <p class="article-more-link">
-            <a href="/2020/10/16/flink3/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/16/flink3/" data-id="cl1sv2skq000rpgvhhtaxevk2" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
 
     </footer>
   </div>
@@ -603,6 +601,10 @@ var _hmt = _hmt || [];
       <ul>
         
           <li>
+            <a href="/2022/04/12/jvm2/">java程序6H到14min及90G内存到30G的优化过程（补充记录）</a>
+          </li>
+        
+          <li>
             <a href="/2022/04/10/bank0/">银行业务知识学习（银行的简介）</a>
           </li>
         
@@ -616,10 +618,6 @@ var _hmt = _hmt || [];
         
           <li>
             <a href="/2022/04/05/react0/">React系统学习（入门使用和基础概念）</a>
-          </li>
-        
-          <li>
-            <a href="/2022/04/05/vuepress/">VuePress搭建静态网站记录</a>
           </li>
         
       </ul>

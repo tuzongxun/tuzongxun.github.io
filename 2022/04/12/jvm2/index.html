@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>java程序6H到14min及90G内存到30G的优化过程（补充记录） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言前边有发过一篇代码优化的文章：记一次java程序从6H到30min的优化过程 大概描述的是一个java程序从最大内存至少80G运行6H30min，到最大内存降到75G并且运行30min的优化过程。 但是实际上这个结果并不达标，基于现有的环境，期望的最大内存不能超过64G，并且在可以接收的处理时间内这个内存应该越小越好。 终于又经过了几天的奋战后，这个结果变成了28G和14min。（这里的时间，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java程序6H到14min及90G内存到30G的优化过程（补充记录）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/12/jvm2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="前言前边有发过一篇代码优化的文章：记一次java程序从6H到30min的优化过程 大概描述的是一个java程序从最大内存至少80G运行6H30min，到最大内存降到75G并且运行30min的优化过程。 但是实际上这个结果并不达标，基于现有的环境，期望的最大内存不能超过64G，并且在可以接收的处理时间内这个内存应该越小越好。 终于又经过了几天的奋战后，这个结果变成了28G和14min。（这里的时间，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-12T11:13:58.000Z">
+<meta property="article:modified_time" content="2022-04-12T11:14:38.908Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="jvm">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-jvm2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/12/jvm2/" class="article-date">
+  <time datetime="2022-04-12T11:13:58.000Z" itemprop="datePublished">2022-04-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      java程序6H到14min及90G内存到30G的优化过程（补充记录）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前边有发过一篇代码优化的文章：<a href="https://blog.csdn.net/tuzongxun/article/details/124028371?spm=1001.2014.3001.5501" target="_blank" rel="noopener">记一次java程序从6H到30min的优化过程</a></p>
+<p>大概描述的是一个java程序从最大内存至少80G运行6H30min，到最大内存降到75G并且运行30min的优化过程。</p>
+<p>但是实际上这个结果并不达标，基于现有的环境，期望的最大内存不能超过64G，并且在可以接收的处理时间内这个内存应该越小越好。</p>
+<p>终于又经过了几天的奋战后，这个结果变成了28G和14min。（这里的时间，并非指单纯读文件的时间，而是整个程序所有业务的完整时间）</p>
+<a id="more"></a>
+
+
+<h2 id="最终优化方案解析"><a href="#最终优化方案解析" class="headerlink" title="最终优化方案解析"></a>最终优化方案解析</h2><p>达到上述效果的原因，主要是两个方面，一是文件的拆分读取，二是数据结构的变更。</p>
+<h3 id="文件拆分"><a href="#文件拆分" class="headerlink" title="文件拆分"></a>文件拆分</h3><p>在这个代码的业务中，每次需要读取四个文件的内容进行处理。</p>
+<p>需要经过基础文件内容的读取、源数据去重、后续各种分组、各种过滤、各种业务去重、各种关联业务数据查询、各种关联业务数据生成、多表入库数据生成、多表和多数据源数据入库等一系列的操作。</p>
+<p>经过反复分析，这四个文件虽然在一定阶段的时候需要合并，但是实际上并不是一开始就需要同时读取以及合并到一起。</p>
+<p>因此就把之前使用流式读取并最终放到一个List中的逻辑，修改为了分开读取，并且各自存到不同的List中。</p>
+<p>与此同时，每个文件读取之后会立即进行后续可以单独处理的逻辑，处理完成之后就销毁这个源数据的List，使得读下一个文件的时候，上一个List就已经可以被回收。</p>
+<p>但是，经过这样的修改之后，发现并没有太大变化。</p>
+<p>又进一步分析后，发现之前的内存溢出直接发生在读源文件以及源数据的过滤阶段。</p>
+<p>而现在虽然已经销毁了一部分源数据的List内容，但是由于经过了后续的逻辑处理，使得内存中又有了新的业务数据，只是换了方式而已。</p>
+<p>又由于在5.3G的文件中，实际是3个几百兆，一个4.3G，于是原本文件列表中4.3G文件排在最后读取的时候，其他三个文件处理后的数据已经占用了很多内存，就导致整个程序依旧需要很大的内存才能运行通过。</p>
+<p>于是我又做了一个小小的修改，对读取的文件列表进行了一个排序，先读最大的这个文件。</p>
+<p>这样修改之后，发现最大内存可以从75G降低到70G了，总的运行时间还是30min左右。</p>
+<p>然而，这个结果依然是不能满足要求。</p>
+<h3 id="数据结构的变更"><a href="#数据结构的变更" class="headerlink" title="数据结构的变更"></a>数据结构的变更</h3><p>在分开了文件读取依旧不能满足要求的情况下，进一步分析代码以及文件的数据，发现这些文件有一个规律，类似这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">11111,1,AAAAA,10,,,111.22,WW,XX</span><br><span class="line">11111,1,AAAAA,20,,,10.22,WW,XX</span><br><span class="line">11111,1,AAAAA,30,,,1.22,WW,XX</span><br><span class="line">11111,1,AAAAA,40,,,21.22,WW,XX</span><br><span class="line">11111,1,AAAAA,50,,,111.22,WW,XX</span><br><span class="line">11111,2,AAAAA,10,,,31.22,WW,XX</span><br><span class="line">11111,2,AAAAA,20,,,111.22,WW,XX</span><br><span class="line">11111,2,AAAAA,30,,,51.22,WW,XX</span><br><span class="line">11111,2,AAAAA,40,,,181.22,WW,XX</span><br><span class="line">11111,2,AAAAA,50,,,81.22,WW,XX</span><br><span class="line">2222,1,AAAAA,10,,,111.22,WW,XX</span><br><span class="line">2222,1,AAAAA,20,,,10.22,WW,XX</span><br><span class="line">2222,1,AAAAA,30,,,1.22,WW,XX</span><br><span class="line">2222,1,AAAAA,40,,,21.22,WW,XX</span><br><span class="line">2222,1,AAAAA,50,,,111.22,WW,XX</span><br><span class="line">2222,2,AAAAA,10,,,31.22,WW,XX</span><br><span class="line">2222,2,AAAAA,20,,,111.22,WW,XX</span><br><span class="line">2222,2,AAAAA,30,,,51.22,WW,XX</span><br><span class="line">2222,2,AAAAA,40,,,181.22,WW,XX</span><br><span class="line">2222,2,AAAAA,50,,,81.22,WW,XX</span><br></pre></td></tr></table></figure>
+
+<p>很显然，这里边有大量的重复内容。</p>
+<p>之前程序中定义的数据存储对象中，属性实际就是和上边每一行一一对应的，那么这里有20行，则最终的List中就有20个对象，这20个对象中有大量重复的内容。</p>
+<p>实际上，一开始测试的时候就已经知道这个，也感觉到修改结构的话应该能提升很大的效率，但是由于后续逻辑太复杂，所以一直不愿意从这层面下手。</p>
+<p>直到似乎用光了所有容易的手段还是不达标后，就不得不硬着头皮从这里下手。</p>
+<p>最终的数据结构修改为了重复的内容只出现一次，而变化的内容改为List存储。</p>
+<p>也就是说之前的对象属性都是普通类型，而现在是一部分普通类型加一部分的List类型。</p>
+<p>之前的一个对象是这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;: &quot;11111&quot;,</span><br><span class="line">    &quot;b&quot;: 1</span><br><span class="line">    &quot;c&quot;: null,</span><br><span class="line">    &quot;d&quot;: &quot;AAAAA&quot;,</span><br><span class="line">    &quot;e&quot;: 10,</span><br><span class="line">    &quot;f&quot;: null,</span><br><span class="line">    &quot;g&quot;: null,</span><br><span class="line">    &quot;h&quot;: 111.22,</span><br><span class="line">    &quot;i&quot;: &quot;WW&quot;,</span><br><span class="line">    &quot;j&quot;: &quot;XX&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上边举例的内容就会有20个这样的对象，那么修改后则是变成了下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;: &quot;11111&quot;,</span><br><span class="line">    &quot;b&quot;: [1,1,1,1,1],</span><br><span class="line">    &quot;c&quot;: null,</span><br><span class="line">    &quot;d&quot;: &quot;AAAAA&quot;,</span><br><span class="line">    &quot;e&quot;: [10,20,30,40,50]</span><br><span class="line">    &quot;f&quot;: null,</span><br><span class="line">    &quot;g&quot;: null,</span><br><span class="line">    &quot;h&quot;: [111.22,10.22,1.22,21.22,111.22]</span><br><span class="line">    &quot;i&quot;: &quot;WW&quot;,</span><br><span class="line">    &quot;j&quot;: &quot;XX&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的结构下，同样是上边举例的数据，最终的List中实际就只有4个对象，大大的减少了内存中重复存储的数据。</p>
+<p>实际上，单纯的这种数据结构变更是很简单的，难的是，后续各种逻辑都是基于上边的数据结构进行处理，所以这种数据结构的变更导致了后续一系列的逻辑修改。</p>
+<h2 id="关于性能优化的一些感想"><a href="#关于性能优化的一些感想" class="headerlink" title="关于性能优化的一些感想"></a>关于性能优化的一些感想</h2><p>原本64G就应该达标，结果意外的降到了30G，任务应该是可以暂时交付了。</p>
+<p>这个过程中有一些关于性能优化的感悟，也一并在这里做一个记录。</p>
+<h3 id="世上没有万能的药"><a href="#世上没有万能的药" class="headerlink" title="世上没有万能的药"></a>世上没有万能的药</h3><p>当我把之前那一篇文章分享到朋友圈的时候，很感谢有几个朋友提出了各种看法和建议。</p>
+<p>有一些让我有了新的灵感和思路，有的其实并不适用于当前的场景，但是不管哪一种，都让我进一步感受到世上没有万能的药。</p>
+<p>例如，有朋友说JDK8默认的垃圾回收器是G1，就是最好的，不需要优化，很显然这是有问题的。</p>
+<p>首先，在这个优化的过程中，我有看过默认的gc，并不是G1，同时我去网上查了，默认gc是G1的应该是jdk9。</p>
+<p>其次，既然jdk提供了这么多的垃圾回收器以及各种参数，自然是有应用场景的，怎么可能说默认的就不需要优化了呢，最多是通常情况下使用默认的就够了。</p>
+<p>再例如，有朋友说文件读取之后对象的内存大小和文件大小应该是多少的比例，这个也是有问题的。</p>
+<p>很显然，文件的大小和读取文件存储的对象大小究竟应该是什么比例，需要看这个对象的数据结构是怎么定义的，就像我同样的文件，使用两种不同的数据结构存储，结果就决然不同。</p>
+<h3 id="心态很重要"><a href="#心态很重要" class="headerlink" title="心态很重要"></a>心态很重要</h3><p>上边其实也提到了，一开始就知道文件有很多重复的内容，如果改变了数据结构，大概率能够提升效率。</p>
+<p>但是鉴于业务逻辑的复杂，所以一开始就是不愿意从这方面下手，总是想从简单的地方解决，也总是想着是不是提升一些就行了。</p>
+<p>事实证明，其实真正咬牙去啃硬骨头的时候，远没有想象中的那么困难。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/12/jvm2/" data-id="cl1w1shg4003lf4vh18vsb7f0" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/" rel="tag">jvm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/10/bank0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">银行业务知识学习（银行的简介）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最终优化方案解析"><span class="toc-number">2.</span> <span class="toc-text">最终优化方案解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件拆分"><span class="toc-number">2.1.</span> <span class="toc-text">文件拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据结构的变更"><span class="toc-number">2.2.</span> <span class="toc-text">数据结构的变更</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于性能优化的一些感想"><span class="toc-number">3.</span> <span class="toc-text">关于性能优化的一些感想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#世上没有万能的药"><span class="toc-number">3.1.</span> <span class="toc-text">世上没有万能的药</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#心态很重要"><span class="toc-number">3.2.</span> <span class="toc-text">心态很重要</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
