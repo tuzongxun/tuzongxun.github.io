@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>React系统学习（組件三大核心属性之props） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="从一个小需求出发假设有这样一个需求，需要在页面中输出不同水果的一些信息，例如id编号、名称和价格。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React系统学习（組件三大核心属性之props）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/17/react2/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="从一个小需求出发假设有这样一个需求，需要在页面中输出不同水果的一些信息，例如id编号、名称和价格。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/react/frunts0.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/react/fruits1.png">
+<meta property="og:image" content="http://blog.tzxcode.cn/images/react/fruit2.png">
+<meta property="article:published_time" content="2022-04-17T03:23:58.000Z">
+<meta property="article:modified_time" content="2022-04-17T03:28:00.504Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.tzxcode.cn/images/react/frunts0.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-react2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/17/react2/" class="article-date">
+  <time datetime="2022-04-17T03:23:58.000Z" itemprop="datePublished">2022-04-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React系统学习（組件三大核心属性之props）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="从一个小需求出发"><a href="#从一个小需求出发" class="headerlink" title="从一个小需求出发"></a>从一个小需求出发</h2><p>假设有这样一个需求，需要在页面中输出不同水果的一些信息，例如id编号、名称和价格。</p>
+<p><img src="/images/react/frunts0.png" alt=""></p>
+<a id="more"></a>
+
+<p>很显然，上边有三种不同的水果，但是每一种的格式是一模一样的，看起来就是<code>ul</code>和<code>li</code>。</p>
+<p>那么根据之前的学习，可以先定义出类似这样的组件以及相关代码，先实现其中一个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;div id&#x3D;&quot;test&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!--核心库--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;..&#x2F;js&#x2F;react.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">	&lt;!--操作dom--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;..&#x2F;js&#x2F;react-dom.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">	&lt;!--用户将jsx转为js--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.staticfile.org&#x2F;babel-standalone&#x2F;6.26.0&#x2F;babel.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">		class Order extends React.Component&#123;</span><br><span class="line">		render() &#123;</span><br><span class="line">			return (</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&lt;li&gt;id：1&lt;&#x2F;li&gt;</span><br><span class="line">					&lt;li&gt;name：苹果&lt;&#x2F;li&gt;  </span><br><span class="line">					&lt;li&gt;price：6.8元&lt;&#x2F;li&gt;</span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			)</span><br><span class="line">		&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		ReactDOM.render(&lt;Order&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line">	&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上边已经实现出来了一种水果的信息展示，如果要三个都出来，需要怎么办呢？实现方式不止一种，例如最简单粗暴的就可以直接在组件里写三个<code>ul</code>。</p>
+<p>但是很显然这样存在一些问题，其中一个问题就是这样的数据是写死的，而实际上这些数据不应该是固定的，例如价格。</p>
+<p>另一个问题就是，真的写多个<code>ul</code>的话，明显是不符合组件的思想的，组件本身就是为了复用，如果写成这样子，那就完全体现不出来组件的意义。</p>
+<p>那么下边就来解决这两个问题。</p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>由于之前学过了<code>state</code>，所以第一时间就能想到把数据从固定变为不固定，可以用<code>state</code>试试，于是组件的定义改成了如下这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Order extends React.Component&#123;</span><br><span class="line">	state &#x3D; &#123;id:1,name:&#39;苹果&#39;,price:6.8&#125;</span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;ul&gt;</span><br><span class="line">				&lt;li&gt;id：&#123;this.state.id&#125;&lt;&#x2F;li&gt;</span><br><span class="line">				&lt;li&gt;name：&#123;this.state.name&#125;&lt;&#x2F;li&gt;  </span><br><span class="line">				&lt;li&gt;price：&#123;this.state.price&#125;元&lt;&#x2F;li&gt;</span><br><span class="line">			&lt;&#x2F;ul&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看起来，数据好像不是固定的了，因为state里边数据可以通过构造方法等初始化方式获得，还可以通过事件回调进行修改。</p>
+<p>但是这里依然只是一个水果，要继续实现三个水果的展示又要怎么办呢？</p>
+<p>首先，可能会先把代码写成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;div id&#x3D;&quot;test&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">	&lt;div id&#x3D;&quot;test1&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">	&lt;div id&#x3D;&quot;test2&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!--核心库--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;..&#x2F;js&#x2F;react.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">	&lt;!--操作dom--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;..&#x2F;..&#x2F;js&#x2F;react-dom.development.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">	&lt;!--用户将jsx转为js--&gt;</span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.staticfile.org&#x2F;babel-standalone&#x2F;6.26.0&#x2F;babel.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">	&lt;script type&#x3D;&quot;text&#x2F;babel&quot;&gt;</span><br><span class="line">		class Order extends React.Component&#123;</span><br><span class="line">		state &#x3D; &#123;id:1,name:&#39;苹果&#39;,price:6.8&#125;</span><br><span class="line">		render() &#123;</span><br><span class="line">			return (</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&lt;li&gt;id：&#123;this.state.id&#125;&lt;&#x2F;li&gt;</span><br><span class="line">					&lt;li&gt;name：&#123;this.state.name&#125;&lt;&#x2F;li&gt;  </span><br><span class="line">					&lt;li&gt;price：&#123;this.state.price&#125;元&lt;&#x2F;li&gt;</span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			)</span><br><span class="line">		&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		ReactDOM.render(&lt;Order&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line">		ReactDOM.render(&lt;Order&#x2F;&gt;,document.getElementById(&#39;test1&#39;))</span><br><span class="line">		ReactDOM.render(&lt;Order&#x2F;&gt;,document.getElementById(&#39;test2&#39;))</span><br><span class="line">	&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上边代码看起来展示了三种水果，也实现了组件的复用，但是实际上展示效果是这样的：</p>
+<p><img src="/images/react/fruits1.png" alt=""></p>
+<p>这并不是展示了三种水果，而是一个水果展示了三次。</p>
+<p>如何解决这个问题呢？这就需要今天的主角<code>props</code>上场了。</p>
+<h2 id="props基本用法"><a href="#props基本用法" class="headerlink" title="props基本用法"></a>props基本用法</h2><p><code>props</code>和<code>state</code>一样是<code>react</code>内置的属性之一，<strong>props可以理解为就是组件标签的属性集合，会帮我们收集组件中所有属性。</strong></p>
+<p>使用<code>props</code>可以很好的解决上边的问题，修改后的组件定义以及使用的基本代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Order extends React.Component&#123;</span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;ul&gt;</span><br><span class="line">				&lt;li&gt;id：&#123;this.props.id&#125;&lt;&#x2F;li&gt;</span><br><span class="line">				&lt;li&gt;name：&#123;this.props.name&#125;&lt;&#x2F;li&gt;  </span><br><span class="line">				&lt;li&gt;price：&#123;this.props.price&#125;元&lt;&#x2F;li&gt;</span><br><span class="line">			&lt;&#x2F;ul&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Order id&#x3D;&#123;1&#125; name&#x3D;&#39;苹果&#39; price&#x3D;&#123;6.8&#125;&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line">ReactDOM.render(&lt;Order id&#x3D;&#123;2&#125; name&#x3D;&#39;香蕉&#39; price&#x3D;&#123;3.7&#125;&#x2F;&gt;,document.getElementById(&#39;test1&#39;))</span><br><span class="line">ReactDOM.render(&lt;Order id&#x3D;&#123;3&#125; name&#x3D;&#39;梨子&#39; price&#x3D;&#123;4.5&#125;&#x2F;&gt;,document.getElementById(&#39;test2&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>进行上边这样的修改后，刷新页面就可以看到结果是最开头想要的效果了，如下：</p>
+<p><img src="/images/react/fruit2.png" alt=""></p>
+<h2 id="对象解构"><a href="#对象解构" class="headerlink" title="对象解构"></a>对象解构</h2><p>虽然效果是实现了，但是上边代码却显得比较繁琐，示例中仅仅展示了三个属性，而真实开发中经常会十几甚至几十的属性，那么像上边这样的代码就会显得极其难看。</p>
+<p>上边代码是可以优化的，其中一个就是对象解构，例如组件定义中使用属性时如果使用解构写法，就可以改成下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">	const &#123;id,name,price&#125; &#x3D;this.props;</span><br><span class="line">	return (</span><br><span class="line">		&lt;ul&gt;</span><br><span class="line">			&lt;li&gt;id：&#123;id&#125;&lt;&#x2F;li&gt;</span><br><span class="line">			&lt;li&gt;name：&#123;name&#125;&lt;&#x2F;li&gt;  </span><br><span class="line">			&lt;li&gt;price：&#123;price&#125;元&lt;&#x2F;li&gt;</span><br><span class="line">		&lt;&#x2F;ul&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解构相当于就是把一个对象的属性一个个拿出来，然后赋值给新的变量，这样之后使用的时候直接使用对应的变量就可以了，而不需要每次都从原对象中拿，代码看起来就会简洁很多。</p>
+<h2 id="三点展开运算符传值"><a href="#三点展开运算符传值" class="headerlink" title="三点展开运算符传值"></a>三点展开运算符传值</h2><p>除了组件中使用数据可以用解构来优化代码外，组件使用时的代码也是可以优化的。</p>
+<p>上边的代码中，三个属性是分别传递的，当属性特别多的时候就特别难写，也特别难看。</p>
+<p>同时，实际开发的时候一般这种数据也是从后端返回，基本也都是对象的方式，而不是直接一个一个属性的返回。</p>
+<p>因此在使用组件并传数据的时候，上边的代码可以进一步优化为下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;模拟数据</span><br><span class="line">let fruit&#x3D;&#123;id:1,name:&#39;苹果&#39;,price:6.8&#125;</span><br><span class="line">let fruit1&#x3D;&#123;id:2,name:&#39;香蕉&#39;,price:3.7&#125;</span><br><span class="line">let fruit2&#x3D;&#123;id:3,name:&#39;梨子&#39;,price:4.5&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Order &#123;...fruit&#125;&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line">ReactDOM.render(&lt;Order &#123;...fruit1&#125;&#x2F;&gt;,document.getElementById(&#39;test1&#39;))</span><br><span class="line">ReactDOM.render(&lt;Order &#123;...fruit2&#125;&#x2F;&gt;,document.getElementById(&#39;test2&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>当然了，真正开发时要怎么写，还要看具体的需求，如果本身就只需要其中几个属性，那么自然也可以直接传值。</p>
+<h2 id="数据约束及默认值"><a href="#数据约束及默认值" class="headerlink" title="数据约束及默认值"></a>数据约束及默认值</h2><p>上边代码实现了一开始的需求，最做了一定的优化，但是还是不够完善，因为实际开发的时候，经常需要对数据进行约束，例如数据的类型限定，例如是否必传，例如没有数据的时候是否需要默认值等等。</p>
+<p>针对上边的代码，如果要加上这些限制，可以改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Order extends React.Component&#123;</span><br><span class="line">	render() &#123;</span><br><span class="line">		const &#123;id,name,price&#125; &#x3D;this.props;</span><br><span class="line">		return (</span><br><span class="line">			&lt;ul&gt;</span><br><span class="line">				&lt;li&gt;id：&#123;id&#125;&lt;&#x2F;li&gt;</span><br><span class="line">				&lt;li&gt;name：&#123;name&#125;&lt;&#x2F;li&gt;  </span><br><span class="line">				&lt;li&gt;price：&#123;price&#125;元&lt;&#x2F;li&gt;</span><br><span class="line">			&lt;&#x2F;ul&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Order.propTypes&#x3D;&#123;</span><br><span class="line">	id:PropTypes.number.isRequired,</span><br><span class="line">	name:PropTypes.string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Order.defaultProps&#x3D;&#123;</span><br><span class="line">	price:0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let fruit&#x3D;&#123;id:1,name:&#39;苹果&#39;,price:6.8&#125;</span><br><span class="line">let fruit1&#x3D;&#123;id:2,name:&#39;香蕉&#39;,price:3.7&#125;</span><br><span class="line">let fruit2&#x3D;&#123;id:3,name:&#39;梨子&#39;&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Order &#123;...fruit&#125;&#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br><span class="line">ReactDOM.render(&lt;Order &#123;...fruit1&#125;&#x2F;&gt;,document.getElementById(&#39;test1&#39;))</span><br><span class="line">ReactDOM.render(&lt;Order &#123;...fruit2&#125;&#x2F;&gt;,document.getElementById(&#39;test2&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>有了上边新增的<code>Order.propTypes</code>和<code>Order.defaultProps</code>后，就可以实现一些数据的限制以及默认值。</p>
+<p>例如这里限制了<code>id</code>必须是数字类型，并且必传；限制了<code>name</code>必须是字符串类型，但是可以不传；没有对<code>price</code>进行数据类型以及是否必传的限制，但是通过```Order.defaultProps`给它了默认值。</p>
+<p>有了这些限制后，如果对应的数据不符合要求，页面也会显示，只是在控制台会有警告输出。</p>
+<p>另外需要注意的是，这里的数字类型使用<code>number</code>，字符串使用<code>string</code>，如果类型是函数则需要使用<code>func</code>，因为<code>function</code>是关键字，所以需要替换。</p>
+<p>还需要注意的是，<code>PropTypes</code>是<code>React</code>内置的类，在<code>React15.5</code>之前可以直接使用<code>React.PropTypes</code>，而之后的版本则需要额外引入一个依赖，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;https:&#x2F;&#x2F;cdn.bootcss.com&#x2F;prop-types&#x2F;15.6.1&#x2F;prop-types.js&quot;&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="约束和默认值的优化"><a href="#约束和默认值的优化" class="headerlink" title="约束和默认值的优化"></a>约束和默认值的优化</h2><p>上边的代码还可以进一步优化，因为从定义可以看出来<code>propTypes</code>和<code>defaultProps</code>都是属于类的，但是却将他们定义在了类外边，就显得不那么好。</p>
+<p>所以这两个定义是可以放到类里边的，使他们能够更清楚的显示和类的关系，修改后如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class Order extends React.Component&#123;</span><br><span class="line">	static propTypes&#x3D;&#123;</span><br><span class="line">		id:PropTypes.number.isRequired,</span><br><span class="line">		name:PropTypes.string</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	static defaultProps&#x3D;&#123;</span><br><span class="line">		price:0</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		const &#123;id,name,price&#125; &#x3D;this.props;</span><br><span class="line">		return (</span><br><span class="line">			&lt;ul&gt;</span><br><span class="line">				&lt;li&gt;id：&#123;id&#125;&lt;&#x2F;li&gt;</span><br><span class="line">				&lt;li&gt;name：&#123;name&#125;&lt;&#x2F;li&gt;  </span><br><span class="line">				&lt;li&gt;price：&#123;price&#125;元&lt;&#x2F;li&gt;</span><br><span class="line">			&lt;&#x2F;ul&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/17/react2/" data-id="cl22qaxi9005r18vh6qe81x0l" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/12/jvm2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">java程序6H到14min及80G内存到28G的优化过程（补充记录）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从一个小需求出发"><span class="toc-number">1.</span> <span class="toc-text">从一个小需求出发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据处理"><span class="toc-number">2.</span> <span class="toc-text">数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#props基本用法"><span class="toc-number">3.</span> <span class="toc-text">props基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象解构"><span class="toc-number">4.</span> <span class="toc-text">对象解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三点展开运算符传值"><span class="toc-number">5.</span> <span class="toc-text">三点展开运算符传值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据约束及默认值"><span class="toc-number">6.</span> <span class="toc-text">数据约束及默认值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#约束和默认值的优化"><span class="toc-number">7.</span> <span class="toc-text">约束和默认值的优化</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
