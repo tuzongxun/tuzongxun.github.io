@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>React系统学习6（dom的diffing算法） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。 这里说到的算法，其实就是diffing算法，或者说diff算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。 关于循环中key的问题如何理解上边的说法呢，理解之前，可以先来看一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React系统学习6（dom的diffing算法）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/05/11/react5/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。 这里说到的算法，其实就是diffing算法，或者说diff算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。 关于循环中key的问题如何理解上边的说法呢，理解之前，可以先来看一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser1.png">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser2.png">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser3.png">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser4.png">
+<meta property="article:published_time" content="2022-05-11T02:33:58.000Z">
+<meta property="article:modified_time" content="2022-05-17T08:32:34.362Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser1.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-react5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/05/11/react5/" class="article-date">
+  <time datetime="2022-05-11T02:33:58.000Z" itemprop="datePublished">2022-05-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React系统学习6（dom的diffing算法）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。</p>
+<p>这里说到的算法，其实就是<code>diffing</code>算法，或者说<code>diff</code>算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。</p>
+<h2 id="关于循环中key的问题"><a href="#关于循环中key的问题" class="headerlink" title="关于循环中key的问题"></a>关于循环中key的问题</h2><p>如何理解上边的说法呢，理解之前，可以先来看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class User extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;users:[</span><br><span class="line">		&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">		&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">	]&#125;</span><br><span class="line"></span><br><span class="line">	add&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let ww&#x3D;&#123;id:3,name:&#39;王五&#39;,age:25&#125;</span><br><span class="line">		this.setState(&#123;users:[ww,...this.state.users]&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;users&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.add&#125;&gt;点击增加王五&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;user.id&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user,index)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;index&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;User &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>在上边的代码中，实际就是一个<code>ul</code>，里边有根据数据生成的<code>li</code>。</p>
+<p>与此同时，还有一个按钮，点击的时候会改变数据，向里边增加一个内容。</p>
+<p>不同是，第一个<code>ul</code>里，<code>li</code>的<code>key</code>用的是数据唯一标识，而第二个<code>ul</code>里，则是直接用的数组的下标。</p>
+<p>当浏览器访问的时候，结果如下图所示：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser1.png" alt=""></p>
+<p>点击增加按钮之后，页面会被重新渲染，结果如下图：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser2.png" alt=""></p>
+<p>显然，单纯的从页面效果看不出任何的不同。</p>
+<p>但是如果上述代码稍作修改，我们在<code>li</code>里加入一个<code>input</code>输入框后，就能够看出效果，修改后代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class User extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;users:[</span><br><span class="line">		&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">		&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">	]&#125;</span><br><span class="line"></span><br><span class="line">	add&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let ww&#x3D;&#123;id:3,name:&#39;王五&#39;,age:25&#125;</span><br><span class="line">		this.setState(&#123;users:[ww,...this.state.users]&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;users&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.add&#125;&gt;点击增加王五&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;user.id&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125; &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user,index)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;index&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125; &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;User &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>再次浏览器访问，同时在<code>input</code>输入框中输入<code>li</code>里展示的内容后，效果如图：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser3.png" alt=""></p>
+<p>然后再点击增加按钮后，会看到页面重新渲染成了这样：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser4.png" alt=""></p>
+<p>从上图可以明显的看出来，第一个<code>ul</code>和第二个<code>ul</code>里的内容已经不一样了。</p>
+<p>第一个<code>ul</code>里后边输入框内的内容还是和<code>li</code>你展示的一致，但是第二个<code>ul</code>里输入框的内容已经不再和<code>li</code>中展示的一样了。</p>
+<p>为什么会这样呢？因为我们代码里两个<code>ul</code>中不同的就是<code>li</code>的<code>key</code>，所以也能是因为这个<code>key</code>的问题。</p>
+<p>但是为什么这个<code>key</code>不同，会导致数据错位呢？这就和<code>diff算法</code>有关了。</p>
+<h2 id="解析数据错位的问题"><a href="#解析数据错位的问题" class="headerlink" title="解析数据错位的问题"></a>解析数据错位的问题</h2><p>首先，在第一次访问页面的时候，实际上生成的DOM内容是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul&gt;</span><br><span class="line">	&lt;li key&#x3D;&#39;1&#39;&gt;我是张三，今年20 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">	&lt;li key&#x3D;&#39;2&#39;&gt;我是李四，今年22 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">	&lt;li key&#x3D;&#39;0&#39;&gt;我是张三，今年20 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt; </span><br><span class="line">	&lt;li key&#x3D;&#39;1&#39;&gt;我是李四，今年22 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br></pre></td></tr></table></figure>
+
+<p>那么当点击增加按钮，在<code>state</code>中增加了一条数据后，里边的数组就变成了这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">	&#123;id:3,name:&#39;王五&#39;,age:25&#125;,</span><br><span class="line">	&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">	&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>状态里的数据发生了改变，就会触发render重新渲染页面，渲染的时候React就会用diff算法进行比较：</p>
+<ol>
+<li>第一次循环，由于新加的数据放在了数组的开头，因此就会先是最新的这个，当key是id的时候，React就会去看是否之前有一个<code>key</code>是<code>3</code>的<code>li</code>，结果发现没有，就生成一个新的<code>li</code>。然后React发现<code>li</code>里边还有一个<code>input</code>，由于之前连这个<code>li</code>都没有，因此自然也就不会有<code>li</code>里的<code>input</code>了，因此也同时生成一个新的<code>input</code>。</li>
+<li>当key是数组索引的时候，由于和数据无关，第一次循环就是<code>0</code>，所以React就会去看之前是否有一个<code>key</code>是<code>0</code>的<code>li</code>，然后就发现之前有一个。但是进一步对比状态里的数据的时候，就会发现内容不一样了，于是就会换成新的内容。之后，React发现<code>li</code>里还有一个<code>input</code>，就继续去看之前是否有一个<code>key</code>是<code>0</code>的<code>li</code>里边有一个<code>input</code>，然后就发现确实是有，但是里边内容没有经过状态变化，所以就直接复用了。</li>
+<li>之后的二次循环以及三次循环，大致上和上边是一样的，所以最终就导致了数据的错位。</li>
+</ol>
+<p>上边的问题正是因为diff算法比较的时候用到了key作为标识，所以在实际开发的时候需要特别注意，类似这种需要定义key的地方，要尽可能的使用数据的唯一标识，否则就很有可能造成数据问题.</p>
+<p>即使没有数据问题，也会导致不必要的重新生成真实DOM，从而影响效率。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/05/11/react5/" data-id="cl39wf1ik0067z0vhgerqdxcz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/29/react4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">React系统学习5（组件生命周期）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于循环中key的问题"><span class="toc-number">1.</span> <span class="toc-text">关于循环中key的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析数据错位的问题"><span class="toc-number">2.</span> <span class="toc-text">解析数据错位的问题</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

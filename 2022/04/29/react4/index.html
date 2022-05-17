@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>React系统学习5（组件生命周期） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在之前的React类式组件定义的时候，有说到有一个必不可少的内容，即render函数，这个函数是React自带的，每当组件的状态变化的时候，就会触发一次render。 render函数就是React生命周期中的一个，与之类似的这些函数通常被称作React生命周期函数、React生命周期钩子函数、React生命周期钩子、React生命周期回调函数。 这些函数包括constructor、compone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React系统学习5（组件生命周期）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/29/react4/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="在之前的React类式组件定义的时候，有说到有一个必不可少的内容，即render函数，这个函数是React自带的，每当组件的状态变化的时候，就会触发一次render。 render函数就是React生命周期中的一个，与之类似的这些函数通常被称作React生命周期函数、React生命周期钩子函数、React生命周期钩子、React生命周期回调函数。 这些函数包括constructor、compone">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Clife.png">
+<meta property="article:published_time" content="2022-04-29T02:33:58.000Z">
+<meta property="article:modified_time" content="2022-05-17T08:31:23.479Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Clife.png">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-react4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/29/react4/" class="article-date">
+  <time datetime="2022-04-29T02:33:58.000Z" itemprop="datePublished">2022-04-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React系统学习5（组件生命周期）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>在之前的React类式组件定义的时候，有说到有一个必不可少的内容，即<code>render</code>函数，这个函数是React自带的，每当组件的状态变化的时候，就会触发一次render。</p>
+<p>render函数就是React生命周期中的一个，与之类似的这些函数通常被称作React生命周期函数、React生命周期钩子函数、React生命周期钩子、React生命周期回调函数。</p>
+<p>这些函数包括constructor、componentWillMount、render、componentDidMount、componentWillUnmount、componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、componentDidUpdate等。</p>
+<h2 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor</h2><p>constructor函数比较好理解，就是构造函数，也就是在组件被创建的一开始就调用。</p>
+<p>在之前的内容中有说过，多数时候构造函数都是可以省略的。</p>
+<p>但是需要注意的是，如果没有省略构造函数，那么构造函数中必须调用<code>super</code>函数，同时，根据React官网的说明，规范的构造函数需要写<code>props</code>参数，并将<code>props</code>传给<code>super</code>，否则的话可能导致一些问题。</p>
+<h2 id="componentWillMount和componentDidMount"><a href="#componentWillMount和componentDidMount" class="headerlink" title="componentWillMount和componentDidMount"></a>componentWillMount和componentDidMount</h2><p>之前在说虚拟DOM转换为真实DOM时，一直说的是渲染，实际上还有一个说法，是叫做挂载，英文单词也就是<code>mount</code>。</p>
+<p>所以实际上，也可以把初次<code>render</code>就理解为是挂载，那么与之对应的就有另外两个生命周期函数，<code>componentWillMount</code>和<code>componentDidMount</code>。</p>
+<p>这两个函数从命名就比较好理解，will是将要，did是完成，也就是说<code>componentWillMount</code>指的是组件将要挂载前，<code>componentDidMount</code>指组件完成挂载后。</p>
+<p>说的再直白一点，就是<code>componentWillMount</code>在<code>初次render</code>之前调用，<code>componentDidMount</code>在<code>初次render</code>之后调用。</p>
+<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>render是必不可少的一个生命周期函数，上边也说<code>初次render</code>的时候就可以先理解为挂载。</p>
+<p>但是为什么说初次呢，是因为挂载只有一次，而render却是<code>1+n</code>次，只有第一次的时候可以简单理解为挂载。</p>
+<p>除了刚开始加载的时候会调用，后边每次状态修改也都会触发<code>render</code>。</p>
+<h2 id="componentWillUpdate和componentDidUpdate"><a href="#componentWillUpdate和componentDidUpdate" class="headerlink" title="componentWillUpdate和componentDidUpdate"></a>componentWillUpdate和componentDidUpdate</h2><p>说到状态修改时触发<code>render</code>，自然就引出另两个生命周期函数，即<code>componentWillUpdate</code>和<code>componentDidUpdate</code>。</p>
+<p>同样的，从命名就能比较容易理解作用，即组件将要修改前调用、组件修改后调用。</p>
+<p>很显然，就是当修改类的<code>render</code>触发时，在它之前和之后会分别触发<code>componentWillUpdate</code>和<code>componentDidUpdate</code>。</p>
+<p>只是，这里少有一点问题，也就是说这个所谓的修改类操作，并不是真的一定是状态发生了修改。</p>
+<p>状态发生修改这个可能比较好理解，因为在说<code>state</code>的时候说过了，实际上指的就是<code>setState</code>操作。</p>
+<p>但是除了这个操作会触发修改类的<code>render</code>外，还有一个操作也可以，那就是<code>forceUpdate</code>。</p>
+<p>他们的一个区别，就涉及到下一个生命周期函数。</p>
+<h2 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h2><p>我们说<code>setState</code>操作会引发状态的修改，但是状态修改了就一定会触发<code>render</code>吗？</p>
+<p>其实不是的。</p>
+<p>因为在<code>setState</code>和<code>render</code>之前还有一个<code>shouldComponentUpdate</code>，这个函数的作用说白了就是决定在<code>setState</code>之后是否要进行<code>render</code>，也就是一个开关。</p>
+<p>在这个函数中，需要一个<code>boolean</code>类型的返回值，默认情况下返回true，这也就是为什么之前只要<code>setState</code>就一定会<code>render</code>的原因。</p>
+<p><code>setState</code>了不一定会<code>render</code>，同样的，<code>render</code>也不是必须要<code>setState</code>，当执行了<code>forceUpdate</code>后，也会触发<code>render</code>。</p>
+<p>如果说，<code>setState</code>到<code>render</code>的过程是<code>shouldComponentUpdate</code>-&gt;<code>componentWillUpdate</code>-&gt;<code>render</code>，那么<code>forceUpdate</code>的过程就是只有<code>componentWillUpdate</code>-&gt;<code>render</code>。</p>
+<h2 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h2><p>上边几个声明周期函数都说完后，就剩<code>componentWillReceiveProps</code>这一个了。</p>
+<p>这个函数只有在父子组件关系中，且父组件第二次给子组件传递数据的时候才会触发。</p>
+<p>例如有下边这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class Parent extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;gift:&quot;奥特曼&quot;&#125;</span><br><span class="line"></span><br><span class="line">	changeGift&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let &#123;gift&#125;&#x3D;this.state</span><br><span class="line">		if(gift &#x3D;&#x3D;&#x3D; &#39;奥特曼&#39;)&#123;</span><br><span class="line">			this.setState(&#123;gift:&#39;超级飞侠&#39;&#125;)</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			this.setState(&#123;gift:&#39;奥特曼&#39;&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;gift&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;h2&gt;父组件&lt;&#x2F;h2&gt;&amp;nbsp;&lt;button onClick&#x3D;&#123;this.changeGift&#125;&gt;点击换个礼物&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;Son gift&#x3D;&#123;gift&#125;&gt;&lt;&#x2F;Son&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Son extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	componentWillReceiveProps()&#123;</span><br><span class="line">		console.log(&quot;看下是什么礼物&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">	render()&#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;h3&gt;&#123;this.props.gift&#125;&lt;&#x2F;h3&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Parent &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的意思是，有一个父组件，里边有一个按钮和一个子组件，父组件会给子组件传递一个礼物的数据，并且在点击按钮时修改传递的数据。</p>
+<p>那么浏览器访问就会看到，一开始就会显示出<code>奥特曼</code>，当点击按钮的时候会在<code>奥特曼</code>和</p>
+<p><code>超级飞侠</code>之间切换。</p>
+<p>如果打开浏览器控制台，就会进一步看到，当第一次访问的时候，并没有任何的输出内容，但是当点击按钮的时候，就会输出如下的内容：</p>
+<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Clife.png" alt="">   </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/29/react4/" data-id="cl39wf1ii0060z0vhemd7entx" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/05/11/react5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          React系统学习6（dom的diffing算法）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/04/28/react3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">React系统学习4（組件三大核心属性之refs）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructor-NaN"><span class="toc-number">1.</span> <span class="toc-text">constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount和componentDidMount"><span class="toc-number">2.</span> <span class="toc-text">componentWillMount和componentDidMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#render"><span class="toc-number">3.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate和componentDidUpdate"><span class="toc-number">4.</span> <span class="toc-text">componentWillUpdate和componentDidUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-number">5.</span> <span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps"><span class="toc-number">6.</span> <span class="toc-text">componentWillReceiveProps</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

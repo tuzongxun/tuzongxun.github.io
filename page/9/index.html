@@ -110,6 +110,153 @@ var _hmt = _hmt || [];
 			
 			
   
+    <article id="post-springcloud7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/15/springcloud7/" class="article-date">
+  <time datetime="2018-09-15T07:09:42.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/15/springcloud7/">springcloud微服务七：网关zuul</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="理解网关概念"><a href="#理解网关概念" class="headerlink" title="理解网关概念"></a>理解网关概念</h1><p>根据我个人的理解，对于一个系统来说，不管是微服务架构还是非微服务架构，如果单从功能实现来说，网关其实不是必要的。<br>但是，如果一个系统的业务涉及到了和外部网络的交互，多数情况下都会加入网关功能，最根源的目的就是提升系统的网络安全性。<br>因此网关可以理解为是在大的系统架构层面，一个网络策略方面的东西，最基本的需求就是实现请求的路由转发。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/09/15/springcloud7/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2018/09/15/springcloud7/" data-id="cl39wf1j6007vz0vh9jqufi84" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-springcloud6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/09/springcloud6/" class="article-date">
+  <time datetime="2018-09-09T07:09:42.000Z" itemprop="datePublished">2018-09-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/09/springcloud6/">springcloud微服务六：声明式服务调用Feign</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在有了eureka服务注册中心、ribbon负载均衡及服务消费、hystrix断路器三部分之后，其实在某种程度上就应该能够创建一个基本的spring cloud微服务应用了，只不过这种应用无论是代码层面还是架构层面都还有一定的缺陷。<br>从代码层面来讲，ribbon和hystrix是一个标准化springcloud应用最基本的模块，通常也都是同时出现的，因此为了简化开发，有一个更高层次的工具来对他们进行了封装整合，这就是Feign。<br>feign在整合了这两者强大功能的同时，还提供了一种声明式的web服务客户端定义方式及可插拔式的注解，同时支持spring mvc的注解。<br>在ribbon和hystrix的基础上，feign看起来就比较简单。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/09/09/springcloud6/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2018/09/09/springcloud6/" data-id="cl39wf1ja0086z0vh75r7fxjz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-springcloud5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/03/springcloud5/" class="article-date">
+  <time datetime="2018-09-03T07:09:42.000Z" itemprop="datePublished">2018-09-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/springcloud/">springcloud</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/03/springcloud5/">springcloud微服务五：客户端负载均衡ribbon</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本概念理解"><a href="#基本概念理解" class="headerlink" title="基本概念理解"></a>基本概念理解</h1><p>ribbon用在客户端，或者说消费端，被称作客户端负载均衡。<br>对于这个称呼，可以解析为三个部分，一个是客户端，一个是负载均衡，然后就是客户端负载均衡。<br>根据个人理解，所有发起请求的一端、去拿东西的一端，都可以称之为客户端或消费端。<br>而负载均衡，一般则是针对于至少两个以上的集群而言，重点在于均衡。从相对论的角度而言，一切都是相对的，那么也就不存在绝对的均衡，因此所谓的均衡就需要一定的标准，如何达到这个标准，则需要一定的控制，即负载均衡策略，也可以称之为规则。<br>对于客户端负载均衡，则可以很好的理解为，这是相对于服务端负载均衡而言。相对于服务端负载均衡而言，客户端负载均衡的好处就在于各个客户端自己实现负载均衡运算，从而降低了服务端的压力。坏处在于客户端要自己实现负载，就需要清楚服务端集群的状态，增加了客户端的复杂度以及多个客户端下可能看起来的功能冗余。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/09/03/springcloud5/#more">继续阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2018/09/03/springcloud5/" data-id="cl39wf1j7007zz0vh8km28pfz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/springcloud/" rel="tag">springcloud</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-mysql-jichu15" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/25/mysql-jichu15/" class="article-date">
@@ -146,7 +293,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/04/25/mysql-jichu15/" data-id="cl22qaxhs005218vhboxab2ik" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/04/25/mysql-jichu15/" data-id="cl39wf1hp004vz0vh6u1agmxe" class="article-share-link">分享</a>
       
       
       
@@ -195,7 +342,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/04/19/wenti/" data-id="cl22qaxjh008l18vhdv1958gi" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/04/19/wenti/" data-id="cl39wf1jq009bz0vhcu2pcif9" class="article-share-link">分享</a>
       
       
       
@@ -244,7 +391,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/04/18/mysql-jichu13/" data-id="cl22qaxhi004j18vh90g85as3" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/04/18/mysql-jichu13/" data-id="cl39wf1hl004pz0vhgmwjg2qu" class="article-share-link">分享</a>
       
       
       
@@ -293,7 +440,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/04/16/mysql-jichu14/" data-id="cl22qaxhn004q18vh6lyg0vm2" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/04/16/mysql-jichu14/" data-id="cl39wf1hk004nz0vh428obq7a" class="article-share-link">分享</a>
       
       
       
@@ -342,7 +489,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/03/12/dubbo1/" data-id="cl22qaxet000518vhfmdnbjwc" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/03/12/dubbo1/" data-id="cl39wf1ey000hz0vh8z8bcvja" class="article-share-link">分享</a>
       
       
       
@@ -391,158 +538,11 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/03/02/java2/" data-id="cl22qaxg3001n18vhbbq19vwi" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/03/02/java2/" data-id="cl39wf1fu001pz0vh74af5qlu" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-zongjie2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/27/zongjie2/" class="article-date">
-  <time datetime="2018-02-27T03:43:58.000Z" itemprop="datePublished">2018-02-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">问题整理</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/27/zongjie2/">记一次开发过程中的思维转换</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>一、问题：</strong><br>有一个同事接到一个新的开发任务，需要把spring框架改成springboot，但是他遇到了一个久久不能解决的问题。</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/02/27/zongjie2/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/02/27/zongjie2/" data-id="cl22qaxk1009h18vh3dz9el28" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" rel="tag">问题整理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-pattern8-facade" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/05/pattern8-facade/" class="article-date">
-  <time datetime="2018-01-05T01:43:58.000Z" itemprop="datePublished">2018-01-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/05/pattern8-facade/">《设计模式》学习笔记8——外观模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>外观模式引用书中的定义如下：</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/01/05/pattern8-facade/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/01/05/pattern8-facade/" data-id="cl22qaxi7005o18vh6be27o20" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-pattern7-observer" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/05/pattern7-observer/" class="article-date">
-  <time datetime="2017-12-05T07:43:58.000Z" itemprop="datePublished">2017-12-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </div>
-
-</span>
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/05/pattern7-observer/">《设计模式》学习笔记7——观察者模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>观察者模式是使用频率最高的设计模式之一，也是最容易理解的设计模式之一，这种模式在生活中随处可见。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/12/05/pattern7-observer/#more">继续阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2017/12/05/pattern7-observer/" data-id="cl22qaxi6005l18vhhtst6dpn" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
 
     </footer>
   </div>
@@ -584,23 +584,23 @@ var _hmt = _hmt || [];
       <ul>
         
           <li>
+            <a href="/2022/05/11/react5/">React系统学习6（dom的diffing算法）</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/29/react4/">React系统学习5（组件生命周期）</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/28/react3/">React系统学习4（組件三大核心属性之refs）</a>
+          </li>
+        
+          <li>
             <a href="/2022/04/17/react2/">React系统学习（組件三大核心属性之props）</a>
           </li>
         
           <li>
             <a href="/2022/04/12/jvm2/">java程序6H到14min及80G内存到28G的优化过程（补充记录）</a>
-          </li>
-        
-          <li>
-            <a href="/2022/04/10/bank0/">银行业务知识学习（银行的简介）</a>
-          </li>
-        
-          <li>
-            <a href="/2022/04/10/react1/">React系统学习（組件三大核心属性之state）</a>
-          </li>
-        
-          <li>
-            <a href="/2022/04/07/jvm1/">记一次java程序从6H到30min的优化过程</a>
           </li>
         
       </ul>

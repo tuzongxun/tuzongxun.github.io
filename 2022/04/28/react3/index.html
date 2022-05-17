@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?fc9a8559a133f4d8ce784d69d6337bb0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+  <title>React系统学习4（組件三大核心属性之refs） | 涂宗勋的博客</title>
+  <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。 再从小需求说起建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。 需求比较简单，根据以往的经验，可能会写出这样的一段代码： 1234567891011121314151617class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React系统学习4（組件三大核心属性之refs）">
+<meta property="og:url" content="http://blog.tzxcode.cn/2022/04/28/react3/index.html">
+<meta property="og:site_name" content="涂宗勋的博客">
+<meta property="og:description" content="React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。 再从小需求说起建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。 需求比较简单，根据以往的经验，可能会写出这样的一段代码： 1234567891011121314151617class">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-28T02:33:58.000Z">
+<meta property="article:modified_time" content="2022-05-17T08:30:48.483Z">
+<meta property="article:author" content="涂宗勋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/images/touxiang.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.13/js/linkcard.js"></script>
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tzxcode.cn"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/shuoshuo/">说说</a>
+        
+          <a class="main-nav-link" href="/archives/">归档</a>
+        
+          <a class="main-nav-link" href="/collections/">导航</a>
+        
+          <a class="main-nav-link" href="/download/">资源</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">涂宗勋的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">java全栈程序员，CSDN博客https://blog.csdn.net/tuzongxun</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <!--<span id="busuanzi_container_site_pv">【本站累计访问量:<span id="busuanzi_value_site_pv"></span>】</span>-->
+        </h2>
+		
+      
+    </div>
+  </div>
+</header>
+	  
+      <div class="outer">
+		<a href="https://tuzongxun.blog.csdn.net/" target="_blank" rel="noopener">
+			<img style="width:98%;height:100px;margin-top:30px;margin-left:2%" src="/images/mycsdn.jpg">
+		</a>
+        <section id="main">
+			
+			<article id="post-react3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/04/28/react3/" class="article-date">
+  <time datetime="2022-04-28T02:33:58.000Z" itemprop="datePublished">2022-04-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+  </div>
+
+</span>
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React系统学习4（組件三大核心属性之refs）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。</p>
+<h2 id="再从小需求说起"><a href="#再从小需求说起" class="headerlink" title="再从小需求说起"></a>再从小需求说起</h2><p>建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。</p>
+<p>需求比较简单，根据以往的经验，可能会写出这样的一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(document.getElementById(&#39;input1&#39;).value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input id&#x3D;&quot;input1&quot; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>如果浏览器访问，会发现确实达到了想要的效果。</p>
+<p>但是这里却有一个问题，那就是在React中除开特定的几个地方只能使用<code>document.getElementById</code>这种直接操作真实DOM的情况外，大多数时候是不应该直接操作真实DOM的。</p>
+<p>原因之前应该也提到过，React会管理一个虚拟DOM，然后会把虚拟DOM渲染成真实DOM，但是渲染过程中并不是每次都全部内容渲染，而是会根据一定的算法，最终尽可能少的生成新的真实DOM，从而提升效率。</p>
+<p>在React中提供了一个属性refs，就可以解决上边的问题。</p>
+<h2 id="string类型的refs"><a href="#string类型的refs" class="headerlink" title="string类型的refs"></a>string类型的refs</h2><p>refs的用法有好几种，最简单的就是string类型的，那么上边的代码就可以改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.refs.input1.value)</span><br><span class="line">	&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&quot;input1&quot; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>和之前不同的就是两个地方，一个是把<code>id=&quot;input1&quot;</code>换成了<code>ref=&quot;input1&quot;</code>，另一个就是把<code>alert(document.getElementById(&#39;input1&#39;).value)</code>改成了<code>alert(this.refs.input1.value)</code>。</p>
+<p>很显然，在这里就没有再直接操作真实DOM。</p>
+<p>当然了，上边代码也可以使用解构写法优化自定义方法中的代码，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">	let &#123;input1&#125; &#x3D; this.refs;</span><br><span class="line">	alert(input1.value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>string用法看起来很简单，但是官网最新的文档已经说这是过时用法了，存在一些问题，不建议再使用，建议用函数式和createRef方式，下边就看看函数式</p>
+<h2 id="函数类型的refs"><a href="#函数类型的refs" class="headerlink" title="函数类型的refs"></a>函数类型的refs</h2><p>函数式分为内联函数和外部引用函数，使用内联函数式写法，上边代码就可以进一步改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.input1.value)</span><br><span class="line">	&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&#123;(node)&#x3D;&gt;&#123;this.input1&#x3D;node&#125;&#125; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>而使用外部引用函数类型的refs，代码则可以改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.input1.value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	bindRef&#x3D;(node)&#x3D;&gt;&#123;</span><br><span class="line">		this.input1&#x3D;node</span><br><span class="line">	&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&#123;this.bindRef&#125; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>上边两份代码的区别就在于，第一个直接在ref后边定义了一个匿名的函数，而第二个则是先声明了一个函数，然后再在ref后边进行引用。</p>
+<p>这两种写法看起来第一种更加简洁，可能也是实际用的更多的。</p>
+<p>但是实际上有一个小细节，那就是第一种写法在每次重新render渲染的时候都会加载两次这个函数，当然了，大多数时候可能也没有太大影响。</p>
+<h2 id="createRef类型的refs"><a href="#createRef类型的refs" class="headerlink" title="createRef类型的refs"></a>createRef类型的refs</h2><p>实际上函数式应该是用的最多的了，因为createRef这种写法必须在外边先进行定义，如下边这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.bindRef.current.value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	bindRef&#x3D;React.createRef()</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&#123;this.bindRef&#125; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>可能有人会说，为什么不直接把<code>React.createRef()</code>放在<code>ref</code>后边呢？</p>
+<p>因为实际上发现这样写的时候根本无效，至于为什么，暂时就不太清楚。</p>
+<p>正是由于这个原因，相比内联函数的写法似乎就要复杂一些，所以可能大多数时候都选择内联函数的写法。</p>
+<p>最后做一个总结，<code>refs</code>三种用法，看似最简单的可能会被弃用，最常用的应该是内联函数方式。</p>
+<p>同时，官网说不要过度使用refs，否则也可能造成性能问题，也就是说实际开发时能不用它就不用，而是该用react中的其他一些方式。</p>
+<p>因为从上边代码中也可以看出来，我们用refs就是为了拿到某个节点，然后得到数据。</p>
+<p>实际上这种需求，如果事件发生的位置和数据节点就是一个，完全可以通过<code>event.target</code>方式处理。</p>
+<p>如果是类似上边示例中事件发生位置和数据节点不同的情况，实际上也可以通过后续受控组件和非受控组件的内容进行处理。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tzxcode.cn/2022/04/28/react3/" data-id="cl39wf1ig005wz0vh0k6shk7v" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  <div class="comments" id="comments">
+    
+     
+       
+       
+      
+      
+	 
+  </div>
+ 
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =5
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+	
+<nav id="article-nav">
+  
+    <a href="/2022/04/29/react4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          React系统学习5（组件生命周期）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/04/17/react2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">React系统学习（組件三大核心属性之props）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+		</section>
+           
+    <aside id="sidebar">
+  
+    <!--微信公众号二维码-->
+
+
+  
+    
+
+  
+    
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed" style="max-height: 300px;">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#再从小需求说起"><span class="toc-number">1.</span> <span class="toc-text">再从小需求说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#string类型的refs"><span class="toc-number">2.</span> <span class="toc-text">string类型的refs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数类型的refs"><span class="toc-number">3.</span> <span class="toc-text">函数类型的refs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#createRef类型的refs"><span class="toc-number">4.</span> <span class="toc-text">createRef类型的refs</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2016 - 2022 涂宗勋&nbsp; <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" rel="noopener">鄂ICP备20000142号</a> |&nbsp;&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>&nbsp;|&nbsp;&nbsp;
+	  <span id="busuanzi_container_site_pv">历史访问<span style="color:#2D7023" id="busuanzi_value_site_pv"></span>次</span>
+	  <div style="width:300px;margin:0 auto; padding:20px 0;"><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42010302002171"style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://blog.tzxcode.cn/beian.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42010302002171号</p></a>
+		 	</div>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;1160569243@qq.com
+    </div>
+	
+  </div>
+</footer>
+
+<script src="/jquery/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+	var countOffset = 50000;  // 初始化首次数据
+	function fixCount() {            
+		if (document.getElementById("busuanzi_container_site_pv").style.display != "none"){
+			$("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+			clearInterval(int);
+		}                  
+		if ($("#busuanzi_container_site_pv").css("display") != "none"){
+			$("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+			clearInterval(int); // 停止检测
+		}  
+	}      	
+});
+</script> 
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/shuoshuo/" class="mobile-nav-link">说说</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/collections/" class="mobile-nav-link">导航</a>
+  
+    <a href="/download/" class="mobile-nav-link">资源</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
