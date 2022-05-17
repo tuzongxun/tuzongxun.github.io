@@ -31,19 +31,19 @@ var _hmt = _hmt || [];
   <title>React系统学习6（dom的diffing算法） | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。 这里说到的算法，其实就是diffing算法，或者说diff算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。 关于循环中key的问题如何理解上边的说法呢，理解之前，可以先来看一个">
+  <meta name="description" content="之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。 这里说到的算法，其实就是diffing算法，或者说diff算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React系统学习6（dom的diffing算法）">
 <meta property="og:url" content="http://blog.tzxcode.cn/2022/05/11/react5/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。 这里说到的算法，其实就是diffing算法，或者说diff算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。 关于循环中key的问题如何理解上边的说法呢，理解之前，可以先来看一个">
+<meta property="og:description" content="之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。 这里说到的算法，其实就是diffing算法，或者说diff算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser1.png">
 <meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser2.png">
 <meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser3.png">
 <meta property="og:image" content="d:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser4.png">
 <meta property="article:published_time" content="2022-05-11T02:33:58.000Z">
-<meta property="article:modified_time" content="2022-05-17T08:32:34.362Z">
+<meta property="article:modified_time" content="2022-05-17T08:43:09.019Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="前端">
 <meta property="article:tag" content="React">
@@ -150,6 +150,8 @@ var _hmt = _hmt || [];
         
         <p>之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。</p>
 <p>这里说到的算法，其实就是<code>diffing</code>算法，或者说<code>diff</code>算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。</p>
+<a id="more"></a>
+
 <h2 id="关于循环中key的问题"><a href="#关于循环中key的问题" class="headerlink" title="关于循环中key的问题"></a>关于循环中key的问题</h2><p>如何理解上边的说法呢，理解之前，可以先来看一个例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class User extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;users:[</span><br><span class="line">		&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">		&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">	]&#125;</span><br><span class="line"></span><br><span class="line">	add&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let ww&#x3D;&#123;id:3,name:&#39;王五&#39;,age:25&#125;</span><br><span class="line">		this.setState(&#123;users:[ww,...this.state.users]&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;users&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.add&#125;&gt;点击增加王五&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;user.id&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user,index)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;index&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;User &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
 
@@ -190,7 +192,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/05/11/react5/" data-id="cl39wf1ik0067z0vhgerqdxcz" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/05/11/react5/" data-id="cl39x4koe006klkvhdqrt54nd" class="article-share-link">分享</a>
       
       
       

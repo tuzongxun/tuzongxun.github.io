@@ -137,51 +137,17 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <!-- Table of Contents -->
-        
         <p>之前一直说React效率高的原因是因为在把虚拟DOM渲染为真实DOM的时候并不是每一次都渲染所有的，而是会进行一定的算法处理，只重新渲染新的DOM。</p>
 <p>这里说到的算法，其实就是<code>diffing</code>算法，或者说<code>diff</code>算法，diff算法有一个重要的特点就是会一层层的判断每一层标签的属性和内容是否一致，如果一致就会复用，不一致才会重新生成。</p>
-<h2 id="关于循环中key的问题"><a href="#关于循环中key的问题" class="headerlink" title="关于循环中key的问题"></a>关于循环中key的问题</h2><p>如何理解上边的说法呢，理解之前，可以先来看一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class User extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;users:[</span><br><span class="line">		&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">		&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">	]&#125;</span><br><span class="line"></span><br><span class="line">	add&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let ww&#x3D;&#123;id:3,name:&#39;王五&#39;,age:25&#125;</span><br><span class="line">		this.setState(&#123;users:[ww,...this.state.users]&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;users&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.add&#125;&gt;点击增加王五&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;user.id&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user,index)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;index&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;User &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>在上边的代码中，实际就是一个<code>ul</code>，里边有根据数据生成的<code>li</code>。</p>
-<p>与此同时，还有一个按钮，点击的时候会改变数据，向里边增加一个内容。</p>
-<p>不同是，第一个<code>ul</code>里，<code>li</code>的<code>key</code>用的是数据唯一标识，而第二个<code>ul</code>里，则是直接用的数组的下标。</p>
-<p>当浏览器访问的时候，结果如下图所示：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser1.png" alt=""></p>
-<p>点击增加按钮之后，页面会被重新渲染，结果如下图：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser2.png" alt=""></p>
-<p>显然，单纯的从页面效果看不出任何的不同。</p>
-<p>但是如果上述代码稍作修改，我们在<code>li</code>里加入一个<code>input</code>输入框后，就能够看出效果，修改后代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class User extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;users:[</span><br><span class="line">		&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">		&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">	]&#125;</span><br><span class="line"></span><br><span class="line">	add&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let ww&#x3D;&#123;id:3,name:&#39;王五&#39;,age:25&#125;</span><br><span class="line">		this.setState(&#123;users:[ww,...this.state.users]&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;users&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.add&#125;&gt;点击增加王五&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;user.id&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125; &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">				&lt;ul&gt;</span><br><span class="line">					&#123;</span><br><span class="line">						users.map((user,index)&#x3D;&gt;&#123;</span><br><span class="line">							console.log(user)</span><br><span class="line">							return &lt;li key&#x3D;&#123;index&#125;&gt;我是&#123;user.name&#125;，今年&#123;user.age&#125; &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;     </span><br><span class="line">				&lt;&#x2F;ul&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;User &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>再次浏览器访问，同时在<code>input</code>输入框中输入<code>li</code>里展示的内容后，效果如图：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser3.png" alt=""></p>
-<p>然后再点击增加按钮后，会看到页面重新渲染成了这样：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Cuser4.png" alt=""></p>
-<p>从上图可以明显的看出来，第一个<code>ul</code>和第二个<code>ul</code>里的内容已经不一样了。</p>
-<p>第一个<code>ul</code>里后边输入框内的内容还是和<code>li</code>你展示的一致，但是第二个<code>ul</code>里输入框的内容已经不再和<code>li</code>中展示的一样了。</p>
-<p>为什么会这样呢？因为我们代码里两个<code>ul</code>中不同的就是<code>li</code>的<code>key</code>，所以也能是因为这个<code>key</code>的问题。</p>
-<p>但是为什么这个<code>key</code>不同，会导致数据错位呢？这就和<code>diff算法</code>有关了。</p>
-<h2 id="解析数据错位的问题"><a href="#解析数据错位的问题" class="headerlink" title="解析数据错位的问题"></a>解析数据错位的问题</h2><p>首先，在第一次访问页面的时候，实际上生成的DOM内容是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul&gt;</span><br><span class="line">	&lt;li key&#x3D;&#39;1&#39;&gt;我是张三，今年20 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">	&lt;li key&#x3D;&#39;2&#39;&gt;我是李四，今年22 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">	&lt;li key&#x3D;&#39;0&#39;&gt;我是张三，今年20 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt; </span><br><span class="line">	&lt;li key&#x3D;&#39;1&#39;&gt;我是李四，今年22 &lt;input type&#x3D;&quot;text&quot;&#x2F;&gt;&lt;&#x2F;li&gt;</span><br><span class="line">&lt;&#x2F;ul&gt;</span><br></pre></td></tr></table></figure>
-
-<p>那么当点击增加按钮，在<code>state</code>中增加了一条数据后，里边的数组就变成了这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">	&#123;id:3,name:&#39;王五&#39;,age:25&#125;,</span><br><span class="line">	&#123;id:1,name:&#39;张三&#39;,age:20&#125;,</span><br><span class="line">	&#123;id:2,name:&#39;李四&#39;,age:22&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>状态里的数据发生了改变，就会触发render重新渲染页面，渲染的时候React就会用diff算法进行比较：</p>
-<ol>
-<li>第一次循环，由于新加的数据放在了数组的开头，因此就会先是最新的这个，当key是id的时候，React就会去看是否之前有一个<code>key</code>是<code>3</code>的<code>li</code>，结果发现没有，就生成一个新的<code>li</code>。然后React发现<code>li</code>里边还有一个<code>input</code>，由于之前连这个<code>li</code>都没有，因此自然也就不会有<code>li</code>里的<code>input</code>了，因此也同时生成一个新的<code>input</code>。</li>
-<li>当key是数组索引的时候，由于和数据无关，第一次循环就是<code>0</code>，所以React就会去看之前是否有一个<code>key</code>是<code>0</code>的<code>li</code>，然后就发现之前有一个。但是进一步对比状态里的数据的时候，就会发现内容不一样了，于是就会换成新的内容。之后，React发现<code>li</code>里还有一个<code>input</code>，就继续去看之前是否有一个<code>key</code>是<code>0</code>的<code>li</code>里边有一个<code>input</code>，然后就发现确实是有，但是里边内容没有经过状态变化，所以就直接复用了。</li>
-<li>之后的二次循环以及三次循环，大致上和上边是一样的，所以最终就导致了数据的错位。</li>
-</ol>
-<p>上边的问题正是因为diff算法比较的时候用到了key作为标识，所以在实际开发的时候需要特别注意，类似这种需要定义key的地方，要尽可能的使用数据的唯一标识，否则就很有可能造成数据问题.</p>
-<p>即使没有数据问题，也会导致不必要的重新生成真实DOM，从而影响效率。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2022/05/11/react5/#more">继续阅读全文 »</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/05/11/react5/" data-id="cl39wf1ik0067z0vhgerqdxcz" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/05/11/react5/" data-id="cl39x4koe006klkvhdqrt54nd" class="article-share-link">分享</a>
       
       
       
@@ -221,49 +187,18 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <!-- Table of Contents -->
-        
         <p>在之前的React类式组件定义的时候，有说到有一个必不可少的内容，即<code>render</code>函数，这个函数是React自带的，每当组件的状态变化的时候，就会触发一次render。</p>
 <p>render函数就是React生命周期中的一个，与之类似的这些函数通常被称作React生命周期函数、React生命周期钩子函数、React生命周期钩子、React生命周期回调函数。</p>
 <p>这些函数包括constructor、componentWillMount、render、componentDidMount、componentWillUnmount、componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、componentDidUpdate等。</p>
-<h2 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor</h2><p>constructor函数比较好理解，就是构造函数，也就是在组件被创建的一开始就调用。</p>
-<p>在之前的内容中有说过，多数时候构造函数都是可以省略的。</p>
-<p>但是需要注意的是，如果没有省略构造函数，那么构造函数中必须调用<code>super</code>函数，同时，根据React官网的说明，规范的构造函数需要写<code>props</code>参数，并将<code>props</code>传给<code>super</code>，否则的话可能导致一些问题。</p>
-<h2 id="componentWillMount和componentDidMount"><a href="#componentWillMount和componentDidMount" class="headerlink" title="componentWillMount和componentDidMount"></a>componentWillMount和componentDidMount</h2><p>之前在说虚拟DOM转换为真实DOM时，一直说的是渲染，实际上还有一个说法，是叫做挂载，英文单词也就是<code>mount</code>。</p>
-<p>所以实际上，也可以把初次<code>render</code>就理解为是挂载，那么与之对应的就有另外两个生命周期函数，<code>componentWillMount</code>和<code>componentDidMount</code>。</p>
-<p>这两个函数从命名就比较好理解，will是将要，did是完成，也就是说<code>componentWillMount</code>指的是组件将要挂载前，<code>componentDidMount</code>指组件完成挂载后。</p>
-<p>说的再直白一点，就是<code>componentWillMount</code>在<code>初次render</code>之前调用，<code>componentDidMount</code>在<code>初次render</code>之后调用。</p>
-<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><p>render是必不可少的一个生命周期函数，上边也说<code>初次render</code>的时候就可以先理解为挂载。</p>
-<p>但是为什么说初次呢，是因为挂载只有一次，而render却是<code>1+n</code>次，只有第一次的时候可以简单理解为挂载。</p>
-<p>除了刚开始加载的时候会调用，后边每次状态修改也都会触发<code>render</code>。</p>
-<h2 id="componentWillUpdate和componentDidUpdate"><a href="#componentWillUpdate和componentDidUpdate" class="headerlink" title="componentWillUpdate和componentDidUpdate"></a>componentWillUpdate和componentDidUpdate</h2><p>说到状态修改时触发<code>render</code>，自然就引出另两个生命周期函数，即<code>componentWillUpdate</code>和<code>componentDidUpdate</code>。</p>
-<p>同样的，从命名就能比较容易理解作用，即组件将要修改前调用、组件修改后调用。</p>
-<p>很显然，就是当修改类的<code>render</code>触发时，在它之前和之后会分别触发<code>componentWillUpdate</code>和<code>componentDidUpdate</code>。</p>
-<p>只是，这里少有一点问题，也就是说这个所谓的修改类操作，并不是真的一定是状态发生了修改。</p>
-<p>状态发生修改这个可能比较好理解，因为在说<code>state</code>的时候说过了，实际上指的就是<code>setState</code>操作。</p>
-<p>但是除了这个操作会触发修改类的<code>render</code>外，还有一个操作也可以，那就是<code>forceUpdate</code>。</p>
-<p>他们的一个区别，就涉及到下一个生命周期函数。</p>
-<h2 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h2><p>我们说<code>setState</code>操作会引发状态的修改，但是状态修改了就一定会触发<code>render</code>吗？</p>
-<p>其实不是的。</p>
-<p>因为在<code>setState</code>和<code>render</code>之前还有一个<code>shouldComponentUpdate</code>，这个函数的作用说白了就是决定在<code>setState</code>之后是否要进行<code>render</code>，也就是一个开关。</p>
-<p>在这个函数中，需要一个<code>boolean</code>类型的返回值，默认情况下返回true，这也就是为什么之前只要<code>setState</code>就一定会<code>render</code>的原因。</p>
-<p><code>setState</code>了不一定会<code>render</code>，同样的，<code>render</code>也不是必须要<code>setState</code>，当执行了<code>forceUpdate</code>后，也会触发<code>render</code>。</p>
-<p>如果说，<code>setState</code>到<code>render</code>的过程是<code>shouldComponentUpdate</code>-&gt;<code>componentWillUpdate</code>-&gt;<code>render</code>，那么<code>forceUpdate</code>的过程就是只有<code>componentWillUpdate</code>-&gt;<code>render</code>。</p>
-<h2 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h2><p>上边几个声明周期函数都说完后，就剩<code>componentWillReceiveProps</code>这一个了。</p>
-<p>这个函数只有在父子组件关系中，且父组件第二次给子组件传递数据的时候才会触发。</p>
-<p>例如有下边这段代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class Parent extends React.Component&#123;</span><br><span class="line">	state&#x3D;&#123;gift:&quot;奥特曼&quot;&#125;</span><br><span class="line"></span><br><span class="line">	changeGift&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		let &#123;gift&#125;&#x3D;this.state</span><br><span class="line">		if(gift &#x3D;&#x3D;&#x3D; &#39;奥特曼&#39;)&#123;</span><br><span class="line">			this.setState(&#123;gift:&#39;超级飞侠&#39;&#125;)</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			this.setState(&#123;gift:&#39;奥特曼&#39;&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		let &#123;gift&#125;&#x3D;this.state</span><br><span class="line">		return (</span><br><span class="line">			</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;h2&gt;父组件&lt;&#x2F;h2&gt;&amp;nbsp;&lt;button onClick&#x3D;&#123;this.changeGift&#125;&gt;点击换个礼物&lt;&#x2F;button&gt;</span><br><span class="line">				&lt;Son gift&#x3D;&#123;gift&#125;&gt;&lt;&#x2F;Son&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Son extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	componentWillReceiveProps()&#123;</span><br><span class="line">		console.log(&quot;看下是什么礼物&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">	render()&#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;h3&gt;&#123;this.props.gift&#125;&lt;&#x2F;h3&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Parent &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>这段代码的意思是，有一个父组件，里边有一个按钮和一个子组件，父组件会给子组件传递一个礼物的数据，并且在点击按钮时修改传递的数据。</p>
-<p>那么浏览器访问就会看到，一开始就会显示出<code>奥特曼</code>，当点击按钮的时候会在<code>奥特曼</code>和</p>
-<p><code>超级飞侠</code>之间切换。</p>
-<p>如果打开浏览器控制台，就会进一步看到，当第一次访问的时候，并没有任何的输出内容，但是当点击按钮的时候，就会输出如下的内容：</p>
-<p><img src="D:%5Chexo%5Cthemes%5Ccafe%5Csource%5Cimages%5Creact%5Clife.png" alt="">   </p>
-
+        
+          <p class="article-more-link">
+            <a href="/2022/04/29/react4/#more">继续阅读全文 »</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/29/react4/" data-id="cl39wf1ii0060z0vhemd7entx" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/29/react4/" data-id="cl39x4kod006glkvhd16m7z6u" class="article-share-link">分享</a>
       
       
       
@@ -303,51 +238,18 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <!-- Table of Contents -->
-        
         <p>React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。</p>
 <h2 id="再从小需求说起"><a href="#再从小需求说起" class="headerlink" title="再从小需求说起"></a>再从小需求说起</h2><p>建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。</p>
 <p>需求比较简单，根据以往的经验，可能会写出这样的一段代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(document.getElementById(&#39;input1&#39;).value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input id&#x3D;&quot;input1&quot; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>如果浏览器访问，会发现确实达到了想要的效果。</p>
-<p>但是这里却有一个问题，那就是在React中除开特定的几个地方只能使用<code>document.getElementById</code>这种直接操作真实DOM的情况外，大多数时候是不应该直接操作真实DOM的。</p>
-<p>原因之前应该也提到过，React会管理一个虚拟DOM，然后会把虚拟DOM渲染成真实DOM，但是渲染过程中并不是每次都全部内容渲染，而是会根据一定的算法，最终尽可能少的生成新的真实DOM，从而提升效率。</p>
-<p>在React中提供了一个属性refs，就可以解决上边的问题。</p>
-<h2 id="string类型的refs"><a href="#string类型的refs" class="headerlink" title="string类型的refs"></a>string类型的refs</h2><p>refs的用法有好几种，最简单的就是string类型的，那么上边的代码就可以改成这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.refs.input1.value)</span><br><span class="line">	&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&quot;input1&quot; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>和之前不同的就是两个地方，一个是把<code>id=&quot;input1&quot;</code>换成了<code>ref=&quot;input1&quot;</code>，另一个就是把<code>alert(document.getElementById(&#39;input1&#39;).value)</code>改成了<code>alert(this.refs.input1.value)</code>。</p>
-<p>很显然，在这里就没有再直接操作真实DOM。</p>
-<p>当然了，上边代码也可以使用解构写法优化自定义方法中的代码，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">	let &#123;input1&#125; &#x3D; this.refs;</span><br><span class="line">	alert(input1.value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>string用法看起来很简单，但是官网最新的文档已经说这是过时用法了，存在一些问题，不建议再使用，建议用函数式和createRef方式，下边就看看函数式</p>
-<h2 id="函数类型的refs"><a href="#函数类型的refs" class="headerlink" title="函数类型的refs"></a>函数类型的refs</h2><p>函数式分为内联函数和外部引用函数，使用内联函数式写法，上边代码就可以进一步改成这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.input1.value)</span><br><span class="line">	&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&#123;(node)&#x3D;&gt;&#123;this.input1&#x3D;node&#125;&#125; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>而使用外部引用函数类型的refs，代码则可以改成这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.input1.value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	bindRef&#x3D;(node)&#x3D;&gt;&#123;</span><br><span class="line">		this.input1&#x3D;node</span><br><span class="line">	&#125;</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&#123;this.bindRef&#125; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>上边两份代码的区别就在于，第一个直接在ref后边定义了一个匿名的函数，而第二个则是先声明了一个函数，然后再在ref后边进行引用。</p>
-<p>这两种写法看起来第一种更加简洁，可能也是实际用的更多的。</p>
-<p>但是实际上有一个小细节，那就是第一种写法在每次重新render渲染的时候都会加载两次这个函数，当然了，大多数时候可能也没有太大影响。</p>
-<h2 id="createRef类型的refs"><a href="#createRef类型的refs" class="headerlink" title="createRef类型的refs"></a>createRef类型的refs</h2><p>实际上函数式应该是用的最多的了，因为createRef这种写法必须在外边先进行定义，如下边这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(this.bindRef.current.value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	bindRef&#x3D;React.createRef()</span><br><span class="line">   </span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input ref&#x3D;&#123;this.bindRef&#125; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
-
-<p>可能有人会说，为什么不直接把<code>React.createRef()</code>放在<code>ref</code>后边呢？</p>
-<p>因为实际上发现这样写的时候根本无效，至于为什么，暂时就不太清楚。</p>
-<p>正是由于这个原因，相比内联函数的写法似乎就要复杂一些，所以可能大多数时候都选择内联函数的写法。</p>
-<p>最后做一个总结，<code>refs</code>三种用法，看似最简单的可能会被弃用，最常用的应该是内联函数方式。</p>
-<p>同时，官网说不要过度使用refs，否则也可能造成性能问题，也就是说实际开发时能不用它就不用，而是该用react中的其他一些方式。</p>
-<p>因为从上边代码中也可以看出来，我们用refs就是为了拿到某个节点，然后得到数据。</p>
-<p>实际上这种需求，如果事件发生的位置和数据节点就是一个，完全可以通过<code>event.target</code>方式处理。</p>
-<p>如果是类似上边示例中事件发生位置和数据节点不同的情况，实际上也可以通过后续受控组件和非受控组件的内容进行处理。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2022/04/28/react3/#more">继续阅读全文 »</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/28/react3/" data-id="cl39wf1ig005wz0vh0k6shk7v" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/28/react3/" data-id="cl39x4kob006dlkvh42kq8ixu" class="article-share-link">分享</a>
       
       
       
@@ -397,7 +299,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/17/react2/" data-id="cl39wf1jc008cz0vhgtlr9bgo" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/17/react2/" data-id="cl39x4ko9006alkvh2i5l8l8y" class="article-share-link">分享</a>
       
       
       
@@ -449,7 +351,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/12/jvm2/" data-id="cl39wf1gw003cz0vh6zro6rrk" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/12/jvm2/" data-id="cl39x4kme003ilkvh813rb69t" class="article-share-link">分享</a>
       
       
       
@@ -503,7 +405,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/10/bank0/" data-id="cl39wf1eq0009z0vh14lw4lty" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/10/bank0/" data-id="cl39x4kk10005lkvh7g327dqz" class="article-share-link">分享</a>
       
       
       
@@ -553,7 +455,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/10/react1/" data-id="cl39wf1im006hz0vhbf7o74pq" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/10/react1/" data-id="cl39x4ko70068lkvh5x9zanja" class="article-share-link">分享</a>
       
       
       
@@ -604,7 +506,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/07/jvm1/" data-id="cl39wf1gq0031z0vh29ajhfl4" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/07/jvm1/" data-id="cl39x4kmc003flkvhh84zdhj6" class="article-share-link">分享</a>
       
       
       
@@ -655,7 +557,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/05/react0/" data-id="cl39wf1ik006az0vh8yzx591p" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/05/react0/" data-id="cl39x4ko50065lkvh8imgges2" class="article-share-link">分享</a>
       
       
       

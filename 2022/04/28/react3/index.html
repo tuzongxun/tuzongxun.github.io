@@ -31,15 +31,15 @@ var _hmt = _hmt || [];
   <title>React系统学习4（組件三大核心属性之refs） | 涂宗勋的博客</title>
   <meta name="baidu-site-verification" content="o8pWlgAEZ7" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。 再从小需求说起建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。 需求比较简单，根据以往的经验，可能会写出这样的一段代码： 1234567891011121314151617class">
+  <meta name="description" content="React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。 再从小需求说起建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。 需求比较简单，根据以往的经验，可能会写出这样的一段代码：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React系统学习4（組件三大核心属性之refs）">
 <meta property="og:url" content="http://blog.tzxcode.cn/2022/04/28/react3/index.html">
 <meta property="og:site_name" content="涂宗勋的博客">
-<meta property="og:description" content="React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。 再从小需求说起建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。 需求比较简单，根据以往的经验，可能会写出这样的一段代码： 1234567891011121314151617class">
+<meta property="og:description" content="React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。 再从小需求说起建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。 需求比较简单，根据以往的经验，可能会写出这样的一段代码：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-28T02:33:58.000Z">
-<meta property="article:modified_time" content="2022-05-17T08:30:48.483Z">
+<meta property="article:modified_time" content="2022-05-17T08:43:46.515Z">
 <meta property="article:author" content="涂宗勋">
 <meta property="article:tag" content="前端">
 <meta property="article:tag" content="React">
@@ -146,6 +146,8 @@ var _hmt = _hmt || [];
         <p>React三大核心属性state、props、refs，前边已经学过了state和props，现在开始最后一个refs的学习。</p>
 <h2 id="再从小需求说起"><a href="#再从小需求说起" class="headerlink" title="再从小需求说起"></a>再从小需求说起</h2><p>建立在业务基础上的技术才是最有价值的，假设有这样一个组件，一个输入框和一个按钮，需要在输入框中输入内容后，点击按钮则弹窗展示输入的内容。</p>
 <p>需求比较简单，根据以往的经验，可能会写出这样的一段代码：</p>
+<a id="more"></a>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Demo extends React.Component&#123;</span><br><span class="line"></span><br><span class="line">	showInput&#x3D;()&#x3D;&gt;&#123;</span><br><span class="line">		alert(document.getElementById(&#39;input1&#39;).value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;input id&#x3D;&quot;input1&quot; type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;点击按钮弹出输入内容&quot;&#x2F;&gt;  </span><br><span class="line">				&lt;button onClick&#x3D;&#123;this.showInput&#125;&gt;点击按钮弹出输入内容&lt;&#x2F;button&gt;  </span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(&lt;Demo &#x2F;&gt;,document.getElementById(&#39;test&#39;))</span><br></pre></td></tr></table></figure>
 
 <p>如果浏览器访问，会发现确实达到了想要的效果。</p>
@@ -185,7 +187,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2022/04/28/react3/" data-id="cl39wf1ig005wz0vh0k6shk7v" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2022/04/28/react3/" data-id="cl39x4kob006dlkvh42kq8ixu" class="article-share-link">分享</a>
       
       
       
