@@ -217,7 +217,7 @@ public class FirstZuulFilter extends ZuulFilter {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2018/09/15/springcloud7/" data-id="cmrcdj9ac008hlg8dba03ctm8" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2018/09/15/springcloud7/" data-id="cmrcdsze8008dac8dcw4ec8s9" class="article-share-link">分享</a>
       
       
       
@@ -244,6 +244,23 @@ public class FirstZuulFilter extends ZuulFilter {
             data-reverse="1"
             async>
     </script>
+    <!-- 新增反转JS，iframe加载完成后颠倒评论顺序 -->
+<script>
+window.addEventListener('message', function(e) {
+  if (e.origin !== 'https://giscus.app') return;
+  // 等待评论DOM渲染完成
+  setTimeout(()=>{
+    const iframe = document.querySelector('#giscus-container iframe');
+    if(!iframe) return;
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    const commentWrap = doc.querySelector('.giscus-comments');
+    if(!commentWrap) return;
+    // 获取所有评论节点倒序重排
+    const items = Array.from(commentWrap.querySelectorAll('.comment-item'));
+    items.reverse().forEach(el=>commentWrap.appendChild(el));
+  }, 600);
+});
+</script>
   
  
 <script src="/jquery/jquery.min.js"></script>

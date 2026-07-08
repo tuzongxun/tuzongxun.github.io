@@ -445,7 +445,7 @@ public static MyProduct getProduct(int type) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2017/11/20/pattern2-simfactory/" data-id="cmrcdj99l0055lg8d8s7tcjx6" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2017/11/20/pattern2-simfactory/" data-id="cmrcdszdi005bac8d8pf6aopq" class="article-share-link">分享</a>
       
       
       
@@ -472,6 +472,23 @@ public static MyProduct getProduct(int type) {
             data-reverse="1"
             async>
     </script>
+    <!-- 新增反转JS，iframe加载完成后颠倒评论顺序 -->
+<script>
+window.addEventListener('message', function(e) {
+  if (e.origin !== 'https://giscus.app') return;
+  // 等待评论DOM渲染完成
+  setTimeout(()=>{
+    const iframe = document.querySelector('#giscus-container iframe');
+    if(!iframe) return;
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    const commentWrap = doc.querySelector('.giscus-comments');
+    if(!commentWrap) return;
+    // 获取所有评论节点倒序重排
+    const items = Array.from(commentWrap.querySelectorAll('.comment-item'));
+    items.reverse().forEach(el=>commentWrap.appendChild(el));
+  }, 600);
+});
+</script>
   
  
 <script src="/jquery/jquery.min.js"></script>

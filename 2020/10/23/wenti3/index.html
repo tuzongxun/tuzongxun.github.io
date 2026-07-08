@@ -180,7 +180,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2020/10/23/wenti3/" data-id="cmrcdj9an009ulg8d03rier7w" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2020/10/23/wenti3/" data-id="cmrcdszen00a1ac8d4bvf03ch" class="article-share-link">分享</a>
       
       
       
@@ -207,6 +207,23 @@ var _hmt = _hmt || [];
             data-reverse="1"
             async>
     </script>
+    <!-- 新增反转JS，iframe加载完成后颠倒评论顺序 -->
+<script>
+window.addEventListener('message', function(e) {
+  if (e.origin !== 'https://giscus.app') return;
+  // 等待评论DOM渲染完成
+  setTimeout(()=>{
+    const iframe = document.querySelector('#giscus-container iframe');
+    if(!iframe) return;
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    const commentWrap = doc.querySelector('.giscus-comments');
+    if(!commentWrap) return;
+    // 获取所有评论节点倒序重排
+    const items = Array.from(commentWrap.querySelectorAll('.comment-item'));
+    items.reverse().forEach(el=>commentWrap.appendChild(el));
+  }, 600);
+});
+</script>
   
  
 <script src="/jquery/jquery.min.js"></script>
@@ -254,7 +271,7 @@ var _hmt = _hmt || [];
 	
 <nav id="article-nav">
   
-    <a href="/2020/10/30/ruoyi1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/10/30/ruoyi2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         

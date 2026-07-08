@@ -155,7 +155,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2017/10/13/maven1/" data-id="cmrcdj99a003ulg8d5udz2473" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2017/10/13/maven1/" data-id="cmrcdszd90042ac8deka68lyd" class="article-share-link">分享</a>
       
       
       
@@ -182,6 +182,23 @@ var _hmt = _hmt || [];
             data-reverse="1"
             async>
     </script>
+    <!-- 新增反转JS，iframe加载完成后颠倒评论顺序 -->
+<script>
+window.addEventListener('message', function(e) {
+  if (e.origin !== 'https://giscus.app') return;
+  // 等待评论DOM渲染完成
+  setTimeout(()=>{
+    const iframe = document.querySelector('#giscus-container iframe');
+    if(!iframe) return;
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    const commentWrap = doc.querySelector('.giscus-comments');
+    if(!commentWrap) return;
+    // 获取所有评论节点倒序重排
+    const items = Array.from(commentWrap.querySelectorAll('.comment-item'));
+    items.reverse().forEach(el=>commentWrap.appendChild(el));
+  }, 600);
+});
+</script>
   
  
 <script src="/jquery/jquery.min.js"></script>
