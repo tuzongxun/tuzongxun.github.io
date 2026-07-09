@@ -289,7 +289,7 @@ var _hmt = _hmt || [];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/shuoshuo/index%20-%20%E5%89%AF%E6%9C%AC.html" data-id="cmrdncqlo000y388dbjcgfgli" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/shuoshuo/index%20-%20%E5%89%AF%E6%9C%AC.html" data-id="cmrdnqpu9000yv48d0z9b2y51" class="article-share-link">分享</a>
       
       
       
@@ -307,7 +307,7 @@ var _hmt = _hmt || [];
             data-strict="0"
             data-reactions-enabled="1"
             data-emit-metadata="0"
-            data-input-position="top"
+            data-input-position="bottom"
             data-theme="light"
             data-lang="zh-CN"
             crossorigin="anonymous"
@@ -316,21 +316,6 @@ var _hmt = _hmt || [];
     </script>
     <!-- 新增反转JS，iframe加载完成后颠倒评论顺序 -->
 <script>
-window.addEventListener('message', function(e) {
-  if (e.origin !== 'https://giscus.app') return;
-  // 等待评论DOM渲染完成
-  setTimeout(()=>{
-    const iframe = document.querySelector('#giscus-container iframe');
-    if(!iframe) return;
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    const commentWrap = doc.querySelector('.giscus-comments');
-    if(!commentWrap) return;
-    // 获取所有评论节点倒序重排
-    const items = Array.from(commentWrap.querySelectorAll('.comment-item'));
-    items.reverse().forEach(el=>commentWrap.appendChild(el));
-  }, 600);
-});
-</script>
   
  
 <script src="/jquery/jquery.min.js"></script>

@@ -200,7 +200,7 @@ the configured Template Resolvers
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tzxcode.cn/2017/12/01/zongjie1/" data-id="cmrdncqo800ap388ddb0q5ybj" class="article-share-link">分享</a>
+      <a data-url="http://blog.tzxcode.cn/2017/12/01/zongjie1/" data-id="cmrdnqpwp00aev48d1uum65kt" class="article-share-link">分享</a>
       
       
       
@@ -220,7 +220,7 @@ the configured Template Resolvers
             data-strict="0"
             data-reactions-enabled="1"
             data-emit-metadata="0"
-            data-input-position="top"
+            data-input-position="bottom"
             data-theme="light"
             data-lang="zh-CN"
             crossorigin="anonymous"
@@ -229,21 +229,6 @@ the configured Template Resolvers
     </script>
     <!-- 新增反转JS，iframe加载完成后颠倒评论顺序 -->
 <script>
-window.addEventListener('message', function(e) {
-  if (e.origin !== 'https://giscus.app') return;
-  // 等待评论DOM渲染完成
-  setTimeout(()=>{
-    const iframe = document.querySelector('#giscus-container iframe');
-    if(!iframe) return;
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    const commentWrap = doc.querySelector('.giscus-comments');
-    if(!commentWrap) return;
-    // 获取所有评论节点倒序重排
-    const items = Array.from(commentWrap.querySelectorAll('.comment-item'));
-    items.reverse().forEach(el=>commentWrap.appendChild(el));
-  }, 600);
-});
-</script>
   
  
 <script src="/jquery/jquery.min.js"></script>
